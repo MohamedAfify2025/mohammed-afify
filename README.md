@@ -1,22 +1,24 @@
-# Mohammed Afify — V2
+# Mohammed Afify — Personal Learning & Professional Platform V3
 
-Professional personal website for Mohammed Afify.
-
-## Structure
-- `index.html`
-- `styles.css`
-- `script.js`
-- `assets/mohammed-afify-portrait.jpg`
+A responsive Arabic-first personal platform combining:
+- Learning Academy
+- Odoo Professional Hub
+- Data Analysis Lab
+- Ready & Practical Projects
+- Professional Services
+- About / Contact
 
 ## Deployment
-Designed for GitHub Pages from the `main` branch and `/ (root)` folder.
+GitHub Pages:
+- Branch: `main`
+- Folder: `/ (root)`
 
-## Linked learning sections
-- ICDL
-- Programming
-- Data Analysis
-- General Content
-- Ready Projects
-- Odoo Training / Support / Programs & Modules / Implementation
+## Files
+- index.html
+- styles.css
+- script.js
+- assets/mohammed-afify-portrait.jpg
 
-The Hero portrait is intentionally cropped to show the upper body only.
+## Existing content links
+The Academy and Projects sections point to the existing Google Sites content.
+Odoo is presented as a dedicated professional hub ready for future detailed pages.
