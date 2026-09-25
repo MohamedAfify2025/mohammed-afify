@@ -4,22 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mohammed Afify | Accountant · Data Analyst · Trainer · Odoo Specialist</title>
-  <meta name="description" content="الموقع الشخصي لمحمد عفيفي: كورسات، تحليل بيانات، مشاريع وحلول، وتدريب ودعم فني وحلول Odoo.">
+  <meta name="description" content="الموقع الشخصي لمحمد عفيفي: أكاديمية تدريبية، تحليل بيانات، مشروعات جاهزة وحلول Odoo.">
+  <meta name="theme-color" content="#071a33">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header class="site-header">
   <div class="container nav-wrap">
-    <a class="brand" href="#home"><span class="brand-mark">M</span><span>Mohammed Afify</span></a>
-    <button class="menu-btn" aria-label="فتح القائمة">☰</button>
-    <nav class="nav">
+    <a class="brand" href="#home" aria-label="Mohammed Afify">
+      <span class="brand-mark">M</span>
+      <span>Mohammed <b>Afify</b></span>
+    </a>
+    <button class="menu-btn" aria-label="فتح القائمة" aria-expanded="false">☰</button>
+    <nav class="nav" id="mainNav">
       <a class="active" href="#home">الرئيسية</a>
-      <a href="#about">عني</a>
       <a href="#academy">الأكاديمية</a>
-      <a href="#odoo">Odoo Solutions</a>
-      <a href="#projects">المشاريع</a>
+      <a href="#odoo">Odoo</a>
+      <a href="#projects">المشروعات</a>
       <a href="#analytics">تحليل البيانات</a>
-      <a href="#certificates">الشهادات</a>
+      <a href="#about">عني</a>
       <a href="#contact">تواصل</a>
     </nav>
   </div>
@@ -27,104 +30,90 @@
 
 <main id="home">
 <section class="hero">
-  <div class="hero-glow glow-a"></div><div class="hero-glow glow-b"></div>
+  <div class="hero-orb orb-1"></div><div class="hero-orb orb-2"></div>
   <div class="container hero-grid">
     <div class="hero-copy">
-      <div class="eyebrow">مرحبًا بك في موقعي الشخصي</div>
-      <h1>MOHAMMED <span>AFIFY</span></h1>
-      <h2>Accountant <i>·</i> Data Analyst <i>·</i> Trainer <i>·</i> Odoo Specialist</h2>
-      <p>محتوى تدريبي، مشروعات عملية، وتحليل بيانات وحلول تقنية تساعدك على تطوير مهاراتك وتحسين أداء أعمالك باستخدام أدوات عملية وحديثة.</p>
+      <div class="eyebrow"><span class="pulse"></span> أهلاً بك في منصتي التعليمية والمهنية</div>
+      <h1>Mohammed <span>Afify</span></h1>
+      <div class="roles">Accountant <i>·</i> Data Analyst <i>·</i> Trainer <i>·</i> Odoo Specialist</div>
+      <p class="hero-lead">أشارك المعرفة من خلال كورسات عملية، مشروعات جاهزة، تحليل بيانات وحلول Odoo تساعدك على التعلم والتطبيق وتحويل الأدوات إلى نتائج حقيقية.</p>
       <div class="hero-actions">
-        <a class="btn primary" href="#academy">🎓 استكشف الكورسات</a>
-        <a class="btn purple" href="#odoo">▣ اكتشف حلول Odoo</a>
-        <a class="btn outline" href="#contact">✈ تواصل معي</a>
+        <a class="btn primary" href="#academy">🎓 استكشف الأكاديمية</a>
+        <a class="btn purple" href="#odoo">◈ حلول Odoo</a>
+        <a class="btn ghost" href="#contact">تواصل معي</a>
       </div>
-      <div class="stats">
-        <div><strong>10+</strong><span>سنوات خبرة</span></div>
-        <div><strong>5+</strong><span>سنوات تحليل بيانات</span></div>
-        <div><strong>50+</strong><span>مشروع وتطبيق</span></div>
-        <div><strong>+</strong><span>محتوى تدريبي</span></div>
+      <div class="hero-trust">
+        <span>تعلم عملي</span><span>مشروعات حقيقية</span><span>حلول أعمال</span>
       </div>
     </div>
-    <div class="hero-person">
-      <div class="portrait-frame"><img src="assets/mohammed-afify.jpeg" alt="Mohammed Afify"></div>
-      <div class="quote-card">« المعرفة ليست فقط أن تتعلم، بل أن تطبق ما تعلمته وتحوّله إلى قيمة عملية. »</div>
+
+    <div class="hero-visual">
+      <div class="portrait-shell">
+        <div class="portrait-ring"></div>
+        <img src="assets/mohammed-afify-portrait.jpg" alt="Mohammed Afify">
+        <div class="floating-card top"><strong>🎓 Academy</strong><small>كورسات ومحتوى عملي</small></div>
+        <div class="floating-card bottom"><strong>◈ Odoo Solutions</strong><small>تدريب · دعم · تطوير</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <div class="container quick-links">
+      <a href="#academy"><b>01</b><span>Academy</span><small>كورسات ومحتوى</small></a>
+      <a href="#odoo"><b>02</b><span>Odoo</span><small>تدريب وحلول</small></a>
+      <a href="#projects"><b>03</b><span>Projects</span><small>مشروعات جاهزة</small></a>
+      <a href="#analytics"><b>04</b><span>Data</span><small>تحليل وDashboards</small></a>
     </div>
   </div>
 </section>
 
-<section id="about" class="section about">
-  <div class="container two-col">
-    <div>
-      <div class="section-kicker">ABOUT ME</div>
-      <h2>أحوّل الخبرة إلى <span>معرفة وحلول عملية</span></h2>
-      <p>محاسب ومحلل بيانات ومدرب مهتم بتحويل البيانات إلى معلومات واضحة تساعد على اتخاذ القرار، مع اهتمام بالتدريب العملي، لوحات المعلومات، الأتمتة، وحلول Odoo.</p>
-    </div>
-    <div class="about-cards">
-      <div class="mini-card"><b>📊 تحليل البيانات</b><span>Excel · Power Query · Power BI · Python</span></div>
-      <div class="mini-card"><b>🎓 التدريب</b><span>كورسات عملية وفيديوهات وملفات واختبارات</span></div>
-      <div class="mini-card"><b>🟣 Odoo</b><span>تدريب ودعم فني وبرامج وموديولات وحلول</span></div>
-      <div class="mini-card"><b>💼 حلول عملية</b><span>مشروعات جاهزة وحلول مخصصة للأعمال</span></div>
-    </div>
-  </div>
-</section>
-
-<section id="academy" class="section">
+<section id="academy" class="section academy">
   <div class="container">
     <div class="section-head">
-      <div><div class="section-kicker">LEARNING ACADEMY</div><h2>الأكاديمية <span>التدريبية</span></h2><p>كورسات عملية تجمع بين المحتوى المنظم والتطبيقات الحقيقية.</p></div>
-      <a class="text-btn" href="#academy">عرض جميع الكورسات →</a>
+      <div><div class="section-kicker">LEARNING ACADEMY</div><h2>تعلم بشكل <span>عملي</span></h2><p>الوصول السريع إلى المحتوى الذي أنشأته بالفعل، مع مساحة جاهزة لإضافة كورسات جديدة.</p></div>
+      <span class="section-note">FREE ACCESS</span>
     </div>
-    <div class="cards six">
-      <article class="course card blue"><div class="icon">▣</div><h3>ICDL</h3><p>أساسيات استخدام الكمبيوتر وبرامج Office.</p><a href="#contact">ابدأ الكورس →</a></article>
-      <article class="course card green"><div class="icon">X</div><h3>Excel</h3><p>من الأساسيات إلى التحليل والتطبيق العملي.</p><a href="#contact">ابدأ الكورس →</a></article>
-      <article class="course card orange"><div class="icon">▥</div><h3>Data Analysis</h3><p>تحليل البيانات وبناء Dashboards.</p><a href="#analytics">ابدأ الكورس →</a></article>
-      <article class="course card purple"><div class="icon">&lt;/&gt;</div><h3>Programming</h3><p>مقدمة في البرمجة والتفكير المنطقي.</p><a href="#contact">ابدأ الكورس →</a></article>
-      <article class="course card cyan"><div class="icon">🐍</div><h3>Python</h3><p>تعلم Python بأسلوب تدريجي وعملي.</p><a href="#contact">ابدأ الكورس →</a></article>
-      <article class="course card violet"><div class="icon">O</div><h3>Odoo Training</h3><p>تدريب عملي على Odoo حسب احتياجات العمل.</p><a href="#odoo">ابدأ الكورس →</a></article>
+    <div class="course-grid">
+      <a class="course-card blue" href="https://sites.google.com/view/mohammedafify2025/icdl" target="_blank" rel="noopener">
+        <span class="course-icon">ICDL</span><span class="course-tag">COURSE</span><h3>ICDL</h3><p>محتوى مهارات الكمبيوتر وOffice.</p><span class="course-link">الدخول إلى المحتوى ↗</span>
+      </a>
+      <a class="course-card purple" href="https://sites.google.com/view/mohammedafify2025/%D8%A7%D9%84%D8%A8%D8%B1%D9%85%D8%AC%D8%A9" target="_blank" rel="noopener">
+        <span class="course-icon">&lt;/&gt;</span><span class="course-tag">COURSE</span><h3>Programming</h3><p>محتوى البرمجة والتطبيقات العملية.</p><span class="course-link">الدخول إلى المحتوى ↗</span>
+      </a>
+      <a class="course-card orange" href="https://sites.google.com/view/mohammedafify2025/data-analsis" target="_blank" rel="noopener">
+        <span class="course-icon">DATA</span><span class="course-tag">COURSE</span><h3>Data Analysis</h3><p>تحليل البيانات وDashboards وأدوات التحليل.</p><span class="course-link">الدخول إلى المحتوى ↗</span>
+      </a>
+      <a class="course-card cyan" href="https://sites.google.com/view/mohammedafify2025/%D8%A7%D9%84%D9%85%D8%AD%D8%AA%D9%88%D9%89" target="_blank" rel="noopener">
+        <span class="course-icon">▶</span><span class="course-tag">CONTENT</span><h3>المحتوى</h3><p>بوابة المحتوى العام والدروس والمواد التعليمية.</p><span class="course-link">استعرض المحتوى ↗</span>
+      </a>
     </div>
   </div>
 </section>
 
-<section id="odoo" class="section odoo-section">
+<section id="odoo" class="section odoo">
   <div class="container">
-    <div class="section-head">
-      <div><div class="section-kicker purple-text">ODOO SOLUTIONS</div><h2>حلول <span>Odoo المتكاملة</span></h2><p>تدريب · دعم فني · برامج وموديولات · تنفيذ وتجهيز</p></div>
-      <a class="text-btn purple-text" href="#contact">اكتشف خدمات Odoo →</a>
+    <div class="odoo-head">
+      <div><div class="section-kicker purple-text">ODOO SOLUTIONS</div><h2>كل ما تحتاجه مع <span>Odoo</span></h2><p>قسم متخصص للتدريب والدعم الفني والبرامج والموديولات وتنفيذ الحلول.</p></div>
+      <div class="odoo-badge">ODOO</div>
     </div>
     <div class="odoo-grid">
-      <div class="odoo-main">
-        <div class="odoo-logo">odoo</div>
-        <h3>حلول عملية تبدأ من احتياجك</h3>
-        <p>مساعدة في فهم النظام، الإعداد، التدريب، الدعم الفني، وتطوير حلول مخصصة حسب طبيعة النشاط.</p>
-        <a class="btn purple" href="#contact">ابدأ الآن →</a>
-      </div>
-      <div class="service"><b>🎓 تدريب Odoo</b><p>كورسات للمستخدمين والفرق مع تطبيق عملي.</p><a href="#contact">عرض التفاصيل →</a></div>
-      <div class="service"><b>🛠 الدعم الفني</b><p>حل المشكلات ومتابعة الإعدادات والأخطاء.</p><a href="#contact">عرض التفاصيل →</a></div>
-      <div class="service"><b>💻 البرامج والموديولات</b><p>حلول وموديولات مخصصة حسب احتياجاتك.</p><a href="#contact">عرض التفاصيل →</a></div>
-      <div class="service"><b>🚀 التنفيذ والتجهيز</b><p>تحليل الاحتياجات وتجهيز النظام للتشغيل.</p><a href="#contact">عرض التفاصيل →</a></div>
+      <article class="odoo-card featured"><span>01</span><h3>Odoo Training</h3><p>تدريب المستخدمين والفرق على النظام بطريقة عملية مرتبطة بالعمليات اليومية.</p><a href="#contact">اطلب التدريب ↗</a></article>
+      <article class="odoo-card"><span>02</span><h3>Technical Support</h3><p>مساعدة في المشكلات والإعدادات ومتابعة الأخطاء والتشغيل.</p><a href="#contact">اطلب الدعم ↗</a></article>
+      <article class="odoo-card"><span>03</span><h3>Programs & Modules</h3><p>تطوير موديولات وبرامج مخصصة حسب احتياجات المشروع.</p><a href="#contact">ناقش فكرتك ↗</a></article>
+      <article class="odoo-card"><span>04</span><h3>Implementation</h3><p>تحليل الاحتياجات وتجهيز العمليات والإعدادات والتدريب قبل التشغيل.</p><a href="#contact">ابدأ مشروعك ↗</a></article>
     </div>
   </div>
 </section>
 
-<section class="odoo-banner">
-  <div class="container banner-inner">
-    <div><span>ODOO</span><h3>نظام واحد لإدارة أعمالك</h3><p>المبيعات · المخزون · المحاسبة · الموارد البشرية · التصنيع · المشاريع والمزيد</p></div>
-    <a class="btn light" href="#contact">اطلب استشارة Odoo</a>
-  </div>
-</section>
-
-<section id="projects" class="section">
+<section id="projects" class="section projects">
   <div class="container">
     <div class="section-head">
-      <div><div class="section-kicker">READY PROJECTS</div><h2>المشاريع والحلول <span>الجاهزة</span></h2><p>مشروعات عملية تساعدك على إدارة أعمالك وتحسين الأداء.</p></div>
-      <a class="text-btn" href="#projects">عرض جميع المشاريع →</a>
+      <div><div class="section-kicker">READY PROJECTS</div><h2>مشروعات <span>جاهزة</span></h2><p>بوابة للمشروعات والحلول التي يمكن استعراضها وطلبها أو تطويرها حسب الحاجة.</p></div>
+      <a class="outline-link" href="https://sites.google.com/view/mohammedafify2025/%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%D8%A7%D8%AA-%D8%A7%D9%84%D8%AC%D8%A7%D9%87%D8%B2%D8%A9" target="_blank" rel="noopener">كل المشروعات ↗</a>
     </div>
-    <div class="cards four">
-      <article class="project card"><div class="project-image hr"></div><div class="tag">Excel</div><h3>إدارة شؤون العاملين والرواتب</h3><p>برنامج متكامل لإدارة الموظفين والحضور والرواتب والتقارير.</p><a href="#contact">عرض المشروع →</a></article>
-      <article class="project card"><div class="project-image clinic"></div><div class="tag">Excel</div><h3>إدارة العيادات</h3><p>نظام عملي لإدارة المرضى والمواعيد والخزينة والتقارير.</p><a href="#contact">عرض المشروع →</a></article>
-      <article class="project card"><div class="project-image dashboard"></div><div class="tag">Power BI</div><h3>مشاريع تحليل البيانات</h3><p>لوحات معلومات وتقارير تحليلية تساعد على فهم الأداء.</p><a href="#analytics">عرض المشروع →</a></article>
-      <article class="project card"><div class="project-image custom"></div><div class="tag">Odoo · Excel</div><h3>حلول مخصصة</h3><p>برامج وحلول مصممة حسب احتياجات الأفراد والشركات.</p><a href="#contact">اطلب حلًا →</a></article>
+    <div class="project-grid">
+      <article><div class="project-cover hr-cover"><span>HR</span></div><div class="project-body"><small>Excel · Management</small><h3>إدارة العاملين والرواتب</h3><p>حل عملي لإدارة البيانات والتقارير والعمليات الإدارية.</p></div></article>
+      <article><div class="project-cover clinic-cover"><span>CLINIC</span></div><div class="project-body"><small>Management</small><h3>إدارة العيادات</h3><p>تنظيم بيانات المرضى والمواعيد والعمليات والتقارير.</p></div></article>
+      <article><div class="project-cover bi-cover"><span>POWER BI</span></div><div class="project-body"><small>Data Analysis</small><h3>Dashboards وتحليل البيانات</h3><p>تقارير ولوحات مؤشرات تساعد على فهم الأداء.</p></div></article>
     </div>
   </div>
 </section>
@@ -132,65 +121,55 @@
 <section id="analytics" class="section analytics">
   <div class="container">
     <div class="section-head">
-      <div><div class="section-kicker">DATA ANALYSIS</div><h2>تحليل البيانات <span>والمشاريع</span></h2><p>تحويل البيانات إلى رؤى تساعدك على اتخاذ قرارات أفضل.</p></div>
-      <a class="text-btn" href="#analytics">استعرض مشاريع التحليل →</a>
+      <div><div class="section-kicker">DATA ANALYSIS</div><h2>من البيانات إلى <span>القرار</span></h2><p>مساحة مخصصة لعرض أعمال تحليل البيانات والـDashboards والكورسات.</p></div>
+      <a class="outline-link" href="https://sites.google.com/view/mohammedafify2025/data-analsis" target="_blank" rel="noopener">فتح قسم Data Analysis ↗</a>
     </div>
-    <div class="analytics-grid">
-      <article class="dash-card"><div class="fake-chart bars"></div><h3>Superstore Sales</h3><p>تحليل مبيعات باستخدام Power BI.</p></article>
-      <article class="dash-card"><div class="fake-chart line"></div><h3>BigMart Sales</h3><p>تحليل المنتجات والمتاجر والمبيعات.</p></article>
-      <article class="dash-card"><div class="fake-chart donut"></div><h3>Financial Dashboard</h3><p>لوحة مؤشرات مالية متكاملة.</p></article>
-      <article class="dash-card"><div class="fake-chart heat"></div><h3>HR Analysis</h3><p>تحليل بيانات الموارد البشرية.</p></article>
+    <div class="analysis-panel">
+      <div class="metric"><small>TOOLS</small><strong>Excel</strong><span>Power Query · Pivot</span></div>
+      <div class="metric"><small>BI</small><strong>Power BI</strong><span>DAX · Dashboards</span></div>
+      <div class="metric"><small>CODE</small><strong>Python</strong><span>تحليل وأتمتة</span></div>
+      <div class="metric"><small>OUTPUT</small><strong>Insights</strong><span>رؤى قابلة للتنفيذ</span></div>
     </div>
-    <div class="tools-row"><span>Excel</span><span>Power Query</span><span>Power BI</span><span>DAX</span><span>Python</span></div>
   </div>
 </section>
 
-<section class="section why">
-  <div class="container two-col">
+<section id="about" class="section about">
+  <div class="container about-grid">
     <div>
-      <div class="section-kicker">WHY CHOOSE ME?</div>
-      <h2>لماذا <span>محمد عفيفي؟</span></h2>
-      <div class="benefits">
-        <div><b>✓ خبرة عملية</b><span>محتوى مبني على تطبيقات ومشروعات.</span></div>
-        <div><b>✓ محتوى متنوع</b><span>كورسات ومشاريع وحلول في أكثر من مجال.</span></div>
-        <div><b>✓ أسلوب عملي</b><span>تطبيقات وملفات واختبارات ومخرجات واضحة.</span></div>
-        <div><b>✓ دعم مستمر</b><span>مساعدة ومتابعة حسب نوع الخدمة.</span></div>
+      <div class="section-kicker">ABOUT ME</div>
+      <h2>خبرة عملية، تعليم، <span>وحلول تقنية</span></h2>
+      <p>أعمل على الجمع بين المعرفة المحاسبية وتحليل البيانات والتدريب وحلول Odoo لتقديم محتوى وحلول عملية يمكن استخدامها في العمل والتطوير.</p>
+      <div class="about-points">
+        <span>✓ محتوى تدريبي عملي</span><span>✓ مشروعات قابلة للتطبيق</span><span>✓ تحليل بيانات</span><span>✓ حلول Odoo</span>
       </div>
     </div>
-    <div class="contact-card"><div class="target">◎</div><h3>هدفي هو مساعدتك</h3><p>على التعلم، تطوير أعمالك، وتحويل البيانات والأدوات إلى نتائج مستخدمة فعليًا.</p><a class="btn primary" href="#contact">تواصل معي الآن</a></div>
-  </div>
-</section>
-
-<section id="certificates" class="section certificates">
-  <div class="container">
-    <div class="section-head"><div><div class="section-kicker">CERTIFICATES</div><h2>الشهادات <span>والخبرات</span></h2><p>مجموعة من الشهادات والاعتمادات والخبرات العملية.</p></div><a class="text-btn" href="#contact">عرض جميع الشهادات →</a></div>
-    <div class="certificate-row">
-      <div class="cert"><strong>Microsoft</strong><span>Excel · Power BI</span></div>
-      <div class="cert"><strong>ICDL</strong><span>Computer Skills</span></div>
-      <div class="cert"><strong>Python</strong><span>Programming</span></div>
-      <div class="cert"><strong>Odoo</strong><span>ERP Training</span></div>
+    <div class="about-box">
+      <div class="about-icon">M</div>
+      <h3>Mohammed Afify</h3>
+      <p>Accountant · Data Analyst · Trainer · Odoo Specialist</p>
+      <a class="btn primary" href="#contact">تواصل معي</a>
     </div>
   </div>
 </section>
 
 <section id="contact" class="section contact">
-  <div class="container contact-inner">
-    <div><div class="section-kicker">CONTACT</div><h2>لديك سؤال أو مشروع؟ <span>تواصل معي</span></h2><p>للكورسات، المشاريع، تحليل البيانات، أو خدمات Odoo.</p></div>
+  <div class="container contact-box">
+    <div><div class="section-kicker">LET'S CONNECT</div><h2>هل لديك فكرة أو مشروع؟</h2><p>يمكنك التواصل لمناقشة التدريب، تحليل البيانات، المشروعات أو حلول Odoo.</p></div>
     <div class="contact-actions">
-      <a class="btn primary" href="mailto:info@example.com">✉ البريد الإلكتروني</a>
-      <a class="btn purple" href="#" aria-label="WhatsApp">◉ WhatsApp</a>
-      <a class="btn outline dark" href="#" aria-label="LinkedIn">in LinkedIn</a>
+      <a class="btn primary" href="mailto:info@systemscodes.com">✉ البريد الإلكتروني</a>
+      <a class="btn dark" href="https://www.linkedin.com/" target="_blank" rel="noopener">in LinkedIn</a>
+      <a class="btn dark" href="https://wa.me/" target="_blank" rel="noopener">◉ WhatsApp</a>
     </div>
   </div>
 </section>
 </main>
 
 <footer class="footer">
-  <div class="container footer-grid">
-    <div><a class="brand" href="#home"><span class="brand-mark">M</span><span>Mohammed Afify</span></a><p>Accountant · Data Analyst · Trainer · Odoo Specialist</p></div>
-    <div class="footer-links"><a href="#academy">الأكاديمية</a><a href="#odoo">Odoo</a><a href="#projects">المشاريع</a><a href="#analytics">تحليل البيانات</a><a href="#certificates">الشهادات</a></div>
+  <div class="container footer-top">
+    <div><a class="brand footer-brand" href="#home"><span class="brand-mark">M</span><span>Mohammed <b>Afify</b></span></a><p>Learning · Data · Odoo · Projects</p></div>
+    <div class="footer-links"><a href="#academy">Academy</a><a href="#odoo">Odoo</a><a href="#projects">Projects</a><a href="#analytics">Data Analysis</a><a href="#contact">Contact</a></div>
   </div>
-  <div class="container copyright">© 2026 Mohammed Afify — جميع الحقوق محفوظة</div>
+  <div class="container copyright">© <span id="year"></span> Mohammed Afify. All rights reserved.</div>
 </footer>
 <script src="script.js"></script>
 </body>
