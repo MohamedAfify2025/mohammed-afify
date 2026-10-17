@@ -1,6 +1,6 @@
 /* Mohammed Afify learning & professional platform
    Before publishing: replace CONTACT_EMAIL with the email you want visitors to use. */
-const CONTACT_EMAIL = "replace-with-your-email@example.com";
+const CONTACT_EMAIL = "mohammedafify34@gmail.com";
 
 const translations = {
   ar: {
