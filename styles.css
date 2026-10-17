@@ -3,3 +3,26 @@
 @media(max-width:760px){.container{width:min(100% - 32px,560px)}.announcement{font-size:9px;gap:8px}.nav-wrap{height:70px;gap:12px}.brand-mark{width:39px;height:39px}.brand-copy strong{font-size:12px}.brand-copy small{font-size:9px}.menu-toggle{display:block;order:3;margin-inline-start:auto}.nav-actions{order:2;gap:8px}.nav-actions .button{display:none}.main-nav{display:none;position:absolute;top:70px;left:0;right:0;background:#fff;padding:16px 22px 22px;border-bottom:1px solid var(--line);box-shadow:0 18px 25px #101a3210;align-items:stretch;gap:0}.main-nav.open{display:flex;flex-direction:column}.main-nav a{padding:11px 0;border-bottom:1px solid #f0f1f6;font-size:12px}.hero{padding-top:42px}.hero-grid{grid-template-columns:1fr;gap:15px}.hero-copy{order:1}.hero h1{font-size:48px;margin-top:17px}.hero-lead{font-size:12px}.hero-visual{order:2;min-height:350px;transform:none;margin-top:4px}.code-window{width:min(91%,390px)}.float-card-top{top:15px;inset-inline-end:0}.float-card-bottom{bottom:23px;inset-inline-start:0}.hero-stamp{bottom:4px;inset-inline-end:16px;transform:scale(.8) rotate(12deg)}.orbit-one{width:340px;height:230px}.orbit-two{width:300px;height:330px}.hero-bottom{align-items:flex-start;flex-direction:column;gap:11px;margin-top:22px}.hero-bottom>div{gap:9px;flex-wrap:wrap;font-size:8px}.section{padding:68px 0}.section-heading{align-items:flex-start;flex-direction:column;gap:10px;margin-bottom:25px}.section-heading h2,.services-intro h2,.resource-copy h2,.about-copy h2,.contact-panel h2{font-size:30px}.section-heading>p{font-size:11px}.category-grid,.course-grid{grid-template-columns:1fr 1fr;gap:10px}.category-card{padding:17px 14px;min-height:292px}.category-card h3{font-size:13px;margin-top:17px}.category-card p{font-size:10px;min-height:77px}.category-icon{width:36px;height:36px}.card-number{font-size:7px}.tag-row span{font-size:8px}.text-link{font-size:10px}.course-art{height:130px}.course-body{padding:14px 12px 16px}.course-body h3{font-size:12px}.course-body p{font-size:9px;min-height:76px}.course-meta{font-size:8px;gap:4px}.filter-row{gap:6px}.filter-btn{padding:8px 10px;font-size:9px}.services-layout,.about-grid{grid-template-columns:1fr;gap:35px}.services-intro>p{font-size:11px}.service-item{grid-template-columns:39px 1fr 15px;gap:12px;padding:17px 0}.service-icon{width:38px;height:38px}.service-item h3{font-size:12px}.service-item p{font-size:9px}.resource-panel{grid-template-columns:1fr;gap:20px;padding:30px 22px}.resource-copy h2{font-size:30px}.resource-visual{min-height:145px;padding:0 5px}.file-one{margin-inline-start:10px}.file-two{margin-inline-end:10px}.about-monogram{min-height:245px}.monogram-box{font-size:58px}.about-copy>p{font-size:11px}.principles{gap:14px}.principles div{font-size:9px}.contact-section{padding-top:15px;padding-bottom:65px}.contact-panel{grid-template-columns:1fr;gap:25px;padding:28px 21px}.contact-panel h2{font-size:29px}.contact-panel>div>p{font-size:10px}.footer-main{align-items:flex-start;flex-wrap:wrap}.footer-main>p{width:100%;order:3;margin:0}.footer-links{gap:13px}.footer-links a{font-size:9px}.footer-bottom{font-size:9px}}
 @media(max-width:390px){.category-grid,.course-grid{grid-template-columns:1fr}.category-card{min-height:255px}.category-card p{min-height:0}.course-body p{min-height:0}.hero h1{font-size:42px}.hero-proof p{font-size:9px}.hero-bottom>div{letter-spacing:.4px}.nav-wrap{gap:8px}.brand-copy strong{font-size:11px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
+/* WhatsApp floating contact button */
+.whatsapp-float {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 9999;
+  background: #25D366;
+  color: #fff;
+  padding: 13px 18px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, .18);
+}
+.whatsapp-float:hover {
+  background: #128C7E;
+  color: #fff;
+}
+html[dir="rtl"] .whatsapp-float {
+  right: auto;
+  left: 22px;
+}
