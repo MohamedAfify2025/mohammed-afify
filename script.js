@@ -75,21 +75,47 @@ document.querySelectorAll(".filter-btn").forEach(button => {
   });
 });
 
-document.getElementById("contactForm").addEventListener("submit", event => {
+
+emailjs.init({
+  publicKey: "JpcpLeL3EEKfRhswb"
+});
+
+document.getElementById("contactForm").addEventListener("submit", async event => {
   event.preventDefault();
-  if (!CONTACT_EMAIL || CONTACT_EMAIL.includes("replace-with-your-email")) {
-    alert(translations[currentLang].formMissingEmail);
-    return;
-  }
+
   const name = document.getElementById("contactName").value.trim();
   const email = document.getElementById("contactEmail").value.trim();
   const interest = document.getElementById("contactInterest");
   const interestText = interest.options[interest.selectedIndex].text;
   const message = document.getElementById("contactMessage").value.trim();
-  const subject = encodeURIComponent(translations[currentLang].emailSubject + " — " + interestText);
-  const body = encodeURIComponent(`${name}\n${email}\n${interestText}\n\n${message}`);
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}&su=${subject}&body=${body}`; window.location.assign(gmailUrl);
-});
 
-document.getElementById("year").textContent = new Date().getFullYear();
-setLanguage("ar");
+  const button = event.submitter;
+  if (button) {
+    button.disabled = true;
+    button.textContent = "جارٍ الإرسال...";
+  }
+
+  try {
+    await emailjs.send(
+      "service_dm7zsh9",
+      "template_jq3y5vo",
+      {
+        from_name: name,
+        from_email: email,
+        interest: interestText,
+        message: message
+      }
+    );
+
+    alert("تم إرسال رسالتك بنجاح، شكرًا لتواصلك معنا.");
+    event.target.reset();
+  } catch (error) {
+    console.error("EmailJS error:", error);
+    alert("تعذر إرسال الرسالة. يرجى المحاولة مرة أخرى لاحقًا.");
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = "إرسال الرسالة";
+    }
+  }
+});
