@@ -88,7 +88,7 @@ document.getElementById("contactForm").addEventListener("submit", event => {
   const message = document.getElementById("contactMessage").value.trim();
   const subject = encodeURIComponent(translations[currentLang].emailSubject + " — " + interestText);
   const body = encodeURIComponent(`${name}\n${email}\n${interestText}\n\n${message}`);
-  window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}&su=${subject}&body=${body}`; window.location.assign(gmailUrl);
 });
 
 document.getElementById("year").textContent = new Date().getFullYear();
