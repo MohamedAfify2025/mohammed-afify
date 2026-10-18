@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="assets/css/content-protection.css">
 <script src="assets/js/content-protection.js" defer></script>
 <!-- CONTENT PROTECTION END -->
+  <link rel="stylesheet" href="odoo-solutions.css">
 </head>
 <body>
   <div class="announcement"><span data-i18n="announcement">التعلّم الحقيقي يبدأ بالتطبيق — اكتشف الدروس والموارد المجانية</span><a href="#learning" data-i18n="explore">استكشف الآن ←</a></div>
@@ -33,7 +34,7 @@
         <a href="#resources" data-i18n="navResources">الموارد</a>
         <a href="#about" data-i18n="navAbout">من أنا</a>
         <a href="#contact" data-i18n="navContact">تواصل</a>
-      </nav>
+      <a href="odoo-solutions.html" class="odoo-nav-link">حلول Odoo</a></nav>
       <div class="nav-actions">
         <button id="languageToggle" class="lang-btn" type="button" aria-label="Switch language">EN</button>
         <a href="#contact" class="button button-small button-primary" data-i18n="navCta">ابدأ مشروعك</a>
@@ -208,7 +209,26 @@
       </div>
     </section>
 
-    <section class="section contact-section" id="contact">
+    <!-- ODOO-SOLUTIONS-CTA-START -->
+<section class="odoo-home-cta" id="odoo-solutions-preview">
+  <div class="odoo-home-cta-inner">
+    <div class="odoo-home-cta-copy">
+      <span class="odoo-tagline">ODOO COMMUNITY · PRACTICAL SYSTEMS</span>
+      <h2>حلول عملية تبدأ من احتياجك الفعلي</h2>
+      <p>أنظمة لإدارة الحضانات والمراكز التعليمية والمدارس والموارد البشرية، إلى جانب التدريب العملي على المحاسبة. استكشف نطاق كل حل وتعرّف على طريقة طلب عرض توضيحي.</p>
+      <a class="odoo-home-cta-button" href="odoo-solutions.html">اكتشف حلول Odoo <span>←</span></a>
+    </div>
+    <div class="odoo-home-cta-cards">
+      <a href="odoo-solutions.html#nursery"><b>01</b><span>إدارة الحضانات — إدراك</span><i>↙</i></a>
+      <a href="odoo-solutions.html#tutoring"><b>02</b><span>المراكز التعليمية والدروس</span><i>↙</i></a>
+      <a href="odoo-solutions.html#school"><b>03</b><span>إدارة المدارس</span><i>↙</i></a>
+      <a href="odoo-solutions.html#hr"><b>04</b><span>الموارد البشرية HR</span><i>↙</i></a>
+      <a href="odoo-solutions.html#accounting-management"><b>05</b><span>إدارة الحسابات على Odoo</span><i>↙</i></a>
+    </div>
+  </div>
+</section>
+<!-- ODOO-SOLUTIONS-CTA-END -->
+<section class="section contact-section" id="contact">
       <div class="container contact-panel">
         <div><span class="section-kicker" data-i18n="contactKicker">لنبدأ الحديث</span><h2 data-i18n="contactTitle">لديك سؤال أو فكرة؟<br><span>يسعدني التواصل معك.</span></h2><p data-i18n="contactIntro">أرسل تفاصيل طلبك، سواء كان استفسارًا عن دورة أو طلب خدمة أو تعاونًا مهنيًا.</p><div class="contact-note"><span class="note-icon">✉</span><span data-i18n="contactNote">النموذج يفتح تطبيق البريد لديك لإرسال الرسالة.</span></div></div>
         <form class="contact-form" id="contactForm">
