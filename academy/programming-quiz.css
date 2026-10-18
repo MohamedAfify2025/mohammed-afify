@@ -1,0 +1,110 @@
+﻿.programming-quiz-section {
+    direction: rtl;
+    width: 100%;
+    margin: 42px auto 30px;
+    padding: clamp(20px, 3.2vw, 34px);
+    border: 1px solid #e0e7f0;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(20,35,58,.055);
+    box-sizing: border-box;
+    scroll-margin-top: 24px;
+}
+
+.programming-quiz-section *,
+.programming-quiz-section *::before,
+.programming-quiz-section *::after {
+    box-sizing: border-box;
+}
+
+.programming-quiz-heading {
+    max-width: 820px;
+    margin: 0 auto 24px;
+    text-align: right;
+}
+
+.programming-quiz-eyebrow {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: #11988d;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.programming-quiz-heading h2 {
+    margin: 0 0 10px;
+    color: #172642;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.6;
+}
+
+.programming-quiz-heading p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.programming-quiz-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 17px;
+}
+
+.programming-quiz-meta span {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #dce8f4;
+    border-radius: 999px;
+    color: #274363;
+    background: #f7faff;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.programming-quiz-frame-wrap {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #e1e8f1;
+    border-radius: 14px;
+    background: #fff;
+}
+
+.programming-quiz-iframe {
+    display: block;
+    width: 100% !important;
+    height: 1150px;
+    max-width: 100%;
+    border: 0;
+    background: #fff;
+}
+
+.programming-quiz-fallback {
+    margin: 14px 0 0;
+    color: #64748b;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+.programming-quiz-fallback a {
+    color: #6746ab;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+    .programming-quiz-section {
+        margin-top: 28px;
+        padding: 18px 13px;
+        border-radius: 16px;
+    }
+
+    .programming-quiz-iframe {
+        height: 1250px;
+    }
+}
