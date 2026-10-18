@@ -1,0 +1,33 @@
+﻿/* Level 1 deterrents only. Not DRM or access control. */
+img, picture, video, .protected-media {
+    -webkit-user-drag: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-touch-callout: none;
+}
+
+body::after {
+    content: "Mohammed Afify | All Rights Reserved";
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 2147483647;
+    pointer-events: none;
+    padding: 7px 10px;
+    border: 1px solid rgba(23,38,66,.12);
+    border-radius: 9px;
+    color: rgba(23,38,66,.75);
+    background: rgba(255,255,255,.84);
+    box-shadow: 0 3px 14px rgba(23,38,66,.08);
+    font: 600 11px/1.4 Arial, sans-serif;
+    backdrop-filter: blur(3px);
+}
+
+@media (max-width: 520px) {
+    body::after {
+        right: 8px;
+        bottom: 8px;
+        padding: 5px 7px;
+        font-size: 9px;
+    }
+}
