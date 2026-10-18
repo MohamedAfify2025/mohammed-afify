@@ -1,0 +1,618 @@
+/* MICROSOFT OFFICE COURSE PAGES */
+
+#office-word-page,
+#office-powerpoint-page,
+#office-excel-page {
+    width: min(1120px, 94vw) !important;
+    margin: 28px auto 72px !important;
+    color: #172642;
+}
+
+#office-word-page h1,
+#office-word-page h2,
+#office-word-page h3,
+#office-word-page p,
+#office-powerpoint-page h1,
+#office-powerpoint-page h2,
+#office-powerpoint-page h3,
+#office-powerpoint-page p,
+#office-excel-page h1,
+#office-excel-page h2,
+#office-excel-page h3,
+#office-excel-page p {
+    overflow-wrap: anywhere;
+}
+
+.office-course-page .office-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    align-items: center;
+    gap: 28px;
+    padding: clamp(26px, 4vw, 48px);
+    overflow: hidden;
+    border-radius: 25px;
+    color: #fff;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(43,188,174,.18), transparent 34%),
+        linear-gradient(135deg, #101a32, #203c62);
+    box-shadow: 0 18px 42px rgba(16,26,50,.12);
+}
+
+.office-course-page .office-hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: right;
+}
+
+.office-course-page .office-eyebrow,
+.office-course-page .office-kicker {
+    color: #25b8aa;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.office-course-page .office-hero h1 {
+    margin: 12px 0;
+    color: #fff;
+    font-size: clamp(30px, 3.7vw, 43px);
+    line-height: 1.5;
+}
+
+.office-course-page .office-hero p {
+    color: #dce7f4;
+    font-size: 14px;
+    line-height: 2.1;
+}
+
+.office-course-page .office-hero-actions,
+.office-course-page .office-next-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.office-course-page .office-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none !important;
+    transition: transform .18s ease;
+}
+
+.office-course-page .office-btn:hover {
+    transform: translateY(-2px);
+}
+
+.office-course-page .office-btn-primary {
+    color: #082f35 !important;
+    background: #2bbcae;
+}
+
+.office-course-page .office-btn-secondary {
+    border-color: #71839d;
+    color: #fff !important;
+    background: transparent;
+}
+
+/* Professional CSS-built hero illustrations */
+
+.office-course-page .office-hero-art {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 430px;
+    min-width: 0;
+    min-height: 270px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 18px;
+    background: rgba(255,255,255,.06);
+}
+
+.office-course-page .office-art-window {
+    width: min(100%, 340px);
+    overflow: hidden;
+    border: 1px solid #dfe7f3;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(0,0,0,.16);
+}
+
+.office-course-page .office-art-toolbar {
+    display: flex;
+    gap: 5px;
+    padding: 11px 13px;
+    background: #e9eef7;
+}
+
+.office-course-page .office-art-toolbar i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #a2b2c8;
+}
+
+.office-course-page .office-art-caption {
+    color: #dbe8f7;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* Word */
+
+#office-word-page .office-art-document {
+    position: relative;
+    min-height: 170px;
+    padding: 20px;
+    background: #fff;
+}
+
+#office-word-page .office-art-mark {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 62px;
+    border-radius: 9px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+#office-word-page .office-mark-word {
+    position: absolute;
+    top: 22px;
+    left: 20px;
+    background: #2368b2;
+    box-shadow: 6px 6px 0 #c7dcf6;
+}
+
+#office-word-page .office-art-lines {
+    display: grid;
+    gap: 9px;
+    margin-left: 90px;
+    padding-top: 6px;
+}
+
+#office-word-page .office-art-lines span {
+    display: block;
+    height: 6px;
+    border-radius: 5px;
+    background: #d9e3f1;
+}
+
+#office-word-page .office-art-lines span:nth-child(2n) {
+    width: 78%;
+}
+
+#office-word-page .office-art-paragraph {
+    width: 100%;
+    height: 35px;
+    margin-top: 24px;
+    border-top: 2px solid #e3eaf4;
+    border-bottom: 2px solid #e3eaf4;
+}
+
+/* PowerPoint */
+
+#office-powerpoint-page .office-art-slide-wrap {
+    padding: 18px;
+    background: #f4f6fb;
+}
+
+#office-powerpoint-page .office-art-slide {
+    position: relative;
+    min-height: 155px;
+    padding: 18px;
+    border: 1px solid #e0e5ef;
+    background: #fff;
+    box-shadow: 0 5px 14px rgba(20,35,58,.08);
+}
+
+#office-powerpoint-page .office-art-slide-title {
+    width: 62%;
+    height: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    background: #c45b32;
+}
+
+#office-powerpoint-page .office-art-slide-text {
+    display: grid;
+    gap: 7px;
+    width: 44%;
+}
+
+#office-powerpoint-page .office-art-slide-text span {
+    height: 5px;
+    border-radius: 4px;
+    background: #dce4ef;
+}
+
+#office-powerpoint-page .office-art-slide-picture {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    width: 42%;
+    height: 75px;
+    padding: 9px;
+    border-radius: 8px;
+    background: #fae8df;
+}
+
+#office-powerpoint-page .office-art-slide-picture div {
+    flex: 1;
+    height: 45%;
+    border-radius: 3px 3px 0 0;
+    background: #d76a3f;
+}
+
+#office-powerpoint-page .office-art-slide-picture div:nth-child(2) {
+    height: 75%;
+    background: #eb9a59;
+}
+
+#office-powerpoint-page .office-art-slide-picture div:nth-child(3) {
+    height: 100%;
+    background: #9b4a4a;
+}
+
+/* Excel */
+
+#office-excel-page .office-art-sheet {
+    position: relative;
+    min-height: 170px;
+    padding: 20px;
+    background: #fff;
+}
+
+#office-excel-page .office-mark-excel {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background: #16834b;
+}
+
+#office-excel-page .office-art-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+}
+
+#office-excel-page .office-art-grid span {
+    height: 20px;
+    border: 1px solid #d9e9de;
+    border-radius: 2px;
+    background: #f2f8f3;
+}
+
+#office-excel-page .office-art-grid span:nth-child(-n+4) {
+    background: #d8eee0;
+}
+
+#office-excel-page .office-art-chart {
+    position: absolute;
+    top: 21px;
+    right: 18px;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 44px;
+}
+
+#office-excel-page .office-art-chart i {
+    display: block;
+    width: 9px;
+    height: 18px;
+    border-radius: 3px 3px 0 0;
+    background: #47a974;
+}
+
+#office-excel-page .office-art-chart i:nth-child(2) {
+    height: 32px;
+}
+
+#office-excel-page .office-art-chart i:nth-child(3) {
+    height: 24px;
+}
+
+#office-excel-page .office-art-chart i:nth-child(4) {
+    height: 40px;
+}
+
+#office-excel-page .office-art-chart i:nth-child(5) {
+    height: 28px;
+}
+
+/* Course sections */
+
+.office-course-page .office-section,
+.office-course-page .office-resources-section {
+    margin-top: 42px;
+}
+
+.office-course-page .office-section-heading {
+    margin-bottom: 22px;
+    text-align: right;
+}
+
+.office-course-page .office-section-heading h2,
+.office-course-page .office-outcomes h2,
+.office-course-page .office-next-step h2 {
+    margin: 7px 0 9px;
+    color: #172642;
+    font-size: clamp(24px, 3vw, 31px);
+    line-height: 1.6;
+}
+
+.office-course-page .office-section-heading p,
+.office-course-page .office-outcomes-content p,
+.office-course-page .office-next-step p {
+    margin: 0;
+    color: #65748a;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.office-course-page .office-topic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.office-course-page .office-topic-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid #e2e8f2;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 7px 22px rgba(20,35,58,.035);
+}
+
+.office-course-page .office-topic-number {
+    display: grid;
+    place-items: center;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    color: #14887e;
+    background: #e7f7f4;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.office-course-page .office-topic-card h3 {
+    margin: 0 0 7px;
+    color: #172642;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.office-course-page .office-topic-card p {
+    margin: 0;
+    color: #65748a;
+    font-size: 12px;
+    line-height: 1.95;
+}
+
+.office-course-page .office-outcomes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 26px;
+    margin-top: 28px;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid #dce9e8;
+    border-radius: 19px;
+    background: linear-gradient(120deg, #effaf8, #fff 75%);
+}
+
+.office-course-page .office-outcomes-list {
+    display: grid;
+    gap: 12px;
+}
+
+.office-course-page .office-outcome-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #36465b;
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+.office-course-page .office-outcome-item span {
+    display: grid;
+    place-items: center;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    color: #127b70;
+    background: #d9f4ed;
+    font-weight: 900;
+}
+
+/* Resource cards */
+
+.office-course-page .office-resource-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.office-course-page .office-resource-card {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+    padding: 17px;
+    border: 1px solid #e0e7f0;
+    border-radius: 15px;
+    color: inherit !important;
+    background: #fff;
+    text-decoration: none !important;
+    box-shadow: 0 6px 20px rgba(20,35,58,.035);
+    transition: transform .18s ease, border-color .18s ease;
+}
+
+.office-course-page .office-resource-card:hover {
+    transform: translateY(-2px);
+    border-color: #b6d8d2;
+}
+
+.office-course-page .office-resource-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    color: #6746ab;
+    background: #f0ebfc;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.office-course-page .office-resource-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.office-course-page .office-resource-copy strong,
+.office-course-page .office-resource-copy small {
+    display: block;
+}
+
+.office-course-page .office-resource-copy strong {
+    margin-bottom: 4px;
+    color: #172642;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.office-course-page .office-resource-copy small {
+    color: #6a788b;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+.office-course-page .office-resource-arrow {
+    color: #168c83;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+/* Next courses */
+
+.office-course-page .office-next-step {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 28px;
+    padding: 24px;
+    border-radius: 18px;
+    background: #172642;
+}
+
+.office-course-page .office-next-step h2 {
+    color: #fff;
+    font-size: 19px;
+}
+
+.office-course-page .office-next-step p {
+    color: #d1dbea;
+}
+
+.office-course-page .office-next-actions {
+    flex-shrink: 0;
+    margin-top: 0;
+}
+
+/* Responsive */
+
+@media (max-width: 760px) {
+    .office-course-page .office-hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .office-course-page .office-hero-art {
+        max-width: 360px;
+        min-height: 235px;
+    }
+
+    .office-course-page .office-topic-grid,
+    .office-course-page .office-outcomes,
+    .office-course-page .office-resource-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .office-course-page .office-next-step {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .office-course-page .office-next-actions {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    #office-word-page,
+    #office-powerpoint-page,
+    #office-excel-page {
+        width: 94vw !important;
+        margin-top: 16px !important;
+    }
+
+    .office-course-page .office-hero {
+        padding: 25px 20px;
+        border-radius: 19px;
+    }
+
+    .office-course-page .office-hero h1 {
+        font-size: 29px;
+    }
+
+    .office-course-page .office-hero-actions,
+    .office-course-page .office-next-actions {
+        flex-direction: column;
+    }
+
+    .office-course-page .office-btn {
+        width: 100%;
+    }
+
+    .office-course-page .office-hero-art {
+        min-height: 210px;
+        padding: 14px;
+    }
+
+    .office-course-page .office-topic-card {
+        padding: 16px;
+    }
+}

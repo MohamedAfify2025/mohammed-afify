@@ -1,0 +1,532 @@
+#programming-page {
+    width: min(1120px, 94vw) !important;
+    margin: 28px auto 72px !important;
+    color: #172642;
+}
+
+#programming-page h1,
+#programming-page h2,
+#programming-page h3,
+#programming-page p {
+    overflow-wrap: anywhere;
+}
+
+#programming-page .prog-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    align-items: center;
+    gap: 28px;
+    padding: clamp(26px, 4vw, 48px);
+    overflow: hidden;
+    border-radius: 25px;
+    color: #fff;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(43,188,174,.18), transparent 34%),
+        linear-gradient(135deg, #101a32, #203c62);
+    box-shadow: 0 18px 42px rgba(16,26,50,.12);
+}
+
+#programming-page .prog-hero-content {
+    text-align: right;
+}
+
+#programming-page .prog-eyebrow,
+#programming-page .prog-kicker {
+    color: #25b8aa;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+#programming-page .prog-hero h1 {
+    margin: 12px 0;
+    color: #fff;
+    font-size: clamp(30px, 3.7vw, 43px);
+    line-height: 1.5;
+}
+
+#programming-page .prog-hero p {
+    color: #dce7f4;
+    font-size: 14px;
+    line-height: 2.1;
+}
+
+#programming-page .prog-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+#programming-page .prog-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none !important;
+    transition: transform .18s ease;
+}
+
+#programming-page .prog-btn:hover {
+    transform: translateY(-2px);
+}
+
+#programming-page .prog-btn-primary {
+    color: #082f35 !important;
+    background: #2bbcae;
+}
+
+#programming-page .prog-btn-secondary {
+    border-color: #71839d;
+    color: #fff !important;
+    background: transparent;
+}
+
+#programming-page .prog-hero-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 440px;
+    height: 280px;
+    margin: auto;
+    overflow: hidden;
+}
+
+#programming-page .prog-hero-visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 14px;
+}
+
+#programming-page .prog-section,
+#programming-page .prog-resources-section {
+    margin-top: 42px;
+}
+
+#programming-page .prog-section-heading {
+    margin-bottom: 22px;
+    text-align: right;
+}
+
+#programming-page .prog-section-heading h2,
+#programming-page .prog-workshop h2,
+#programming-page .prog-social h2,
+#programming-page .prog-next-step h2 {
+    margin: 7px 0 9px;
+    color: #172642;
+    font-size: clamp(24px, 3vw, 31px);
+    line-height: 1.6;
+}
+
+#programming-page .prog-section-heading p,
+#programming-page .prog-workshop p,
+#programming-page .prog-social p,
+#programming-page .prog-next-step p {
+    margin: 0;
+    color: #65748a;
+    font-size: 13px;
+    line-height: 2;
+}
+
+#programming-page .prog-track-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+#programming-page .prog-track-card {
+    display: grid;
+    grid-template-columns: minmax(150px, .8fr) minmax(0, 1.2fr);
+    align-items: stretch;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #e2e8f2;
+    border-radius: 18px;
+    color: inherit;
+    background: #fff;
+    text-decoration: none !important;
+    box-shadow: 0 7px 22px rgba(20,35,58,.035);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+#programming-page .prog-track-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(20,35,58,.09);
+}
+
+#programming-page .prog-track-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 205px;
+    padding: 12px;
+    background: linear-gradient(135deg, #f3f6fc, #e7eef8);
+}
+
+#programming-page .prog-track-image img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+#programming-page .prog-track-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 19px;
+    text-align: right;
+}
+
+#programming-page .prog-track-kicker {
+    color: #168c83;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .7px;
+}
+
+#programming-page .prog-track-body h3 {
+    margin: 8px 0;
+    color: #172642;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+#programming-page .prog-track-body p {
+    flex: 1;
+    margin: 0 0 14px;
+    color: #65748a;
+    font-size: 12px;
+    line-height: 1.95;
+}
+
+#programming-page .prog-track-link {
+    color: #6844b0;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+#programming-page .prog-basics {
+    margin-top: 40px;
+}
+
+#programming-page .prog-topic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+}
+
+#programming-page .prog-topic {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 19px;
+    border: 1px solid #e2e8f2;
+    border-radius: 15px;
+    background: #fff;
+}
+
+#programming-page .prog-topic span {
+    display: grid;
+    place-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    color: #14887e;
+    background: #e7f7f4;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+#programming-page .prog-topic strong {
+    color: #172642;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+#programming-page .prog-topic small {
+    color: #65748a;
+    font-size: 11px;
+    line-height: 1.9;
+}
+
+#programming-page .prog-workshop {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, .8fr);
+    align-items: center;
+    gap: 24px;
+    margin-top: 28px;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid #dce9e8;
+    border-radius: 19px;
+    background: linear-gradient(120deg, #effaf8, #fff 75%);
+}
+
+#programming-page .prog-workshop-copy {
+    text-align: right;
+}
+
+#programming-page .prog-workshop h2 {
+    margin-top: 7px;
+}
+
+#programming-page .prog-workshop .prog-btn {
+    margin-top: 18px;
+}
+
+#programming-page .prog-workshop-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #fff;
+}
+
+#programming-page .prog-workshop-image img {
+    display: block;
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+}
+
+#programming-page .prog-resource-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+}
+
+#programming-page .prog-resource-card {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+    padding: 17px;
+    border: 1px solid #e0e7f0;
+    border-radius: 15px;
+    color: inherit !important;
+    background: #fff;
+    text-decoration: none !important;
+    box-shadow: 0 6px 20px rgba(20,35,58,.035);
+    transition: transform .18s ease, border-color .18s ease;
+}
+
+#programming-page .prog-resource-card:hover {
+    transform: translateY(-2px);
+    border-color: #b6d8d2;
+}
+
+#programming-page .prog-resource-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    color: #6746ab;
+    background: #f0ebfc;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+#programming-page .prog-resource-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+#programming-page .prog-resource-copy strong,
+#programming-page .prog-resource-copy small {
+    display: block;
+}
+
+#programming-page .prog-resource-copy strong {
+    margin-bottom: 4px;
+    color: #172642;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+#programming-page .prog-resource-copy small {
+    color: #6a788b;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+#programming-page .prog-resource-arrow {
+    color: #168c83;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+#programming-page .prog-social {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 28px;
+    padding: 22px;
+    border: 1px solid #e2e8f2;
+    border-radius: 18px;
+    background: #fff;
+}
+
+#programming-page .prog-social h2 {
+    font-size: 20px;
+}
+
+#programming-page .prog-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+#programming-page .prog-social-links a {
+    padding: 9px 12px;
+    border: 1px solid #e0e7f0;
+    border-radius: 10px;
+    color: #30425f !important;
+    background: #fbfcfe;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none !important;
+}
+
+#programming-page .prog-next-step {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 28px;
+    padding: 24px;
+    border-radius: 18px;
+    background: #172642;
+}
+
+#programming-page .prog-next-step h2 {
+    color: #fff;
+    font-size: 19px;
+}
+
+#programming-page .prog-next-step p {
+    color: #d1dbea;
+}
+
+@media (max-width: 900px) {
+    #programming-page .prog-track-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #programming-page .prog-topic-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    #programming-page .prog-hero,
+    #programming-page .prog-workshop {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #programming-page .prog-hero-visual {
+        max-width: 350px;
+        height: 230px;
+    }
+
+    #programming-page .prog-hero-visual img {
+        max-height: 230px;
+    }
+
+    #programming-page .prog-workshop-image {
+        max-width: 430px;
+        width: 100%;
+        margin: auto;
+    }
+
+    #programming-page .prog-resource-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #programming-page .prog-social {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #programming-page .prog-next-step {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 520px) {
+    #programming-page {
+        width: 94vw !important;
+        margin-top: 16px !important;
+    }
+
+    #programming-page .prog-hero {
+        padding: 25px 20px;
+        border-radius: 19px;
+    }
+
+    #programming-page .prog-hero h1 {
+        font-size: 29px;
+    }
+
+    #programming-page .prog-hero-actions {
+        flex-direction: column;
+    }
+
+    #programming-page .prog-btn {
+        width: 100%;
+    }
+
+    #programming-page .prog-track-card {
+        grid-template-columns: 110px minmax(0, 1fr);
+    }
+
+    #programming-page .prog-track-image {
+        min-height: 180px;
+        padding: 8px;
+    }
+
+    #programming-page .prog-track-image img {
+        height: 155px;
+    }
+
+    #programming-page .prog-track-body {
+        padding: 13px;
+    }
+
+    #programming-page .prog-track-body h3 {
+        font-size: 14px;
+    }
+
+    #programming-page .prog-topic-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #programming-page .prog-hero-visual {
+        height: 190px;
+    }
+
+    #programming-page .prog-hero-visual img {
+        max-height: 190px;
+    }
+}
+
+/* END PROGRAMMING PAGE DESIGN */

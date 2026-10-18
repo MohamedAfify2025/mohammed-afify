@@ -1,0 +1,678 @@
+/* WINDOWS STANDALONE DESIGN */
+
+.gs-main.gs-windows-page {
+    width: min(1120px, 94vw) !important;
+    margin: 28px auto 72px !important;
+    color: #172642 !important;
+}
+
+.gs-windows-page .win-hero {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.25fr) minmax(230px, .75fr) !important;
+    align-items: center !important;
+    gap: 28px !important;
+    min-height: 300px;
+    padding: clamp(26px, 4vw, 50px) !important;
+    overflow: hidden;
+    border-radius: 24px !important;
+    color: #ffffff !important;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(43,188,174,.22), transparent 34%),
+        linear-gradient(135deg, #101a32, #203c62) !important;
+    box-shadow: 0 18px 42px rgba(16,26,50,.12) !important;
+}
+
+.gs-windows-page .win-hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: right;
+}
+
+.gs-windows-page .win-eyebrow,
+.gs-windows-page .win-section-kicker {
+    color: #20aa9c !important;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.gs-windows-page .win-hero h1 {
+    margin: 12px 0 !important;
+    color: #ffffff !important;
+    font-size: clamp(30px, 4vw, 44px) !important;
+    line-height: 1.45 !important;
+}
+
+.gs-windows-page .win-hero p {
+    max-width: 600px;
+    margin: 0;
+    color: #e1eaf5 !important;
+    font-size: 14px;
+    line-height: 2.1;
+}
+
+.gs-windows-page .win-hero-actions {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.gs-windows-page .win-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 16px !important;
+    border: 1px solid transparent;
+    border-radius: 10px !important;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none !important;
+}
+
+.gs-windows-page .win-btn-primary {
+    color: #082f35 !important;
+    background: #2bbcae !important;
+}
+
+.gs-windows-page .win-btn-secondary {
+    color: #ffffff !important;
+    border-color: #72839c !important;
+    background: transparent !important;
+}
+
+.gs-windows-page .win-hero-visual {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.gs-windows-page .win-visual-window {
+    width: min(100%, 260px);
+    overflow: hidden;
+    border: 1px solid #ffffff60;
+    border-radius: 16px;
+    color: #203c62;
+    background: #ffffff;
+    box-shadow: 0 18px 40px #0002;
+}
+
+.gs-windows-page .win-window-top {
+    display: flex;
+    gap: 5px;
+    padding: 10px 12px;
+    background: #e8eef7;
+}
+
+.gs-windows-page .win-window-top i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #9cacc2;
+}
+
+.gs-windows-page .win-window-body {
+    position: relative;
+    padding: 25px 22px;
+}
+
+.gs-windows-page .win-window-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    color: #ffffff;
+    background: #2167ae;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.gs-windows-page .win-window-line {
+    height: 8px;
+    width: 78%;
+    margin-top: 18px;
+    border-radius: 8px;
+    background: #e0e7f1;
+}
+
+.gs-windows-page .win-window-line.short {
+    width: 48%;
+    margin-top: 9px;
+}
+
+.gs-windows-page .win-window-check {
+    position: absolute;
+    right: 20px;
+    bottom: 22px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #ffffff;
+    background: #20a58b;
+    font-weight: 900;
+}
+
+.gs-windows-page .win-visual-caption {
+    color: #dce7f5 !important;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.gs-windows-page .win-intro,
+.gs-windows-page .win-resources {
+    margin-top: 42px !important;
+}
+
+.gs-windows-page .win-section-heading {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.gs-windows-page .win-section-heading h2,
+.gs-windows-page .win-outcomes h2 {
+    margin: 7px 0 9px !important;
+    color: #172642 !important;
+    font-size: clamp(24px, 3vw, 30px) !important;
+    line-height: 1.6;
+}
+
+.gs-windows-page .win-section-heading p,
+.gs-windows-page .win-outcomes-content p {
+    margin: 0;
+    color: #65748a !important;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.gs-windows-page .win-topic-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 15px !important;
+}
+
+.gs-windows-page .win-topic-card {
+    display: flex !important;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+    padding: 20px !important;
+    border: 1px solid #e2e8f2 !important;
+    border-radius: 16px !important;
+    background: #ffffff !important;
+    box-shadow: 0 7px 22px #14233a08;
+}
+
+.gs-windows-page .win-topic-number {
+    display: grid !important;
+    place-items: center;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    color: #14887e !important;
+    background: #e7f7f4 !important;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.gs-windows-page .win-topic-card h3 {
+    margin: 0 0 7px !important;
+    color: #172642 !important;
+    font-size: 16px !important;
+    line-height: 1.7;
+}
+
+.gs-windows-page .win-topic-card p {
+    margin: 0;
+    color: #65748a !important;
+    font-size: 12px;
+    line-height: 1.95;
+}
+
+.gs-windows-page .win-outcomes {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: center;
+    gap: 26px;
+    margin-top: 28px !important;
+    padding: clamp(22px, 3vw, 32px) !important;
+    border: 1px solid #dce9e8 !important;
+    border-radius: 19px !important;
+    background: linear-gradient(120deg, #effaf8, #ffffff 75%) !important;
+}
+
+.gs-windows-page .win-outcomes-list {
+    display: grid !important;
+    gap: 12px;
+}
+
+.gs-windows-page .win-outcomes-list > div {
+    display: flex !important;
+    align-items: flex-start;
+    gap: 10px;
+    color: #36465b !important;
+    font-size: 12px;
+    line-height: 1.85;
+}
+
+.gs-windows-page .win-outcomes-list > div span {
+    display: grid;
+    place-items: center;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    color: #127b70 !important;
+    background: #d9f4ed !important;
+    font-weight: 900;
+}
+
+.gs-windows-page .win-resource-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px;
+}
+
+.gs-windows-page .win-resource-card {
+    display: flex !important;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+    padding: 18px !important;
+    border: 1px solid #e0e7f0 !important;
+    border-radius: 15px !important;
+    color: inherit !important;
+    background: #ffffff !important;
+    text-decoration: none !important;
+    box-shadow: 0 6px 20px #14233a08;
+}
+
+.gs-windows-page .win-resource-icon {
+    display: grid !important;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    color: #6746ab !important;
+    background: #f0ebfc !important;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.gs-windows-page .win-resource-icon-test {
+    color: #137c70 !important;
+    background: #e3f6f1 !important;
+    font-size: 20px;
+}
+
+.gs-windows-page .win-resource-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.gs-windows-page .win-resource-copy strong,
+.gs-windows-page .win-resource-copy small {
+    display: block;
+}
+
+.gs-windows-page .win-resource-copy strong {
+    margin-bottom: 4px;
+    color: #172642 !important;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.gs-windows-page .win-resource-copy small {
+    color: #6a788b !important;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+.gs-windows-page .win-resource-arrow {
+    color: #168c83 !important;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.gs-windows-page .win-next-step {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 28px !important;
+    padding: 24px !important;
+    border-radius: 18px !important;
+    color: #ffffff !important;
+    background: #172642 !important;
+}
+
+.gs-windows-page .win-next-step h2 {
+    margin: 0 0 6px !important;
+    color: #ffffff !important;
+    font-size: 19px !important;
+}
+
+.gs-windows-page .win-next-step p {
+    margin: 0;
+    color: #d1dbea !important;
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+@media (max-width: 760px) {
+    .gs-windows-page .win-hero {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .gs-windows-page .win-hero-visual {
+        display: none !important;
+    }
+
+    .gs-windows-page .win-topic-grid,
+    .gs-windows-page .win-outcomes,
+    .gs-windows-page .win-resource-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .gs-windows-page .win-next-step {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 520px) {
+    .gs-main.gs-windows-page {
+        width: 94vw !important;
+        margin-top: 16px !important;
+    }
+
+    .gs-windows-page .win-hero {
+        padding: 25px 20px !important;
+        border-radius: 19px !important;
+    }
+
+    .gs-windows-page .win-hero h1 {
+        font-size: 29px !important;
+    }
+
+    .gs-windows-page .win-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .gs-windows-page .win-btn {
+        width: 100%;
+    }
+
+    .gs-windows-page .win-topic-card {
+        padding: 16px !important;
+    }
+}
+
+/* END WINDOWS STANDALONE DESIGN */
+
+
+/* WINDOWS FOUR-PANE ICON START */
+
+.gs-windows-page .win-window-icon {
+    display: block !important;
+    width: 60px !important;
+    height: 60px !important;
+    padding: 0 !important;
+    overflow: hidden;
+    border-radius: 13px !important;
+    background-color: #2167ae !important;
+    background-image:
+        linear-gradient(#ffffff, #ffffff),
+        linear-gradient(#ffffff, #ffffff),
+        linear-gradient(#ffffff, #ffffff),
+        linear-gradient(#ffffff, #ffffff) !important;
+    background-size:
+        44% 44%,
+        44% 44%,
+        44% 44%,
+        44% 44% !important;
+    background-position:
+        left 5px top 5px,
+        right 5px top 5px,
+        left 5px bottom 5px,
+        right 5px bottom 5px !important;
+    background-repeat: no-repeat !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+}
+
+.gs-windows-page .win-window-icon span {
+    display: none !important;
+}
+
+/* WINDOWS FOUR-PANE ICON END */
+
+
+/* WINDOWS HERO IMAGE START */
+
+.gs-windows-page .win-hero {
+    grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr) !important;
+    align-items: center !important;
+}
+
+.gs-windows-page .win-hero-visual {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+}
+
+.gs-windows-page .win-hero-image {
+    display: block !important;
+    width: 100%;
+    max-width: 410px;
+    max-height: 330px;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .16);
+}
+
+@media (max-width: 760px) {
+    .gs-windows-page .win-hero {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .gs-windows-page .win-hero-visual {
+        display: flex !important;
+        max-width: 340px;
+        margin: 8px auto 0;
+    }
+
+    .gs-windows-page .win-hero-image {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 420px) {
+    .gs-windows-page .win-hero-visual {
+        max-width: 260px;
+    }
+
+    .gs-windows-page .win-hero-image {
+        max-height: 210px;
+    }
+}
+
+/* WINDOWS HERO IMAGE END */
+
+
+/* WINDOWS HERO IMAGE SIZE FIX START */
+
+/* تثبيت المقدمة ومنع تداخل الصورة مع النص */
+.gs-main.gs-windows-page > .win-hero {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) !important;
+    align-items: center !important;
+    gap: 28px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* تحديد مساحة الصورة */
+.gs-main.gs-windows-page .win-hero-visual {
+    display: flex !important;
+    position: relative !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 430px !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: 300px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+/* فرض أبعاد مناسبة للصورة نفسها */
+.gs-main.gs-windows-page img.win-hero-image {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 430px !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: 290px !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+}
+
+/* التأكد من بقاء النص فوق خلفية المقدمة */
+.gs-main.gs-windows-page .win-hero-content {
+    position: relative !important;
+    z-index: 1 !important;
+    min-width: 0 !important;
+}
+
+/* الهواتف والأجهزة الصغيرة */
+@media (max-width: 760px) {
+    .gs-main.gs-windows-page > .win-hero {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 22px !important;
+    }
+
+    .gs-main.gs-windows-page .win-hero-visual {
+        width: 100% !important;
+        max-width: 340px !important;
+        max-height: 240px !important;
+    }
+
+    .gs-main.gs-windows-page img.win-hero-image {
+        width: 100% !important;
+        max-width: 340px !important;
+        max-height: 240px !important;
+    }
+}
+
+/* WINDOWS HERO IMAGE SIZE FIX END */
+
+
+/* WINDOWS IMAGE FINAL OVERRIDE START */
+
+/* الحفاظ على توزيع المقدمة */
+.gs-main.gs-windows-page > .win-hero {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 28px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* صندوق صورة ثابت الأبعاد */
+
+# windows-course-hero-visual {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 410px !important;
+    min-width: 0 !important;
+    height: 273px !important;
+    max-height: 273px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    flex: 0 1 410px !important;
+}
+
+/* منع تمدد الصورة */
+#windows-course-hero-img {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* بقاء النص فوق خلفية المقدمة */
+.gs-main.gs-windows-page .win-hero-content {
+    position: relative !important;
+    z-index: 2 !important;
+    min-width: 0 !important;
+}
+
+/* الشاشات الصغيرة */
+@media (max-width: 760px) {
+    .gs-main.gs-windows-page > .win-hero {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 22px !important;
+    }
+
+    #windows-course-hero-visual {
+        width: 100% !important;
+        max-width: 360px !important;
+        height: 240px !important;
+        max-height: 240px !important;
+        margin: 0 auto !important;
+    }
+}
+
+@media (max-width: 420px) {
+    #windows-course-hero-visual {
+        max-width: 285px !important;
+        height: 190px !important;
+        max-height: 190px !important;
+    }
+}
+
+/* WINDOWS IMAGE FINAL OVERRIDE END */

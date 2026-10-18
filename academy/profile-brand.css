@@ -1,0 +1,113 @@
+/* Brand image showcase in the white profile section */
+#professional-profile .profile-brand-showcase {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 1.08fr);
+    align-items: center;
+    gap: clamp(20px, 3vw, 34px);
+    width: 100%;
+    margin: 24px auto 0;
+    padding: clamp(22px, 3vw, 34px);
+    border: 1px solid #e2e8f2;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(20, 35, 58, .055);
+}
+
+#professional-profile .profile-brand-copy {
+    min-width: 0;
+    text-align: right;
+}
+
+#professional-profile .profile-brand-kicker {
+    color: #159e94;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+#professional-profile .profile-brand-copy h2 {
+    margin: 9px 0 10px;
+    color: #172642;
+    font-size: clamp(21px, 2.5vw, 29px);
+    line-height: 1.55;
+}
+
+#professional-profile .profile-brand-copy p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 2.05;
+}
+
+#professional-profile .profile-brand-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 17px;
+}
+
+#professional-profile .profile-brand-tags span {
+    padding: 7px 11px;
+    border: 1px solid #e0e7f0;
+    border-radius: 999px;
+    color: #40526a;
+    background: #f8fafc;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#professional-profile .profile-brand-image-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 190px;
+    padding: 12px;
+    overflow: hidden;
+    border: 1px solid #edf0f5;
+    border-radius: 15px;
+    background: #fff;
+    text-decoration: none !important;
+}
+
+#professional-profile img.profile-brand-image {
+    display: block;
+    width: 100%;
+    max-width: 570px;
+    max-height: 250px;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 8px;
+}
+
+@media (max-width: 760px) {
+    #professional-profile .profile-brand-showcase {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 22px;
+    }
+
+    #professional-profile .profile-brand-image-link {
+        min-height: 130px;
+    }
+
+    #professional-profile img.profile-brand-image {
+        max-height: 210px;
+    }
+}
+
+@media (max-width: 480px) {
+    #professional-profile .profile-brand-showcase {
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    #professional-profile .profile-brand-copy h2 {
+        font-size: 22px;
+    }
+
+    #professional-profile .profile-brand-copy p {
+        font-size: 12px;
+    }
+}
+/* End brand image showcase */
