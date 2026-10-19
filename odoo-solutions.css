@@ -42,3 +42,67 @@
 @media(max-width:950px){.odoo-home-cta-inner{grid-template-columns:1fr;gap:30px}.odoo-detail-hero-inner{grid-template-columns:1fr .8fr;gap:10px}.odoo-detail-card{grid-template-columns:35px minmax(0,1fr)}.odoo-detail-aside{grid-column:2;border-right:0;border-top:1px solid #e8edf3;padding:15px 0 0;flex-direction:row;align-items:center}.odoo-detail-aside p{max-width:440px}.odoo-detail-nav nav{gap:13px}}
 @media(max-width:700px){.odoo-detail-nav{flex-wrap:wrap}.odoo-detail-nav nav{order:3;overflow:auto;width:100%;padding:5px 0}.odoo-detail-nav nav a{white-space:nowrap}.odoo-small-cta{margin-right:auto}.odoo-detail-hero-inner{grid-template-columns:1fr}.odoo-system-visual{min-height:280px}.odoo-system-orbit{width:245px;height:245px}.odoo-system-orbit.orbit-two{width:190px;height:190px}.odoo-detail-hero h1{font-size:2.65rem}.odoo-detail-card{grid-template-columns:1fr;padding:22px;gap:10px}.odoo-detail-index{padding:0}.odoo-detail-aside{grid-column:1}.odoo-accounting-inner{grid-template-columns:1fr;gap:24px}.odoo-detail-contact-inner{align-items:stretch;flex-direction:column}.odoo-detail-contact-actions{width:100%}.odoo-detail-contact-actions>*{width:100%;box-sizing:border-box}.odoo-detail-footer{flex-direction:column}.odoo-home-cta-cards a{grid-template-columns:38px 1fr 20px}}
 @media(prefers-reduced-motion:reduce){.odoo-home-cta-button,.odoo-home-cta-cards a{transition:none}}
+/* ODOO-VIDEOS-STYLE-START */
+.odoo-video-block {
+  margin: 24px 0;
+  padding: 18px;
+  border: 1px solid #e2e9ef;
+  border-radius: 16px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+.odoo-video-heading > span {
+  color: #0d9488;
+  font-size: .69rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+}
+.odoo-video-heading h4 {
+  margin: 7px 0;
+  color: #14213b;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+.odoo-video-heading p {
+  color: #68758b;
+  font-size: .9rem;
+  line-height: 1.8;
+  margin-bottom: 14px !important;
+}
+.odoo-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #101a32;
+}
+.odoo-video-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  border: 0;
+}
+.odoo-video-fallback {
+  display: inline-block;
+  margin-top: 13px;
+  color: #078b7d !important;
+  font-size: .87rem;
+  font-weight: 800;
+  text-decoration: none !important;
+}
+.odoo-video-fallback:hover {
+  text-decoration: underline !important;
+}
+@media (max-width: 600px) {
+  .odoo-video-block {
+    padding: 12px;
+    margin: 18px 0;
+  }
+  .odoo-video-heading h4 {
+    font-size: 1rem;
+  }
+}
+/* ODOO-VIDEOS-STYLE-END */

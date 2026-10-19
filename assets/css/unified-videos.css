@@ -1,0 +1,86 @@
+/* UNIFIED-VIDEOS-MANAGED */
+.platform-video-card,
+.odoo-video-block {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 24px 0;
+  padding: 17px;
+  border: 1px solid #e2e9ef;
+  border-radius: 16px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+.platform-video-frame,
+.odoo-video-frame {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #101a32;
+}
+.platform-video-frame iframe,
+.platform-video-frame video,
+.odoo-video-frame iframe,
+.odoo-video-frame video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  border: 0;
+  object-fit: contain;
+}
+.platform-video-caption {
+  display: block;
+  padding-top: 14px;
+  color: #14213b;
+  line-height: 1.8;
+}
+.platform-video-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #0d9488;
+  font-family: Arial, sans-serif;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+.platform-video-caption strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 800;
+}
+.platform-video-caption a,
+.odoo-video-fallback {
+  display: inline-block;
+  margin-top: 8px;
+  color: #078b7d !important;
+  font-size: .86rem;
+  font-weight: 800;
+  text-decoration: none !important;
+}
+.platform-video-caption a:hover,
+.odoo-video-fallback:hover {
+  text-decoration: underline !important;
+}
+@media (max-width: 600px) {
+  .platform-video-card,
+  .odoo-video-block {
+    margin: 18px 0;
+    padding: 11px;
+    border-radius: 12px;
+  }
+  .platform-video-caption strong {
+    font-size: .94rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .platform-video-card * {
+    scroll-behavior: auto;
+  }
+}
