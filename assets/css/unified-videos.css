@@ -84,3 +84,85 @@
     scroll-behavior: auto;
   }
 }
+/* PLAYLIST-DISTRIBUTION-CSS-START */
+.playlist-lessons-section {
+  padding: clamp(48px, 7vw, 82px) 22px;
+  background: #f5f7fb;
+}
+.playlist-lessons-inner {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.playlist-lessons-header {
+  max-width: 780px;
+  margin: 0 auto 30px;
+  text-align: right;
+}
+.playlist-lessons-header h2 {
+  margin: 12px 0;
+  color: #14213b;
+  font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+  line-height: 1.4;
+}
+.playlist-lessons-header p {
+  color: #68758b;
+  line-height: 1.9;
+}
+.playlist-video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+.playlist-video-grid > .platform-video-card {
+  min-width: 0;
+  margin: 0;
+  height: auto;
+}
+@media (max-width: 760px) {
+  .playlist-video-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
+  }
+  .playlist-lessons-section {
+    padding-inline: 15px;
+  }
+}
+/* PLAYLIST-DISTRIBUTION-CSS-END */
+/* CHANNEL-VIDEOS-CSS-START */
+.channel-videos-section .channel-subscribe-link,
+.channel-odoo-videos .channel-subscribe-link {
+  display: inline-flex;
+  margin-top: 10px;
+  color: #078b7d !important;
+  font-size: .88rem;
+  font-weight: 800;
+  text-decoration: none !important;
+}
+.channel-videos-section .channel-subscribe-link:hover,
+.channel-odoo-videos .channel-subscribe-link:hover {
+  text-decoration: underline !important;
+}
+.channel-video-grid {
+  align-items: start;
+}
+.channel-video-grid > .platform-video-card {
+  min-width: 0;
+  height: auto;
+  margin: 0;
+}
+.channel-odoo-video-group {
+  margin-top: 35px;
+}
+.channel-odoo-video-group h3 {
+  margin: 0 0 18px;
+  color: #14213b;
+  font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+}
+@media (max-width: 760px) {
+  .channel-video-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* CHANNEL-VIDEOS-CSS-END */
