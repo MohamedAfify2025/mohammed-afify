@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- MEMBERSHIP ACCESS PRELOAD -->
+<style>html.m-access-checking body main{visibility:hidden!important}</style>
+<script>document.documentElement.classList.add('m-access-checking');</script>
+<!-- /MEMBERSHIP ACCESS PRELOAD -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="تعليم البرمجة للأطفال باستخدام أنشطة مرئية ومشروعات صغيرة.">
@@ -16,15 +20,16 @@
 <link rel="stylesheet" href="../assets/css/unified-videos.css">
     <!-- CINEMATIC MOTION LAYER -->
     <link rel="stylesheet" href="../assets/css/cinematic-motion.css">
+    <link rel="stylesheet" href="../assets/css/site-assistant.css">
 </head>
 <body>
 <header class="gs-header">
 <a class="gs-brand" href="../index.html"><span>MA.</span> Mohammed Afify</a>
-<nav class="gs-nav"><a href='../index.html#googleSitesLibrary'>الرئيسية</a><a href='index.html'>مكتبة الدورات</a><a href='programming.html'>البرمجة</a><a href='icdl.html'>ICDL</a><a href='data-analysis.html'>تحليل البيانات</a><a href='projects.html'>المشروعات</a></nav>
+<nav class="gs-nav"><a href='../index.html#googleSitesLibrary'>الرئيسية</a><a href='index.html'>مكتبة الدورات</a><a href='programming.html'>البرمجة</a><a href='icdl.html'>ICDL</a><a href='data-analysis.html'>تحليل البيانات</a><a href='projects.html'>المشروعات</a><a href='../membership/login.html'>حساب الطالب</a><a href='../membership/register.html'>طلب الاشتراك</a></nav>
 </header>
 <main id="scratch-page" class="gs-main gs-scratch-page">
 
-  <section class="scratch-hero">
+  <section class="scratch-hero" data-cinematic-bg="programming">
     <div class="scratch-hero-content">
       <span class="scratch-eyebrow">KIDS CODING · SCRATCH</span>
       <h1>البرمجة للأطفال بطريقة ممتعة</h1>
@@ -422,5 +427,11 @@
 <footer class="gs-footer"><a href="../index.html">Mohammed Afify</a><span>Learn · Analyze · Build · Transform</span></footer>
     <!-- CINEMATIC MOTION SCRIPT -->
     <script src="../assets/js/cinematic-motion.js"></script>
+    <script src="../assets/js/site-assistant.js" defer></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/membership.js" defer></script>
+<script src="../assets/js/membership-access-control.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 80">
+  <rect x="8" y="8" width="64" height="64" rx="16" fill="#101A32"/>
+  <text x="34" y="49" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="24" fill="#F4F6FB">MA</text>
+  <circle cx="62" cy="48" r="4" fill="#F5B83D"/>
+  <text x="88" y="42" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="26" fill="#101A32">Mohammed Afify</text>
+  <text x="89" y="62" font-family="Segoe UI,Arial,sans-serif" font-size="13" letter-spacing="2" fill="#1B2A4E">LEARN · ANALYZE · BUILD</text>
+</svg>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="أرسل طلب الانضمام إلى منصة Mohammed Afify التعليمية.">
+  <title>طلب الاشتراك | Mohammed Afify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/membership.css">
+</head>
+<body class="membership-page" data-page="register">
+  <div class="m-shell"><header class="m-header"><a class="m-brand" href="../index.html"><span class="m-mark">MA<span>.</span></span><span>Mohammed Afify<small style="display:block;color:#778198;font-size:10px;font-weight:500">منصة التعلم والتطبيق</small></span></a><nav class="m-nav"><a href="../index.html">الرئيسية</a><a href="../academy/index.html">مكتبة الدورات</a><a href="login.html">تسجيل الدخول</a></nav></header>
+    <main class="m-layout auth-only"><section class="m-intro"><span class="m-kicker">JOIN THE LEARNING COMMUNITY</span><h1>خطوتك الأولى تبدأ من هنا.</h1><p>أنشئ حسابك وقدم طلب الاشتراك. بعد مراجعة الطلب واعتماده، ستتمكن من متابعة تقدمك ونتائجك من لوحة الطالب.</p><ul class="m-points"><li><span>✓</span> حساب شخصي مرتبط ببريدك الإلكتروني.</li><li><span>✓</span> متابعة تقدم الدروس والاختبارات عند تفعيلها.</li><li><span>✓</span> مراجعة الطلب يدويًا من إدارة المنصة.</li></ul></section>
+    <section class="m-card"><h2>طلب اشتراك جديد</h2><p class="m-muted">املأ البيانات التالية بدقة. الحقول المعلّمة مطلوبة.</p><div id="configWarning" class="m-config-warning">يلزم ربط المنصة بمشروع Supabase قبل إرسال الطلبات. راجع ملف SETUP-MEMBERSHIP.md داخل الحزمة.</div><div id="formNotice" class="m-notice" role="status" aria-live="polite"></div>
+      <form id="registerForm" class="m-form"><div class="m-field"><label for="fullName">الاسم بالكامل *</label><input id="fullName" name="fullName" autocomplete="name" required maxlength="120" placeholder="الاسم كما تريد ظهوره في حسابك"></div>
+        <div class="m-field"><label for="email">البريد الإلكتروني *</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="name@example.com"></div>
+        <div class="m-field"><label for="phone">رقم الهاتف *</label><input id="phone" name="phone" type="tel" autocomplete="tel" required maxlength="30" placeholder="01xxxxxxxxx"></div>
+        <div class="m-field"><label for="course">المسار أو الدورة المطلوبة *</label><select id="course" name="course" required><option value="" selected disabled>اختر المسار المتاح حاليًا</option><option value="الإدارة والأعمال">الإدارة والأعمال — متاح الآن</option><optgroup label="مسارات ستُتاح لاحقًا"><option value="البرمجة" disabled>البرمجة — قريبًا</option><option value="تحليل البيانات" disabled>تحليل البيانات — قريبًا</option><option value="ICDL ومهارات الكمبيوتر" disabled>ICDL ومهارات الكمبيوتر — قريبًا</option><option value="Microsoft Office" disabled>Microsoft Office — قريبًا</option><option value="المحاسبة و Odoo" disabled>المحاسبة و Odoo — قريبًا</option><option value="مسار آخر / لم أحدد بعد" disabled>مسار آخر — قريبًا</option></optgroup>
+</select></div>
+        <div class="m-field"><label for="password">كلمة المرور *</label><input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required placeholder="8 أحرف على الأقل"></div>
+        <div class="m-field"><label for="confirmPassword">تأكيد كلمة المرور *</label><input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="أعد كتابة كلمة المرور"></div>
+        <button class="m-button" type="submit">إرسال طلب الاشتراك ←</button><p class="m-muted" style="font-size:11px;margin:0">إرسال الطلب لا يعني تفعيل الاشتراك تلقائيًا. ستظهر حالة الطلب داخل حسابك.</p>
+      </form><div class="m-links"><span>لديك حساب بالفعل؟</span><a href="login.html">تسجيل الدخول</a></div>
+    </section></main><footer class="m-footer">© <span id="year"></span> Mohammed Afify · <a href="../index.html">العودة إلى الموقع</a></footer>
+  </div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/js/supabase-config.js"></script><script src="../assets/js/membership.js" defer></script>
+</body></html>

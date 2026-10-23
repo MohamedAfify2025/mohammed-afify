@@ -950,3 +950,1027 @@ textarea:focus-visible, select:focus-visible {
 @media (max-width: 700px) {
   #contact.contact-section::before { background-size: 36px 36px; }
 }
+
+/* PAGE-SPECIFIC IMAGE BACKGROUNDS */
+[data-cinematic-bg="home-tech"] { --cinematic-page-image: url("../images/backgrounds/home-tech.png"); }
+[data-cinematic-bg="odoo-business"] { --cinematic-page-image: url("../images/backgrounds/odoo-business.png"); }
+[data-cinematic-bg="education"] { --cinematic-page-image: url("../images/backgrounds/education.png"); }
+[data-cinematic-bg="education"] { --cinematic-page-image: url("../images/backgrounds/education.png"); }
+[data-cinematic-bg="data-analysis"] { --cinematic-page-image: url("../images/backgrounds/data-analysis.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+[data-cinematic-bg="education"] { --cinematic-page-image: url("../images/backgrounds/education.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+[data-cinematic-bg="programming"] { --cinematic-page-image: url("../images/backgrounds/programming.png"); }
+[data-cinematic-bg="home-tech"] { --cinematic-page-image: url("../images/backgrounds/home-tech.png"); }
+[data-cinematic-bg="programming"] { --cinematic-page-image: url("../images/backgrounds/programming.png"); }
+[data-cinematic-bg="programming"] { --cinematic-page-image: url("../images/backgrounds/programming.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+/* Bright, readable backgrounds with a gentle image drift */
+[data-cinematic-bg] {
+  background-image:
+    linear-gradient(
+      105deg,
+      rgba(255,255,255,.70),
+      rgba(246,250,255,.57) 52%,
+      rgba(255,255,255,.43)
+    ),
+    var(--cinematic-page-image) !important;
+  background-size: cover, cover !important;
+  background-position: center, 48% 48%;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: cinematic-page-background-drift 30s ease-in-out infinite alternate;
+}
+
+/* Show the home feature image more clearly */
+#home.hero .hero-visual[data-cinematic-bg="home-tech"] {
+  background-image:
+    linear-gradient(100deg, rgba(255,255,255,.04), rgba(255,255,255,.08)),
+    var(--cinematic-page-image) !important;
+  background-size: cover, cover !important;
+  background-position: center, 50% 50%;
+  background-repeat: no-repeat, no-repeat !important;
+}
+
+/* Dark text stays readable over light image backgrounds */
+[data-cinematic-bg]:not(.hero-visual) h1,
+[data-cinematic-bg]:not(.hero-visual) h2 {
+  color: #173052 !important;
+  text-shadow: none !important;
+}
+
+[data-cinematic-bg]:not(.hero-visual) p {
+  color: #536982;
+}
+
+/* Keep the digital identity consistent */
+[data-cinematic-bg] {
+  border-color: rgba(214,228,244,.8);
+}
+
+/* Slow, subtle background movement */
+@keyframes cinematic-page-background-drift {
+  from { background-position: center, 46% 48%; }
+  to   { background-position: center, 54% 52%; }
+}
+
+@media (max-width: 640px) {
+  [data-cinematic-bg] {
+    background-position: center, 52% center;
+    animation-duration: 38s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-cinematic-bg] {
+    animation: none !important;
+  }
+}
+
+/* ODOO RTL LIGHT HERO REFINEMENT */
+[data-cinematic-bg="odoo-business"] {
+  background-color: #f8fbff !important;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.08) 0%,
+      rgba(255,255,255,.18) 30%,
+      rgba(255,255,255,.58) 65%,
+      rgba(255,255,255,.86) 100%
+    ),
+    url("../images/backgrounds/odoo-business-rtl.png") !important;
+  background-size: cover, cover !important;
+  background-position: center center, center center !important;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: odoo-hero-image-drift 34s ease-in-out infinite alternate;
+}
+
+[data-cinematic-bg="odoo-business"] h1,
+[data-cinematic-bg="odoo-business"] h2 {
+  color: #173052 !important;
+  text-shadow: none !important;
+}
+
+[data-cinematic-bg="odoo-business"] p {
+  color: #405975 !important;
+}
+
+@keyframes odoo-hero-image-drift {
+  from { background-position: center center, 47% 49%; }
+  to   { background-position: center center, 53% 51%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-cinematic-bg="odoo-business"] {
+    animation: none !important;
+  }
+}
+
+/* PROGRAMMING HERO IMAGE COMPOSITION */
+#programming-page .prog-hero[data-cinematic-bg="programming"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #f7faff !important;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.04) 0%,
+      rgba(255,255,255,.13) 34%,
+      rgba(255,255,255,.76) 58%,
+      rgba(255,255,255,.97) 100%
+    ),
+    url("../images/backgrounds/programming-rtl.png") !important;
+  background-size: cover, cover !important;
+  background-position: center, center !important;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: programming-hero-drift 32s ease-in-out infinite alternate;
+}
+
+/* Prevent the old illustration and photo from appearing together */
+#programming-page .prog-hero[data-cinematic-bg="programming"] .prog-hero-visual {
+  visibility: hidden !important;
+}
+
+/* Clear, high-contrast Arabic content */
+#programming-page .prog-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+#programming-page .prog-hero-content h1 {
+  color: #173052 !important;
+  text-shadow: none !important;
+}
+
+#programming-page .prog-hero-content h1 span {
+  color: #1674d5 !important;
+}
+
+#programming-page .prog-hero-content p {
+  color: #415a75 !important;
+  text-shadow: none !important;
+}
+
+#programming-page .prog-hero-content .prog-hero-actions a {
+  text-shadow: none !important;
+}
+
+@keyframes programming-hero-drift {
+  from { background-position: center, 46% 48%; }
+  to   { background-position: center, 54% 52%; }
+}
+
+@media (max-width: 640px) {
+  #programming-page .prog-hero[data-cinematic-bg="programming"] {
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(255,255,255,.90) 0%,
+        rgba(255,255,255,.80) 52%,
+        rgba(255,255,255,.28) 100%
+      ),
+      url("../images/backgrounds/programming-rtl.png") !important;
+    background-position: center, center !important;
+  }
+
+  #programming-page .prog-hero[data-cinematic-bg="programming"] .prog-hero-visual {
+    visibility: visible !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #programming-page .prog-hero[data-cinematic-bg="programming"] {
+    animation: none !important;
+  }
+}
+
+/* PROGRAMMING SECONDARY CTA CONTRAST FIX */
+#programming-page .prog-hero-actions a:nth-of-type(2) {
+  color: #173052 !important;
+  -webkit-text-fill-color: #173052 !important;
+  background: rgba(255, 255, 255, .97) !important;
+  border: 1px solid #9bb5d2 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  box-shadow: 0 5px 16px rgba(35, 67, 105, .08);
+}
+
+#programming-page .prog-hero-actions a:nth-of-type(2) * {
+  color: #173052 !important;
+  -webkit-text-fill-color: #173052 !important;
+  text-shadow: none !important;
+}
+
+#programming-page .prog-hero-actions a:nth-of-type(2):hover {
+  background: #edf6ff !important;
+  border-color: #2678cc !important;
+  transform: translateY(-2px);
+}
+
+/* PROGRAMMING SCROLL SECTIONS LIVE BACKGROUNDS */
+#programming-page #programming-tracks {
+  --prog-scroll-image: url("../images/backgrounds/education.jpg");
+}
+#programming-page #programming-basics {
+  --prog-scroll-image: url("../images/backgrounds/programming.jpg");
+}
+#programming-page #programming-workshops {
+  --prog-scroll-image: url("../images/backgrounds/artificial-intelligence.jpg");
+}
+#programming-page #programming-resources {
+  --prog-scroll-image: url("../images/backgrounds/office-skills.jpg");
+}
+#programming-page .prog-social {
+  --prog-scroll-image: url("../images/backgrounds/home-tech.jpg");
+}
+#programming-page .prog-next-step {
+  --prog-scroll-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#programming-page #programming-online-quiz {
+  --prog-scroll-image: url("../images/backgrounds/data-analysis.jpg");
+}
+#programming-page #channel-videos-programming {
+  --prog-scroll-image: url("../images/backgrounds/programming.jpg");
+}
+
+#programming-page #programming-tracks,
+#programming-page #programming-basics,
+#programming-page #programming-workshops,
+#programming-page #programming-resources,
+#programming-page .prog-social,
+#programming-page .prog-next-step,
+#programming-page #programming-online-quiz,
+#programming-page #channel-videos-programming {
+  position: relative;
+  isolation: isolate;
+  background-color: #f8fbff !important;
+  background-image:
+    linear-gradient(
+      110deg,
+      rgba(255,255,255,.72),
+      rgba(247,251,255,.65) 52%,
+      rgba(255,255,255,.78)
+    ),
+    var(--prog-scroll-image) !important;
+  background-size: cover, cover !important;
+  background-position: center, 46% 48%;
+  background-repeat: no-repeat, no-repeat !important;
+  border: 1px solid rgba(212,228,245,.82);
+  border-radius: 24px;
+  box-shadow: 0 16px 38px rgba(41,71,109,.07);
+  animation: programming-scroll-background-drift 32s ease-in-out infinite alternate;
+}
+
+#programming-page #programming-tracks h2,
+#programming-page #programming-basics h2,
+#programming-page #programming-workshops h2,
+#programming-page #programming-resources h2,
+#programming-page .prog-social h2,
+#programming-page .prog-next-step h2,
+#programming-page #programming-online-quiz h2,
+#programming-page #channel-videos-programming h2 {
+  color: #173052;
+  text-shadow: none;
+}
+
+#programming-page #programming-tracks p,
+#programming-page #programming-basics p,
+#programming-page #programming-workshops p,
+#programming-page #programming-resources p,
+#programming-page .prog-social p,
+#programming-page .prog-next-step p,
+#programming-page #programming-online-quiz p,
+#programming-page #channel-videos-programming p {
+  color: #4d637e;
+}
+
+@keyframes programming-scroll-background-drift {
+  from { background-position: center, 46% 48%; }
+  to   { background-position: center, 54% 52%; }
+}
+
+@media (max-width: 640px) {
+  #programming-page #programming-tracks,
+  #programming-page #programming-basics,
+  #programming-page #programming-workshops,
+  #programming-page #programming-resources,
+  #programming-page .prog-social,
+  #programming-page .prog-next-step,
+  #programming-page #programming-online-quiz,
+  #programming-page #channel-videos-programming {
+    background-position: center, 52% center;
+    animation-duration: 40s;
+    border-radius: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #programming-page #programming-tracks,
+  #programming-page #programming-basics,
+  #programming-page #programming-workshops,
+  #programming-page #programming-resources,
+  #programming-page .prog-social,
+  #programming-page .prog-next-step,
+  #programming-page #programming-online-quiz,
+  #programming-page #channel-videos-programming {
+    animation: none !important;
+  }
+}
+
+/* ALL PAGE SCROLL BACKGROUNDS V1 */
+/* ALL PAGE SCROLL BACKGROUNDS V1 */
+
+/* Homepage sections */
+#learning,
+#courses {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+#googleSitesLibrary {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+#services,
+#odoo-solutions-preview {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#resources {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+#about,
+#contact.contact-section,
+.sc-semantic-section {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+
+/* Odoo business and accounting */
+.odoo-detail-hero,
+#solutions.odoo-detail-solutions,
+#channel-odoo-videos.odoo-detail-solutions {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#accounting-management.odoo-accounting-course,
+.odoo-detail-contact {
+  --live-section-image: url("../images/backgrounds/accounting.jpg");
+}
+
+/* Professional profile and certificates */
+.profile-hero,
+.profile-brand-showcase,
+.profile-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+.profile-photo-feature,
+.profile-intro-section {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+#profile-certificates,
+#profile-cv {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+#profile-work {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+
+/* Educational content pages */
+.gs-hero:not(.cinematic-data-analysis-hero) {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+.gs-section,
+.gs-original-content.sc-content-page {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+#materials {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+
+/* Data analysis page overrides the generic educational sections */
+.gs-main > .cinematic-data-analysis-hero,
+body:has(.cinematic-data-analysis-hero) .gs-section,
+body:has(.cinematic-data-analysis-hero) .gs-original-content,
+body:has(.cinematic-data-analysis-hero) #materials,
+#channel-videos-data {
+  --live-section-image: url("../images/backgrounds/data-analysis.jpg");
+}
+
+/* Excel, Word and PowerPoint */
+.office-hero,
+#office-topics,
+.office-outcomes,
+#office-resources,
+#channel-videos-excel,
+#channel-videos-word,
+#channel-videos-powerpoint {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.office-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* ICDL and digital skills */
+.icdl-hero,
+#icdl-topics,
+.icdl-outcomes,
+#icdl-resources,
+#channel-videos-icdl {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.icdl-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Projects */
+.projects-hero,
+.projects-method {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+#projects-list {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#projects-materials {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.projects-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Python */
+.py-hero,
+#python-topics,
+.py-outcomes,
+.py-outline {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+#python-resources {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.py-social {
+  --live-section-image: url("../images/backgrounds/artificial-intelligence.jpg");
+}
+.py-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Scratch and kids coding */
+.scratch-hero,
+#scratch-levels,
+.scratch-outcomes,
+#scratch-resources,
+#channel-videos-scratch {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+.scratch-workshop {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+.scratch-social {
+  --live-section-image: url("../images/backgrounds/artificial-intelligence.jpg");
+}
+.scratch-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Windows and internet */
+.win-hero,
+#windows-topics,
+.win-outcomes,
+#windows-resources,
+#channel-videos-windows {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.win-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Shared treatment — photo background with a bright readable overlay */
+#learning,
+#courses,
+#googleSitesLibrary,
+#services,
+#resources,
+#about,
+#odoo-solutions-preview,
+#contact.contact-section,
+.sc-semantic-section,
+.odoo-detail-hero,
+#solutions.odoo-detail-solutions,
+#channel-odoo-videos.odoo-detail-solutions,
+#accounting-management.odoo-accounting-course,
+.odoo-detail-contact,
+.profile-hero,
+.profile-brand-showcase,
+.profile-photo-feature,
+.profile-intro-section,
+#profile-certificates,
+#profile-work,
+#profile-cv,
+.profile-next-step,
+.gs-hero:not(.cinematic-data-analysis-hero),
+.gs-section,
+.gs-original-content.sc-content-page,
+.gs-main > .cinematic-data-analysis-hero,
+body:has(.cinematic-data-analysis-hero) .gs-original-content,
+body:has(.cinematic-data-analysis-hero) #materials,
+#channel-videos-data,
+.office-hero,
+#office-topics,
+.office-outcomes,
+#office-resources,
+.office-next-step,
+#channel-videos-excel,
+#channel-videos-word,
+#channel-videos-powerpoint,
+.icdl-hero,
+#icdl-topics,
+.icdl-outcomes,
+#icdl-resources,
+.icdl-next-step,
+#channel-videos-icdl,
+.projects-hero,
+#projects-list,
+.projects-method,
+#projects-materials,
+.projects-next-step,
+.py-hero,
+#python-topics,
+.py-outcomes,
+.py-outline,
+#python-resources,
+.py-social,
+.py-next-step,
+.scratch-hero,
+#scratch-levels,
+.scratch-outcomes,
+.scratch-workshop,
+#scratch-resources,
+.scratch-social,
+.scratch-next-step,
+#channel-videos-scratch,
+.win-hero,
+#windows-topics,
+.win-outcomes,
+#windows-resources,
+.win-next-step,
+#channel-videos-windows {
+  background-color: #f8fbff !important;
+  background-image:
+    linear-gradient(
+      110deg,
+      rgba(255,255,255,.73),
+      rgba(246,250,255,.63) 52%,
+      rgba(255,255,255,.79)
+    ),
+    var(--live-section-image) !important;
+  background-size: 100% 100%, 112% 112% !important;
+  background-position: 0 0, 46% 48%;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: all-page-background-drift 36s ease-in-out infinite alternate;
+}
+
+/* Keep each section's headings readable */
+#learning > h1,
+#learning > h2,
+#courses > h1,
+#courses > h2,
+#googleSitesLibrary > h1,
+#googleSitesLibrary > h2,
+#services > h1,
+#services > h2,
+#resources > h1,
+#resources > h2,
+#about > h1,
+#about > h2,
+#contact.contact-section h2,
+.odoo-detail-hero h1,
+.odoo-detail-solutions h2,
+.odoo-accounting-course h2,
+.profile-hero h1,
+.profile-section h2,
+.gs-hero h1,
+.gs-section h2,
+.office-hero h1,
+.office-section h2,
+.icdl-hero h1,
+.icdl-section h2,
+.projects-hero h1,
+.projects-section h2,
+.py-hero h1,
+.py-section h2,
+.scratch-hero h1,
+.scratch-section h2,
+.win-hero h1,
+.win-intro h2 {
+  text-shadow: none;
+}
+
+/* Subtle, continuous movement as the visitor scrolls */
+@keyframes all-page-background-drift {
+  from { background-position: 0 0, 46% 48%; }
+  to   { background-position: 0 0, 54% 52%; }
+}
+
+@media (max-width: 640px) {
+  #learning,
+  #courses,
+  #googleSitesLibrary,
+  #services,
+  #resources,
+  #about,
+  #odoo-solutions-preview,
+  #contact.contact-section,
+  .sc-semantic-section,
+  .odoo-detail-hero,
+  #solutions.odoo-detail-solutions,
+  #channel-odoo-videos.odoo-detail-solutions,
+  #accounting-management.odoo-accounting-course,
+  .odoo-detail-contact,
+  .profile-hero,
+  .profile-brand-showcase,
+  .profile-photo-feature,
+  .profile-intro-section,
+  #profile-certificates,
+  #profile-work,
+  #profile-cv,
+  .profile-next-step,
+  .gs-hero:not(.cinematic-data-analysis-hero),
+  .gs-section,
+  .gs-original-content.sc-content-page,
+  .gs-main > .cinematic-data-analysis-hero,
+  body:has(.cinematic-data-analysis-hero) .gs-original-content,
+  body:has(.cinematic-data-analysis-hero) #materials,
+  #channel-videos-data,
+  .office-hero,
+  #office-topics,
+  .office-outcomes,
+  #office-resources,
+  .office-next-step,
+  #channel-videos-excel,
+  #channel-videos-word,
+  #channel-videos-powerpoint,
+  .icdl-hero,
+  #icdl-topics,
+  .icdl-outcomes,
+  #icdl-resources,
+  .icdl-next-step,
+  #channel-videos-icdl,
+  .projects-hero,
+  #projects-list,
+  .projects-method,
+  #projects-materials,
+  .projects-next-step,
+  .py-hero,
+  #python-topics,
+  .py-outcomes,
+  .py-outline,
+  #python-resources,
+  .py-social,
+  .py-next-step,
+  .scratch-hero,
+  #scratch-levels,
+  .scratch-outcomes,
+  .scratch-workshop,
+  #scratch-resources,
+  .scratch-social,
+  .scratch-next-step,
+  #channel-videos-scratch,
+  .win-hero,
+  #windows-topics,
+  .win-outcomes,
+  #windows-resources,
+  .win-next-step,
+  #channel-videos-windows {
+    background-size: 100% 100%, 120% 120% !important;
+    background-position: 0 0, 52% 50%;
+    animation-duration: 42s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #learning,
+  #courses,
+  #googleSitesLibrary,
+  #services,
+  #resources,
+  #about,
+  #odoo-solutions-preview,
+  #contact.contact-section,
+  .sc-semantic-section,
+  .odoo-detail-hero,
+  #solutions.odoo-detail-solutions,
+  #channel-odoo-videos.odoo-detail-solutions,
+  #accounting-management.odoo-accounting-course,
+  .odoo-detail-contact,
+  .profile-hero,
+  .profile-brand-showcase,
+  .profile-photo-feature,
+  .profile-intro-section,
+  #profile-certificates,
+  #profile-work,
+  #profile-cv,
+  .profile-next-step,
+  .gs-hero:not(.cinematic-data-analysis-hero),
+  .gs-section,
+  .gs-original-content.sc-content-page,
+  .gs-main > .cinematic-data-analysis-hero,
+  body:has(.cinematic-data-analysis-hero) .gs-original-content,
+  body:has(.cinematic-data-analysis-hero) #materials,
+  #channel-videos-data,
+  .office-hero,
+  #office-topics,
+  .office-outcomes,
+  #office-resources,
+  .office-next-step,
+  #channel-videos-excel,
+  #channel-videos-word,
+  #channel-videos-powerpoint,
+  .icdl-hero,
+  #icdl-topics,
+  .icdl-outcomes,
+  #icdl-resources,
+  .icdl-next-step,
+  #channel-videos-icdl,
+  .projects-hero,
+  #projects-list,
+  .projects-method,
+  #projects-materials,
+  .projects-next-step,
+  .py-hero,
+  #python-topics,
+  .py-outcomes,
+  .py-outline,
+  #python-resources,
+  .py-social,
+  .py-next-step,
+  .scratch-hero,
+  #scratch-levels,
+  .scratch-outcomes,
+  .scratch-workshop,
+  #scratch-resources,
+  .scratch-social,
+  .scratch-next-step,
+  #channel-videos-scratch,
+  .win-hero,
+  #windows-topics,
+  .win-outcomes,
+  #windows-resources,
+  .win-next-step,
+  #channel-videos-windows {
+    animation: none !important;
+  }
+}
+
+/* VISUAL BALANCE AND IMAGE DISTRIBUTION FIX */
+
+/* Light, readable education library hero */
+.gs-hero:not(.cinematic-data-analysis-hero) {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+  color: #173052 !important;
+  background-color: #f8fbff !important;
+  background-image:
+    linear-gradient(
+      105deg,
+      rgba(255,255,255,.30) 0%,
+      rgba(255,255,255,.63) 45%,
+      rgba(255,255,255,.94) 100%
+    ),
+    url("../images/backgrounds/education.jpg") !important;
+  background-size: 100% 100%, cover !important;
+  background-position: center, center !important;
+}
+
+.gs-hero:not(.cinematic-data-analysis-hero) h1,
+.gs-hero:not(.cinematic-data-analysis-hero) h2 {
+  color: #173052 !important;
+  text-shadow: none !important;
+}
+
+.gs-hero:not(.cinematic-data-analysis-hero) p {
+  color: #455f7c !important;
+}
+
+/* Each business section gets a different visual */
+.odoo-detail-hero {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#solutions.odoo-detail-solutions {
+  --live-section-image: url("../images/backgrounds/accounting.jpg");
+}
+#channel-odoo-videos.odoo-detail-solutions {
+  --live-section-image: url("../images/backgrounds/data-analysis.jpg");
+}
+#accounting-management.odoo-accounting-course {
+  --live-section-image: url("../images/backgrounds/accounting.jpg");
+}
+.odoo-detail-contact {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+
+/* Microsoft Office page: distinguish lessons from resources */
+.office-hero {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+#office-topics {
+  --live-section-image: url("../images/backgrounds/data-analysis.jpg");
+}
+.office-outcomes {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+#office-resources {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.office-next-step {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+#channel-videos-excel,
+#channel-videos-word,
+#channel-videos-powerpoint {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+
+/* Homepage: use a light background under dark text */
+#learning,
+#courses,
+#googleSitesLibrary,
+#services,
+#resources,
+#about,
+#odoo-solutions-preview,
+#contact.contact-section {
+  background-color: #f8fbff !important;
+}
+
+#learning,
+#courses {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+#googleSitesLibrary {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+#services,
+#odoo-solutions-preview {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#resources {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+#about,
+#contact.contact-section {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+
+/* Bright photographic layer for content sections */
+#learning,
+#courses,
+#googleSitesLibrary,
+#services,
+#resources,
+#about,
+#odoo-solutions-preview,
+#contact.contact-section,
+.odoo-detail-solutions,
+.odoo-accounting-course,
+.odoo-detail-contact,
+.profile-hero,
+.profile-brand-showcase,
+.profile-photo-feature,
+.profile-intro-section,
+.profile-section,
+.profile-next-step,
+.gs-section,
+.office-section,
+.office-outcomes,
+.office-resources-section,
+.office-next-step,
+.icdl-section,
+.icdl-outcomes,
+.icdl-next-step,
+.projects-section,
+.projects-method,
+.projects-materials,
+.projects-next-step,
+.py-section,
+.py-outcomes,
+.py-outline,
+.py-next-step,
+.scratch-section,
+.scratch-outcomes,
+.scratch-workshop,
+.scratch-next-step,
+.win-intro,
+.win-outcomes,
+.win-resources,
+.win-next-step {
+  background-color: #f8fbff;
+  background-image:
+    linear-gradient(
+      110deg,
+      rgba(255,255,255,.86),
+      rgba(248,251,255,.78) 55%,
+      rgba(255,255,255,.88)
+    ),
+    var(--live-section-image, none);
+  background-size: 100% 100%, cover;
+  background-position: center, 50% 50%;
+  background-repeat: no-repeat;
+  animation: balanced-section-drift 38s ease-in-out infinite alternate;
+}
+
+/* Cards remain clean and legible */
+.category-card,
+.platform-video-card,
+.gs-tool-card,
+.project-card,
+.office-card,
+.icdl-card {
+  color: #173052;
+}
+
+/* Animate backgrounds gently, not the text */
+@keyframes balanced-section-drift {
+  from { background-position: center, 47% 48%; }
+  to   { background-position: center, 53% 52%; }
+}
+
+@media (max-width: 640px) {
+  #learning,
+  #courses,
+  #googleSitesLibrary,
+  #services,
+  #resources,
+  #about,
+  #odoo-solutions-preview,
+  #contact.contact-section,
+  .odoo-detail-solutions,
+  .odoo-accounting-course,
+  .odoo-detail-contact,
+  .profile-hero,
+  .profile-section,
+  .gs-section,
+  .office-section,
+  .office-outcomes,
+  .office-resources-section,
+  .icdl-section,
+  .icdl-outcomes,
+  .projects-section,
+  .projects-method,
+  .projects-materials,
+  .py-section,
+  .py-outcomes,
+  .py-outline,
+  .scratch-section,
+  .scratch-outcomes,
+  .scratch-workshop,
+  .win-intro,
+  .win-outcomes,
+  .win-resources {
+    background-size: 100% 100%, cover;
+    background-position: center, 50% center;
+    animation-duration: 44s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #learning,
+  #courses,
+  #googleSitesLibrary,
+  #services,
+  #resources,
+  #about,
+  #odoo-solutions-preview,
+  #contact.contact-section,
+  .odoo-detail-solutions,
+  .odoo-accounting-course,
+  .odoo-detail-contact,
+  .profile-hero,
+  .profile-section,
+  .gs-section,
+  .office-section,
+  .office-outcomes,
+  .office-resources-section,
+  .icdl-section,
+  .icdl-outcomes,
+  .projects-section,
+  .projects-method,
+  .projects-materials,
+  .py-section,
+  .py-outcomes,
+  .py-outline,
+  .scratch-section,
+  .scratch-outcomes,
+  .scratch-workshop,
+  .win-intro,
+  .win-outcomes,
+  .win-resources {
+    animation: none !important;
+  }
+}
+
+/* Restore personal portrait in the homepage hero */
+#home.hero .hero-visual[data-cinematic-bg="home-tech"] {
+  background-image:
+    linear-gradient(100deg, rgba(7,15,31,.16), rgba(7,15,31,.10)),
+    url("../images/profile-office-hero.jpg") !important;
+  background-size: cover, cover !important;
+  background-position: center, 54% 44% !important;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: cinematic-photo-pan 32s ease-in-out infinite alternate !important;
+}

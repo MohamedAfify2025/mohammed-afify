@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
+:root {
+  --brand-navy:  #101A32;
+  --brand-navy2: #1B2A4E;
+  --brand-amber: #F5B83D;
+  --brand-teal:  #2DD4BF;
+  --brand-cloud: #F4F6FB;
+  --brand-font:  'Cairo', 'Segoe UI', Tahoma, sans-serif;
+  --brand-radius: 16px;
+  --brand-shadow: 0 10px 30px rgba(16, 26, 50, .18);
+}
+body { font-family: var(--brand-font); }
+.brand-btn {
+  background: var(--brand-amber); color: var(--brand-navy);
+  font-weight: 800; border: 0; border-radius: var(--brand-radius);
+  padding: .8rem 1.4rem; box-shadow: var(--brand-shadow); cursor: pointer;
+}
+.brand-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }

@@ -1,0 +1,33 @@
+/* Restore the personal portrait in the homepage hero. The image stays animated subtly. */
+#home.hero .hero-visual[data-cinematic-bg="home-personal"] {
+  background-image:
+    linear-gradient(100deg, rgba(7, 15, 31, .07), rgba(7, 15, 31, .12)),
+    url("../images/profile-office-hero.jpg") !important;
+  background-size: cover, cover !important;
+  background-position: center center, 54% 42% !important;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: personal-hero-photo-pan 36s ease-in-out infinite alternate !important;
+  border: 1px solid rgba(230, 240, 255, .25);
+  border-radius: 26px;
+}
+
+#home.hero .hero-visual[data-cinematic-bg="home-personal"]::before {
+  background: linear-gradient(0deg, rgba(7, 15, 31, .16), transparent 58%) !important;
+}
+
+@keyframes personal-hero-photo-pan {
+  from { background-position: center center, 52% 42%; }
+  to   { background-position: center center, 60% 46%; }
+}
+
+@media (max-width: 640px) {
+  #home.hero .hero-visual[data-cinematic-bg="home-personal"] {
+    background-position: center center, 57% center !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home.hero .hero-visual[data-cinematic-bg="home-personal"] {
+    animation: none !important;
+  }
+}

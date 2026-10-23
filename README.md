@@ -29,10 +29,14 @@ Current site: https://mohamedafify2025.github.io/mohammed-afify/
    with the real email address where you want to receive inquiries.
 2. Replace sample course links and descriptions with actual lesson/video URLs when ready.
 3. Review the biography and service descriptions to ensure they accurately represent the services you offer.
-4. The contact form uses `mailto:`. It does not store submissions on a server. A future academy with student accounts, paid checkout, progress tracking, quizzes, or certificates will need a backend or an LMS/payment integration.
+4. The contact form uses `mailto:`. It does not store submissions on a server. Student account starter pages are included in `membership/`, backed by Supabase after setup. Follow `SETUP-MEMBERSHIP.md` before using them. Payment processing and secure protection of private course files are not configured in this package.
 
 ## Local preview
 Open `index.html` in a browser. For a more realistic local test, serve the folder with a simple static web server.
 
 ## Brand line
 **Learn • Analyze • Build • Transform**
+
+## Student accounts and memberships
+
+See [SETUP-MEMBERSHIP.md](SETUP-MEMBERSHIP.md) for the Supabase setup, SQL schema, admin account setup, limitations, and testing checklist.
