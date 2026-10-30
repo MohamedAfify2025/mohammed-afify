@@ -17,6 +17,10 @@
     <!-- CINEMATIC MOTION LAYER -->
     <link rel="stylesheet" href="assets/css/cinematic-motion.css">
     <link rel="stylesheet" href="assets/css/site-assistant.css">
+<link rel="stylesheet" href="assets/css/odoo-readability.css">
+<link rel="stylesheet" href="assets/css/nursery-module-showcase.css">
+<link rel="stylesheet" href="assets/css/programs-intro.css">
+<link rel="stylesheet" href="assets/css/program-detail-dialog.css">
 </head>
 <body class="odoo-solutions-page">
 <header class="odoo-detail-header">
@@ -38,14 +42,46 @@
   <section class="odoo-detail-hero" data-cinematic-bg="odoo-business">
     <div class="odoo-detail-hero-inner">
       <div>
-        <span class="odoo-tagline">ODOO COMMUNITY · BUSINESS SOLUTIONS</span>
-        <h1>حوّل إجراءات العمل<br><span>إلى نظام أوضح.</span></h1>
-        <p>حلول عملية لإدارة المؤسسات التعليمية والموارد البشرية. نبدأ بفهم طريقة العمل، ثم تحديد الوظائف المطلوبة ونطاق التطوير والتدريب المناسب.</p>
+        <span class="odoo-tagline">ODOO SOLUTIONS PORTFOLIO · برامج عملية للأعمال</span>
+        <h1>حلول Odoo العملية<br><span>لإدارة أعمالك بوضوح أكبر</span></h1>
+        <p>من الحضانات والمراكز التعليمية إلى المدارس والموارد البشرية والمحاسبة، استكشف حلولًا مبنية على Odoo لتنظيم الإجراءات والبيانات. نبدأ بفهم احتياجك، ثم نحدد نطاق الوظائف والتخصيص والتدريب المناسب.</p>
         <div class="odoo-detail-actions">
-          <a class="odoo-home-cta-button" href="#solutions">استكشف الأنظمة ↓</a>
+          <a class="odoo-home-cta-button" href="#solutions">استكشف البرامج ↓</a>
           <a class="odoo-detail-secondary" href="index.html#contact">اطلب عرضًا توضيحيًا</a>
         </div>
-        <div class="odoo-detail-steps">
+        <!-- PROGRAM-INTRO-SHORTCUTS-START -->
+<div class="programs-intro-shortcuts-block">
+  <div class="programs-intro-shortcuts-heading">استكشف الحلول حسب المجال</div>
+  <nav class="odoo-program-shortcuts" aria-label="استكشف برامج Odoo حسب المجال">
+    <a class="odoo-program-shortcut" href="#nursery">
+      <span class="program-shortcut-number">01</span>
+      <span class="program-shortcut-label">الحضانات</span>
+      <span class="program-shortcut-arrow" aria-hidden="true">↙</span>
+    </a>
+    <a class="odoo-program-shortcut" href="#tutoring">
+      <span class="program-shortcut-number">02</span>
+      <span class="program-shortcut-label">المراكز التعليمية</span>
+      <span class="program-shortcut-arrow" aria-hidden="true">↙</span>
+    </a>
+    <a class="odoo-program-shortcut" href="#school">
+      <span class="program-shortcut-number">03</span>
+      <span class="program-shortcut-label">المدارس</span>
+      <span class="program-shortcut-arrow" aria-hidden="true">↙</span>
+    </a>
+    <a class="odoo-program-shortcut" href="#hr">
+      <span class="program-shortcut-number">04</span>
+      <span class="program-shortcut-label">الموارد البشرية</span>
+      <span class="program-shortcut-arrow" aria-hidden="true">↙</span>
+    </a>
+    <a class="odoo-program-shortcut" href="#accounting-management">
+      <span class="program-shortcut-number">05</span>
+      <span class="program-shortcut-label">المحاسبة</span>
+      <span class="program-shortcut-arrow" aria-hidden="true">↙</span>
+    </a>
+  </nav>
+</div>
+<!-- PROGRAM-INTRO-SHORTCUTS-END -->
+<div class="odoo-detail-steps">
           <span>01 / تحليل الاحتياج</span>
           <span>02 / التهيئة والتطوير</span>
           <span>03 / التدريب</span>
@@ -55,9 +91,33 @@
         <div class="odoo-system-orbit orbit-one"></div>
         <div class="odoo-system-orbit orbit-two"></div>
         <div class="odoo-system-core"><b>ERP</b><span>نظام مترابط</span></div>
-        <div class="odoo-system-node node-one"><b>EDU</b><span>التعليم</span></div>
-        <div class="odoo-system-node node-two"><b>HR</b><span>الموظفون</span></div>
-        <div class="odoo-system-node node-three"><b>ACC</b><span>المحاسبة</span></div>
+        <!-- ODOO-PROGRAM-NODES-START -->
+<button type="button" class="odoo-system-node node-one"
+        data-program="nursery" aria-haspopup="dialog"
+        aria-label="تفاصيل برنامج إدارة الحضانات">
+  <b>NUR</b><span>الحضانات</span>
+</button>
+<button type="button" class="odoo-system-node node-two"
+        data-program="tutoring" aria-haspopup="dialog"
+        aria-label="تفاصيل برنامج المراكز التعليمية">
+  <b>EDU</b><span>المراكز التعليمية</span>
+</button>
+<button type="button" class="odoo-system-node node-three"
+        data-program="school" aria-haspopup="dialog"
+        aria-label="تفاصيل برنامج إدارة المدارس">
+  <b>SCH</b><span>المدارس</span>
+</button>
+<button type="button" class="odoo-system-node node-four"
+        data-program="hr" aria-haspopup="dialog"
+        aria-label="تفاصيل برنامج الموارد البشرية">
+  <b>HR</b><span>الموارد البشرية</span>
+</button>
+<button type="button" class="odoo-system-node node-five"
+        data-program="accounting" aria-haspopup="dialog"
+        aria-label="تفاصيل برنامج المحاسبة">
+  <b>ACC</b><span>المحاسبة</span>
+</button>
+<!-- ODOO-PROGRAM-NODES-END -->
       </div>
     </div>
   </section>
@@ -75,8 +135,238 @@
         <span class="odoo-detail-label">EDRAK · NURSERY MANAGEMENT</span>
         <h3>إدارة الحضانات — إدراك</h3>
         <p>تنظيم بيانات الأطفال والإجراءات اليومية للحضانة، مع متابعة الحضور والرسوم والفصول والخدمات المرتبطة بالطفل.</p>
+<!-- EDRAK-NURSERY-SHOWCASE-START -->
+<section class="nursery-module-showcase" aria-labelledby="nursery-showcase-title">
+
+  <header class="nursery-showcase-intro">
+    <div class="nursery-intro-copy">
+      <span class="nursery-showcase-kicker">EDRAK · NURSERY MANAGEMENT</span>
+      <h4 id="nursery-showcase-title">كل طفل له ملف… وكل يوم له متابعة أوضح</h4>
+      <p>
+        تعرّف على الجوانب الأساسية لإدارة الحضانة في إدراك. افتح كل بطاقة
+        لمعرفة ما الذي تنظمه هذه الوظيفة وكيف تساعد في ترتيب العمل اليومي.
+      </p>
+    </div>
+    <div class="nursery-intro-symbol" aria-hidden="true">
+      <div class="nursery-symbol-orbit"></div>
+      <div class="nursery-symbol-center">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M32 8 53 20v24L32 56 11 44V20L32 8Z"
+                stroke="currentColor" stroke-width="2.5"/>
+          <circle cx="32" cy="25" r="7" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M19 45c1.8-7 6.2-10 13-10s11.2 3 13 10"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="nursery-symbol-caption">رعاية · تنظيم · متابعة</span>
+    </div>
+  </header>
+
+  <div class="nursery-workflow" aria-label="مسار العمل المبسط">
+    <div class="nursery-workflow-step">
+      <span class="nursery-workflow-icon">01</span>
+      <span>ملف الطفل</span>
+    </div>
+    <span class="nursery-workflow-arrow" aria-hidden="true">←</span>
+    <div class="nursery-workflow-step">
+      <span class="nursery-workflow-icon">02</span>
+      <span>اليوم الدراسي</span>
+    </div>
+    <span class="nursery-workflow-arrow" aria-hidden="true">←</span>
+    <div class="nursery-workflow-step">
+      <span class="nursery-workflow-icon">03</span>
+      <span>الخدمات والرسوم</span>
+    </div>
+    <span class="nursery-workflow-arrow" aria-hidden="true">←</span>
+    <div class="nursery-workflow-step">
+      <span class="nursery-workflow-icon">04</span>
+      <span>المتابعة</span>
+    </div>
+  </div>
+
+  <div class="nursery-features-heading">
+    <div>
+      <span class="nursery-showcase-kicker">EXPLORE THE FEATURES</span>
+      <h5>استكشف وظائف الحضانة</h5>
+    </div>
+    <span class="nursery-click-hint">اضغط على أي بطاقة لعرض التفاصيل +</span>
+  </div>
+
+  <div class="nursery-showcase-grid">
+
+    <details class="nursery-feature-card tone-mint">
+      <summary>
+        <span class="nursery-feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="15" r="7" stroke="currentColor" stroke-width="2.4"/>
+            <path d="M10 39c1.5-9 6-13 14-13s12.5 4 14 13"
+                  stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M34 9h7M37.5 5.5v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="nursery-card-title-wrap">
+          <span class="nursery-card-index">01 / ملف الطفل</span>
+          <strong>ملف الطفل والأسرة</strong>
+          <small>البيانات الأساسية والتفاصيل المرتبطة بالطفل</small>
+        </span>
+        <span class="nursery-card-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="nursery-feature-details">
+        <p>نظّم بيانات الطفل في مكان واضح يسهل الرجوع إليه وربطها بتفاصيل الخدمة التي يحتاج إليها داخل الحضانة.</p>
+        <div class="nursery-detail-chips"><span>البيانات الأساسية</span><span>تنظيم المعلومات</span></div>
+      </div>
+    </details>
+
+    <details class="nursery-feature-card tone-blue">
+      <summary>
+        <span class="nursery-feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect x="7" y="11" width="34" height="30" rx="5"
+                  stroke="currentColor" stroke-width="2.4"/>
+            <path d="M15 6v10M33 6v10M7 20h34"
+                  stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="m16 29 5 5 11-11"
+                  stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="nursery-card-title-wrap">
+          <span class="nursery-card-index">02 / المتابعة اليومية</span>
+          <strong>الحضور والانصراف</strong>
+          <small>رؤية يومية أوضح لحركة الأطفال</small>
+        </span>
+        <span class="nursery-card-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="nursery-feature-details">
+        <p>نظّم متابعة الحضور والانصراف بما يساعد فريق الحضانة على مراجعة الإجراءات اليومية ومتابعة بيانات الأطفال.</p>
+        <div class="nursery-detail-chips"><span>الحضور</span><span>الانصراف</span><span>المتابعة اليومية</span></div>
+      </div>
+    </details>
+
+    <details class="nursery-feature-card tone-purple">
+      <summary>
+        <span class="nursery-feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M7 10.5A4.5 4.5 0 0 1 11.5 6H24v34H11.5A4.5 4.5 0 0 0 7 44V10.5Z"
+                  stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/>
+            <path d="M41 10.5A4.5 4.5 0 0 0 36.5 6H24v34h12.5A4.5 4.5 0 0 1 41 44V10.5Z"
+                  stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/>
+            <path d="M13 14h5M13 20h5M30 14h5M30 20h5"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="nursery-card-title-wrap">
+          <span class="nursery-card-index">03 / البيئة التعليمية</span>
+          <strong>الفصول والمجموعات</strong>
+          <small>تنظيم الأطفال ضمن الفصول المناسبة</small>
+        </span>
+        <span class="nursery-card-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="nursery-feature-details">
+        <p>رتّب الفصول والمجموعات واربط بيانات الطفل بالبيئة التعليمية المناسبة وفق هيكل الحضانة وإعداداتها.</p>
+        <div class="nursery-detail-chips"><span>الفصول</span><span>المجموعات</span><span>تنظيم البيانات</span></div>
+      </div>
+    </details>
+
+    <details class="nursery-feature-card tone-amber">
+      <summary>
+        <span class="nursery-feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect x="5.5" y="10" width="37" height="29" rx="5"
+                  stroke="currentColor" stroke-width="2.4"/>
+            <path d="M6 18h36" stroke="currentColor" stroke-width="2.4"/>
+            <path d="M12 29h9M12 33h15" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+            <circle cx="34" cy="29" r="3.5" stroke="currentColor" stroke-width="2.2"/>
+          </svg>
+        </span>
+        <span class="nursery-card-title-wrap">
+          <span class="nursery-card-index">04 / الإدارة المالية</span>
+          <strong>الرسوم والمصروفات</strong>
+          <small>ترتيب متابعة الرسوم والمدفوعات</small>
+        </span>
+        <span class="nursery-card-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="nursery-feature-details">
+        <p>نظّم معلومات الرسوم والمبالغ المرتبطة بالطفل، وتابعها وفق إعدادات الموديول والإجراءات المتفق عليها.</p>
+        <div class="nursery-detail-chips"><span>الرسوم</span><span>المدفوعات</span></div>
+      </div>
+    </details>
+
+    <details class="nursery-feature-card tone-coral">
+      <summary>
+        <span class="nursery-feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M24 41S6 30 6 17.5C6 10 15 5 24 15c9-10 18-5 18 2.5C42 30 24 41 24 41Z"
+                  stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+            <path d="M24 15v17M15.5 23.5h17"
+                  stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="nursery-card-title-wrap">
+          <span class="nursery-card-index">05 / الرعاية</span>
+          <strong>الصحة والخدمات</strong>
+          <small>تنظيم المعلومات المرتبطة برعاية الطفل</small>
+        </span>
+        <span class="nursery-card-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="nursery-feature-details">
+        <p>اجمع تفاصيل المتابعة الصحية والخدمات المرتبطة بالطفل ضمن تنظيم واضح، وفق الوظائف المتاحة والمفعّلة في النظام.</p>
+        <div class="nursery-detail-chips"><span>المتابعة الصحية</span><span>الخدمات</span></div>
+      </div>
+    </details>
+
+    <details class="nursery-feature-card tone-sky">
+      <summary>
+        <span class="nursery-feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect x="5.5" y="12" width="37" height="27" rx="5"
+                  stroke="currentColor" stroke-width="2.4"/>
+            <path d="M12 12V8.5h24V12M11 20h26"
+                  stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+            <circle cx="15" cy="34" r="2" fill="currentColor"/>
+            <circle cx="33" cy="34" r="2" fill="currentColor"/>
+            <path d="m16 26 4 4 9-8"
+                  stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="nursery-card-title-wrap">
+          <span class="nursery-card-index">06 / الخدمات والتواصل</span>
+          <strong>النقل والأنشطة والتواصل</strong>
+          <small>عرض الخدمات ووسائل المتابعة المرتبطة بالطفل</small>
+        </span>
+        <span class="nursery-card-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="nursery-feature-details">
+        <p>رتّب تفاصيل النقل والأنشطة والتواصل مع أولياء الأمور بحسب نطاق عمل الحضانة والوظائف التي تم تفعيلها.</p>
+        <div class="nursery-detail-chips"><span>النقل</span><span>الأنشطة</span><span>التواصل الأسري</span></div>
+      </div>
+    </details>
+
+  </div>
+
+  <p class="nursery-scope-note">
+    <span aria-hidden="true">ⓘ</span>
+    تفاصيل الوظائف النهائية تتحدد بحسب إصدار الموديول والإعدادات والتخصيص المتفق عليه.
+  </p>
+
+  <footer class="nursery-showcase-footer">
+  <div class="nursery-footer-copy">
+    <span class="nursery-footer-kicker">NEXT STEP · EDRAK NURSERY</span>
+    <strong>ابدأ الخطوة التالية لإدارة حضانتك بوضوح</strong>
+    <p>اطلب عرضًا توضيحيًا، أو أرسل طلب الانضمام لمناقشة التهيئة وخطوات التنفيذ المناسبة.</p>
+  </div>
+  <div class="nursery-showcase-actions">
+    <a class="nursery-showcase-primary"
+       href="https://wa.me/201092452759?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%B7%D9%84%D8%A8%20%D8%B9%D8%B1%D8%B6%20%D8%AA%D9%88%D8%B6%D9%8A%D8%AD%D9%8A%20%D9%84%D9%86%D8%B8%D8%A7%D9%85%20%D8%A5%D8%AF%D8%B1%D8%A7%D9%83%20%D9%84%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D8%AD%D8%B6%D8%A7%D9%86%D8%A9"
+       target="_blank" rel="noopener noreferrer">اطلب Demo للبرنامج ↗</a>
+    <a class="nursery-showcase-secondary"
+       href="index.html#contact">طلب الانضمام إلى النظام ←</a>
+  </div>
+</footer>
+
+</section>
+<!-- EDRAK-NURSERY-SHOWCASE-END -->
 <!-- ODOO-NURSERY-VIDEO-START -->
-<div class="odoo-video-block">
+<div class="odoo-video-block" id="edraak-nursery-demo">
   <div class="odoo-video-heading">
     <span>VIDEO DEMO</span>
     <h4>شاهد شرح نظام إدارة الحضانة — إدراك</h4>
@@ -94,13 +384,7 @@
   <a class="odoo-video-fallback" href="https://youtu.be/3RYYtbRna7o" target="_blank" rel="noopener noreferrer">مشاهدة الفيديو على YouTube ↗</a>
 </div>
 <!-- ODOO-NURSERY-VIDEO-END -->
-        <div class="odoo-feature-pills">
-          <span>ملفات الأطفال</span><span>الحضور والمتابعة</span>
-          <span>الفصول والمجموعات</span><span>الرسوم</span><span>النقل</span>
-          <span>الصحة والأنشطة</span><span>التواصل مع أولياء الأمور</span>
-          <span>جهات الاتصال والمحاسبة بحسب الإعداد</span>
-        </div>
-        <a class="odoo-detail-link" href="index.html#contact">ناقش احتياجات الحضانة ←</a>
+<a class="odoo-detail-link" href="index.html#contact">ناقش احتياجات الحضانة ←</a>
       </div>
       <aside class="odoo-detail-aside">
         <strong>EDU<span>01</span></strong>
@@ -115,7 +399,7 @@
         <h3>إدارة المراكز التعليمية والدروس</h3>
         <p>إدارة المجموعات التعليمية وتسجيل الطلاب وتنظيم الحصص والحضور، والاستفادة من جهات الاتصال لبيانات الطلاب والمعلمين.</p>
 <!-- ODOO-TUTORING-VIDEO-START -->
-<div class="odoo-video-block">
+<div class="odoo-video-block" id="edraak-tutoring-demo">
   <div class="odoo-video-heading">
     <span>VIDEO DEMO</span>
     <h4>شاهد شرح نظام المراكز التعليمية والدروس</h4>
@@ -319,5 +603,16 @@
     <!-- CINEMATIC MOTION SCRIPT -->
     <script src="assets/js/cinematic-motion.js"></script>
     <script src="assets/js/site-assistant.js" defer></script>
+<!-- ODOO-PROGRAM-DIALOG-START -->
+<dialog class="odoo-program-dialog" id="odoo-program-dialog"
+        dir="rtl" aria-label="تفاصيل برامج Odoo">
+  <div class="odoo-program-dialog-shell">
+    <button type="button" class="odoo-program-dialog-close"
+            aria-label="إغلاق نافذة التفاصيل">×</button>
+    <div id="odoo-program-dialog-content"></div>
+  </div>
+</dialog>
+<!-- ODOO-PROGRAM-DIALOG-END -->
+<script src="assets/js/program-detail-dialog.js" defer></script>
 </body>
 </html>

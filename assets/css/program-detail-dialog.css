@@ -1,0 +1,524 @@
+/* PROGRAM DETAIL DIALOG V5 — local test */
+/* Keep the existing cinematic/page background intact. */
+body.odoo-solutions-page {
+    overflow-x: clip !important;
+}
+
+.odoo-solutions-page .odoo-system-visual {
+    min-height: 470px !important;
+}
+
+.odoo-solutions-page .odoo-system-orbit {
+    width: 330px !important;
+    height: 330px !important;
+}
+
+.odoo-solutions-page .odoo-system-orbit.orbit-two {
+    width: 245px !important;
+    height: 245px !important;
+}
+
+.odoo-solutions-page .odoo-system-core {
+    width: 156px !important;
+    height: 156px !important;
+}
+
+.odoo-solutions-page .odoo-system-core b {
+    font-size: 2.75rem !important;
+}
+
+.odoo-solutions-page .odoo-system-core span {
+    font-size: .96rem !important;
+}
+
+.odoo-solutions-page button.odoo-system-node {
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 126px;
+    min-height: 78px;
+    padding: 13px 15px;
+    box-sizing: border-box;
+    border: 1px solid #d4e2eb;
+    border-radius: 17px;
+    background: rgba(255,255,255,.97);
+    box-shadow: 0 12px 27px rgba(18,39,65,.15);
+    color: #18324e;
+    font-family: inherit;
+    text-align: center;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.odoo-solutions-page button.odoo-system-node b {
+    color: var(--node-color, #087f73) !important;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    font-weight: 900;
+}
+
+.odoo-solutions-page button.odoo-system-node span {
+    color: #2d435b !important;
+    font-size: .88rem;
+    line-height: 1.7;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.odoo-solutions-page button.odoo-system-node:hover,
+.odoo-solutions-page button.odoo-system-node:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 17px 32px rgba(18,39,65,.22);
+}
+
+.odoo-solutions-page button.odoo-system-node:focus-visible {
+    outline: 3px solid #42bfa9;
+    outline-offset: 3px;
+}
+
+.odoo-solutions-page .odoo-system-node.node-one {
+    --node-color: #087f73;
+    top: 0;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translateX(-50%);
+}
+
+.odoo-solutions-page .odoo-system-node.node-one:hover {
+    transform: translateX(-50%) translateY(-3px);
+}
+
+.odoo-solutions-page .odoo-system-node.node-two {
+    --node-color: #286ca7;
+    top: 22%;
+    right: 0;
+    bottom: auto;
+    left: auto;
+}
+
+.odoo-solutions-page .odoo-system-node.node-three {
+    --node-color: #7152a3;
+    right: 2%;
+    bottom: 3%;
+    top: auto;
+    left: auto;
+}
+
+.odoo-solutions-page .odoo-system-node.node-four {
+    --node-color: #167a74;
+    left: 2%;
+    bottom: 3%;
+    top: auto;
+    right: auto;
+}
+
+.odoo-solutions-page .odoo-system-node.node-five {
+    --node-color: #96631e;
+    top: 22%;
+    left: 0;
+    bottom: auto;
+    right: auto;
+}
+
+/* Stronger and more consistent program labels and descriptions. */
+.odoo-solutions-page .odoo-detail-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border: 1px solid #bde9df;
+    border-radius: 999px;
+    background: #e6f8f3;
+    color: #087f73 !important;
+    font-size: .84rem !important;
+    font-weight: 900 !important;
+    letter-spacing: .025em !important;
+    line-height: 1.65;
+}
+
+.odoo-solutions-page .odoo-detail-card h3 {
+    font-size: clamp(1.65rem, 2.15vw, 2.05rem) !important;
+    line-height: 1.6 !important;
+    color: #142743 !important;
+}
+
+.odoo-solutions-page .odoo-detail-card-content > p {
+    color: #394f68 !important;
+    font-size: 1.04rem !important;
+    font-weight: 500;
+    line-height: 2.05 !important;
+}
+
+.odoo-solutions-page .odoo-detail-aside p {
+    color: #455b73 !important;
+    font-size: .94rem !important;
+    line-height: 1.95 !important;
+}
+
+.odoo-solutions-page .odoo-video-heading > span {
+    color: #087f73 !important;
+    font-size: .8rem !important;
+    font-weight: 900;
+}
+
+.odoo-solutions-page .odoo-video-heading h4 {
+    color: #142743 !important;
+    font-size: 1.3rem !important;
+    line-height: 1.8 !important;
+}
+
+.odoo-solutions-page .odoo-video-heading p {
+    color: #435871 !important;
+    font-size: 1rem !important;
+    line-height: 1.95 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-kicker,
+.odoo-solutions-page #nursery .nursery-footer-kicker {
+    font-size: .8rem !important;
+    font-weight: 900 !important;
+    letter-spacing: .035em;
+    line-height: 1.9;
+}
+
+.odoo-solutions-page #nursery .nursery-card-index {
+    font-size: .78rem !important;
+    font-weight: 900 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap strong {
+    font-size: 1.08rem !important;
+    line-height: 1.8 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap small {
+    font-size: .9rem !important;
+    line-height: 1.9 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-details p {
+    font-size: 1rem !important;
+    line-height: 2.05 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-detail-chips span {
+    font-size: .78rem !important;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-footer {
+    align-items: center;
+    gap: 24px;
+    padding: clamp(22px, 3vw, 32px) !important;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-copy strong {
+    font-size: clamp(1.12rem, 1.7vw, 1.45rem) !important;
+    line-height: 1.8 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-copy p {
+    font-size: .96rem !important;
+    line-height: 2 !important;
+    color: #e7eef7 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-actions a {
+    min-height: 48px;
+    padding: 12px 17px;
+    font-size: .9rem !important;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-primary {
+    background: #63dfc8 !important;
+    color: #10243a !important;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-secondary {
+    border: 1px solid #90a8c1 !important;
+    background: rgba(255,255,255,.08) !important;
+    color: #fff !important;
+}
+
+/* Separate program detail screen/modal. */
+.odoo-solutions-page dialog.odoo-program-dialog {
+    width: min(760px, calc(100vw - 28px));
+    max-width: 760px;
+    max-height: calc(100vh - 28px);
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 23px;
+    background: #fff;
+    color: #20334c;
+    box-shadow: 0 28px 90px rgba(0,0,0,.32);
+}
+
+.odoo-solutions-page dialog.odoo-program-dialog::backdrop {
+    background: rgba(9,23,41,.73);
+    backdrop-filter: blur(7px);
+}
+
+.odoo-program-dialog-shell {
+    position: relative;
+    max-height: calc(100vh - 28px);
+    overflow-y: auto;
+    padding: clamp(24px, 4vw, 42px);
+    background:
+        radial-gradient(ellipse at 100% 0%, rgba(91,218,195,.13), transparent 36%),
+        #fff;
+}
+
+.odoo-program-dialog-close {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #dbe5eb;
+    border-radius: 12px;
+    background: #fff;
+    color: #263d56;
+    font-size: 1.65rem;
+    cursor: pointer;
+}
+
+.odoo-program-dialog-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    margin: 0 0 13px;
+    border: 1px solid #bde9df;
+    border-radius: 999px;
+    background: #e6f8f3;
+    color: #087f73;
+    font-size: .77rem;
+    font-weight: 900;
+    line-height: 1.7;
+}
+
+.odoo-program-dialog-title {
+    margin: 0 0 13px;
+    padding-left: 42px;
+    color: #142743;
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 900;
+    line-height: 1.6;
+}
+
+.odoo-program-dialog-intro {
+    margin: 0 0 24px;
+    color: #40566f;
+    font-size: 1.02rem;
+    line-height: 2.05;
+}
+
+.odoo-program-dialog-subheading {
+    margin: 0 0 13px;
+    color: #18324e;
+    font-size: 1.08rem;
+    font-weight: 900;
+    line-height: 1.8;
+}
+
+.odoo-program-dialog-features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.odoo-program-dialog-features li {
+    position: relative;
+    min-width: 0;
+    padding: 13px 36px 13px 12px;
+    border: 1px solid #e0e9ef;
+    border-radius: 12px;
+    background: #f8fbfc;
+    color: #314a64;
+    font-size: .92rem;
+    line-height: 1.9;
+    font-weight: 700;
+}
+
+.odoo-program-dialog-features li::before {
+    content: "✓";
+    position: absolute;
+    top: 13px;
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    background: #dcf6ee;
+    color: #087f73;
+    font-size: .75rem;
+    font-weight: 900;
+}
+
+.odoo-program-dialog-note {
+    margin-top: 18px;
+    padding: 12px 14px;
+    border-right: 3px solid #36bca7;
+    border-radius: 8px;
+    background: #f0faf7;
+    color: #40566f;
+    font-size: .83rem;
+    line-height: 1.95;
+}
+
+.odoo-program-dialog-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 23px;
+}
+
+.odoo-program-dialog-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 12px 16px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    text-decoration: none;
+    text-align: center;
+    font-size: .87rem;
+    font-weight: 900;
+    line-height: 1.7;
+}
+
+.odoo-program-dialog-actions .dialog-demo {
+    background: #5bdac3;
+    color: #10243a !important;
+}
+
+.odoo-program-dialog-actions .dialog-join {
+    background: #152b47;
+    color: #fff !important;
+}
+
+.odoo-program-dialog-actions .dialog-section {
+    border-color: #d4e0e8;
+    background: #fff;
+    color: #243d57 !important;
+}
+
+@media (max-width: 900px) {
+    .odoo-solutions-page .odoo-system-visual {
+        min-height: 430px !important;
+    }
+
+    .odoo-solutions-page .odoo-detail-hero-inner .odoo-system-visual {
+        width: min(100%, 430px) !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 560px) {
+    .odoo-solutions-page .odoo-system-visual {
+        min-height: 390px !important;
+    }
+
+    .odoo-solutions-page .odoo-system-orbit {
+        width: 270px !important;
+        height: 270px !important;
+    }
+
+    .odoo-solutions-page .odoo-system-orbit.orbit-two {
+        width: 205px !important;
+        height: 205px !important;
+    }
+
+    .odoo-solutions-page .odoo-system-core {
+        width: 125px !important;
+        height: 125px !important;
+    }
+
+    .odoo-solutions-page .odoo-system-core b {
+        font-size: 2.2rem !important;
+    }
+
+    .odoo-solutions-page button.odoo-system-node {
+        min-width: 106px;
+        min-height: 66px;
+        padding: 9px;
+        border-radius: 12px;
+    }
+
+    .odoo-solutions-page button.odoo-system-node b {
+        font-size: .92rem;
+    }
+
+    .odoo-solutions-page button.odoo-system-node span {
+        font-size: .76rem;
+    }
+
+    .odoo-solutions-page .odoo-system-node.node-two {
+        right: 0;
+    }
+
+    .odoo-solutions-page .odoo-system-node.node-five {
+        left: 0;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-actions a {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .odoo-solutions-page dialog.odoo-program-dialog {
+        width: calc(100vw - 18px);
+        max-height: calc(100vh - 18px);
+        border-radius: 17px;
+    }
+
+    .odoo-program-dialog-shell {
+        max-height: calc(100vh - 18px);
+        padding: 25px 17px;
+    }
+
+    .odoo-program-dialog-features {
+        grid-template-columns: minmax(0,1fr);
+    }
+
+    .odoo-program-dialog-actions {
+        display: grid;
+        grid-template-columns: minmax(0,1fr);
+    }
+
+    .odoo-program-dialog-actions a {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .odoo-solutions-page button.odoo-system-node {
+        transition: none;
+    }
+}
+/* END PROGRAM DETAIL DIALOG V5 */

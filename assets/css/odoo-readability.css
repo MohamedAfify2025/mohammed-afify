@@ -1,0 +1,137 @@
+/* Local readability test for Mohammed Afify website */
+.odoo-solutions-page .odoo-detail-hero {
+    position: relative !important;
+    isolation: isolate;
+    overflow: hidden;
+    color: #15213a !important;
+    padding-block: clamp(48px, 6vw, 82px) !important;
+}
+
+.odoo-solutions-page .odoo-detail-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        to left,
+        rgba(255,255,255,.97) 0%,
+        rgba(255,255,255,.92) 48%,
+        rgba(255,255,255,.48) 100%
+    );
+}
+
+.odoo-solutions-page .odoo-detail-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr);
+    gap: clamp(24px, 4vw, 58px);
+}
+
+.odoo-solutions-page .odoo-detail-hero h1 {
+    max-width: 760px;
+    font-size: clamp(2.1rem, 4.1vw, 3.7rem) !important;
+    line-height: 1.42 !important;
+    letter-spacing: 0 !important;
+    color: #142747 !important;
+    margin-block: 16px 22px !important;
+    text-wrap: pretty;
+}
+
+.odoo-solutions-page .odoo-detail-hero h1 span {
+    color: #078a7b !important;
+}
+
+.odoo-solutions-page .odoo-detail-hero .odoo-tagline {
+    color: #087f73 !important;
+    font-size: .78rem;
+    line-height: 1.8;
+}
+
+.odoo-solutions-page .odoo-detail-hero p {
+    max-width: 680px;
+    color: #33465f !important;
+    font-size: clamp(1rem, 1.15vw, 1.12rem) !important;
+    line-height: 2.05 !important;
+}
+
+.odoo-solutions-page .odoo-detail-actions {
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.odoo-solutions-page .odoo-detail-secondary {
+    color: #183451 !important;
+    border-color: rgba(24,52,81,.28) !important;
+    background: rgba(255,255,255,.66);
+}
+
+.odoo-solutions-page .odoo-detail-steps {
+    color: #53657b !important;
+    font-size: .86rem !important;
+    line-height: 1.9;
+    gap: 12px 20px;
+}
+
+.odoo-solutions-page .odoo-system-node {
+    background: rgba(255,255,255,.94) !important;
+    border-color: rgba(20,39,71,.12) !important;
+    box-shadow: 0 12px 28px rgba(20,39,71,.12) !important;
+}
+
+.odoo-solutions-page .odoo-system-node span {
+    color: #33465f !important;
+}
+
+.odoo-solutions-page .odoo-detail-section-heading h2,
+.odoo-solutions-page .odoo-detail-card h3 {
+    line-height: 1.55;
+    text-wrap: pretty;
+}
+
+.odoo-solutions-page .odoo-detail-section-heading p,
+.odoo-solutions-page .odoo-detail-card-content > p {
+    font-size: 1rem;
+    line-height: 2;
+}
+
+.odoo-solutions-page .odoo-feature-pills span {
+    line-height: 1.8;
+}
+
+@media (max-width: 950px) {
+    .odoo-solutions-page .odoo-detail-hero-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .odoo-solutions-page .odoo-system-visual {
+        min-height: 280px;
+    }
+}
+
+@media (max-width: 600px) {
+    .odoo-solutions-page .odoo-detail-hero {
+        padding-inline: 18px !important;
+    }
+
+    .odoo-solutions-page .odoo-detail-hero h1 {
+        font-size: clamp(1.9rem, 8vw, 2.6rem) !important;
+    }
+
+    .odoo-solutions-page .odoo-detail-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .odoo-solutions-page .odoo-detail-actions a {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .odoo-solutions-page .odoo-detail-steps {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

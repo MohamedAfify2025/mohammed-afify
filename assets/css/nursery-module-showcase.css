@@ -1,0 +1,1211 @@
+/* Edraak Nursery Showcase V2 — local visual review */
+.odoo-solutions-page #nursery .nursery-module-showcase,
+.odoo-solutions-page #nursery .nursery-module-showcase * {
+    box-sizing: border-box;
+}
+
+.odoo-solutions-page #nursery .nursery-module-showcase {
+    width: 100%;
+    margin: 28px 0;
+    padding: clamp(18px, 2.7vw, 34px);
+    overflow: hidden;
+    border: 1px solid #dce8ed;
+    border-radius: 24px;
+    background:
+        radial-gradient(ellipse at 100% 0%, rgba(42, 190, 166, .09), transparent 33%),
+        linear-gradient(155deg, #ffffff 0%, #f7fafc 78%, #f2f8f9 100%);
+    color: #20334c;
+    box-shadow: 0 18px 48px rgba(21, 39, 67, .07);
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 145px;
+    align-items: center;
+    gap: 22px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e3ebef;
+}
+
+.odoo-solutions-page #nursery .nursery-intro-copy {
+    min-width: 0;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-kicker {
+    display: inline-block;
+    color: #087f73;
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .07em;
+    line-height: 1.8;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-intro h4 {
+    margin: 10px 0 12px;
+    color: #142743;
+    font-size: clamp(1.45rem, 2.5vw, 2.05rem);
+    line-height: 1.55;
+    font-weight: 800;
+    text-wrap: pretty;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-intro p {
+    max-width: 720px;
+    margin: 0;
+    color: #43566f;
+    font-size: .98rem;
+    line-height: 2;
+    font-weight: 500;
+}
+
+.odoo-solutions-page #nursery .nursery-intro-symbol {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 10px;
+    min-height: 135px;
+}
+
+.odoo-solutions-page #nursery .nursery-symbol-orbit {
+    position: absolute;
+    width: 118px;
+    height: 118px;
+    border: 1px dashed #8bd9ce;
+    border-radius: 50%;
+}
+
+.odoo-solutions-page #nursery .nursery-symbol-center {
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 82px;
+    height: 82px;
+    border-radius: 25px;
+    background: linear-gradient(145deg, #dff8f2, #c3eee6);
+    color: #087f73;
+    box-shadow: 0 12px 25px rgba(13, 120, 108, .1);
+    transform: rotate(-4deg);
+}
+
+.odoo-solutions-page #nursery .nursery-symbol-center svg {
+    width: 49px;
+    height: 49px;
+}
+
+.odoo-solutions-page #nursery .nursery-symbol-caption {
+    position: relative;
+    z-index: 1;
+    margin-top: 1px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #e4ecef;
+    color: #3f556b;
+    font-size: .68rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.odoo-solutions-page #nursery .nursery-workflow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 22px 0 28px;
+    padding: 14px 16px;
+    border: 1px solid #e0e9ee;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.odoo-solutions-page #nursery .nursery-workflow-step {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #273e59;
+    font-size: .84rem;
+    font-weight: 800;
+}
+
+.odoo-solutions-page #nursery .nursery-workflow-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 31px;
+    height: 31px;
+    border-radius: 10px;
+    background: #e2f7f2;
+    color: #087f73;
+    font-size: .69rem;
+    font-weight: 800;
+}
+
+.odoo-solutions-page #nursery .nursery-workflow-arrow {
+    color: #20a995;
+    font-weight: 800;
+}
+
+.odoo-solutions-page #nursery .nursery-features-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 0 0 15px;
+}
+
+.odoo-solutions-page #nursery .nursery-features-heading h5 {
+    margin: 4px 0 0;
+    color: #162b47;
+    font-size: 1.35rem;
+    line-height: 1.6;
+    font-weight: 800;
+}
+
+.odoo-solutions-page #nursery .nursery-click-hint {
+    color: #50647b;
+    font-size: .76rem;
+    line-height: 1.8;
+    font-weight: 600;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 13px;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card {
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #dde7ed;
+    border-radius: 17px;
+    background: #fff;
+    box-shadow: 0 5px 16px rgba(22, 43, 71, .035);
+    transition: box-shadow .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card:hover {
+    border-color: #a9dcd5;
+    box-shadow: 0 12px 27px rgba(22, 43, 71, .08);
+    transform: translateY(-2px);
+}
+
+.odoo-solutions-page #nursery .nursery-feature-card summary {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) 24px;
+    align-items: center;
+    gap: 12px;
+    min-height: 112px;
+    padding: 17px 15px;
+    list-style: none;
+    cursor: pointer;
+    text-align: right;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-card summary::-webkit-details-marker {
+    display: none;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-card summary:focus-visible {
+    outline: 3px solid #168f80;
+    outline-offset: -4px;
+    border-radius: 14px;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-icon {
+    display: grid;
+    place-items: center;
+    align-self: start;
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    color: var(--nursery-accent);
+    background: var(--nursery-tint);
+}
+
+.odoo-solutions-page #nursery .nursery-feature-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.odoo-solutions-page #nursery .tone-mint {
+    --nursery-accent: #087f73;
+    --nursery-tint: #dff7f0;
+}
+
+.odoo-solutions-page #nursery .tone-blue {
+    --nursery-accent: #2769b0;
+    --nursery-tint: #e4f1ff;
+}
+
+.odoo-solutions-page #nursery .tone-purple {
+    --nursery-accent: #7052ad;
+    --nursery-tint: #eee8ff;
+}
+
+.odoo-solutions-page #nursery .tone-amber {
+    --nursery-accent: #9d6108;
+    --nursery-tint: #fff0d3;
+}
+
+.odoo-solutions-page #nursery .tone-coral {
+    --nursery-accent: #be5264;
+    --nursery-tint: #ffe9ed;
+}
+
+.odoo-solutions-page #nursery .tone-sky {
+    --nursery-accent: #247d9b;
+    --nursery-tint: #dff5fb;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.odoo-solutions-page #nursery .nursery-card-index {
+    color: var(--nursery-accent);
+    font-size: .67rem;
+    line-height: 1.6;
+    font-weight: 800;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap strong {
+    color: #172d49;
+    font-size: .98rem;
+    line-height: 1.7;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap small {
+    color: #50627a;
+    font-size: .79rem;
+    line-height: 1.8;
+    font-weight: 500;
+}
+
+.odoo-solutions-page #nursery .nursery-card-toggle {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f0f4f7;
+    color: #3f556b;
+    font-size: 1rem;
+}
+
+.odoo-solutions-page #nursery .nursery-card-toggle::before {
+    content: "+";
+    line-height: 1;
+}
+
+.odoo-solutions-page #nursery details[open] .nursery-card-toggle::before {
+    content: "−";
+}
+
+.odoo-solutions-page #nursery .nursery-feature-details {
+    padding: 0 17px 17px;
+    border-top: 1px solid #edf1f4;
+    background: linear-gradient(180deg, #fff, #fbfcfd);
+}
+
+.odoo-solutions-page #nursery .nursery-feature-details p {
+    margin: 13px 0;
+    color: #40536b;
+    font-size: .87rem;
+    line-height: 2;
+    font-weight: 500;
+}
+
+.odoo-solutions-page #nursery .nursery-detail-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.odoo-solutions-page #nursery .nursery-detail-chips span {
+    padding: 5px 8px;
+    border: 1px solid #e0e8ed;
+    border-radius: 7px;
+    background: #f6f9fb;
+    color: #40546b;
+    font-size: .7rem;
+    line-height: 1.7;
+    font-weight: 700;
+}
+
+.odoo-solutions-page #nursery .nursery-scope-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 16px 0 0;
+    color: #51647a;
+    font-size: .76rem;
+    line-height: 1.9;
+}
+
+.odoo-solutions-page #nursery .nursery-scope-note > span {
+    flex-shrink: 0;
+    color: #087f73;
+    font-weight: 800;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    margin-top: 24px;
+    padding: clamp(20px, 2.7vw, 28px);
+    border: 1px solid #223c5c;
+    border-radius: 19px;
+    background:
+        radial-gradient(ellipse at 100% 0%, rgba(88, 217, 194, .18), transparent 42%),
+        linear-gradient(125deg, #13243e, #193451);
+    color: #fff;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-copy {
+    min-width: 0;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-kicker {
+    display: block;
+    margin-bottom: 7px;
+    color: #79e3d0;
+    font-size: .68rem;
+    line-height: 1.8;
+    font-weight: 800;
+    letter-spacing: .06em;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-copy strong {
+    display: block;
+    color: #fff;
+    font-size: 1.08rem;
+    font-weight: 800;
+    line-height: 1.8;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-copy p {
+    margin: 7px 0 0;
+    color: #e0e9f2;
+    font-size: .83rem;
+    line-height: 1.9;
+    font-weight: 500;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    flex-shrink: 0;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 44px;
+    padding: 11px 15px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    font-size: .82rem;
+    line-height: 1.7;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-actions a:hover {
+    transform: translateY(-2px);
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-primary {
+    color: #102b3c !important;
+    background: #63dfc8;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-primary:hover {
+    background: #8ae9d8;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-secondary {
+    border-color: #647b96;
+    color: #fff !important;
+    background: rgba(255,255,255,.045);
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-secondary:hover {
+    border-color: #91e7d8;
+    background: rgba(255,255,255,.09);
+}
+
+.odoo-solutions-page #nursery .odoo-video-block {
+    margin-top: 26px;
+    padding: clamp(16px, 2vw, 24px);
+    border: 1px solid #dce8ed;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(22, 43, 71, .045);
+}
+
+.odoo-solutions-page #nursery .odoo-video-heading h4 {
+    color: #162b47;
+    line-height: 1.7;
+    font-weight: 800;
+}
+
+.odoo-solutions-page #nursery .odoo-video-heading p {
+    color: #465b74;
+    line-height: 1.9;
+}
+
+.odoo-solutions-page #nursery .odoo-video-frame {
+    overflow: hidden;
+    border-radius: 14px;
+    background: #13243e;
+}
+
+.odoo-solutions-page #nursery .odoo-video-frame iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+    border-radius: 14px;
+}
+
+.odoo-solutions-page #nursery .odoo-video-fallback {
+    display: inline-flex;
+    margin-top: 12px;
+    color: #087f73;
+    font-weight: 800;
+    line-height: 1.8;
+}
+
+@media (max-width: 1040px) {
+    .odoo-solutions-page #nursery .nursery-showcase-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 760px) {
+    .odoo-solutions-page #nursery .nursery-showcase-intro {
+        grid-template-columns: 1fr;
+    }
+
+    .odoo-solutions-page #nursery .nursery-intro-symbol {
+        display: none;
+    }
+
+    .odoo-solutions-page #nursery .nursery-workflow {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .odoo-solutions-page #nursery .nursery-workflow-arrow {
+        transform: rotate(-90deg);
+        align-self: center;
+        line-height: 1;
+    }
+
+    .odoo-solutions-page #nursery .nursery-features-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-actions {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-actions a {
+        width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+    .odoo-solutions-page #nursery .nursery-showcase-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .odoo-solutions-page #nursery .nursery-module-showcase {
+        padding: 15px;
+        border-radius: 17px;
+    }
+
+    .odoo-solutions-page #nursery .nursery-feature-card summary {
+        min-height: 100px;
+        padding: 15px 12px;
+        grid-template-columns: 42px minmax(0, 1fr) 22px;
+        gap: 10px;
+    }
+
+    .odoo-solutions-page #nursery .nursery-feature-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+    }
+
+    .odoo-solutions-page #nursery .nursery-feature-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .odoo-solutions-page #nursery .nursery-card-title-wrap strong {
+        font-size: .95rem;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-footer {
+        padding: 18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .odoo-solutions-page #nursery details.nursery-feature-card,
+    .odoo-solutions-page #nursery .nursery-showcase-actions a {
+        transition: none;
+    }
+
+    .odoo-solutions-page #nursery details.nursery-feature-card:hover,
+    .odoo-solutions-page #nursery .nursery-showcase-actions a:hover {
+        transform: none;
+    }
+}
+
+/* NURSERY FULL WIDTH OVERRIDES START */
+/* Expand the page content and nursery module */
+.odoo-solutions-page .odoo-detail-solutions {
+    width: calc(100% - 32px) !important;
+    max-width: 1600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.odoo-solutions-page article.odoo-detail-card#nursery {
+    position: relative !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+}
+
+.odoo-solutions-page #nursery > .odoo-detail-aside {
+    display: none !important;
+}
+
+.odoo-solutions-page #nursery > .odoo-detail-index {
+    position: absolute !important;
+    top: 20px !important;
+    left: 24px !important;
+    right: auto !important;
+    z-index: 2;
+}
+
+.odoo-solutions-page #nursery > .odoo-detail-card-content {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 34px clamp(16px, 3vw, 48px) 28px !important;
+}
+
+.odoo-solutions-page #nursery .nursery-module-showcase {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-intro {
+    grid-template-columns: minmax(0, 1fr) 145px;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.odoo-solutions-page #nursery .nursery-feature-card,
+.odoo-solutions-page #nursery .nursery-feature-card summary,
+.odoo-solutions-page #nursery .nursery-feature-details {
+    min-width: 0;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-intro p,
+.odoo-solutions-page #nursery .nursery-feature-details p {
+    max-width: none;
+}
+
+@media (max-width: 900px) {
+    .odoo-solutions-page .odoo-detail-solutions {
+        width: calc(100% - 24px) !important;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .odoo-solutions-page .odoo-detail-solutions {
+        width: calc(100% - 16px) !important;
+    }
+
+    .odoo-solutions-page #nursery > .odoo-detail-card-content {
+        padding: 42px 12px 18px !important;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-intro {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+/* NURSERY FULL WIDTH OVERRIDES END */
+
+/* VISUAL SERVICE CARDS V3 START */
+.odoo-solutions-page #nursery details.nursery-feature-card {
+    --card-start: #103b43;
+    --card-end: #116e70;
+    --card-glow: rgba(106, 246, 218, .20);
+    --card-accent: #a6f4e4;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.16) !important;
+    border-radius: 17px;
+    background: linear-gradient(135deg, var(--card-start), var(--card-end)) !important;
+    box-shadow: 0 12px 28px rgba(17, 38, 58, .13) !important;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card.tone-blue {
+    --card-start: #173657;
+    --card-end: #246aa0;
+    --card-glow: rgba(111, 195, 255, .23);
+    --card-accent: #b9e1ff;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card.tone-purple {
+    --card-start: #35254f;
+    --card-end: #6650a0;
+    --card-glow: rgba(205, 179, 255, .24);
+    --card-accent: #e0d0ff;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card.tone-amber {
+    --card-start: #503415;
+    --card-end: #9a621d;
+    --card-glow: rgba(255, 211, 123, .22);
+    --card-accent: #ffe0a0;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card.tone-coral {
+    --card-start: #512838;
+    --card-end: #9d435c;
+    --card-glow: rgba(255, 166, 190, .22);
+    --card-accent: #ffd0dc;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card.tone-sky {
+    --card-start: #15384b;
+    --card-end: #237e96;
+    --card-glow: rgba(134, 231, 246, .22);
+    --card-accent: #b9f2fb;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    top: -65px;
+    left: -50px;
+    width: 190px;
+    height: 190px;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 60% 60%, var(--card-glow), transparent 68%);
+    box-shadow:
+        0 0 0 20px rgba(255,255,255,.025),
+        0 0 0 42px rgba(255,255,255,.018);
+    pointer-events: none;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card summary {
+    position: relative;
+    z-index: 1;
+    min-height: 132px;
+    padding: 20px 17px;
+    background: transparent !important;
+    color: #fff !important;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-icon {
+    color: var(--card-accent) !important;
+    background: rgba(255,255,255,.13) !important;
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.09);
+}
+
+.odoo-solutions-page #nursery .nursery-card-index {
+    color: var(--card-accent) !important;
+    font-size: .7rem;
+    letter-spacing: .015em;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap strong {
+    color: #fff !important;
+    font-size: 1rem;
+    line-height: 1.8;
+    font-weight: 800;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap small {
+    color: rgba(255,255,255,.88) !important;
+    font-size: .8rem;
+    line-height: 1.9;
+}
+
+.odoo-solutions-page #nursery .nursery-card-toggle {
+    position: relative;
+    z-index: 2;
+    color: #fff !important;
+    background: rgba(255,255,255,.15) !important;
+    border: 1px solid rgba(255,255,255,.13);
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card[open] {
+    border-color: var(--card-accent) !important;
+    box-shadow: 0 17px 35px rgba(17, 38, 58, .20) !important;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card[open] summary {
+    background: rgba(0,0,0,.06) !important;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-details {
+    position: relative;
+    z-index: 1;
+    padding: 0 18px 18px !important;
+    border-top: 1px solid rgba(255,255,255,.19) !important;
+    background: rgba(6,18,32,.20) !important;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-details p {
+    color: #fff !important;
+    font-size: .89rem;
+    line-height: 2;
+}
+
+.odoo-solutions-page #nursery .nursery-detail-chips span {
+    border-color: rgba(255,255,255,.22) !important;
+    background: rgba(255,255,255,.10) !important;
+    color: #fff !important;
+    font-weight: 700;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 38px rgba(17,38,58,.22) !important;
+}
+
+.odoo-solutions-page #nursery .nursery-scope-note {
+    color: #43566f !important;
+}
+
+@media (max-width: 560px) {
+    .odoo-solutions-page #nursery details.nursery-feature-card summary {
+        min-height: 112px;
+        padding: 17px 13px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .odoo-solutions-page #nursery details.nursery-feature-card {
+        transition: none;
+    }
+    .odoo-solutions-page #nursery details.nursery-feature-card:hover {
+        transform: none;
+    }
+}
+/* VISUAL SERVICE CARDS V3 END */
+
+/* NURSERY LAYOUT V6 START */
+
+/* Preserve the original cinematic page background. */
+html {
+    overflow-x: clip !important;
+}
+
+body.odoo-solutions-page {
+    max-width: 100%;
+    overflow-x: clip !important;
+}
+
+.odoo-solutions-page #nursery .nursery-module-showcase {
+    width: 100%;
+    max-width: none !important;
+    padding: clamp(20px, 2.7vw, 38px) !important;
+    overflow: hidden;
+    border-radius: 22px;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-intro {
+    grid-template-columns: minmax(0, 1fr) 135px;
+    align-items: center;
+    gap: clamp(18px, 2.8vw, 40px);
+    padding-bottom: 27px;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-kicker {
+    color: #087f73 !important;
+    font-size: .82rem !important;
+    font-weight: 900 !important;
+    line-height: 1.9;
+    letter-spacing: .025em;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-intro h4 {
+    max-width: 100%;
+    margin: 10px 0 14px;
+    color: #142743 !important;
+    font-size: clamp(1.65rem, 2.5vw, 2.3rem) !important;
+    line-height: 1.55 !important;
+    font-weight: 900 !important;
+    text-wrap: balance;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-intro p {
+    max-width: 100%;
+    color: #334b65 !important;
+    font-size: clamp(1rem, 1.13vw, 1.12rem) !important;
+    font-weight: 500;
+    line-height: 2.05 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-workflow {
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 15px;
+}
+
+.odoo-solutions-page #nursery .nursery-workflow-step {
+    color: #203b56 !important;
+    font-size: .91rem !important;
+    line-height: 1.85;
+    font-weight: 850 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-features-heading {
+    align-items: end;
+    margin: 4px 0 18px;
+    gap: 14px;
+}
+
+.odoo-solutions-page #nursery .nursery-features-heading h5 {
+    margin-top: 5px;
+    color: #142743 !important;
+    font-size: clamp(1.35rem, 2vw, 1.75rem) !important;
+    line-height: 1.6;
+    font-weight: 900 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-click-hint {
+    color: #405873 !important;
+    font-size: .88rem !important;
+    line-height: 1.8;
+    font-weight: 700;
+}
+
+/* Equal-size cards; details open in the separate modal instead of inside the grid. */
+.odoo-solutions-page #nursery .nursery-showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 15px;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card {
+    min-width: 0;
+    align-self: stretch;
+    min-height: 155px;
+    border-radius: 17px;
+    cursor: pointer;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card summary {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) 25px;
+    align-items: center;
+    gap: 12px;
+    min-height: 155px;
+    height: 100%;
+    padding: 20px 17px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-details {
+    display: none !important;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap {
+    min-width: 0;
+    gap: 6px;
+}
+
+.odoo-solutions-page #nursery .nursery-card-index {
+    font-size: .76rem !important;
+    line-height: 1.75;
+    font-weight: 900 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap strong {
+    color: #fff !important;
+    font-size: clamp(1rem, 1.15vw, 1.12rem) !important;
+    line-height: 1.8 !important;
+    font-weight: 900 !important;
+    overflow-wrap: anywhere;
+}
+
+.odoo-solutions-page #nursery .nursery-card-title-wrap small {
+    color: rgba(255,255,255,.94) !important;
+    font-size: .88rem !important;
+    line-height: 1.9 !important;
+    font-weight: 600 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+}
+
+.odoo-solutions-page #nursery .nursery-feature-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.odoo-solutions-page #nursery .nursery-card-toggle {
+    display: grid;
+    place-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.14) !important;
+    color: #fff !important;
+}
+
+.odoo-solutions-page #nursery .nursery-card-toggle::before {
+    content: "↗";
+    font-size: .85rem;
+    font-weight: 900;
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card:hover {
+    transform: translateY(-3px);
+}
+
+.odoo-solutions-page #nursery details.nursery-feature-card:focus-within {
+    outline: 3px solid #55cfbc;
+    outline-offset: 3px;
+}
+
+.odoo-solutions-page #nursery .nursery-scope-note {
+    color: #40566e !important;
+    font-size: .83rem !important;
+    line-height: 1.95;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-footer {
+    gap: 24px;
+    padding: clamp(22px, 3vw, 34px) !important;
+    border-radius: 18px;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-kicker {
+    color: #8df0dc !important;
+    font-size: .8rem !important;
+    font-weight: 900 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-copy strong {
+    color: #fff !important;
+    font-size: clamp(1.15rem, 1.7vw, 1.45rem) !important;
+    line-height: 1.8 !important;
+    font-weight: 900 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-footer-copy p {
+    color: #edf3fa !important;
+    font-size: .97rem !important;
+    line-height: 2.05 !important;
+}
+
+.odoo-solutions-page #nursery .nursery-showcase-actions a {
+    min-height: 48px;
+    font-size: .92rem !important;
+    font-weight: 900 !important;
+}
+
+/* Separate detail window */
+.odoo-solutions-page dialog.odoo-program-dialog {
+    width: min(760px, calc(100vw - 24px));
+    max-width: 760px;
+    max-height: calc(100vh - 24px);
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #e1e9ee;
+    border-radius: 22px;
+    background: #fff;
+    color: #20334c;
+    box-shadow: 0 28px 90px rgba(0,0,0,.32);
+}
+
+.odoo-solutions-page dialog.odoo-program-dialog::backdrop {
+    background: rgba(9,23,41,.74);
+    backdrop-filter: blur(7px);
+}
+
+.odoo-solutions-page .odoo-program-dialog-shell {
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+    padding: clamp(22px, 3.5vw, 40px);
+}
+
+.odoo-solutions-page .odoo-program-dialog-title {
+    color: #142743;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 900;
+    line-height: 1.65;
+}
+
+.odoo-solutions-page .odoo-program-dialog-intro {
+    color: #364d67;
+    font-size: 1.04rem;
+    line-height: 2.1;
+}
+
+.odoo-solutions-page .odoo-program-dialog-subheading {
+    color: #142743;
+    font-size: 1.1rem;
+    font-weight: 900;
+    line-height: 1.8;
+}
+
+.odoo-solutions-page .odoo-program-dialog-features li {
+    color: #2d4660;
+    font-size: .96rem;
+    line-height: 1.95;
+}
+
+.odoo-solutions-page .odoo-program-dialog-note {
+    color: #3d566d;
+    font-size: .88rem;
+    line-height: 2;
+}
+
+@media (max-width: 1050px) {
+    .odoo-solutions-page #nursery .nursery-showcase-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .odoo-solutions-page #nursery .nursery-showcase-intro {
+        grid-template-columns: minmax(0,1fr);
+    }
+
+    .odoo-solutions-page #nursery .nursery-intro-symbol {
+        display: none;
+    }
+
+    .odoo-solutions-page #nursery .nursery-workflow {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .odoo-solutions-page #nursery .nursery-workflow-arrow {
+        align-self: center;
+        transform: rotate(-90deg);
+    }
+
+    .odoo-solutions-page #nursery .nursery-features-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .odoo-solutions-page #nursery .nursery-showcase-actions {
+        display: grid;
+        grid-template-columns: minmax(0,1fr);
+        width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+    .odoo-solutions-page #nursery .nursery-showcase-grid {
+        grid-template-columns: minmax(0,1fr);
+    }
+
+    .odoo-solutions-page #nursery details.nursery-feature-card,
+    .odoo-solutions-page #nursery details.nursery-feature-card summary {
+        min-height: 126px;
+    }
+
+    .odoo-solutions-page #nursery details.nursery-feature-card summary {
+        grid-template-columns: 43px minmax(0,1fr) 23px;
+        padding: 16px 13px;
+        gap: 10px;
+    }
+
+    .odoo-solutions-page #nursery .nursery-feature-icon {
+        width: 43px;
+        height: 43px;
+    }
+
+    .odoo-solutions-page .odoo-program-dialog-shell {
+        padding: 24px 16px;
+    }
+
+    .odoo-solutions-page .odoo-program-dialog-features {
+        grid-template-columns: minmax(0,1fr);
+    }
+
+    .odoo-solutions-page .odoo-program-dialog-actions {
+        display: grid;
+        grid-template-columns: minmax(0,1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .odoo-solutions-page #nursery details.nursery-feature-card {
+        transition: none;
+    }
+}
+/* NURSERY LAYOUT V6 END */
