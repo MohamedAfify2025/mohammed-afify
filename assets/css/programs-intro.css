@@ -693,3 +693,25 @@
 }
 
 /* FULL WIDTH PROGRAMS HERO END */
+
+/* CLINIC PROGRAM SHORTCUT V1 START */
+.odoo-solutions-page .odoo-program-shortcuts {
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+}
+
+.odoo-solutions-page .odoo-program-shortcut.clinic-shortcut {
+    border-color: #b8e7e1;
+    background: linear-gradient(135deg,#e7f7f4,#ffffff);
+}
+
+.odoo-solutions-page .odoo-program-shortcut.clinic-shortcut .program-shortcut-number {
+    background: #d8f2ed;
+    color: #087f73;
+}
+
+@media (max-width: 520px) {
+    .odoo-solutions-page .odoo-program-shortcuts {
+        grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    }
+}
+/* CLINIC PROGRAM SHORTCUT V1 END */

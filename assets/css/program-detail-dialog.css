@@ -522,3 +522,106 @@ body.odoo-solutions-page {
     }
 }
 /* END PROGRAM DETAIL DIALOG V5 */
+
+/* ERP NODE POINTER FIX V1 */
+.odoo-solutions-page .odoo-detail-hero-inner .odoo-system-visual {
+    pointer-events: auto !important;
+}
+
+.odoo-solutions-page .odoo-system-visual > .odoo-system-orbit,
+.odoo-solutions-page .odoo-system-visual > .odoo-system-core {
+    pointer-events: none !important;
+}
+
+.odoo-solutions-page .odoo-system-visual > button.odoo-system-node {
+    position: absolute;
+    pointer-events: auto !important;
+    z-index: 5;
+    touch-action: manipulation;
+}
+
+.odoo-solutions-page .odoo-system-visual > button.odoo-system-node:focus-visible {
+    outline: 3px solid #43cbb5;
+    outline-offset: 4px;
+}
+/* END ERP NODE POINTER FIX V1 */
+
+/* CLINIC ERP NODE V1 START */
+.odoo-solutions-page .odoo-system-node.node-six {
+    --node-color: #167b80;
+    position: absolute !important;
+    top: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: -2px !important;
+    transform: translateX(-50%);
+    border-color: #b7e8e3 !important;
+}
+
+.odoo-solutions-page .odoo-system-node.node-six:hover {
+    transform: translateX(-50%) translateY(-3px);
+}
+
+.odoo-solutions-page .clinic-detail-card {
+    border-top: 4px solid #168b83;
+}
+
+.odoo-solutions-page .clinic-detail-card .odoo-detail-label {
+    color: #087f73 !important;
+}
+
+.odoo-solutions-page .clinic-detail-notice {
+    margin-top: 18px;
+    padding: 13px 15px;
+    border-right: 4px solid #168b83;
+    border-radius: 10px;
+    background: #eff9f7;
+    color: #35566a;
+    font-size: .9rem;
+    font-weight: 600;
+    line-height: 2;
+}
+
+.odoo-solutions-page .clinic-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.odoo-solutions-page .clinic-detail-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 11px 17px;
+    border-radius: 11px;
+    font-size: .88rem;
+    font-weight: 900;
+    line-height: 1.8;
+    text-decoration: none;
+}
+
+.odoo-solutions-page .clinic-demo-button {
+    background: #5bdac3;
+    color: #10243a !important;
+}
+
+.odoo-solutions-page .clinic-join-button {
+    border: 1px solid #cbd9e4;
+    background: #fff;
+    color: #18334e !important;
+}
+
+@media (max-width: 600px) {
+    .odoo-solutions-page .clinic-detail-actions {
+        display: grid;
+        grid-template-columns: minmax(0,1fr);
+    }
+
+    .odoo-solutions-page .clinic-detail-actions a {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+/* CLINIC ERP NODE V1 END */

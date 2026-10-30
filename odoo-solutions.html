@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101a32">
-  <meta name="description" content="حلول عملية مبنية على Odoo Community لإدارة الحضانات والمراكز التعليمية والمدارس والموارد البشرية، ودورة المحاسبة المتكاملة.">
+  <meta name="description" content="حلول عملية مبنية على Odoo Community لإدارة الحضانات والمراكز التعليمية والمدارس والعيادات الطبية والموارد البشرية، ودورة المحاسبة المتكاملة.">
   <title>حلول Odoo العملية | Mohammed Afify</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,6 +31,7 @@
     <nav aria-label="القائمة الرئيسية">
       <a href="index.html">الرئيسية</a>
       <a href="#solutions">الأنظمة</a>
+      <a href=
       <a href="#accounting-management">المحاسبة</a>
       <a href="index.html#contact">تواصل</a>
     </nav>
@@ -44,7 +45,7 @@
       <div>
         <span class="odoo-tagline">ODOO SOLUTIONS PORTFOLIO · برامج عملية للأعمال</span>
         <h1>حلول Odoo العملية<br><span>لإدارة أعمالك بوضوح أكبر</span></h1>
-        <p>من الحضانات والمراكز التعليمية إلى المدارس والموارد البشرية والمحاسبة، استكشف حلولًا مبنية على Odoo لتنظيم الإجراءات والبيانات. نبدأ بفهم احتياجك، ثم نحدد نطاق الوظائف والتخصيص والتدريب المناسب.</p>
+        <p>من الحضانات والمراكز التعليمية إلى المدارس والعيادات الطبية والموارد البشرية والمحاسبة، استكشف حلولًا مبنية على Odoo لتنظيم الإجراءات والبيانات. نبدأ بفهم احتياجك، ثم نحدد نطاق الوظائف والتخصيص والتدريب المناسب.</p>
         <div class="odoo-detail-actions">
           <a class="odoo-home-cta-button" href="#solutions">استكشف البرامج ↓</a>
           <a class="odoo-detail-secondary" href="index.html#contact">اطلب عرضًا توضيحيًا</a>
@@ -80,6 +81,11 @@
     </a>
   </nav>
 </div>
+<a class="odoo-program-shortcut clinic-shortcut" href="#clinics">
+  <span class="program-shortcut-number">06</span>
+  <span class="program-shortcut-label">العيادات الطبية</span>
+  <span class="program-shortcut-arrow" aria-hidden="true">↙</span>
+</a>
 <!-- PROGRAM-INTRO-SHORTCUTS-END -->
 <div class="odoo-detail-steps">
           <span>01 / تحليل الاحتياج</span>
@@ -116,6 +122,11 @@
         data-program="accounting" aria-haspopup="dialog"
         aria-label="تفاصيل برنامج المحاسبة">
   <b>ACC</b><span>المحاسبة</span>
+</button>
+<button type="button" class="odoo-system-node node-six"
+        data-program="clinic" aria-haspopup="dialog"
+        aria-label="تفاصيل برنامج إدارة العيادات الطبية">
+  <b>CLINIC</b><span>العيادات</span>
 </button>
 <!-- ODOO-PROGRAM-NODES-END -->
       </div>
@@ -359,7 +370,7 @@
        href="https://wa.me/201092452759?text=%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%B7%D9%84%D8%A8%20%D8%B9%D8%B1%D8%B6%20%D8%AA%D9%88%D8%B6%D9%8A%D8%AD%D9%8A%20%D9%84%D9%86%D8%B8%D8%A7%D9%85%20%D8%A5%D8%AF%D8%B1%D8%A7%D9%83%20%D9%84%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D8%AD%D8%B6%D8%A7%D9%86%D8%A9"
        target="_blank" rel="noopener noreferrer">اطلب Demo للبرنامج ↗</a>
     <a class="nursery-showcase-secondary"
-       href="index.html#contact">طلب الانضمام إلى النظام ←</a>
+       href="index.html?odoo_program=nursery&amp;odoo_request=join#contact">طلب الاشتراك وبدء التنفيذ ←</a>
   </div>
 </footer>
 
@@ -469,7 +480,52 @@
         <p>بيانات منظمة لدعم إجراءات شؤون الموظفين.</p>
       </aside>
     </article>
-  </section>
+
+    <article class="odoo-detail-card clinic-detail-card" id="clinics">
+      <div class="odoo-detail-index">06</div>
+      <div class="odoo-detail-card-content">
+        <span class="odoo-detail-label">MEDICAL CLINIC MANAGEMENT · ODOO</span>
+        <h3>إدارة العيادات الطبية</h3>
+        <p>
+          نظّم رحلة المريض من تسجيل البيانات وحجز المواعيد إلى الاستقبال
+          والزيارات والفواتير والتحصيل، مع ربط الإجراءات التشغيلية والمالية
+          في مسار إداري أوضح.
+        </p>
+
+        <div class="odoo-feature-pills">
+          <span>ملفات المرضى والبيانات الأساسية</span>
+          <span>الأطباء والتخصصات وغرف الكشف</span>
+          <span>المواعيد وجدولة الزيارات</span>
+          <span>الاستقبال وقائمة الانتظار</span>
+          <span>الخدمات والفواتير</span>
+          <span>التحصيل ومتابعة المدفوعات</span>
+          <span>إعدادات أتعاب الأطباء</span>
+          <span>إغلاق الورديات ومراجعة التحصيل</span>
+          <span>لوحات المتابعة والتقارير التشغيلية</span>
+        </div>
+
+        <div class="clinic-detail-notice">
+          تتحدد الوظائف النهائية بحسب إعدادات النظام والتخصصات والإجراءات
+          المعتمدة في العيادة ونطاق التخصيص المتفق عليه.
+        </div>
+
+        <div class="clinic-detail-actions">
+          <a class="clinic-demo-button"
+             href="index.html?odoo_program=clinic&amp;odoo_request=demo#contact">
+            اطلب عرضًا توضيحيًا ↗
+          </a>
+          <a class="clinic-join-button"
+             href="index.html?odoo_program=clinic&amp;odoo_request=join#contact">
+            طلب الاشتراك وبدء التنفيذ ←
+          </a>
+        </div>
+      </div>
+      <aside class="odoo-detail-aside">
+        <strong>CLINIC<span>06</span></strong>
+        <p>تنظيم رحلة المريض والإجراءات التشغيلية والمالية للعيادة.</p>
+      </aside>
+    </article>
+</section>
 
 
 <!-- CHANNEL-ODOO-VIDEOS-START -->

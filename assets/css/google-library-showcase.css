@@ -1,0 +1,315 @@
+
+
+/* GOOGLE LIBRARY SHOWCASE V1 START */
+
+/* Preserve the original animated/photo background. */
+#googleSitesLibrary.gs-library-home {
+    position: relative;
+    isolation: isolate;
+    padding-block: clamp(58px, 6vw, 88px);
+}
+
+#googleSitesLibrary .container {
+    width: min(100% - 40px, 1440px);
+    max-width: 1440px;
+    margin-inline: auto;
+}
+
+#googleSitesLibrary .section-heading {
+    align-items: end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 30px;
+}
+
+#googleSitesLibrary .section-heading h2 {
+    color: #172641 !important;
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 900;
+    line-height: 1.55;
+    text-wrap: balance;
+}
+
+#googleSitesLibrary .section-heading h2 span {
+    color: #078b7d !important;
+}
+
+#googleSitesLibrary .section-kicker {
+    color: #087f73 !important;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    line-height: 1.9;
+}
+
+#googleSitesLibrary .section-heading > p {
+    max-width: 470px;
+    margin: 0;
+    color: #40536c !important;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 2;
+}
+
+/* Four spacious columns instead of a crowded five-card row. */
+#googleSitesLibrary .gs-home-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 17px;
+    margin: 0 0 30px;
+}
+
+/* Card palette */
+#googleSitesLibrary .gs-home-card {
+    --library-accent: #6654b7;
+    --library-soft: #f1edff;
+    --library-shadow: rgba(102,84,183,.12);
+
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    min-height: 270px;
+    padding: 23px 21px 20px;
+    overflow: hidden;
+
+    border: 1px solid #e0e7ef;
+    border-top: 4px solid var(--library-accent);
+    border-radius: 19px;
+
+    background:
+        linear-gradient(155deg, var(--library-soft) 0%, #fff 64%);
+
+    box-shadow: 0 8px 24px rgba(20,39,65,.065);
+    text-decoration: none !important;
+
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+/* Per-card accent colors */
+#googleSitesLibrary .gs-home-card:nth-child(6n + 1) {
+    --library-accent: #7052b6;
+    --library-soft: #f2edff;
+    --library-shadow: rgba(112,82,182,.13);
+}
+#googleSitesLibrary .gs-home-card:nth-child(6n + 2) {
+    --library-accent: #087f73;
+    --library-soft: #e9f8f3;
+    --library-shadow: rgba(8,127,115,.13);
+}
+#googleSitesLibrary .gs-home-card:nth-child(6n + 3) {
+    --library-accent: #276ba8;
+    --library-soft: #eaf3ff;
+    --library-shadow: rgba(39,107,168,.13);
+}
+#googleSitesLibrary .gs-home-card:nth-child(6n + 4) {
+    --library-accent: #a16a20;
+    --library-soft: #fff4df;
+    --library-shadow: rgba(161,106,32,.13);
+}
+#googleSitesLibrary .gs-home-card:nth-child(6n + 5) {
+    --library-accent: #bb5368;
+    --library-soft: #fff0f2;
+    --library-shadow: rgba(187,83,104,.12);
+}
+#googleSitesLibrary .gs-home-card:nth-child(6n + 6) {
+    --library-accent: #277e91;
+    --library-soft: #e9f7fa;
+    --library-shadow: rgba(39,126,145,.12);
+}
+
+#googleSitesLibrary .gs-home-card::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    right: -35px;
+    bottom: -53px;
+    width: 145px;
+    height: 145px;
+    border: 1px solid var(--library-accent);
+    border-radius: 50%;
+    opacity: .09;
+    box-shadow:
+        0 0 0 17px var(--library-soft),
+        0 0 0 35px rgba(255,255,255,.6);
+    pointer-events: none;
+}
+
+#googleSitesLibrary .gs-home-card > span {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 47px;
+    height: 47px;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 14px;
+    background: var(--library-accent);
+    color: #fff !important;
+    font-family: 'Inter', sans-serif;
+    font-size: 19px;
+    font-weight: 900;
+    box-shadow: 0 7px 16px var(--library-shadow);
+}
+
+#googleSitesLibrary .gs-home-card h3 {
+    position: relative;
+    margin: 18px 0 9px;
+    color: #172b46 !important;
+    font-family: 'Cairo', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+}
+
+#googleSitesLibrary .gs-home-card p {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    margin: 0 0 20px;
+    color: #465a73 !important;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 2;
+}
+
+#googleSitesLibrary .gs-home-card b {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding: 9px 13px;
+    border: 1px solid color-mix(in srgb, var(--library-accent) 22%, white);
+    border-radius: 10px;
+    background: var(--library-soft);
+    color: var(--library-accent) !important;
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    line-height: 1.7;
+}
+
+#googleSitesLibrary .gs-home-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--library-accent);
+    box-shadow: 0 17px 35px var(--library-shadow);
+}
+
+#googleSitesLibrary .gs-home-card:hover > span {
+    transform: scale(1.06);
+}
+
+#googleSitesLibrary .gs-home-card > span {
+    transition: transform .2s ease;
+}
+
+#googleSitesLibrary .gs-home-card:focus-visible {
+    outline: 3px solid #28aa98;
+    outline-offset: 4px;
+}
+
+/* Main library action */
+#googleSitesLibrary > .container > .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 21px;
+    border-radius: 12px;
+    background: #152c47;
+    color: #fff !important;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 8px 20px rgba(21,44,71,.13);
+    transition: transform .2s ease, background .2s ease;
+}
+
+#googleSitesLibrary > .container > .button:hover {
+    transform: translateY(-2px);
+    background: #087f73;
+}
+
+@media (max-width: 1100px) {
+    #googleSitesLibrary .gs-home-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    #googleSitesLibrary.gs-library-home {
+        padding-block: 54px;
+    }
+
+    #googleSitesLibrary .container {
+        width: min(100% - 30px, 650px);
+    }
+
+    #googleSitesLibrary .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 9px;
+        margin-bottom: 23px;
+    }
+
+    #googleSitesLibrary .section-heading h2 {
+        font-size: 29px;
+    }
+
+    #googleSitesLibrary .section-heading > p {
+        font-size: 13px;
+    }
+
+    #googleSitesLibrary .gs-home-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    #googleSitesLibrary .gs-home-card {
+        min-height: 245px;
+        padding: 17px 15px;
+        border-radius: 16px;
+    }
+
+    #googleSitesLibrary .gs-home-card h3 {
+        font-size: 15px;
+    }
+
+    #googleSitesLibrary .gs-home-card p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 390px) {
+    #googleSitesLibrary .gs-home-grid {
+        grid-template-columns: minmax(0,1fr);
+    }
+
+    #googleSitesLibrary .gs-home-card {
+        min-height: 210px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #googleSitesLibrary .gs-home-card,
+    #googleSitesLibrary .gs-home-card > span,
+    #googleSitesLibrary > .container > .button {
+        transition: none;
+    }
+
+    #googleSitesLibrary .gs-home-card:hover,
+    #googleSitesLibrary > .container > .button:hover {
+        transform: none;
+    }
+}
+
+/* GOOGLE LIBRARY SHOWCASE V1 END */

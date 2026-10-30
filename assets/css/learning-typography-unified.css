@@ -1,0 +1,131 @@
+
+
+/* LEARNING TYPOGRAPHY UNIFIED V1 START */
+
+/* Only the learning paths section is affected.
+   Existing pastel card backgrounds and illustrations are preserved. */
+
+#learning.learning-section {
+    font-family: 'Cairo', 'Inter', sans-serif !important;
+}
+
+#learning .section-heading .section-kicker {
+    color: #087f73 !important;
+    font-family: 'Cairo', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    line-height: 1.8 !important;
+}
+
+#learning .section-heading h2 {
+    color: #162a45 !important;
+    font-family: 'Cairo', sans-serif !important;
+    font-size: clamp(28px, 2.5vw, 38px) !important;
+    font-weight: 800 !important;
+    line-height: 1.5 !important;
+}
+
+#learning .section-heading > p {
+    color: #4b5d73 !important;
+    font-family: 'Cairo', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 2 !important;
+}
+
+#learning .category-card {
+    font-family: 'Cairo', sans-serif !important;
+    color: #172b46 !important;
+}
+
+#learning .category-card h3 {
+    color: #172b46 !important;
+    font-family: 'Cairo', sans-serif !important;
+    font-size: 19px !important;
+    font-weight: 800 !important;
+    line-height: 1.8 !important;
+    letter-spacing: 0 !important;
+    margin-block: 17px 12px !important;
+}
+
+#learning .category-card p {
+    color: #4b5d73 !important;
+    font-family: 'Cairo', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    line-height: 1.95 !important;
+    letter-spacing: 0 !important;
+}
+
+#learning .category-card .card-number {
+    color: #64748b !important;
+    font-family: 'Inter', 'Cairo', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    line-height: 1.7 !important;
+    letter-spacing: .06em !important;
+}
+
+#learning .category-card .tag-row {
+    gap: 7px;
+}
+
+#learning .category-card .tag-row span {
+    color: #40536b !important;
+    background: rgba(255,255,255,.82) !important;
+    border: 1px solid rgba(95,115,140,.19) !important;
+    border-radius: 7px;
+    font-family: 'Inter', 'Cairo', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.6 !important;
+    padding: 5px 9px !important;
+}
+
+#learning .category-card .text-link {
+    color: #087f73 !important;
+    font-family: 'Cairo', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    line-height: 1.8 !important;
+    text-decoration: none !important;
+}
+
+#learning .category-card .text-link span {
+    color: #087f73 !important;
+    font-size: 15px !important;
+}
+
+#learning .category-card .text-link:hover {
+    color: #075e55 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 4px;
+}
+
+@media (max-width: 760px) {
+    #learning .section-heading h2 {
+        font-size: 28px !important;
+    }
+
+    #learning .section-heading > p {
+        font-size: 14px !important;
+    }
+
+    #learning .category-card h3 {
+        font-size: 17px !important;
+    }
+
+    #learning .category-card p {
+        font-size: 13.5px !important;
+    }
+
+    #learning .category-card .tag-row span {
+        font-size: 11px !important;
+    }
+
+    #learning .category-card .text-link {
+        font-size: 13.5px !important;
+    }
+}
+
+/* LEARNING TYPOGRAPHY UNIFIED V1 END */

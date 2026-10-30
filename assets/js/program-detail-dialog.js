@@ -6,6 +6,8 @@
   const content = document.getElementById("odoo-program-dialog-content");
 
   if (!dialog || !content) return;
+  /* ODOO PROGRAM CTA FLOW V1 */
+  const joinRequestUrl = programKey => `index.html?odoo_program=${encodeURIComponent(programKey)}&odoo_request=join#contact`;
 
   const programs = {
     nursery: {
@@ -87,6 +89,24 @@
       ],
       section: "#accounting-management",
       demo: "https://wa.me/201092452759?text=" + encodeURIComponent("أرغب في طلب عرض توضيحي لبرنامج إدارة الحسابات على Odoo.")
+    },
+    clinic: {
+      number: "06",
+      code: "MEDICAL CLINIC MANAGEMENT",
+      title: "إدارة العيادات الطبية",
+      intro: "تنظيم ملفات المرضى والمواعيد والأطباء والاستقبال والفواتير والتحصيل في مسار إداري مترابط.",
+      features: [
+        "ملفات المرضى والبيانات الأساسية",
+        "الأطباء والتخصصات وغرف الكشف",
+        "المواعيد وجدولة الزيارات",
+        "الاستقبال وقائمة الانتظار",
+        "الخدمات والفواتير والتحصيل",
+        "إعدادات أتعاب الأطباء",
+        "إغلاق الورديات ومراجعة التحصيل",
+        "لوحات المتابعة والتقارير التشغيلية"
+      ],
+      section: "#clinics",
+      demo: "index.html?odoo_program=clinic&odoo_request=demo#contact"
     }
   };
 
@@ -110,9 +130,12 @@
 
     content.replaceChildren();
 
+    const titleNode = el("h2", "odoo-program-dialog-title", program.title);
+    titleNode.id = "odoo-program-dialog-title";
+    dialog.setAttribute("aria-labelledby", titleNode.id);
     content.append(
       el("p", "odoo-program-dialog-eyebrow", program.code),
-      el("h2", "odoo-program-dialog-title", program.title),
+      titleNode,
       el("p", "odoo-program-dialog-intro", program.intro),
       el("h3", "odoo-program-dialog-subheading", "ماذا يغطي هذا البرنامج؟")
     );
@@ -135,7 +158,7 @@
     actions.append(
       link("dialog-section", program.section, "عرض تفاصيل البرنامج", true),
       link("dialog-demo", program.demo, "اطلب Demo للبرنامج ↗", false),
-      link("dialog-join", "index.html#contact", "طلب الانضمام ←", false)
+      link("dialog-join", joinRequestUrl(key), "طلب الاشتراك وبدء التنفيذ ←", false)
     );
     content.append(actions);
   }
@@ -176,6 +199,7 @@
   const content = document.getElementById("odoo-program-dialog-content");
 
   if (!root || !dialog || !content) return;
+  /* ODOO NURSERY DETAIL ACCESSIBILITY V1 */
 
   function addElement(tag, className, text) {
     const node = document.createElement(tag);
@@ -203,9 +227,12 @@
 
     content.replaceChildren();
 
+    const titleNode = addElement("h2", "odoo-program-dialog-title", title);
+    titleNode.id = "odoo-program-dialog-title";
+    dialog.setAttribute("aria-labelledby", titleNode.id);
     content.append(
       addElement("p", "odoo-program-dialog-eyebrow", index),
-      addElement("h2", "odoo-program-dialog-title", title),
+      titleNode,
       addElement("p", "odoo-program-dialog-intro", shortText),
       addElement("h3", "odoo-program-dialog-subheading", "تفاصيل هذه الوظيفة")
     );
@@ -234,7 +261,7 @@
 
     addLink(actions, "dialog-section", "#edraak-nursery-demo", "مشاهدة فيديو الحضانة", true);
     addLink(actions, "dialog-demo", demoHref, "اطلب Demo للبرنامج ↗", false);
-    addLink(actions, "dialog-join", joinHref, "طلب الانضمام ←", false);
+    addLink(actions, "dialog-join", joinHref, "طلب الاشتراك وبدء التنفيذ ←", false);
 
     content.append(actions);
 
