@@ -1,0 +1,237 @@
+/* MOHAMMED AFIFY BUSINESS ADMINISTRATION PROFESSIONAL LAYOUT START */
+:root {
+  --ba-ink: #142541;
+  --ba-muted: #52657d;
+  --ba-line: #dfe7f1;
+  --ba-violet: #6653bd;
+  --ba-teal: #087f73;
+  --ba-panel-shadow: 0 18px 48px rgba(18, 39, 68, .065);
+}
+
+html { scroll-padding-top: 92px; }
+body {
+  font-family: "Cairo", "Inter", sans-serif !important;
+  color: var(--ba-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Give the learning track the room it needs on desktop. */
+.ba-main {
+  width: min(1540px, calc(100% - 64px)) !important;
+  max-width: 1540px !important;
+  box-sizing: border-box !important;
+  margin-inline: auto !important;
+  padding: clamp(30px, 3.2vw, 54px) 0 92px !important;
+}
+.ba-hero {
+  gap: clamp(24px, 3vw, 48px) !important;
+  padding: clamp(34px, 4.2vw, 72px) !important;
+  border-radius: 30px !important;
+}
+.ba-hero h1 {
+  font-size: clamp(38px, 3.45vw, 62px) !important;
+  line-height: 1.24 !important;
+  letter-spacing: -.025em;
+}
+.ba-hero p {
+  max-width: 850px !important;
+  font-size: clamp(18px, 1.25vw, 21px) !important;
+  line-height: 2.05 !important;
+}
+.ba-kicker { font-size: 12px !important; letter-spacing: .08em !important; }
+.ba-button { min-height: 50px; padding: 13px 22px !important; font-size: 16px !important; }
+.ba-hero-art { min-height: 280px !important; padding: clamp(22px, 2.4vw, 36px) !important; }
+.ba-art-symbol { font-size: clamp(76px, 7vw, 112px) !important; }
+
+/* Clearer learning roadmap and equal-height cards. */
+.ba-stats { gap: 16px !important; margin: 26px 0 48px !important; }
+.ba-stat { padding: 22px 24px !important; border-radius: 20px !important; }
+.ba-stat strong { font-size: 30px !important; color: var(--ba-ink) !important; }
+.ba-stat span { font-size: 15px !important; color: var(--ba-muted) !important; }
+.ba-section { margin-top: 48px !important; }
+.ba-section-head { align-items: end !important; margin-bottom: 22px !important; }
+.ba-section-head h2 { font-size: clamp(28px, 2.25vw, 40px) !important; line-height: 1.35 !important; }
+.ba-section-head p { max-width: 760px !important; font-size: 17px !important; line-height: 1.95 !important; color: var(--ba-muted) !important; }
+.ba-units { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; gap: 14px !important; }
+.ba-unit-card {
+  min-height: 205px !important;
+  gap: 12px !important;
+  padding: 22px !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 28px rgba(17, 32, 61, .045) !important;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.ba-unit-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(17, 32, 61, .09) !important; }
+.ba-unit-number { width: 42px !important; height: 42px !important; border-radius: 13px !important; font-size: 15px !important; }
+.ba-unit-card h3 { font-size: 18px !important; line-height: 1.75 !important; color: var(--ba-ink) !important; }
+.ba-unit-card p { font-size: 15px !important; line-height: 1.9 !important; color: var(--ba-muted) !important; }
+.ba-unit-status { font-size: 13px !important; }
+
+/* Lesson panels: stronger hierarchy and comfortable reading width. */
+.ba-panel {
+  padding: clamp(28px, 3.1vw, 54px) !important;
+  margin-top: 24px !important;
+  border-radius: 28px !important;
+  border-color: var(--ba-line) !important;
+  box-shadow: var(--ba-panel-shadow) !important;
+}
+.ba-panel h2 {
+  margin: 10px 0 20px !important;
+  color: var(--ba-ink) !important;
+  font-size: clamp(32px, 2.55vw, 44px) !important;
+  line-height: 1.4 !important;
+}
+.ba-panel h3 {
+  margin: 30px 0 13px !important;
+  color: var(--ba-ink) !important;
+  font-size: clamp(23px, 1.75vw, 29px) !important;
+  line-height: 1.55 !important;
+}
+.ba-panel h4 { color: var(--ba-ink) !important; line-height: 1.65 !important; }
+.ba-panel p,
+.ba-panel li,
+.ba-detail-content p,
+.ba-detail-content li {
+  color: #42556e !important;
+  font-size: clamp(17px, 1.12vw, 19px) !important;
+  line-height: 2.05 !important;
+}
+.ba-bullets { padding-inline-start: 28px !important; margin: 16px 0 22px !important; }
+.ba-bullets li { padding-inline-start: 4px; margin: 5px 0; }
+.ba-highlight { padding: 20px 24px !important; border-radius: 16px !important; font-size: 18px !important; line-height: 2.05 !important; }
+.ba-lead-grid { gap: 18px !important; }
+.ba-lesson { padding: 24px !important; border-radius: 20px !important; box-shadow: 0 8px 24px rgba(17, 32, 61, .035); }
+.ba-lesson h3 { font-size: 22px !important; }
+.ba-lesson p { font-size: 17px !important; line-height: 2 !important; }
+.ba-pill { padding: 8px 13px !important; font-size: 13px !important; }
+.ba-video-placeholder { padding: 24px !important; border-radius: 20px !important; }
+.ba-video-placeholder strong { font-size: 19px !important; }
+.ba-video-placeholder p { font-size: 15px !important; line-height: 1.9 !important; }
+
+/* Unit 02 — cards, comparison table and case study. This remains scoped to the unit. */
+.ba-unit-two .ba-u2-kicker { font-size: 12px !important; }
+.ba-unit-two .ba-u2-intro { padding: 22px 26px !important; font-size: 18px !important; line-height: 2.05 !important; }
+.ba-unit-two .ba-u2-section-head { margin: 38px 0 18px !important; }
+.ba-unit-two .ba-u2-section-head h3 { font-size: clamp(24px, 1.9vw, 30px) !important; }
+.ba-unit-two .ba-u2-section-head p { font-size: 15px !important; color: #52657d !important; }
+.ba-unit-two .ba-u2-outcomes { gap: 14px !important; }
+.ba-unit-two .ba-u2-outcome { min-height: 126px !important; padding: 19px !important; border-radius: 18px !important; }
+.ba-unit-two .ba-u2-outcome b { font-size: 14px !important; }
+.ba-unit-two .ba-u2-outcome span { font-size: 16px !important; line-height: 1.9 !important; }
+.ba-unit-two .ba-u2-type-grid { gap: 18px !important; }
+.ba-unit-two .ba-u2-type-card { padding: 26px 25px 23px !important; border-radius: 22px !important; box-shadow: 0 14px 32px rgba(19,39,67,.065) !important; }
+.ba-unit-two .ba-u2-type-icon { width: 52px !important; height: 52px !important; font-size: 25px !important; }
+.ba-unit-two .ba-u2-type-index { font-size: 12px !important; }
+.ba-unit-two .ba-u2-type-card h4 { font-size: 22px !important; }
+.ba-unit-two .ba-u2-type-card p { font-size: 16px !important; line-height: 2 !important; }
+.ba-unit-two .ba-u2-tags span { padding: 7px 11px !important; font-size: 13px !important; }
+.ba-unit-two .ba-u2-table-wrap {
+  width: 100% !important;
+  margin: 20px 0 24px !important;
+  overflow-x: auto !important;
+  border: 1px solid #dbe4ef !important;
+  border-radius: 18px !important;
+  box-shadow: 0 12px 30px rgba(19,39,67,.06) !important;
+}
+.ba-unit-two .ba-u2-table {
+  width: 100% !important;
+  min-width: 980px !important;
+  table-layout: fixed !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+.ba-unit-two .ba-u2-table th {
+  padding: 18px 17px !important;
+  background: #172b49 !important;
+  color: #fff !important;
+  font-family: Cairo, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+  white-space: normal !important;
+  border-bottom: 1px solid rgba(255,255,255,.12) !important;
+}
+.ba-unit-two .ba-u2-table td {
+  padding: 17px !important;
+  color: #40546e !important;
+  font-family: Cairo, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.9 !important;
+  vertical-align: middle !important;
+  overflow-wrap: anywhere;
+}
+.ba-unit-two .ba-u2-table th:first-child,
+.ba-unit-two .ba-u2-table td:first-child { width: 19%; }
+.ba-unit-two .ba-u2-table td:first-child { color: #172b49 !important; font-weight: 900 !important; }
+.ba-unit-two .ba-u2-table tbody tr:nth-child(even) td { background: #f5f8fc !important; }
+.ba-unit-two .ba-u2-table tbody tr:hover td { background: #eef4fa !important; }
+.ba-unit-two .ba-u2-table-note { font-size: 14px !important; line-height: 1.9 !important; color: #5b6d84 !important; }
+.ba-unit-two .ba-u2-tradeoff { gap: 14px !important; }
+.ba-unit-two .ba-u2-tradeoff article { padding: 20px !important; border-radius: 17px !important; }
+.ba-unit-two .ba-u2-tradeoff h4 { font-size: 18px !important; }
+.ba-unit-two .ba-u2-tradeoff p { font-size: 16px !important; line-height: 1.95 !important; }
+.ba-unit-two .ba-u2-case { padding: 22px 24px !important; border-radius: 18px !important; }
+.ba-unit-two .ba-u2-case h4 { font-size: 19px !important; }
+.ba-unit-two .ba-u2-case p { font-size: 17px !important; line-height: 2 !important; }
+.ba-unit-two .ba-u2-decision label { padding: 17px !important; font-size: 15px !important; line-height: 1.9 !important; }
+.ba-unit-two .ba-u2-field label { font-size: 15px !important; }
+.ba-unit-two .ba-u2-field input,
+.ba-unit-two .ba-u2-field select,
+.ba-unit-two .ba-u2-field textarea { font-size: 16px !important; padding: 13px 15px !important; }
+.ba-unit-two .ba-u2-question legend { font-size: 17px !important; }
+.ba-unit-two .ba-u2-option { font-size: 16px !important; line-height: 1.95 !important; padding: 10px 12px !important; }
+.ba-unit-two .ba-u2-endcap { padding: 22px 24px !important; border-radius: 18px !important; }
+.ba-unit-two .ba-u2-endcap strong { font-size: 18px !important; }
+.ba-unit-two .ba-u2-endcap p { font-size: 15px !important; }
+.ba-unit-two .ba-u2-endcap a { font-size: 15px !important; padding: 12px 17px !important; }
+
+/* Other unit summaries, activities and quiz fields share the same typography. */
+.ba-details { border-radius: 20px !important; }
+.ba-details summary { padding: 22px 24px !important; font-size: 18px !important; color: var(--ba-ink) !important; }
+.ba-detail-content { padding: 8px 26px 26px !important; }
+.ba-activity, .ba-quiz { padding: 26px !important; border-radius: 20px !important; }
+.ba-field label, .ba-question legend { font-size: 16px !important; }
+.ba-option { font-size: 16px !important; line-height: 1.95 !important; padding: 11px 13px !important; }
+.ba-field textarea, .ba-field input, .ba-field select { font-size: 16px !important; }
+.ba-helper, .ba-footnote { font-size: 14px !important; line-height: 1.9 !important; }
+
+@media (max-width: 1250px) {
+  .ba-main { width: min(100% - 40px, 1120px) !important; }
+  .ba-units { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 900px) {
+  .ba-main { width: calc(100% - 32px) !important; padding-top: 24px !important; }
+  .ba-hero { grid-template-columns: 1fr !important; }
+  .ba-hero-art { min-height: 190px !important; }
+  .ba-units { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .ba-u2-outcomes { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .ba-u2-type-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .ba-lead-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 650px) {
+  .ba-main { width: calc(100% - 24px) !important; padding: 16px 0 48px !important; }
+  .ba-hero { padding: 24px 20px !important; border-radius: 22px !important; }
+  .ba-hero h1 { font-size: 34px !important; }
+  .ba-hero p { font-size: 16px !important; }
+  .ba-hero-art { min-height: 160px !important; }
+  .ba-stats, .ba-lead-grid, .ba-form-grid, .ba-units, .ba-u2-type-grid { grid-template-columns: 1fr !important; }
+  .ba-panel { padding: 22px 18px !important; border-radius: 21px !important; }
+  .ba-panel h2 { font-size: 28px !important; }
+  .ba-panel h3 { font-size: 22px !important; }
+  .ba-panel p, .ba-panel li { font-size: 16px !important; }
+  .ba-u2-outcomes { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .ba-u2-section-head { display: block !important; }
+  .ba-u2-section-head p { margin-top: 7px !important; }
+  .ba-u2-tradeoff, .ba-u2-decision, .ba-u2-form { grid-template-columns: 1fr !important; }
+  .ba-u2-field.full { grid-column: auto !important; }
+  .ba-u2-endcap { align-items: stretch !important; }
+  .ba-u2-endcap a { width: 100% !important; box-sizing: border-box !important; }
+  .ba-activity, .ba-quiz { padding: 19px !important; }
+  .ba-unit-card { min-height: 0 !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ba-unit-card { transition: none !important; }
+  .ba-unit-card:hover { transform: none !important; }
+}
+/* MOHAMMED AFIFY — BUSINESS ADMINISTRATION PROFESSIONAL LAYOUT END */
