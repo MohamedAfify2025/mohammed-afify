@@ -1974,3 +1974,38 @@ body:has(.cinematic-data-analysis-hero) #materials,
   background-repeat: no-repeat, no-repeat !important;
   animation: cinematic-photo-pan 32s ease-in-out infinite alternate !important;
 }
+
+/* ==========================================================
+   MOHAMMED AFIFY ACADEMY HERO CONTRAST FIX V3
+   Scoped exclusively to the course library page
+   ========================================================== */
+
+body:has(.gs-catalog) .gs-main > .gs-hero > h1,
+body:has(.gs-catalog) .gs-main > .gs-hero > h2 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+    text-shadow: 0 4px 22px rgba(0,0,0,.24) !important;
+}
+
+body:has(.gs-catalog) .gs-main > .gs-hero > p {
+    color: #e6eef8 !important;
+    -webkit-text-fill-color: #e6eef8 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    text-shadow: none !important;
+}
+
+body:has(.gs-catalog) .gs-main .gs-grid > a.gs-catalog
+.pro-course-generated > .pro-course-label {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    opacity: 1 !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,.2) !important;
+}
+
+/* END MOHAMMED AFIFY ACADEMY HERO CONTRAST FIX V3 */
