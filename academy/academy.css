@@ -2240,3 +2240,267 @@ a.win-resource-card:hover {
 }
 
 /* END MOHAMMED AFIFY PROFESSIONAL ACADEMY DESIGN V1 */
+
+/* ==========================================================
+   MOHAMMED AFIFY ACADEMY VISUAL FIX V2
+   Targets actual .gs-catalog HTML structure
+   ========================================================== */
+
+/* HERO: clear contrast and readable Arabic title */
+html body .gs-main > .gs-hero {
+    background:
+        radial-gradient(circle at 12% 15%, rgba(19,190,177,.20), transparent 34%),
+        radial-gradient(circle at 90% 95%, rgba(89,137,208,.28), transparent 37%),
+        linear-gradient(125deg, #10243b 0%, #19385d 55%, #294d7a 100%) !important;
+}
+
+html body .gs-main > .gs-hero > h1 {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+    text-shadow: 0 3px 20px rgba(0,0,0,.24) !important;
+    font-size: clamp(2rem, 4.2vw, 3.5rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.45 !important;
+}
+
+html body .gs-main > .gs-hero > p {
+    color: #e6eef8 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    font-size: clamp(.98rem, 1.5vw, 1.12rem) !important;
+    line-height: 2 !important;
+    max-width: 780px;
+}
+
+html body .gs-main > .gs-hero > .gs-kicker {
+    color: #71f2dc !important;
+    opacity: 1 !important;
+}
+
+/* Actual cards are anchor elements with class gs-catalog */
+html body .gs-main .gs-grid > a.gs-catalog {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    min-width: 0;
+    min-height: 415px;
+    padding: 0 !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+    position: relative;
+    border: 1px solid #e4eaf2 !important;
+    border-radius: 22px !important;
+    background: #ffffff !important;
+    color: #14243c !important;
+    text-decoration: none !important;
+    box-shadow: 0 8px 28px rgba(24,48,78,.07) !important;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease !important;
+}
+
+/* Uniform image and illustration area */
+html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media {
+    display: flex !important;
+    flex: 0 0 210px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 210px !important;
+    min-height: 210px !important;
+    max-height: 210px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+    background: #edf3fa !important;
+}
+
+/* Images fill the media area */
+html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    object-fit: cover !important;
+    transition: transform .4s ease;
+}
+
+/* Keep logos and educational artwork completely visible */
+html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media.pro-course-python img,
+html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media.pro-course-icdl img,
+html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media.pro-course-scratch img,
+html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media.pro-course-word img,
+html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media.pro-course-powerpoint img,
+html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media.pro-course-windows img {
+    object-fit: contain !important;
+    padding: 14px !important;
+}
+
+/* Generated BIZ illustration */
+html body .gs-main .gs-grid > a.gs-catalog .pro-course-generated {
+    position: absolute !important;
+    inset: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(255,255,255,.15), transparent 40%),
+        linear-gradient(135deg, #203d67, #5879a9) !important;
+}
+
+html body .gs-main .gs-grid > a.gs-catalog .pro-course-generated .pro-course-orbit {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 50%;
+}
+
+html body .gs-main .gs-grid > a.gs-catalog .pro-course-generated .pro-course-glyph {
+    position: relative;
+    z-index: 1;
+    color: #ffffff !important;
+    font-size: 3.7rem !important;
+    font-weight: 900 !important;
+}
+
+html body .gs-main .gs-grid > a.gs-catalog .pro-course-generated .pro-course-label {
+    position: relative;
+    z-index: 1;
+    color: #ffffff !important;
+    font-size: .78rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .6px;
+}
+
+/* Card labels */
+html body .gs-main .gs-grid > a.gs-catalog > .gs-kicker {
+    display: block;
+    margin: 20px 24px 0 !important;
+    padding: 0 !important;
+    color: #078e88 !important;
+    font-size: .70rem !important;
+    font-weight: 850 !important;
+    line-height: 1.7;
+    text-align: right !important;
+    opacity: 1 !important;
+}
+
+/* Card titles */
+html body .gs-main .gs-grid > a.gs-catalog > h2 {
+    display: block;
+    margin: 8px 24px 0 !important;
+    padding: 0 !important;
+    color: #14243c !important;
+    font-size: 1.3rem !important;
+    font-weight: 900 !important;
+    line-height: 1.7 !important;
+    text-align: right !important;
+}
+
+/* Card descriptions */
+html body .gs-main .gs-grid > a.gs-catalog > p {
+    display: block;
+    flex: 1 1 auto;
+    margin: 9px 24px 0 !important;
+    padding: 0 !important;
+    color: #64748b !important;
+    font-size: .94rem !important;
+    font-weight: 400 !important;
+    line-height: 1.95 !important;
+    text-align: right !important;
+}
+
+/* Card action */
+html body .gs-main .gs-grid > a.gs-catalog > b {
+    display: block;
+    margin: 17px 24px 23px !important;
+    padding: 0 !important;
+    color: #6041c8 !important;
+    font-size: .94rem !important;
+    font-weight: 850 !important;
+    text-align: right !important;
+}
+
+/* Grid layout */
+html body .gs-main .gs-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 23px !important;
+}
+
+/* Desktop interaction */
+@media (hover: hover) and (pointer: fine) {
+    html body .gs-main .gs-grid > a.gs-catalog:hover {
+        transform: translateY(-6px) !important;
+        border-color: rgba(8,168,157,.42) !important;
+        box-shadow: 0 20px 42px rgba(24,48,78,.14) !important;
+    }
+
+    html body .gs-main .gs-grid > a.gs-catalog:hover > .pro-course-media img {
+        transform: scale(1.035);
+    }
+}
+
+/* Tablet */
+@media (max-width: 1050px) {
+    html body .gs-main .gs-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    html body .gs-main {
+        width: calc(100% - 28px) !important;
+    }
+
+    html body .gs-main > .gs-hero {
+        min-height: 225px;
+        padding: 30px 23px !important;
+        border-radius: 20px !important;
+    }
+
+    html body .gs-main > .gs-hero > h1 {
+        font-size: 2rem !important;
+    }
+
+    html body .gs-main .gs-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 18px !important;
+    }
+
+    html body .gs-main .gs-grid > a.gs-catalog {
+        min-height: 390px;
+    }
+
+    html body .gs-main .gs-grid > a.gs-catalog > .pro-course-media {
+        flex-basis: 205px !important;
+        height: 205px !important;
+        min-height: 205px !important;
+        max-height: 205px !important;
+    }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    html body .gs-main .gs-grid > a.gs-catalog,
+    html body .gs-main .gs-grid > a.gs-catalog img {
+        transition: none !important;
+    }
+}
+
+/* END MOHAMMED AFIFY ACADEMY VISUAL FIX V2 */
