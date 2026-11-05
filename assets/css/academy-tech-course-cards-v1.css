@@ -1,0 +1,84 @@
+﻿/* Mohammed Afify Academy - Technology Course Cards V1.1
+   Local decorative imagery. No external image requests. */
+body:has(.gs-catalog) .gs-catalog {
+  padding: 0 0 22px !important;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(29,55,88,.12);
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(15,35,65,.09);
+  transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+}
+body:has(.gs-catalog) .gs-catalog:hover {
+  transform: translateY(-6px);
+  border-color: rgba(40,190,208,.58);
+  box-shadow: 0 20px 42px rgba(15,35,65,.16);
+}
+body:has(.gs-catalog) .pro-course-media {
+  position: relative;
+  display: block;
+  height: clamp(190px, 20vw, 250px);
+  overflow: hidden;
+  isolation: isolate;
+  background-color: #0d1d38;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+body:has(.gs-catalog) .pro-course-media > img,
+body:has(.gs-catalog) .pro-course-media > .pro-course-generated {
+  display: none !important;
+}
+body:has(.gs-catalog) .pro-course-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(135deg, rgba(7,18,39,.06), rgba(7,18,39,.18));
+  pointer-events: none;
+}
+body:has(.gs-catalog) .pro-course-media::after {
+  content: "";
+  position: absolute;
+  inset: 58% 0 0;
+  z-index: 1;
+  background: linear-gradient(transparent, rgba(7,17,35,.28));
+  pointer-events: none;
+}
+/* Dedicated image for each of the 13 current learning cards. */
+body:has(.gs-catalog) .pro-course-business { background-image: url("../academy-course-cards/business-administration.webp"); }
+body:has(.gs-catalog) .pro-course-programming { background-image: url("../academy-course-cards/programming.webp"); }
+body:has(.gs-catalog) .pro-course-python { background-image: url("../academy-course-cards/python.webp"); }
+body:has(.gs-catalog) .pro-course-scratch { background-image: url("../academy-course-cards/scratch.webp"); }
+body:has(.gs-catalog) .pro-course-icdl { background-image: url("../academy-course-cards/icdl.webp"); }
+body:has(.gs-catalog) .pro-course-windows { background-image: url("../academy-course-cards/windows.webp"); }
+body:has(.gs-catalog) .pro-course-word { background-image: url("../academy-course-cards/word.webp"); }
+body:has(.gs-catalog) .pro-course-powerpoint { background-image: url("../academy-course-cards/powerpoint.webp"); }
+body:has(.gs-catalog) .pro-course-excel { background-image: url("../academy-course-cards/excel.webp"); }
+body:has(.gs-catalog) .pro-course-data { background-image: url("../academy-course-cards/data-analysis.webp"); }
+body:has(.gs-catalog) .pro-course-content { background-image: url("../academy-course-cards/learning-content.webp"); }
+body:has(.gs-catalog) .pro-course-projects { background-image: url("../academy-course-cards/projects.webp"); }
+body:has(.gs-catalog) .pro-course-profile { background-image: url("../academy-course-cards/certificates.webp"); }
+body:has(.gs-catalog) .gs-catalog > .gs-kicker,
+body:has(.gs-catalog) .gs-catalog > h2,
+body:has(.gs-catalog) .gs-catalog > p,
+body:has(.gs-catalog) .gs-catalog > b {
+  margin-inline: 22px;
+}
+body:has(.gs-catalog) .gs-catalog > .gs-kicker { margin-top: 17px; }
+body:has(.gs-catalog) .gs-catalog > h2 { font-size: clamp(19px, 1.5vw, 23px); line-height: 1.6; }
+body:has(.gs-catalog) .gs-catalog > p { min-height: 68px; line-height: 1.9; }
+@media (min-width: 651px) and (max-width: 1000px) {
+  body:has(.gs-catalog) .gs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 650px) {
+  body:has(.gs-catalog) .gs-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  body:has(.gs-catalog) .pro-course-media { height: clamp(190px, 58vw, 270px); }
+  body:has(.gs-catalog) .gs-catalog > .gs-kicker,
+  body:has(.gs-catalog) .gs-catalog > h2,
+  body:has(.gs-catalog) .gs-catalog > p,
+  body:has(.gs-catalog) .gs-catalog > b { margin-inline: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(.gs-catalog) .gs-catalog { transition: none; }
+}
