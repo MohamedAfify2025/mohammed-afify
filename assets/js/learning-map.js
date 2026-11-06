@@ -1,14 +1,74 @@
-/* Mohammed Afify Academy — connected map interactions V2 */
+/* Mohammed Afify Academy — course images and domain filters V3 */
 (() => {
   'use strict';
+
+  const COURSE_CONFIG = {
+    'business-administration.html': { domain: 'business', image: 'business-administration.webp' },
+    'programming.html':             { domain: 'technology', image: 'programming.webp' },
+    'python.html':                  { domain: 'technology', image: 'python.webp' },
+    'scratch.html':                 { domain: 'technology', image: 'scratch.webp' },
+    'icdl.html':                    { domain: 'digital', image: 'icdl.webp' },
+    'windows.html':                 { domain: 'digital', image: 'windows.webp' },
+    'word.html':                    { domain: 'digital', image: 'word.webp' },
+    'powerpoint.html':              { domain: 'digital', image: 'powerpoint.webp' },
+    'excel.html':                   { domain: 'digital', image: 'excel.webp' },
+    'data-analysis.html':           { domain: 'data', image: 'data-analysis.webp' },
+    'content.html':                 { domain: 'projects', image: 'learning-content.webp' },
+    'projects.html':                { domain: 'projects', image: 'projects.webp' },
+    'certificates.html':            { domain: 'projects', image: 'certificates.webp' }
+  };
+
+  const DOMAIN_LABELS = {
+    business: 'مسار واحد',
+    technology: '3 مسارات',
+    digital: '5 مسارات',
+    data: 'مسار واحد',
+    projects: '3 موارد'
+  };
+
+  const getFileName = (card) => {
+    const raw = card.getAttribute('href') || '';
+    return raw.split(/[?#]/, 1)[0].split('/').pop().trim();
+  };
+
+  const installCardImages = (cards) => {
+    cards.forEach((card, index) => {
+      const config = COURSE_CONFIG[getFileName(card)];
+      if (!config) return;
+
+      // Derive the category from the destination page, not stale HTML attributes.
+      card.dataset.domain = config.domain;
+      card.dataset.courseCard = '';
+
+      const media = card.querySelector('.pro-course-media');
+      if (!media) return;
+
+      // Replace old Google Sites photos and generated text placeholders.
+      while (media.firstChild) media.removeChild(media.firstChild);
+
+      const image = document.createElement('img');
+      image.className = 'academy-course-card-image';
+      image.src = `../assets/academy-course-cards/${config.image}`;
+      image.alt = card.querySelector('h2')?.textContent.trim() || 'صورة الدورة التعليمية';
+      image.loading = index < 3 ? 'eager' : 'lazy';
+      image.decoding = 'async';
+      image.fetchPriority = index < 3 ? 'high' : 'auto';
+      media.appendChild(image);
+      media.dataset.imageReady = 'true';
+    });
+  };
 
   const init = () => {
     const map = document.querySelector('[data-learning-map]');
     const catalog = document.querySelector('#learning-course-grid');
     if (!map || !catalog || map.dataset.ready === 'true') return;
-    map.dataset.ready = 'true';
 
-    const cards = Array.from(catalog.querySelectorAll('[data-course-card]'));
+    const cards = Array.from(catalog.querySelectorAll('a.gs-catalog'));
+    if (!cards.length) return;
+
+    map.dataset.ready = 'true';
+    installCardImages(cards);
+
     const filters = Array.from(map.querySelectorAll('[data-map-filter]'));
     const nodeFilters = filters.filter((item) => item.dataset.mapFilter !== 'all');
     const search = map.querySelector('#lm-course-search');
@@ -32,6 +92,15 @@
       .toLocaleLowerCase('ar')
       .trim();
 
+    // Recalculate the domain badges from the canonical card mapping.
+    nodeFilters.forEach((node) => {
+      const count = cards.filter((card) => card.dataset.domain === node.dataset.mapFilter).length;
+      const badge = node.querySelector('.lm-node-count');
+      if (badge && DOMAIN_LABELS[node.dataset.mapFilter]) badge.textContent = DOMAIN_LABELS[node.dataset.mapFilter];
+      if (count === 0) node.setAttribute('aria-disabled', 'true');
+      else node.removeAttribute('aria-disabled');
+    });
+
     const update = (shouldScroll = false) => {
       const term = normalize(search?.value || '');
       let shown = 0;
@@ -40,8 +109,23 @@
         const matchesDomain = activeDomain === 'all' || card.dataset.domain === activeDomain;
         const matchesText = !term || normalize(card.textContent).includes(term);
         const visible = matchesDomain && matchesText;
-        card.hidden = !visible;
-        card.classList.toggle('lm-card-visible', visible);
+
+        // Use both the HTML hidden state and an important inline display rule.
+        // This prevents older Academy styles from keeping filtered cards visible.
+        if (visible) {
+          card.hidden = false;
+          card.removeAttribute('hidden');
+          card.style.removeProperty('display');
+          card.setAttribute('aria-hidden', 'false');
+          card.classList.add('lm-card-visible');
+        } else {
+          card.hidden = true;
+          card.setAttribute('hidden', '');
+          card.style.setProperty('display', 'none', 'important');
+          card.setAttribute('aria-hidden', 'true');
+          card.classList.remove('lm-card-visible');
+        }
+
         if (visible) shown += 1;
       });
 
@@ -66,14 +150,25 @@
         else selection.textContent = 'كل المجالات مفتوحة للاستكشاف. اختر عقدة لعرض مساراتها.';
       }
       if (catalogTitle) catalogTitle.textContent = domain ? domain.title : (term ? 'نتائج البحث' : 'استكشف كل المسارات');
-      if (catalogSubtitle) catalogSubtitle.textContent = domain ? domain.description : (term ? 'المسارات المطابقة لعبارة البحث.' : 'اختر مجالًا من الخريطة لتظهر المسارات المرتبطة به هنا.');
-      if (resultCount) resultCount.textContent = activeDomain === 'all' && !term ? `${shown} عنصرًا` : `${shown} من ${cards.length} عنصرًا`;
+      if (catalogSubtitle) {
+        catalogSubtitle.textContent = domain
+          ? domain.description
+          : (term ? 'المسارات المطابقة لعبارة البحث.' : 'اختر مجالًا من الخريطة لتظهر المسارات المرتبطة به هنا.');
+      }
+      if (resultCount) {
+        resultCount.textContent = activeDomain === 'all' && !term
+          ? `${shown} عنصرًا`
+          : `${shown} من ${cards.length} عنصرًا`;
+      }
       if (total) total.textContent = String(cards.length);
       if (empty) empty.hidden = shown !== 0;
 
       if (shouldScroll) {
         const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-        document.querySelector('#course-catalog')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        document.querySelector('#course-catalog')?.scrollIntoView({
+          behavior: reduceMotion ? 'auto' : 'smooth',
+          block: 'start'
+        });
       }
     };
 
