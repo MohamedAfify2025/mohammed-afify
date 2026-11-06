@@ -1,12 +1,11 @@
-/* Mohammed Afify — platform content retrieval assistant */
+﻿/* Mohammed Afify — platform content retrieval assistant */
 (() => {
   "use strict";
 
   if (document.getElementById("ma-site-assistant") || !document.body) return;
 
   const PAGE_PATHS = [
-    "index.html",
-    "odoo-solutions.html",
+    "academy/business-administration.html",
     "academy/certificates.html",
     "academy/content.html",
     "academy/data-analysis.html",
@@ -19,7 +18,10 @@
     "academy/python.html",
     "academy/scratch.html",
     "academy/windows.html",
-    "academy/word.html"
+    "academy/word.html",
+    "brand/preview.html",
+    "index.html",
+    "odoo-solutions.html",
   ];
 
   const path = window.location.pathname;
@@ -116,6 +118,9 @@
         <button class="ma-assistant-chip" type="button" data-question="ما محتوى تحليل البيانات وPower BI؟">تحليل البيانات</button>
         <button class="ma-assistant-chip" type="button" data-question="ما حلول Odoo الموجودة في المنصة؟">حلول Odoo</button>
         <button class="ma-assistant-chip" type="button" data-question="أين أجد المشروعات التطبيقية؟">المشروعات</button>
+        <button class="ma-assistant-chip" type="button" data-question="ما حلول إدارة العيادات الطبية؟">العيادات</button>
+        <button class="ma-assistant-chip" type="button" data-question="ما نظام إدارة الحضانات؟">الحضانات</button>
+        <button class="ma-assistant-chip" type="button" data-question="ما محتوى مسار الإدارة والأعمال؟">الإدارة والأعمال</button>
       </div>
 
       <form class="ma-assistant-composer">
@@ -290,6 +295,42 @@
     {
       keys: ["تعلم", "اتعلم", "دورات", "كورسات", "تعليمي"],
       terms: ["تعليم", "الدورات", "المحتوى التعليمي", "المكتبة", "الفيديوهات", "المسارات"]
+    },
+    {
+      keys: ["حضانة", "حضانات", "nursery", "ادارة الحضانات", "ادراك"],
+      terms: ["حضانة", "حضانات", "nursery", "الطفل", "الأطفال", "الأسرة", "الحضور", "الانصراف", "الفصول", "الرسوم", "النقل", "الصحة", "الأنشطة"]
+    },
+    {
+      keys: ["عيادة", "عيادات", "clinic", "clinics", "طبي", "طبية", "مركز طبي"],
+      terms: ["عيادة", "عيادات", "clinic", "clinics", "المرضى", "المواعيد", "الأطباء", "الاستقبال", "الفواتير", "التحصيل", "الخدمات الطبية"]
+    },
+    {
+      keys: ["مدرسة", "مدارس", "school", "schools"],
+      terms: ["مدرسة", "مدارس", "الطلاب", "المراحل", "الصفوف", "البيانات الأكاديمية", "الحضور", "الرسوم"]
+    },
+    {
+      keys: ["مركز تعليمي", "المراكز التعليمية", "دروس", "تدريس", "tutoring"],
+      terms: ["مركز تعليمي", "المراكز التعليمية", "المجموعات", "الطلاب", "المعلمين", "الحصص", "الحضور", "التحصيل"]
+    },
+    {
+      keys: ["موارد بشرية", "الموارد البشرية", "hr", "الموظفين", "شؤون العاملين"],
+      terms: ["الموارد البشرية", "الموظفين", "ملفات الموظفين", "الحضور", "الانصراف", "الإجازات", "الرواتب", "إجراءات العمل"]
+    },
+    {
+      keys: ["تأهيل", "التأهيل", "مركز التأهيل", "rehabilitation", "تخاطب", "علاج وظيفي"],
+      terms: ["مركز التأهيل", "التأهيل", "تخاطب", "تعديل السلوك", "صعوبات التعلم", "العلاج الوظيفي", "العلاج الطبيعي", "التقييم النفسي", "الجلسات", "الباقات"]
+    },
+    {
+      keys: ["ادارة واعمال", "الإدارة والأعمال", "business", "ريادة الأعمال", "مشروعات"],
+      terms: ["الإدارة", "الأعمال", "إدارة الأعمال", "المشروعات", "التخطيط", "القرارات", "التسويق", "المبيعات", "التطبيق العملي"]
+    },
+    {
+      keys: ["محاسبة", "حسابات", "accounting", "مالية", "فواتير"],
+      terms: ["المحاسبة", "الحسابات", "الفواتير", "القيود", "المدفوعات", "التقارير المالية", "الدورة المحاسبية"]
+    },
+    {
+      keys: ["اشتراك", "التسجيل", "انضمام", "طلب الانضمام", "عضوية"],
+      terms: ["الاشتراك", "التسجيل", "طلب الاشتراك", "الانضمام", "نموذج التسجيل", "حساب الطالب"]
     }
   ];
 
@@ -316,13 +357,44 @@
   const BLOCK_SELECTOR = [
     ".category-card", ".course-card", ".gs-tool-card", ".gs-source-block",
     ".gs-resource", ".platform-video-card", ".odoo-detail-card",
-    ".odoo-accounting-steps > div"
+    ".odoo-accounting-steps > div", ".service-item", ".odoo-solution-tile",
+    ".course-track-card", ".program-card", "[data-assistant-index]"
   ].join(",");
 
   let knowledgePromise = null;
 
+  function getEntryUrl(node, relativePath) {
+    const pageHref = siteUrl(relativePath);
+    const linkedNode = node.matches("a[href]") ? node : node.closest("a[href]");
+
+    if (linkedNode) {
+      const rawHref = linkedNode.getAttribute("href") || "";
+      if (rawHref && !/^(javascript:|mailto:|tel:)/i.test(rawHref)) {
+        try {
+          const candidate = new URL(rawHref, pageHref);
+          const basePath = new URL(base, window.location.origin).pathname;
+          if (candidate.origin === window.location.origin &&
+              candidate.pathname.startsWith(basePath)) {
+            return candidate.href;
+          }
+        } catch (_) {
+          // Fall back to the page/section URL when the link is malformed.
+        }
+      }
+    }
+
+    const section = node.closest("section[id], article[id]");
+    if (section && /^[A-Za-z][\w:.-]*$/.test(section.id)) {
+      const target = new URL(pageHref);
+      target.hash = section.id;
+      return target.href;
+    }
+
+    return pageHref;
+  }
+
   async function buildPageEntries(relativePath) {
-    const response = await fetch(siteUrl(relativePath), { cache: "force-cache" });
+    const response = await fetch(siteUrl(relativePath), { cache: "no-cache", credentials: "same-origin" });
 
     if (!response.ok) {
       throw new Error("HTTP " + response.status + " for " + relativePath);
@@ -342,7 +414,7 @@
     ).forEach((element) => element.remove());
 
     const selector = [
-      "h1", "h2", "h3", "p", "li", "a[href]",
+      "h1", "h2", "h3", "p", "li", "a[href]", "td", "th", "dt", "dd", "blockquote", "figcaption",
       BLOCK_SELECTOR
     ].join(",");
 
@@ -386,7 +458,7 @@
         pageTitle,
         heading,
         text: text.slice(0, 800),
-        url: siteUrl(relativePath)
+        url: getEntryUrl(node, relativePath)
       });
     });
 
@@ -487,12 +559,13 @@
 
     for (const entry of ranked) {
       if (usedPages.has(entry.page)) continue;
-      if (selected.length === 0 && entry.score < 2.5) break;
+      const minimumFirstScore = 1.5;
+      if (selected.length === 0 && entry.score < minimumFirstScore) break;
 
       usedPages.add(entry.page);
       selected.push(entry);
 
-      if (selected.length >= 3) break;
+      if (selected.length >= 5) break;
     }
 
     return selected;
@@ -514,6 +587,8 @@
       "academy/excel.html": "Microsoft Excel",
       "academy/icdl.html": "ICDL ومهارات الكمبيوتر",
       "academy/index.html": "مكتبة الدورات التعليمية",
+      "academy/business-administration.html": "الإدارة والأعمال",
+      "membership/register.html": "طلب الاشتراك والتسجيل",
       "academy/powerpoint.html": "Microsoft PowerPoint",
       "academy/programming.html": "البرمجة",
       "academy/projects.html": "المشروعات التطبيقية",
@@ -559,7 +634,7 @@
 
     const actions = results.map((entry) => ({
       href: entry.url,
-      label: "المصدر: " + pageLabel(entry.page)
+      label: "المصدر: " + cleanSnippet(entry.heading || pageLabel(entry.page), 48)
     }));
 
     // Keep source links at the end of every answer.
@@ -602,6 +677,162 @@
     }
   }
 
+  // Live, page-wide search suggestions while the visitor types.
+  const liveSearchPanel = document.createElement("div");
+  liveSearchPanel.className = "ma-assistant-search-suggestions";
+  liveSearchPanel.hidden = true;
+  liveSearchPanel.setAttribute("role", "region");
+  liveSearchPanel.setAttribute("aria-label", "نتائج البحث في محتوى المنصة");
+
+  const liveSearchStyle = document.createElement("style");
+  liveSearchStyle.textContent = `
+    .ma-assistant-search-suggestions {
+      margin: 8px 10px 10px;
+      padding: 10px;
+      border: 1px solid #dce6ed;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(18, 38, 63, .09);
+      max-height: 270px;
+      overflow-y: auto;
+      direction: rtl;
+      color: #142743;
+    }
+    .ma-assistant-search-suggestions[hidden] { display: none !important; }
+    .ma-assistant-search-suggestions .ma-search-heading {
+      margin: 0 0 7px;
+      color: #087f73;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .ma-assistant-search-suggestions a {
+      display: block;
+      padding: 9px 10px;
+      margin-top: 6px;
+      border: 1px solid #edf1f5;
+      border-radius: 10px;
+      background: #f9fbfd;
+      color: #243b55;
+      text-decoration: none;
+      line-height: 1.65;
+    }
+    .ma-assistant-search-suggestions a:hover,
+    .ma-assistant-search-suggestions a:focus-visible {
+      border-color: #5bdac3;
+      background: #effbf8;
+      outline: none;
+    }
+    .ma-assistant-search-suggestions strong {
+      display: block;
+      color: #142743;
+      font-size: 13px;
+    }
+    .ma-assistant-search-suggestions small {
+      display: block;
+      margin-top: 3px;
+      color: #52677e;
+      font-size: 11px;
+    }
+    .ma-assistant-search-suggestions .ma-search-source {
+      display: block;
+      margin-top: 4px;
+      color: #087f73;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .ma-assistant-search-suggestions .ma-search-empty {
+      padding: 10px;
+      color: #52677e;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+  `;
+  root.appendChild(liveSearchStyle);
+  form.insertAdjacentElement("beforebegin", liveSearchPanel);
+
+  let liveSearchTimer = null;
+  let liveSearchSequence = 0;
+
+  function renderLiveSearchResults(results, query) {
+    liveSearchPanel.replaceChildren();
+
+    const heading = document.createElement("p");
+    heading.className = "ma-search-heading";
+    heading.textContent = results.length
+      ? `نتائج مطابقة لـ «${query}» (${results.length})`
+      : `لم تظهر نتائج مطابقة لـ «${query}»`;
+    liveSearchPanel.appendChild(heading);
+
+    if (!results.length) {
+      const empty = document.createElement("div");
+      empty.className = "ma-search-empty";
+      empty.textContent = "جرّب كلمة أخرى أو اكتب عبارة أطول. يتم البحث في الصفحات العامة ومحتواها.";
+      liveSearchPanel.appendChild(empty);
+      liveSearchPanel.hidden = false;
+      return;
+    }
+
+    results.forEach((entry) => {
+      const link = document.createElement("a");
+      link.href = entry.url;
+
+      const title = document.createElement("strong");
+      title.textContent = entry.heading || entry.pageTitle || pageLabel(entry.page);
+
+      const snippet = document.createElement("small");
+      snippet.textContent = cleanSnippet(entry.text, 180);
+
+      const source = document.createElement("span");
+      source.className = "ma-search-source";
+      source.textContent = "فتح المصدر: " + pageLabel(entry.page) + " ↗";
+
+      link.append(title, snippet, source);
+      liveSearchPanel.appendChild(link);
+    });
+
+    liveSearchPanel.hidden = false;
+  }
+
+  input.addEventListener("input", () => {
+    const query = input.value.trim();
+    const normalized = normalizeText(query);
+    const sequence = ++liveSearchSequence;
+
+    if (liveSearchTimer) clearTimeout(liveSearchTimer);
+
+    if (normalized.length < 2 || !tokens(query).length) {
+      liveSearchPanel.hidden = true;
+      liveSearchPanel.replaceChildren();
+      return;
+    }
+
+    liveSearchPanel.hidden = false;
+    liveSearchPanel.textContent = "جارٍ البحث في محتوى المنصة…";
+
+    liveSearchTimer = setTimeout(async () => {
+      try {
+        const knowledge = await getKnowledge();
+        if (sequence !== liveSearchSequence || input.value.trim() !== query) return;
+        const results = searchKnowledge(knowledge.entries, query);
+        renderLiveSearchResults(results, query);
+      } catch (error) {
+        if (sequence !== liveSearchSequence) return;
+        liveSearchPanel.textContent = "تعذر تحميل نتائج البحث. تأكد من اتصال الموقع ثم أعد المحاولة.";
+        liveSearchPanel.hidden = false;
+        console.error("Live platform search error:", error);
+      }
+    }, 220);
+  });
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      liveSearchPanel.hidden = true;
+    }
+  });
+
+  form.addEventListener("submit", () => {
+    liveSearchPanel.hidden = true;
+  });
   root.querySelectorAll("[data-question]").forEach((button) => {
     button.addEventListener("click", () => {
       handleQuestion(button.getAttribute("data-question"));

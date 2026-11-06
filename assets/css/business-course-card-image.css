@@ -1,0 +1,45 @@
+
+
+/* BUSINESS COURSE CARD IMAGE V1 START */
+#courses .course-card.business-track-card .course-art.business-course-art {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    aspect-ratio: 16 / 9 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    isolation: isolate;
+    background: linear-gradient(135deg,#e8f2fb,#fff2dc) !important;
+    border: 0 !important;
+}
+
+#courses .course-card.business-track-card .course-art.business-course-art::before,
+#courses .course-card.business-track-card .course-art.business-course-art::after {
+    content: none !important;
+    display: none !important;
+}
+
+#courses .course-card.business-track-card .business-course-art img {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    object-fit: cover !important;
+    object-position: center 48% !important;
+}
+
+@media (max-width: 650px) {
+    #courses .course-card.business-track-card .course-art.business-course-art {
+        aspect-ratio: 16 / 9 !important;
+    }
+}
+/* BUSINESS COURSE CARD IMAGE V1 END */

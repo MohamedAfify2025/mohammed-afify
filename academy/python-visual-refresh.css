@@ -1,0 +1,440 @@
+/* Mohammed Afify Academy — Python page visual pilot V1
+   Purpose: distinct section treatments, readable hero, no repeated background image. */
+
+.gs-main.gs-python-page {
+  width: min(1180px, 94vw) !important;
+  margin: 30px auto 76px !important;
+  color: #152b49;
+}
+
+.gs-python-page .py-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+  align-items: center;
+  gap: clamp(20px, 3vw, 38px);
+  min-height: 390px;
+  padding: clamp(22px, 3.3vw, 42px);
+  overflow: hidden;
+  border: 1px solid rgba(202, 220, 240, .95);
+  border-radius: 27px;
+  background-color: #eaf3fc !important;
+  background-image:
+    linear-gradient(90deg,
+      rgba(255,255,255,.10) 0%,
+      rgba(255,255,255,.20) 38%,
+      rgba(255,255,255,.82) 62%,
+      rgba(255,255,255,.96) 100%),
+    url("../assets/images/backgrounds/programming-rtl.png") !important;
+  background-size: cover, cover !important;
+  background-position: center, 48% 50% !important;
+  background-repeat: no-repeat, no-repeat !important;
+  box-shadow: 0 22px 52px rgba(20, 48, 82, .12);
+  animation: none !important;
+}
+
+.gs-python-page .py-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: auto -8% -80px 34%;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(61, 190, 190, .18), transparent 70%);
+  pointer-events: none;
+}
+
+.gs-python-page .py-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 590px;
+  padding: clamp(22px, 2.8vw, 34px);
+  text-align: right;
+  border: 1px solid rgba(255,255,255,.82);
+  border-radius: 22px;
+  background: rgba(255,255,255,.84);
+  box-shadow: 0 14px 38px rgba(28, 63, 101, .10);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.gs-python-page .py-eyebrow,
+.gs-python-page .py-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #078d83 !important;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .9px;
+}
+
+.gs-python-page .py-eyebrow {
+  padding: 7px 11px;
+  border: 1px solid rgba(20, 171, 158, .20);
+  border-radius: 999px;
+  background: #e8faf7;
+}
+
+.gs-python-page .py-hero h1 {
+  margin: 15px 0 12px;
+  color: #142b4c !important;
+  font-size: clamp(32px, 3.35vw, 46px);
+  font-weight: 900;
+  line-height: 1.42;
+  letter-spacing: -.5px;
+  text-shadow: none !important;
+}
+
+.gs-python-page .py-hero p {
+  max-width: 560px;
+  margin: 0;
+  color: #526780 !important;
+  font-size: clamp(15px, 1.3vw, 17px);
+  font-weight: 600;
+  line-height: 2.05;
+}
+
+.gs-python-page .py-hero-actions,
+.gs-python-page .py-next-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin-top: 24px;
+}
+
+.gs-python-page .py-btn {
+  min-height: 48px;
+  padding: 11px 19px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.gs-python-page .py-btn-primary {
+  color: #062d34 !important;
+  background: linear-gradient(135deg, #45d0bd, #19aa9e) !important;
+  box-shadow: 0 8px 20px rgba(25, 170, 158, .20);
+}
+
+.gs-python-page .py-btn-secondary {
+  border-color: #c5d4e5 !important;
+  color: #1c385a !important;
+  background: rgba(255,255,255,.88) !important;
+}
+
+.gs-python-page .py-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(22, 55, 91, .13);
+}
+
+.gs-python-page .py-hero-visual {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  height: clamp(230px, 24vw, 300px);
+  margin: auto;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.94);
+  border-radius: 23px;
+  background: rgba(255,255,255,.96) !important;
+  box-shadow: 0 18px 42px rgba(18, 45, 77, .18);
+}
+
+.gs-python-page .py-hero-image {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Every section gets its own surface. The global cinematic layer previously
+   repeated the same programming photo across most sections. */
+.gs-main.gs-python-page #python-topics {
+  margin-top: 46px;
+  padding: clamp(24px, 3vw, 36px);
+  border: 1px solid #e0e9f4;
+  border-radius: 24px;
+  background-color: #fff !important;
+  background-image:
+    linear-gradient(rgba(34, 86, 132, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 86, 132, .025) 1px, transparent 1px) !important;
+  background-size: 30px 30px !important;
+  animation: none !important;
+}
+
+.gs-python-page .py-section-heading {
+  margin-bottom: 23px;
+}
+
+.gs-python-page .py-section-heading h2,
+.gs-python-page .py-outcomes h2,
+.gs-python-page .py-outline h2,
+.gs-python-page .py-social h2,
+.gs-python-page .py-next-step h2 {
+  margin: 7px 0 10px;
+  color: #152d50 !important;
+  font-size: clamp(25px, 2.5vw, 32px);
+  font-weight: 900;
+  line-height: 1.5;
+}
+
+.gs-python-page .py-section-heading p,
+.gs-python-page .py-outline p,
+.gs-python-page .py-social p {
+  color: #61748b !important;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.gs-python-page .py-topic-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.gs-python-page .py-topic-card {
+  position: relative;
+  min-height: 142px;
+  gap: 13px;
+  padding: 20px 17px;
+  border: 1px solid #e1eaf4;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #fff, #f7fbff) !important;
+  box-shadow: 0 8px 22px rgba(23, 54, 88, .045);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.gs-python-page .py-topic-card:hover {
+  transform: translateY(-4px);
+  border-color: #a8dcd5;
+  box-shadow: 0 15px 30px rgba(23, 54, 88, .09);
+}
+
+.gs-python-page .py-topic-number {
+  flex-basis: 44px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #cceee8;
+  border-radius: 14px;
+  color: #078b80 !important;
+  background: linear-gradient(145deg, #effdfa, #dff6f1) !important;
+  font-size: 13px;
+}
+
+.gs-python-page .py-topic-card h3 {
+  color: #172f51 !important;
+  font-size: 16px;
+  font-weight: 850;
+}
+
+.gs-python-page .py-topic-card p {
+  color: #62758b !important;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.gs-python-page .py-outcomes {
+  position: relative;
+  isolation: isolate;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  margin-top: 27px;
+  padding: clamp(25px, 3.2vw, 38px);
+  overflow: hidden;
+  border: 1px solid #1f4770;
+  border-radius: 23px;
+  background: linear-gradient(120deg, #132d50 0%, #1e4770 58%, #176d78 100%) !important;
+  box-shadow: 0 17px 36px rgba(17, 47, 79, .14);
+  animation: none !important;
+}
+
+.gs-python-page .py-outcomes::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: auto -70px -120px auto;
+  width: 300px;
+  height: 300px;
+  border: 1px solid rgba(135, 231, 224, .18);
+  border-radius: 50%;
+  box-shadow: 0 0 0 28px rgba(135, 231, 224, .035), 0 0 0 58px rgba(135, 231, 224, .025);
+}
+
+.gs-python-page .py-outcomes .py-kicker,
+.gs-python-page .py-outcomes h2 {
+  color: #eafffd !important;
+}
+
+.gs-python-page .py-outcomes p {
+  max-width: 620px;
+  color: #d7e6f2 !important;
+  font-size: 15px;
+  line-height: 2.1;
+}
+
+.gs-python-page .py-outcomes-list {
+  gap: 10px;
+}
+
+.gs-python-page .py-outcomes-list > div {
+  padding: 10px 12px;
+  border: 1px solid rgba(225, 248, 247, .14);
+  border-radius: 12px;
+  color: #f3fbff !important;
+  background: rgba(255,255,255,.085);
+  font-size: 13px;
+}
+
+.gs-python-page .py-outcomes-list span {
+  color: #073c43 !important;
+  background: #8ce7d9 !important;
+}
+
+.gs-python-page .py-outline {
+  margin-top: 27px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid #e1eaf4;
+  border-radius: 22px;
+  background: #fff !important;
+  box-shadow: 0 9px 26px rgba(23, 54, 88, .045);
+  animation: none !important;
+}
+
+.gs-python-page .py-outline-visual {
+  padding: 12px;
+  border-color: #e3ebf5;
+  border-radius: 17px;
+  background: #f5f9fd !important;
+}
+
+.gs-python-page .py-outline-visual img {
+  max-height: 270px;
+  object-fit: contain;
+}
+
+.gs-main.gs-python-page #python-resources {
+  margin-top: 30px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid #e1eaf4;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #f6fbff, #fff 62%, #f0faf8) !important;
+  animation: none !important;
+}
+
+.gs-python-page .py-resource-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gs-python-page .py-resource-card {
+  min-height: 82px;
+  border-color: #e0e9f2;
+  border-radius: 14px;
+  background: #fff !important;
+}
+
+.gs-python-page .py-resource-copy strong {
+  color: #1a3457 !important;
+  font-size: 14px;
+}
+
+.gs-python-page .py-resource-copy small {
+  color: #64778e !important;
+  font-size: 12px;
+}
+
+.gs-python-page .py-social {
+  margin-top: 27px;
+  padding: 24px;
+  border: 1px solid #e3e8f5;
+  border-radius: 19px;
+  background: linear-gradient(110deg, #f5f3ff, #fff 58%, #f0fbfa) !important;
+  animation: none !important;
+}
+
+.gs-python-page .py-social-links a {
+  padding: 10px 14px;
+  border-radius: 11px;
+  color: #314a6a !important;
+  background: #fff !important;
+  font-size: 13px;
+}
+
+.gs-python-page .py-next-step {
+  margin-top: 27px;
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid #1c4772;
+  border-radius: 20px;
+  background: linear-gradient(115deg, #132b4b, #1c4c75 66%, #167e83) !important;
+  box-shadow: 0 14px 30px rgba(17, 47, 79, .13);
+  animation: none !important;
+}
+
+.gs-python-page .py-next-step h2 { color: #fff !important; }
+.gs-python-page .py-next-step p { color: #dceaf4 !important; font-size: 14px; }
+.gs-python-page .py-next-step .py-btn-secondary {
+  color: #173653 !important;
+  background: #fff !important;
+  border-color: #fff !important;
+}
+
+@media (max-width: 900px) {
+  .gs-python-page .py-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(250px, .85fr);
+    gap: 18px;
+    min-height: 345px;
+  }
+  .gs-python-page .py-topic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gs-python-page .py-resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 680px) {
+  .gs-main.gs-python-page { width: 94vw !important; margin-top: 16px !important; }
+  .gs-python-page .py-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    min-height: 0;
+    padding: 17px;
+    border-radius: 20px;
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.93)),
+      url("../assets/images/backgrounds/programming-rtl.png") !important;
+    background-position: center, 35% center !important;
+  }
+  .gs-python-page .py-hero-content {
+    padding: 21px 18px;
+    border-radius: 17px;
+    order: 1;
+  }
+  .gs-python-page .py-hero h1 { font-size: clamp(27px, 7vw, 34px); }
+  .gs-python-page .py-hero p { font-size: 14px; }
+  .gs-python-page .py-hero-visual {
+    order: 2;
+    width: min(100%, 330px);
+    height: 185px;
+    padding: 12px;
+  }
+  .gs-python-page .py-hero-actions,
+  .gs-python-page .py-next-actions { flex-direction: column; width: 100%; }
+  .gs-python-page .py-btn { width: 100%; }
+  .gs-main.gs-python-page #python-topics,
+  .gs-main.gs-python-page #python-resources { padding: 20px 15px; }
+  .gs-python-page .py-topic-grid,
+  .gs-python-page .py-resource-grid,
+  .gs-python-page .py-outcomes,
+  .gs-python-page .py-outline { grid-template-columns: minmax(0, 1fr); }
+  .gs-python-page .py-topic-card { min-height: 0; padding: 16px; }
+  .gs-python-page .py-outcomes { gap: 18px; padding: 22px 17px; }
+  .gs-python-page .py-outline { gap: 18px; padding: 18px; }
+  .gs-python-page .py-social,
+  .gs-python-page .py-next-step { align-items: flex-start; flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-python-page .py-hero,
+  .gs-python-page .py-topic-card,
+  .gs-python-page .py-btn,
+  .gs-python-page .py-resource-card { animation: none !important; transition: none !important; }
+}
