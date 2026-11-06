@@ -1,0 +1,81 @@
+/* Academy course card images V2 - force explicit image mapping and replace legacy media */
+.pro-course-media {
+  display: block !important;
+  position: relative !important;
+  height: clamp(190px, 20vw, 250px) !important;
+  min-height: 190px;
+  overflow: hidden !important;
+  isolation: isolate;
+  background-color: #071a33 !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: cover !important;
+}
+
+/* Hide legacy Google Sites images and generated text placeholders. */
+.pro-course-media > img,
+.pro-course-media > .pro-course-generated {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Remove legacy grey overlays that muted the previous images. */
+.pro-course-media::before,
+.pro-course-media::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+/* The filenames are mapped to the actual subject shown inside each WebP. */
+.pro-course-media.pro-course-business {
+  background-image: url("../academy-course-cards/data-analysis.webp") !important;
+}
+.pro-course-media.pro-course-programming {
+  background-image: url("../academy-course-cards/business-administration.webp") !important;
+}
+.pro-course-media.pro-course-python {
+  background-image: url("../academy-course-cards/programming.webp") !important;
+}
+.pro-course-media.pro-course-scratch {
+  background-image: url("../academy-course-cards/python.webp") !important;
+}
+.pro-course-media.pro-course-icdl {
+  background-image: url("../academy-course-cards/scratch.webp") !important;
+}
+.pro-course-media.pro-course-windows {
+  background-image: url("../academy-course-cards/icdl.webp") !important;
+}
+.pro-course-media.pro-course-word {
+  background-image: url("../academy-course-cards/windows.webp") !important;
+}
+.pro-course-media.pro-course-powerpoint {
+  background-image: url("../academy-course-cards/word.webp") !important;
+}
+.pro-course-media.pro-course-excel {
+  background-image: url("../academy-course-cards/powerpoint.webp") !important;
+}
+.pro-course-media.pro-course-data {
+  background-image: url("../academy-course-cards/excel.webp") !important;
+}
+.pro-course-media.pro-course-content {
+  background-image: url("../academy-course-cards/learning-content.webp") !important;
+}
+.pro-course-media.pro-course-projects {
+  background-image: url("../academy-course-cards/projects.webp") !important;
+}
+.pro-course-media.pro-course-profile {
+  background-image: url("../academy-course-cards/certificates.webp") !important;
+}
+
+@media (min-width: 651px) and (max-width: 1000px) {
+  .gs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .pro-course-media { height: clamp(190px, 25vw, 230px) !important; }
+}
+@media (max-width: 650px) {
+  .gs-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .pro-course-media { height: clamp(190px, 58vw, 270px) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gs-catalog { transition: none !important; }
+}
