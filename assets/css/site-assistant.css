@@ -289,3 +289,437 @@
   .ma-assistant-panel { animation: none !important; }
   .ma-assistant-messages { scroll-behavior: auto; }
 }
+
+/* MOHAMMED AFIFY OFFICIAL ROBOT MASCOT V1 */
+#ma-site-assistant .ma-robot-mascot {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+#ma-site-assistant .ma-assistant-launcher {
+    background: linear-gradient(145deg,#087A7E,#20B7AD 60%,#718BF1);
+}
+#ma-site-assistant .ma-assistant-launcher .ma-robot-mascot {
+    width: 47px;
+    height: 47px;
+}
+#ma-site-assistant .ma-assistant-avatar .ma-robot-mascot {
+    width: 38px;
+    height: 38px;
+}
+/* END OFFICIAL ROBOT MASCOT */
+
+
+/* ================================================
+   MOHAMMED AFIFY ROBOT COMPANION V1
+   Character beside welcome + face avatar
+   Search Engine V2 and chat behavior are unchanged.
+================================================ */
+
+#ma-site-assistant .ma-assistant-launcher {
+    overflow: hidden;
+}
+
+#ma-site-assistant .ma-assistant-launcher .ma-robot-avatar-image {
+    display: block;
+    width: 58px;
+    height: 58px;
+    max-width: none;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 28%;
+    border: 1px solid rgba(111, 239, 216, .78);
+    box-shadow: 0 0 0 3px rgba(53, 204, 181, .13);
+}
+
+#ma-site-assistant .ma-assistant-avatar {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #0d6662, #153b53);
+    border: 1px solid rgba(106, 231, 210, .44);
+}
+
+#ma-site-assistant .ma-assistant-avatar .ma-robot-avatar-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    border-radius: inherit;
+}
+
+#ma-site-assistant .ma-chat-row.ma-chat-welcome-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    direction: rtl;
+}
+
+#ma-site-assistant .ma-assistant-welcome-mascot-frame {
+    position: relative;
+    flex: 0 0 88px;
+    width: 88px;
+    height: 148px;
+    align-self: flex-end;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border: 1px solid rgba(75, 201, 184, .42);
+    border-radius: 15px;
+    background: linear-gradient(160deg, #0b625b 0%, #0d4d53 58%, #142f49 100%);
+    box-shadow: 0 8px 20px rgba(8, 67, 73, .16);
+    transform-origin: 50% 94%;
+    animation: ma-robot-welcome-wave 4.8s ease-in-out infinite;
+}
+
+#ma-site-assistant .ma-assistant-welcome-mascot {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+    object-position: center bottom;
+}
+
+#ma-site-assistant .ma-chat-row.ma-chat-welcome-row .ma-chat-bubble {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none !important;
+    width: auto;
+}
+
+@keyframes ma-robot-welcome-wave {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-3px) rotate(-1.2deg); }
+    55% { transform: translateY(-1px) rotate(1.1deg); }
+    78% { transform: translateY(-2px) rotate(-.5deg); }
+}
+
+@media (max-width: 540px) {
+    #ma-site-assistant .ma-assistant-welcome-mascot-frame {
+        flex-basis: 68px;
+        width: 68px;
+        height: 116px;
+        border-radius: 12px;
+    }
+
+    #ma-site-assistant .ma-chat-row.ma-chat-welcome-row {
+        gap: 6px;
+    }
+
+    #ma-site-assistant .ma-assistant-avatar {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+    }
+
+    #ma-site-assistant .ma-assistant-launcher .ma-robot-avatar-image {
+        width: 54px;
+        height: 54px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #ma-site-assistant .ma-assistant-welcome-mascot-frame {
+        animation: none !important;
+    }
+}
+
+/* END MOHAMMED AFIFY ROBOT COMPANION V1 */
+
+
+/* MOHAMMED AFIFY ROBOT COMPANION V1.1 - LARGE WELCOME */
+
+#ma-site-assistant .ma-chat-row.ma-chat-welcome-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+    gap: 10px !important;
+}
+
+#ma-site-assistant .ma-assistant-welcome-mascot-frame {
+    flex: 0 0 132px !important;
+    width: 132px !important;
+    height: 220px !important;
+    min-height: 220px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 12px 28px rgba(8,67,73,.22) !important;
+    overflow: hidden !important;
+}
+
+#ma-site-assistant .ma-assistant-welcome-mascot {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center bottom !important;
+}
+
+#ma-site-assistant .ma-chat-row.ma-chat-welcome-row .ma-chat-bubble {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    width: auto !important;
+    line-height: 1.9 !important;
+}
+
+/* Mobile */
+@media (max-width: 540px) {
+    #ma-site-assistant .ma-assistant-welcome-mascot-frame {
+        flex: 0 0 96px !important;
+        width: 96px !important;
+        height: 160px !important;
+        min-height: 160px !important;
+        border-radius: 14px !important;
+    }
+
+    #ma-site-assistant .ma-chat-row.ma-chat-welcome-row {
+        gap: 7px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #ma-site-assistant .ma-assistant-welcome-mascot-frame {
+        animation: none !important;
+    }
+}
+
+/* END ROBOT COMPANION V1.1 */
+
+
+/* MOHAMMED AFIFY FLOATING ROBOT SIZE V1.2 */
+
+/* Main floating launcher */
+#ma-site-assistant .ma-assistant-launcher {
+    width: 118px !important;
+    height: 118px !important;
+    min-width: 118px !important;
+    min-height: 118px !important;
+    padding: 3px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    background: linear-gradient(
+        145deg,#075c61,#18b8a8,#143e59
+    ) !important;
+    border: 2px solid rgba(95,239,216,.85) !important;
+    box-shadow:
+        0 12px 30px rgba(4,75,77,.28),
+        0 0 0 5px rgba(43,207,185,.13) !important;
+    transition: transform .25s ease, box-shadow .25s ease !important;
+}
+
+/* Actual installed robot image class */
+#ma-site-assistant .ma-assistant-launcher .ma-robot-launcher-image {
+    display: block !important;
+    width: 108px !important;
+    height: 108px !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    object-position: center 26% !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(130,255,229,.8) !important;
+}
+
+/* Hover */
+#ma-site-assistant .ma-assistant-launcher:hover {
+    transform: scale(1.06) !important;
+    box-shadow:
+        0 15px 36px rgba(4,75,77,.34),
+        0 0 0 8px rgba(43,207,185,.15) !important;
+}
+
+/* Mobile */
+@media (max-width:600px) {
+    #ma-site-assistant .ma-assistant-launcher {
+        width: 94px !important;
+        height: 94px !important;
+        min-width: 94px !important;
+        min-height: 94px !important;
+    }
+
+    #ma-site-assistant .ma-assistant-launcher .ma-robot-launcher-image {
+        width: 86px !important;
+        height: 86px !important;
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    #ma-site-assistant .ma-assistant-launcher {
+        transition: none !important;
+    }
+}
+
+/* END FLOATING ROBOT V1.2 */
+
+
+/* MOHAMMED AFIFY SHARED ROBOT MOTION V1.3 */
+
+/* Larger floating robot - preserve portrait proportions */
+#ma-site-assistant .ma-assistant-launcher {
+    width: 142px !important;
+    height: 232px !important;
+    min-width: 142px !important;
+    min-height: 232px !important;
+
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 22px !important;
+    overflow: visible !important;
+    background: transparent !important;
+    border: 0 !important;
+
+    box-shadow: none !important;
+}
+
+/* Full mascot artwork */
+#ma-site-assistant .ma-robot-launcher-image {
+    display: block !important;
+    width: 142px !important;
+    height: 232px !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    object-fit: contain !important;
+    object-position: center !important;
+
+    border-radius: 22px !important;
+    filter: drop-shadow(0 10px 13px rgba(10,65,70,.20));
+}
+
+/* One shared animation for both robots */
+@keyframes maRobotSharedGreetingV13 {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-3px) rotate(.7deg);
+    }
+
+    50% {
+        transform: translateY(-7px) rotate(0deg);
+    }
+
+    75% {
+        transform: translateY(-3px) rotate(-.7deg);
+    }
+}
+
+#ma-site-assistant .ma-robot-launcher-image,
+#ma-site-assistant .ma-assistant-welcome-mascot,
+#ma-site-assistant .ma-assistant-welcome-mascot-frame {
+    animation: maRobotSharedGreetingV13 3.2s ease-in-out infinite !important;
+    transform-origin: center bottom !important;
+    will-change: transform;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    #ma-site-assistant .ma-assistant-launcher {
+        width: 112px !important;
+        height: 183px !important;
+        min-width: 112px !important;
+        min-height: 183px !important;
+    }
+
+    #ma-site-assistant .ma-robot-launcher-image {
+        width: 112px !important;
+        height: 183px !important;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    #ma-site-assistant .ma-robot-launcher-image,
+    #ma-site-assistant .ma-assistant-welcome-mascot,
+    #ma-site-assistant .ma-assistant-welcome-mascot-frame {
+        animation: none !important;
+        will-change: auto;
+    }
+}
+
+/* END SHARED ROBOT MOTION V1.3 */
+
+
+/* MA_LAUNCHER_FULL_BODY_V14 */
+
+/* Full body launcher */
+#ma-site-assistant .ma-assistant-launcher {
+    width:142px !important;
+    height:232px !important;
+    min-width:142px !important;
+    min-height:232px !important;
+    padding:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    overflow:visible !important;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:20px !important;
+    box-shadow:none !important;
+}
+
+#ma-site-assistant .ma-assistant-launcher .ma-robot-launcher-full-image {
+    display:block !important;
+    width:142px !important;
+    height:232px !important;
+    max-width:none !important;
+    max-height:none !important;
+    object-fit:contain !important;
+    object-position:center bottom !important;
+    border:0 !important;
+    border-radius:18px !important;
+    box-shadow:0 9px 19px rgba(5,65,70,.20) !important;
+}
+
+/* Same welcome animation for both robots */
+#ma-site-assistant .ma-assistant-launcher .ma-robot-launcher-full-image,
+#ma-site-assistant .ma-assistant-welcome-mascot-frame {
+    animation:ma-robot-welcome-wave 4.8s ease-in-out infinite !important;
+    transform-origin:50% 94% !important;
+}
+
+/* Small screen */
+@media(max-width:600px) {
+    #ma-site-assistant .ma-assistant-launcher {
+        width:112px !important;
+        height:183px !important;
+        min-width:112px !important;
+        min-height:183px !important;
+    }
+
+    #ma-site-assistant .ma-assistant-launcher .ma-robot-launcher-full-image {
+        width:112px !important;
+        height:183px !important;
+    }
+}
+
+/* Respect reduced motion */
+@media(prefers-reduced-motion:reduce) {
+    #ma-site-assistant .ma-robot-launcher-full-image,
+    #ma-site-assistant .ma-assistant-welcome-mascot-frame {
+        animation:none !important;
+    }
+}
+
+/* END MA_LAUNCHER_FULL_BODY_V14 */

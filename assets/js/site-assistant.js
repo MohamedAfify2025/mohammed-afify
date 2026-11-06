@@ -1,10 +1,18 @@
-﻿/* Mohammed Afify — platform content retrieval assistant */
+/* Mohammed Afify — platform content retrieval assistant */
 (() => {
   "use strict";
 
   if (document.getElementById("ma-site-assistant") || !document.body) return;
 
   const PAGE_PATHS = [
+    "academy/accounting.html",
+    "academy/accounting-unit-1.html",
+    "academy/accounting-unit-2.html",
+    "academy/accounting-unit-3.html",
+    "academy/accounting-unit-4.html",
+    "academy/accounting-unit-5.html",
+    "academy/accounting-lesson-u1-01.html",
+    "academy/accounting-quiz-u1.html",
     "academy/business-administration.html",
     "academy/certificates.html",
     "academy/content.html",
@@ -72,17 +80,7 @@
 
     <button class="ma-assistant-launcher" type="button"
       aria-label="افتح مساعد الموقع" aria-expanded="false">
-      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <path d="M24 6v5" stroke="white" stroke-width="2.4" stroke-linecap="round"/>
-        <circle cx="24" cy="4" r="2.5" fill="#BFFFF3"/>
-        <rect x="7" y="12" width="34" height="27" rx="9"
-          fill="rgba(255,255,255,.18)" stroke="white" stroke-width="2"/>
-        <rect x="12" y="19" width="24" height="11" rx="5.5"
-          fill="#123B44" stroke="#C2FFF4" stroke-width="1.4"/>
-        <circle cx="19" cy="24.5" r="2" fill="#75F1DB"/>
-        <circle cx="29" cy="24.5" r="2" fill="#75F1DB"/>
-        <path d="M18 34h12" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+      <img class="ma-robot-avatar-image ma-robot-launcher-image ma-robot-launcher-full-image" src="${siteUrl("assets/images/assistant/mohammed-afify-robot-mascot.png")}" alt="" aria-hidden="true">
     </button>
 
     <section class="ma-assistant-panel" role="dialog" aria-modal="false"
@@ -90,15 +88,7 @@
       <header class="ma-assistant-panel-header">
         <button class="ma-assistant-close" type="button" aria-label="إغلاق المساعد">×</button>
         <div class="ma-assistant-avatar" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none">
-            <rect x="8" y="12" width="32" height="27" rx="9"
-              fill="rgba(255,255,255,.15)" stroke="white" stroke-width="2"/>
-            <rect x="13" y="19" width="22" height="11" rx="5.5"
-              fill="#123B44" stroke="#A8F4E8"/>
-            <circle cx="19" cy="24.5" r="2" fill="#75F1DB"/>
-            <circle cx="29" cy="24.5" r="2" fill="#75F1DB"/>
-            <path d="M18 34h12" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          </svg>
+          <img class="ma-robot-avatar-image ma-robot-header-image" src="${siteUrl("assets/images/assistant/mohammed-afify-robot-avatar.png")}" alt="" aria-hidden="true">
         </div>
         <div class="ma-assistant-header-copy">
           <strong id="ma-assistant-title">مساعد Mohammed Afify</strong>
@@ -143,6 +133,27 @@
   const log = root.querySelector(".ma-assistant-messages");
   const form = root.querySelector(".ma-assistant-composer");
   const input = root.querySelector(".ma-assistant-input");
+  // MOHAMMED AFIFY ROBOT COMPANION V1
+  // Adds the approved full-body mascot beside the initial welcome message only.
+  const assistantMascotUrl = siteUrl("assets/images/assistant/mohammed-afify-robot-mascot.png");
+  const initialWelcomeRow = log.querySelector(".ma-chat-row.is-assistant");
+
+  if (initialWelcomeRow && !initialWelcomeRow.querySelector(".ma-assistant-welcome-mascot")) {
+    initialWelcomeRow.classList.add("ma-chat-welcome-row");
+
+    const mascotFrame = document.createElement("div");
+    mascotFrame.className = "ma-assistant-welcome-mascot-frame";
+
+    const mascotImage = document.createElement("img");
+    mascotImage.className = "ma-assistant-welcome-mascot";
+    mascotImage.src = assistantMascotUrl;
+    mascotImage.alt = "روبوت مساعد Mohammed Afify";
+    mascotImage.decoding = "async";
+    mascotImage.loading = "eager";
+
+    mascotFrame.appendChild(mascotImage);
+    initialWelcomeRow.insertBefore(mascotFrame, initialWelcomeRow.firstChild);
+  }
 
   function setOpen(open) {
     root.classList.toggle("ma-open", open);
@@ -219,9 +230,12 @@
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/[أإآٱ]/g, "ا")
+      .replace(/[ؤ]/g, "و")
+      .replace(/[ئ]/g, "ي")
       .replace(/ى/g, "ي")
       .replace(/ة/g, "ه")
       .replace(/ـ/g, "")
+      .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, "")
       .replace(/[^\w\u0600-\u06FF+#.\s]/g, " ")
       .replace(/\s+/g, " ")
       .trim();
@@ -325,8 +339,19 @@
       terms: ["الإدارة", "الأعمال", "إدارة الأعمال", "المشروعات", "التخطيط", "القرارات", "التسويق", "المبيعات", "التطبيق العملي"]
     },
     {
-      keys: ["محاسبة", "حسابات", "accounting", "مالية", "فواتير"],
-      terms: ["المحاسبة", "الحسابات", "الفواتير", "القيود", "المدفوعات", "التقارير المالية", "الدورة المحاسبية"]
+      keys: [
+        "محاسبة", "حسابات", "accounting", "مالية", "فواتير",
+        "مدين", "دائن", "الخصوم", "الأصول", "القيد المزدوج",
+        "ميزان المراجعة", "دفاتر الأستاذ", "دفاتر اليومية",
+        "المعادلة المحاسبية", "الاستحقاق"
+      ],
+      terms: [
+        "المحاسبة", "الحسابات", "الفواتير", "القيود", "المدفوعات",
+        "التقارير المالية", "الدورة المحاسبية", "القيد المزدوج",
+        "المدين", "الدائن", "الأصول", "الخصوم", "حقوق الملكية",
+        "دفاتر الأستاذ", "دفاتر اليومية", "ميزان المراجعة",
+        "القوائم المالية", "الأساس النقدي", "أساس الاستحقاق"
+      ]
     },
     {
       keys: ["اشتراك", "التسجيل", "انضمام", "طلب الانضمام", "عضوية"],
@@ -340,9 +365,19 @@
     const expanded = new Set(baseTerms);
 
     SYNONYM_GROUPS.forEach((group) => {
-      const matched = group.keys.some((key) =>
-        normalizedQuery.includes(normalizeText(key))
-      );
+      const matched = group.keys.some((key) => {
+        const keyTokens = tokens(key);
+
+        return normalizedQuery.includes(normalizeText(key)) ||
+          normalizeText(key).includes(normalizedQuery) ||
+          keyTokens.some((keyToken) =>
+            baseTerms.some((queryToken) =>
+              queryToken.length >= 3 &&
+              keyToken.length >= 3 &&
+              (keyToken.includes(queryToken) || queryToken.includes(keyToken))
+            )
+          );
+      });
 
       if (matched) {
         group.terms.forEach((term) => {
@@ -353,12 +388,14 @@
 
     return { baseTerms, expandedTerms: Array.from(expanded), normalizedQuery };
   }
-
   const BLOCK_SELECTOR = [
     ".category-card", ".course-card", ".gs-tool-card", ".gs-source-block",
     ".gs-resource", ".platform-video-card", ".odoo-detail-card",
     ".odoo-accounting-steps > div", ".service-item", ".odoo-solution-tile",
-    ".course-track-card", ".program-card", "[data-assistant-index]"
+    ".course-track-card", ".program-card", "[data-assistant-index]",
+    ".ac-unit-grid > *", ".ac-lesson-row", ".al-content-section",
+    ".al-case-story", ".al-case-analysis", ".al-function-card",
+    ".av-quiz-question"
   ].join(",");
 
   let knowledgePromise = null;
@@ -492,75 +529,172 @@
     return knowledgePromise;
   }
 
-  function tokenMatches(textTokens, term) {
-    if (textTokens.has(term)) return true;
-    if (term.length < 3) return false;
+  // MOHAMMED AFIFY SMART SEARCH ENGINE V2
+  // Exact phrase, partial word, infix fragment and one-character typo matching.
 
-    for (const word of textTokens) {
-      if (word.length >= 3 && (word.startsWith(term) || term.startsWith(word))) {
-        return true;
+  function editDistanceAtMostOne(left, right) {
+    if (left === right) return 0;
+    if (Math.abs(left.length - right.length) > 1) return 2;
+
+    let i = 0;
+    let j = 0;
+    let edits = 0;
+
+    while (i < left.length && j < right.length) {
+      if (left[i] === right[j]) {
+        i++;
+        j++;
+        continue;
+      }
+
+      edits++;
+      if (edits > 1) return 2;
+
+      if (left.length > right.length) i++;
+      else if (right.length > left.length) j++;
+      else {
+        i++;
+        j++;
       }
     }
-    return false;
+
+    if (i < left.length || j < right.length) edits++;
+    return edits;
+  }
+
+  function tokenMatchStrength(textTokens, term) {
+    if (!term) return 0;
+
+    let best = 0;
+
+    for (const word of textTokens) {
+      if (word === term) return 1;
+
+      const shortest = Math.min(word.length, term.length);
+      const longest = Math.max(word.length, term.length);
+
+      // Match a fragment anywhere inside a word, not only at its beginning.
+      if ((word.includes(term) || term.includes(word)) && shortest >= 2) {
+        let strength;
+
+        if (shortest >= 5) strength = 0.94;
+        else if (shortest >= 4) strength = 0.86;
+        else if (shortest === 3) strength = 0.72;
+        else strength = 0.42;
+
+        // Keep very short fragments from overpowering precise matches.
+        strength *= Math.min(1, shortest / Math.max(3, longest * 0.55));
+        best = Math.max(best, strength);
+        continue;
+      }
+
+      // Tolerate one missing, extra or mistyped character in longer words.
+      if (shortest >= 4 && editDistanceAtMostOne(word, term) === 1) {
+        best = Math.max(best, 0.48);
+      }
+    }
+
+    return best;
   }
 
   function scoreEntry(entry, queryInfo) {
     const titleTokens = new Set(tokens(entry.heading + " " + entry.pageTitle));
     const textTokens = new Set(tokens(entry.text));
+    const combined = normalizeText(
+      entry.heading + " " + entry.pageTitle + " " + entry.text
+    );
 
     let score = 0;
     let matchedOriginal = 0;
+    let matchedTitle = 0;
+    let synonymBonus = 0;
 
     queryInfo.baseTerms.forEach((term) => {
-      const titleMatch = tokenMatches(titleTokens, term);
-      const textMatch = tokenMatches(textTokens, term);
+      const titleStrength = tokenMatchStrength(titleTokens, term);
+      const textStrength = tokenMatchStrength(textTokens, term);
+      const bestStrength = Math.max(titleStrength, textStrength);
 
-      if (titleMatch) score += 5;
-      if (textMatch) score += 2.1;
-      if (titleMatch || textMatch) matchedOriginal++;
+      if (bestStrength > 0) matchedOriginal++;
+
+      if (titleStrength > 0) {
+        matchedTitle++;
+        score += 10 * titleStrength;
+      }
+
+      if (textStrength > 0) {
+        score += 3.4 * textStrength;
+      }
     });
 
-    queryInfo.expandedTerms.forEach((term) => {
-      if (queryInfo.baseTerms.includes(term)) return;
-
-      const titleMatch = tokenMatches(titleTokens, term);
-      const textMatch = tokenMatches(textTokens, term);
-
-      if (titleMatch) score += 2.0;
-      if (textMatch) score += 0.65;
-    });
-
-    const combined = normalizeText(entry.heading + " " + entry.text);
-    if (queryInfo.normalizedQuery.length >= 3 &&
-        combined.includes(queryInfo.normalizedQuery)) {
-      score += 8;
+    // Full phrase match is stronger than a broad synonym match.
+    if (
+      queryInfo.normalizedQuery.length >= 3 &&
+      combined.includes(queryInfo.normalizedQuery)
+    ) {
+      score += 18;
     }
 
-    if (queryInfo.baseTerms.length >= 2 && matchedOriginal === 0) {
-      score *= 0.35;
+    // Reward entries containing all meaningful query words.
+    if (
+      queryInfo.baseTerms.length > 1 &&
+      matchedOriginal === queryInfo.baseTerms.length
+    ) {
+      score += 3.5;
     }
 
-    return { score, matchedOriginal };
+    // Synonyms provide discovery help but cannot create results alone.
+    if (matchedOriginal > 0) {
+      queryInfo.expandedTerms.forEach((term) => {
+        if (queryInfo.baseTerms.includes(term)) return;
+
+        const titleStrength = tokenMatchStrength(titleTokens, term);
+        const textStrength = tokenMatchStrength(textTokens, term);
+
+        synonymBonus += (titleStrength * 0.7) + (textStrength * 0.18);
+      });
+    }
+
+    score += Math.min(2.2, synonymBonus);
+
+    // Penalize a result that matches only a tiny fraction of a long query.
+    if (queryInfo.baseTerms.length > 1) {
+      const coverage = matchedOriginal / queryInfo.baseTerms.length;
+      score *= 0.45 + (0.55 * coverage);
+    }
+
+    return { score, matchedOriginal, matchedTitle };
   }
 
   function searchKnowledge(entries, query) {
     const queryInfo = expandedTerms(query);
+    if (!queryInfo.baseTerms.length) return [];
 
     const ranked = entries.map((entry) => {
       const result = scoreEntry(entry, queryInfo);
-      return { ...entry, score: result.score, matchedOriginal: result.matchedOriginal };
-    }).filter((entry) => entry.score > 0);
 
-    ranked.sort((a, b) => b.score - a.score);
+      return {
+        ...entry,
+        score: result.score,
+        matchedOriginal: result.matchedOriginal,
+        matchedTitle: result.matchedTitle
+      };
+    }).filter((entry) => {
+      const threshold = queryInfo.baseTerms.length === 1 ? 1.8 : 2.0;
+      return entry.matchedOriginal > 0 && entry.score >= threshold;
+    });
 
-    // Limit results to one best matching excerpt per source page.
+    ranked.sort((a, b) =>
+      (b.score - a.score) ||
+      (b.matchedOriginal - a.matchedOriginal) ||
+      (b.matchedTitle - a.matchedTitle)
+    );
+
+    // Return the strongest excerpt from each source page.
     const selected = [];
     const usedPages = new Set();
 
     for (const entry of ranked) {
       if (usedPages.has(entry.page)) continue;
-      const minimumFirstScore = 1.5;
-      if (selected.length === 0 && entry.score < minimumFirstScore) break;
 
       usedPages.add(entry.page);
       selected.push(entry);
@@ -570,7 +704,6 @@
 
     return selected;
   }
-
   function cleanSnippet(value, maxLength = 330) {
     const text = String(value || "").replace(/\s+/g, " ").trim();
     if (text.length <= maxLength) return text;
@@ -581,7 +714,14 @@
     const labels = {
       "index.html": "الواجهة الرئيسية",
       "odoo-solutions.html": "حلول Odoo",
-      "academy/certificates.html": "الشهادات والملف المهني",
+      "academy/accounting.html": "كورس المحاسبة",
+      "academy/accounting-unit-1.html": "المحاسبة - الوحدة الأولى",
+      "academy/accounting-unit-2.html": "المحاسبة - الوحدة الثانية",
+      "academy/accounting-unit-3.html": "المحاسبة - الوحدة الثالثة",
+      "academy/accounting-unit-4.html": "المحاسبة - الوحدة الرابعة",
+      "academy/accounting-unit-5.html": "المحاسبة - الوحدة الخامسة",
+      "academy/accounting-lesson-u1-01.html": "المحاسبة - الدرس الأول",
+      "academy/accounting-quiz-u1.html": "اختبار الوحدة الأولى - المحاسبة",      "academy/certificates.html": "الشهادات والملف المهني",
       "academy/content.html": "المحتوى التعليمي",
       "academy/data-analysis.html": "تحليل البيانات",
       "academy/excel.html": "Microsoft Excel",
