@@ -1,0 +1,382 @@
+/* MOHAMMED AFIFY CONTENT PAGE PREMIUM V2 START
+   Scoped to academy/content.html. Does not replace or alter existing background imagery.
+*/
+
+/* Wider editorial canvas */
+body:has(.sc-content-page) .gs-main {
+    width: min(1500px, calc(100% - 64px)) !important;
+    max-width: 1500px !important;
+    margin: clamp(22px, 3vw, 44px) auto 82px !important;
+}
+
+/* The existing hero image/background is intentionally untouched. */
+body:has(.sc-content-page) .gs-main > .gs-hero {
+    min-height: clamp(300px, 31vw, 430px);
+    padding: clamp(38px, 5.2vw, 76px) !important;
+    border-radius: 30px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+    box-shadow: 0 22px 52px rgba(18, 39, 67, .10);
+}
+
+body:has(.sc-content-page) .gs-main > .gs-hero .gs-kicker {
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    letter-spacing: .08em;
+}
+
+body:has(.sc-content-page) .gs-main > .gs-hero h1 {
+    max-width: 950px;
+    margin: 12px 0 16px !important;
+    color: #132b4a !important;
+    font-size: clamp(38px, 4.5vw, 60px) !important;
+    font-weight: 900 !important;
+    line-height: 1.28 !important;
+    text-wrap: balance;
+}
+
+body:has(.sc-content-page) .gs-main > .gs-hero p {
+    max-width: 850px;
+    color: #425d7a !important;
+    font-size: clamp(16px, 1.22vw, 19px) !important;
+    line-height: 2.1 !important;
+}
+
+body:has(.sc-content-page) .gs-main > .gs-hero .gs-hero-actions,
+body:has(.sc-content-page) .gs-main > .gs-hero .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+body:has(.sc-content-page) .gs-main > .gs-hero .gs-hero-actions a,
+body:has(.sc-content-page) .gs-main > .gs-hero .hero-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 11px 20px !important;
+    border: 1px solid #c8d7e6 !important;
+    border-radius: 13px !important;
+    background: rgba(255,255,255,.94) !important;
+    color: #173653 !important;
+    font-weight: 900 !important;
+    text-decoration: none !important;
+    box-shadow: 0 8px 20px rgba(17, 42, 70, .07);
+}
+
+body:has(.sc-content-page) .gs-main > .gs-hero .gs-hero-actions a:last-child,
+body:has(.sc-content-page) .gs-main > .gs-hero .hero-actions a:last-child {
+    border-color: #159e91 !important;
+    background: #159e91 !important;
+    color: #fff !important;
+}
+
+/* Course collection panel */
+body:has(.sc-content-page) .sc-content-page {
+    margin-top: 30px !important;
+    padding: clamp(24px, 3vw, 46px) !important;
+    border-radius: 28px !important;
+    background-color: rgba(255,255,255,.78) !important;
+    border-color: rgba(215, 227, 240, .95) !important;
+    box-shadow: 0 18px 45px rgba(18, 39, 67, .065) !important;
+}
+
+body:has(.sc-content-page) .sc-content-page .sc-content-heading {
+    margin-bottom: clamp(24px, 3vw, 40px) !important;
+}
+
+body:has(.sc-content-page) .sc-content-page .sc-content-heading h2 {
+    color: #132b4a !important;
+    font-size: clamp(30px, 3.2vw, 42px) !important;
+    font-weight: 900 !important;
+    line-height: 1.4 !important;
+}
+
+body:has(.sc-content-page) .sc-content-page .sc-content-heading p {
+    max-width: 880px;
+    color: #526b85 !important;
+    font-size: clamp(15px, 1.12vw, 17px) !important;
+    line-height: 2.1 !important;
+}
+
+body:has(.sc-content-page) .sc-content-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: clamp(16px, 1.6vw, 25px) !important;
+}
+
+body:has(.sc-content-page) .sc-content-card {
+    min-height: 410px !important;
+    border-radius: 22px !important;
+    border-color: #dce6f1 !important;
+    box-shadow: 0 12px 30px rgba(20, 45, 74, .075) !important;
+}
+
+body:has(.sc-content-page) .sc-content-card:hover {
+    transform: translateY(-6px) !important;
+    border-color: #83cfc2 !important;
+    box-shadow: 0 22px 42px rgba(20, 45, 74, .13) !important;
+}
+
+body:has(.sc-content-page) .sc-content-card-media {
+    height: 205px !important;
+    min-height: 205px !important;
+    flex-basis: 205px !important;
+    background: linear-gradient(145deg, #eef4fa, #e4edf6) !important;
+}
+
+body:has(.sc-content-page) .sc-content-card-media img {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 13px !important;
+    object-fit: contain !important;
+}
+
+body:has(.sc-content-page) .sc-content-card-body {
+    padding: 21px !important;
+}
+
+body:has(.sc-content-page) .sc-content-category {
+    color: #078477 !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .07em;
+}
+
+body:has(.sc-content-page) .sc-content-card h3 {
+    color: #142d4c !important;
+    font-size: clamp(18px, 1.35vw, 21px) !important;
+    line-height: 1.65 !important;
+}
+
+body:has(.sc-content-page) .sc-content-card p {
+    color: #536b84 !important;
+    font-size: clamp(14px, 1vw, 15.5px) !important;
+    line-height: 2.05 !important;
+}
+
+body:has(.sc-content-page) .sc-content-card-link {
+    border-top-color: #e6edf4 !important;
+    color: #087f73 !important;
+    font-size: 14px !important;
+}
+
+/* Social / references panel becomes a clear destination area. */
+body:has(.sc-content-page) .sc-content-social-area {
+    display: grid !important;
+    grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr);
+    align-items: center !important;
+    gap: 22px !important;
+    margin-top: 34px !important;
+    padding: clamp(22px, 2.6vw, 34px) !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    border-radius: 23px !important;
+    background: linear-gradient(125deg, #122641 0%, #193b5b 66%, #0f625f 100%) !important;
+    box-shadow: 0 18px 38px rgba(15, 39, 66, .16) !important;
+}
+
+body:has(.sc-content-page) .sc-content-social-heading h3 {
+    color: #fff !important;
+    font-size: clamp(19px, 1.5vw, 23px) !important;
+    font-weight: 900 !important;
+}
+
+body:has(.sc-content-page) .sc-content-social-heading p {
+    color: #d0deeb !important;
+    font-size: 13px !important;
+    line-height: 2 !important;
+}
+
+body:has(.sc-content-page) .sc-content-social-links {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px !important;
+}
+
+body:has(.sc-content-page) .sc-content-social-link {
+    min-width: 0;
+    min-height: 66px;
+    padding: 13px 16px !important;
+    border: 1px solid rgba(255,255,255,.72) !important;
+    border-radius: 15px !important;
+    background: rgba(255,255,255,.97) !important;
+    color: #1b3857 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    box-shadow: 0 8px 18px rgba(0,0,0,.08);
+}
+
+body:has(.sc-content-page) .sc-content-social-link img {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+/* Other learning paths: full cards instead of tiny pill links. */
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch;
+    gap: 14px !important;
+    margin-top: 32px !important;
+    padding: clamp(22px, 2.8vw, 38px) !important;
+    border: 1px solid rgba(214, 228, 240, .95) !important;
+    border-radius: 25px !important;
+    background-color: rgba(246, 250, 254, .88) !important;
+    box-shadow: 0 15px 36px rgba(20, 45, 74, .07) !important;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) > h2,
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) > p,
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) > .gs-original-heading {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+}
+
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) h2 {
+    margin: 0 0 8px !important;
+    color: #142d4c !important;
+    font-size: clamp(25px, 2.5vw, 34px) !important;
+    font-weight: 900 !important;
+    line-height: 1.5 !important;
+}
+
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) > a,
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) .gs-grid a {
+    display: flex !important;
+    flex: 1 1 215px !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    min-width: 0;
+    min-height: 84px !important;
+    margin: 0 !important;
+    padding: 16px 18px !important;
+    border: 1px solid #dbe6f0 !important;
+    border-radius: 16px !important;
+    background: rgba(255,255,255,.97) !important;
+    color: #203b59 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    line-height: 1.8 !important;
+    text-align: right;
+    text-decoration: none !important;
+    box-shadow: 0 7px 18px rgba(20,45,74,.05);
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) > a:hover,
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) .gs-grid a:hover {
+    transform: translateY(-3px);
+    border-color: #8bcfc4 !important;
+    box-shadow: 0 14px 28px rgba(20,45,74,.10);
+}
+
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) > a::after,
+body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) .gs-grid a::after {
+    content: "↗";
+    display: grid;
+    place-items: center;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #e5f7f3;
+    color: #078477;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+/* Existing floating assistant and WhatsApp controls remain untouched. */
+body:has(.sc-content-page) a:focus-visible {
+    outline: 3px solid #42c9b4 !important;
+    outline-offset: 4px;
+}
+
+@media (max-width: 1180px) {
+    body:has(.sc-content-page) .gs-main {
+        width: min(1100px, calc(100% - 42px)) !important;
+    }
+    body:has(.sc-content-page) .sc-content-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 760px) {
+    body:has(.sc-content-page) .sc-content-social-area {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+    body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) > a,
+    body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) .gs-grid a {
+        flex-basis: 100% !important;
+    }
+}
+
+@media (max-width: 620px) {
+    body:has(.sc-content-page) .gs-main {
+        width: calc(100% - 22px) !important;
+        margin: 14px auto 48px !important;
+    }
+    body:has(.sc-content-page) .gs-main > .gs-hero {
+        min-height: 255px;
+        padding: 26px 19px !important;
+        border-radius: 20px !important;
+    }
+    body:has(.sc-content-page) .gs-main > .gs-hero h1 {
+        font-size: clamp(30px, 8vw, 39px) !important;
+    }
+    body:has(.sc-content-page) .gs-main > .gs-hero .gs-hero-actions,
+    body:has(.sc-content-page) .gs-main > .gs-hero .hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    body:has(.sc-content-page) .gs-main > .gs-hero .gs-hero-actions a,
+    body:has(.sc-content-page) .gs-main > .gs-hero .hero-actions a {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    body:has(.sc-content-page) .sc-content-page {
+        padding: 18px 13px !important;
+        border-radius: 20px !important;
+    }
+    body:has(.sc-content-page) .sc-content-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 15px !important;
+    }
+    body:has(.sc-content-page) .sc-content-card {
+        min-height: 0 !important;
+    }
+    body:has(.sc-content-page) .sc-content-card-media {
+        height: 190px !important;
+        min-height: 190px !important;
+        flex-basis: 190px !important;
+    }
+    body:has(.sc-content-page) .sc-content-social-area {
+        padding: 19px !important;
+        border-radius: 19px !important;
+    }
+    body:has(.sc-content-page) .sc-content-social-links {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+    body:has(.sc-content-page) .gs-main > section.gs-section:not(.sc-content-page) {
+        padding: 19px 14px !important;
+        border-radius: 19px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body:has(.sc-content-page) *,
+    body:has(.sc-content-page) *::before,
+    body:has(.sc-content-page) *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* MOHAMMED AFIFY CONTENT PAGE PREMIUM V2 END */

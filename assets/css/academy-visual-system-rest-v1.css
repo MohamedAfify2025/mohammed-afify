@@ -1,0 +1,733 @@
+/* Mohammed Afify Academy — Remaining Pages Visual System V1
+   Extends the approved Python pilot to the other academy pages.
+   Existing copy, links, course data, membership gates and original images remain intact. */
+
+:root {
+  --av-ink: #152b49;
+  --av-muted: #5d718b;
+  --av-line: #dfe8f3;
+  --av-paper: #f7faff;
+  --av-teal: #20b7a7;
+  --av-violet: #7559d6;
+  --av-shadow: 0 16px 38px rgba(20, 48, 82, .075);
+}
+
+/* Page frame: consistent width and rhythm without changing document structure. */
+.ba-main,
+.gs-main.gs-original-page,
+.gs-main.gs-icdl-page,
+.gs-main.gs-windows-page,
+.gs-main.gs-scratch-page,
+#programming-page,
+#projects-page,
+.office-course-page,
+#professional-profile {
+  color: var(--av-ink);
+}
+
+/* Shared hero treatment. Existing hero artwork/logo images stay in their original slots. */
+.ba-main .ba-hero,
+#programming-page .prog-hero,
+#projects-page .projects-hero,
+.gs-scratch-page .scratch-hero,
+.gs-windows-page .win-hero,
+.gs-icdl-page .icdl-hero,
+.office-course-page .office-hero,
+#professional-profile .profile-hero,
+.gs-main > .cinematic-data-analysis-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(206, 222, 240, .82) !important;
+  border-radius: 26px !important;
+  box-shadow: 0 20px 48px rgba(16, 40, 72, .13) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  animation: none !important;
+}
+
+/* Business & management: strategic, executive technology palette. */
+.ba-main .ba-hero {
+  background-color: #112b4b !important;
+  background-image:
+    linear-gradient(105deg, rgba(7, 19, 38, .80), rgba(13, 40, 66, .60) 58%, rgba(17, 56, 76, .48)),
+    url("../images/backgrounds/odoo-business.jpg") !important;
+  background-position: center, 50% 48% !important;
+}
+.ba-main .ba-hero h1,
+.ba-main .ba-hero p,
+.ba-main .ba-hero .ba-kicker,
+.ba-main .ba-hero .ba-art-label,
+.ba-main .ba-hero .ba-art-symbol { color: #fff !important; }
+.ba-main .ba-hero p { text-shadow: 0 1px 5px rgba(0,0,0,.34); }
+.ba-main .ba-hero .ba-hero-art {
+  border-color: rgba(255,255,255,.48) !important;
+  background: rgba(10, 28, 52, .58) !important;
+  box-shadow: 0 18px 42px rgba(0,0,0,.16);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Programming: code-oriented visual, while preserving the original hero artwork. */
+#programming-page .prog-hero {
+  background-color: #102b4e !important;
+  background-image:
+    linear-gradient(100deg, rgba(8, 22, 44, .82), rgba(11, 44, 75, .72) 58%, rgba(8, 87, 99, .54)),
+    url("../images/backgrounds/programming.jpg") !important;
+  background-position: center, 44% 50% !important;
+}
+#programming-page .prog-hero h1,
+#programming-page .prog-hero p { color: #fff !important; }
+#programming-page .prog-hero p { color: #e5f0fb !important; }
+#programming-page .prog-hero-visual img { filter: drop-shadow(0 18px 28px rgba(0,0,0,.18)); }
+
+/* Data analytics: darker data room background and readable white text. */
+.gs-main > .cinematic-data-analysis-hero {
+  color: #fff !important;
+  background-color: #102a4c !important;
+  background-image:
+    linear-gradient(105deg, rgba(7, 22, 43, .82), rgba(10, 42, 73, .72) 62%, rgba(17, 94, 111, .58)),
+    url("../images/backgrounds/data-analysis.jpg") !important;
+  background-position: center, 48% 50% !important;
+}
+.gs-main > .cinematic-data-analysis-hero h1,
+.gs-main > .cinematic-data-analysis-hero h2 { color: #fff !important; }
+.gs-main > .cinematic-data-analysis-hero p { color: #e4effa !important; }
+.gs-main > .cinematic-data-analysis-hero .gs-kicker { color: #8de9dc !important; }
+.gs-main > .cinematic-data-analysis-hero .gs-btn {
+  border: 1px solid rgba(255,255,255,.30) !important;
+  color: #082e3a !important;
+  background: linear-gradient(130deg, #71e0d0, #22b6a6) !important;
+}
+.gs-main > .cinematic-data-analysis-hero .gs-btn.alt {
+  color: #fff !important;
+  background: rgba(255,255,255,.08) !important;
+}
+
+/* Office courses: distinct accents for Excel, PowerPoint and Word. */
+#office-excel-page .office-hero {
+  background-color: #123b36 !important;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(81, 212, 153, .24), transparent 36%),
+    linear-gradient(125deg, #103c36, #17634f 62%, #183c57) !important;
+}
+#office-powerpoint-page .office-hero {
+  background-color: #3b214c !important;
+  background-image:
+    radial-gradient(circle at 14% 20%, rgba(255, 160, 93, .25), transparent 36%),
+    linear-gradient(125deg, #352044, #67324f 64%, #273e67) !important;
+}
+#office-word-page .office-hero {
+  background-color: #17365e !important;
+  background-image:
+    radial-gradient(circle at 14% 20%, rgba(104, 179, 255, .23), transparent 36%),
+    linear-gradient(125deg, #17345b, #24588b 62%, #263c6e) !important;
+}
+.office-course-page .office-hero h1,
+.office-course-page .office-hero p { color: #fff !important; }
+.office-course-page .office-hero p { color: #e5effa !important; }
+.office-course-page .office-hero-art {
+  border-color: rgba(255,255,255,.35) !important;
+  background: rgba(255,255,255,.10) !important;
+  box-shadow: 0 18px 42px rgba(0,0,0,.14);
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+}
+#office-excel-page .office-mark-excel { background: #16834b !important; }
+#office-powerpoint-page .office-art-slide-wrap { background: linear-gradient(145deg, #fff5ef, #fff) !important; }
+#office-word-page .office-mark-word { background: #245a9a !important; }
+.office-course-page .office-btn-primary {
+  color: #082c37 !important;
+  background: linear-gradient(130deg, #73e1d1, #20b7a7) !important;
+  box-shadow: 0 8px 22px rgba(24, 184, 166, .20);
+}
+.office-course-page .office-btn-secondary {
+  border-color: rgba(255,255,255,.56) !important;
+  color: #fff !important;
+  background: rgba(255,255,255,.08) !important;
+}
+
+/* ICDL: digital skills identity, retaining the official ICDL image. */
+.gs-icdl-page .icdl-hero {
+  background-color: #102d53 !important;
+  background-image:
+    linear-gradient(105deg, rgba(8, 24, 49, .82), rgba(17, 60, 93, .70) 60%, rgba(12, 104, 120, .56)),
+    url("../images/backgrounds/office-skills.jpg") !important;
+  background-position: center, 50% 48% !important;
+}
+.gs-icdl-page .icdl-hero h1,
+.gs-icdl-page .icdl-hero p { color: #fff !important; }
+.gs-icdl-page .icdl-hero p { color: #e3eef9 !important; }
+.gs-icdl-page .icdl-hero-visual {
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 20px;
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 18px 42px rgba(0,0,0,.17);
+}
+.gs-icdl-page .icdl-hero-image { border-radius: 12px; }
+
+/* Scratch: a brighter creative learning identity. Preserve the Scratch image. */
+.gs-scratch-page .scratch-hero {
+  background-color: #30275f !important;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255, 191, 92, .25), transparent 34%),
+    linear-gradient(125deg, #30255f, #4c3c8c 58%, #126e82) !important;
+}
+.gs-scratch-page .scratch-hero h1,
+.gs-scratch-page .scratch-hero p { color: #fff !important; }
+.gs-scratch-page .scratch-hero p { color: #eeeaff !important; }
+.gs-scratch-page .scratch-hero-visual {
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.38);
+  border-radius: 20px;
+  background: rgba(255,255,255,.95);
+  box-shadow: 0 18px 42px rgba(0,0,0,.17);
+}
+.gs-scratch-page .scratch-hero-image { border-radius: 12px; }
+.gs-scratch-page .scratch-btn-primary {
+  color: #2a205c !important;
+  background: linear-gradient(130deg, #ffe08a, #ffbf59) !important;
+}
+
+/* Windows: secure, practical digital skills. Preserve the existing Windows graphic. */
+.gs-windows-page .win-hero {
+  background-color: #102d54 !important;
+  background-image:
+    linear-gradient(105deg, rgba(8, 24, 49, .82), rgba(17, 57, 96, .68) 60%, rgba(17, 103, 130, .50)),
+    url("../images/backgrounds/office-skills.jpg") !important;
+  background-position: center, 52% 48% !important;
+}
+.gs-windows-page .win-hero h1,
+.gs-windows-page .win-hero p { color: #fff !important; }
+.gs-windows-page .win-hero p { color: #e2edf8 !important; }
+.gs-windows-page .win-hero-visual img { filter: drop-shadow(0 18px 28px rgba(0,0,0,.18)); }
+
+/* Projects: a modern product and operations portfolio. */
+#projects-page .projects-hero {
+  background-color: #182c52 !important;
+  background-image:
+    linear-gradient(105deg, rgba(13, 25, 53, .86), rgba(30, 50, 94, .74) 62%, rgba(28, 106, 117, .54)),
+    url("../images/backgrounds/home-tech.jpg") !important;
+  background-position: center, 50% 48% !important;
+}
+#projects-page .projects-hero h1,
+#projects-page .projects-hero p { color: #fff !important; }
+#projects-page .projects-hero p { color: #e4edf8 !important; }
+#projects-page .projects-hero-art {
+  border-color: rgba(255,255,255,.32) !important;
+  background: rgba(255,255,255,.10) !important;
+  box-shadow: 0 18px 42px rgba(0,0,0,.14);
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+}
+
+/* Educational content index: a light, calm, library-oriented hero. */
+.gs-original-page > .gs-hero:not(.cinematic-data-analysis-hero) {
+  color: #172e50 !important;
+  border: 1px solid #dfe9f4 !important;
+  background-color: #edf5ff !important;
+  background-image:
+    linear-gradient(100deg, rgba(255,255,255,.94), rgba(244,249,255,.82) 55%, rgba(255,255,255,.90)),
+    url("../images/backgrounds/education.jpg") !important;
+  background-size: cover, cover !important;
+  background-position: center, 48% 48% !important;
+  box-shadow: var(--av-shadow) !important;
+}
+.gs-original-page > .gs-hero:not(.cinematic-data-analysis-hero) h1,
+.gs-original-page > .gs-hero:not(.cinematic-data-analysis-hero) h2 { color: #152d50 !important; }
+.gs-original-page > .gs-hero:not(.cinematic-data-analysis-hero) p { color: #536b86 !important; }
+.gs-original-page > .gs-hero:not(.cinematic-data-analysis-hero) .gs-kicker { color: #078c82 !important; }
+.gs-original-page > .gs-hero:not(.cinematic-data-analysis-hero) .gs-btn.alt {
+  border-color: #c7d7e9 !important;
+  color: #234260 !important;
+  background: rgba(255,255,255,.72) !important;
+}
+
+/* Profile and certificates: visual polish only; original personal and certificate assets untouched. */
+#professional-profile .profile-hero {
+  background-color: #142d50 !important;
+  background-image:
+    linear-gradient(110deg, rgba(8, 21, 42, .82), rgba(22, 48, 78, .68) 60%, rgba(20, 93, 102, .50)),
+    url("../images/backgrounds/education.jpg") !important;
+  background-position: center, 48% 48% !important;
+}
+#professional-profile .profile-hero h1,
+#professional-profile .profile-hero p { color: #fff !important; }
+#professional-profile .profile-hero p { color: #e5eef8 !important; }
+#professional-profile .profile-hero-visual {
+  border-color: rgba(255,255,255,.30) !important;
+  background: rgba(255,255,255,.09) !important;
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+}
+
+/* Stop the repeated global photo from appearing behind every section. */
+.ba-main .ba-section,
+#programming-page .prog-section,
+#programming-page .prog-resources-section,
+#projects-page .projects-section,
+#projects-page .projects-method,
+.gs-scratch-page .scratch-section,
+.gs-scratch-page .scratch-outcomes,
+.gs-windows-page .win-section,
+.gs-windows-page .win-outcomes,
+.gs-icdl-page .icdl-section,
+.gs-icdl-page .icdl-outcomes,
+.office-course-page .office-section,
+.office-course-page .office-outcomes,
+.office-course-page .office-resources-section,
+.gs-original-page > .gs-section,
+.gs-original-page .gs-original-content,
+#professional-profile .profile-section {
+  background-color: #fff !important;
+  background-image: none !important;
+  border: 1px solid var(--av-line) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 10px 30px rgba(19, 46, 79, .055);
+  animation: none !important;
+}
+
+.ba-main .ba-section,
+#programming-page .prog-section,
+#programming-page .prog-resources-section,
+#projects-page .projects-section,
+#projects-page .projects-method,
+.gs-scratch-page .scratch-section,
+.gs-scratch-page .scratch-outcomes,
+.gs-windows-page .win-section,
+.gs-windows-page .win-outcomes,
+.gs-icdl-page .icdl-section,
+.gs-icdl-page .icdl-outcomes,
+.office-course-page .office-section,
+.office-course-page .office-outcomes,
+.office-course-page .office-resources-section,
+.gs-original-page > .gs-section,
+.gs-original-page .gs-original-content,
+#professional-profile .profile-section {
+  padding: clamp(20px, 3vw, 34px);
+}
+
+/* Unified section typography. */
+.ba-main .ba-section-head h2,
+#programming-page .prog-section-heading h2,
+#projects-page .projects-section-heading h2,
+.gs-scratch-page .scratch-section-heading h2,
+.gs-windows-page .win-section-heading h2,
+.gs-icdl-page .icdl-section-heading h2,
+.office-course-page .office-section-heading h2,
+.gs-original-page .gs-original-heading h2,
+#professional-profile .profile-section-heading h2 {
+  color: #152d50 !important;
+  font-size: clamp(23px, 2.5vw, 31px) !important;
+  line-height: 1.55 !important;
+  font-weight: 900 !important;
+}
+.ba-main .ba-section-head p,
+#programming-page .prog-section-heading p,
+#projects-page .projects-section-heading p,
+.gs-scratch-page .scratch-section-heading p,
+.gs-windows-page .win-section-heading p,
+.gs-icdl-page .icdl-section-heading p,
+.office-course-page .office-section-heading p,
+.gs-original-page .gs-original-heading p,
+#professional-profile .profile-section-heading p {
+  color: #5d718b !important;
+  font-size: 14px !important;
+  line-height: 2 !important;
+}
+
+/* Course cards: consistent borders, typography, shadow and hover. */
+.ba-main .ba-unit-card,
+#programming-page .prog-track-card,
+#programming-page .prog-resource-card,
+#projects-page .project-card,
+.gs-scratch-page .scratch-level-card,
+.gs-scratch-page .scratch-resource-card,
+.gs-windows-page .win-topic-card,
+.gs-windows-page .win-resource-card,
+.gs-icdl-page .icdl-topic-card,
+.gs-icdl-page .icdl-resource-card,
+.office-course-page .office-topic-card,
+.office-course-page .office-resource-card,
+.gs-original-page .gs-tool-card,
+.gs-original-page .gs-card,
+.gs-original-page .gs-source-block,
+.gs-original-page .sc-content-card,
+#professional-profile .profile-certificate-card,
+#professional-profile .profile-work-card,
+#professional-profile .profile-link-card {
+  border: 1px solid #dfe8f3 !important;
+  border-radius: 17px !important;
+  background-color: #fff !important;
+  box-shadow: 0 8px 24px rgba(19, 46, 79, .055) !important;
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.ba-main .ba-unit-card:hover,
+#programming-page .prog-track-card:hover,
+#programming-page .prog-resource-card:hover,
+#projects-page .project-card:hover,
+.gs-scratch-page .scratch-level-card:hover,
+.gs-scratch-page .scratch-resource-card:hover,
+.gs-windows-page .win-topic-card:hover,
+.gs-windows-page .win-resource-card:hover,
+.gs-icdl-page .icdl-topic-card:hover,
+.gs-icdl-page .icdl-resource-card:hover,
+.office-course-page .office-topic-card:hover,
+.office-course-page .office-resource-card:hover,
+.gs-original-page .gs-tool-card:hover,
+.gs-original-page .gs-card:hover,
+.gs-original-page .sc-content-card:hover,
+#professional-profile .profile-certificate-card:hover,
+#professional-profile .profile-work-card:hover,
+#professional-profile .profile-link-card:hover {
+  transform: translateY(-4px);
+  border-color: #a7dcd5 !important;
+  box-shadow: 0 17px 34px rgba(19, 46, 79, .11) !important;
+}
+
+.ba-main .ba-unit-card h3,
+#programming-page .prog-track-card h3,
+#projects-page .project-card h3,
+.gs-scratch-page .scratch-level-card h3,
+.gs-windows-page .win-topic-card h3,
+.gs-icdl-page .icdl-topic-card h3,
+.office-course-page .office-topic-card h3,
+#professional-profile .profile-certificate-card h3,
+#professional-profile .profile-work-card h3 {
+  color: #172f51 !important;
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+  font-weight: 850 !important;
+}
+.ba-main .ba-unit-card p,
+#programming-page .prog-track-card p,
+#projects-page .project-card p,
+.gs-scratch-page .scratch-level-card p,
+.gs-windows-page .win-topic-card p,
+.gs-icdl-page .icdl-topic-card p,
+.office-course-page .office-topic-card p,
+.gs-original-page .gs-tool-card p,
+.gs-original-page .sc-content-card p,
+#professional-profile .profile-certificate-card p,
+#professional-profile .profile-work-card p {
+  color: #5f738c !important;
+  font-size: 13px !important;
+  line-height: 1.95 !important;
+}
+
+/* Original media remains intact; standardize only the frame. */
+#professional-profile .profile-certificate-image-link,
+.gs-original-page .sc-content-card-media {
+  border-radius: 14px 14px 0 0;
+  background: #f1f6fc !important;
+  overflow: hidden;
+}
+#professional-profile .profile-certificate-image-link img,
+.gs-original-page .sc-content-card-media img {
+  max-width: 100%;
+  object-position: center;
+}
+
+/* Consistent keyboard focus and reduced-motion behavior. */
+.ba-main a:focus-visible,
+#programming-page a:focus-visible,
+#projects-page a:focus-visible,
+.gs-scratch-page a:focus-visible,
+.gs-windows-page a:focus-visible,
+.gs-icdl-page a:focus-visible,
+.office-course-page a:focus-visible,
+.gs-original-page a:focus-visible,
+#professional-profile a:focus-visible {
+  outline: 3px solid #22b8a7 !important;
+  outline-offset: 3px !important;
+}
+
+@media (max-width: 760px) {
+  .ba-main .ba-section,
+  #programming-page .prog-section,
+  #programming-page .prog-resources-section,
+  #projects-page .projects-section,
+  #projects-page .projects-method,
+  .gs-scratch-page .scratch-section,
+  .gs-scratch-page .scratch-outcomes,
+  .gs-windows-page .win-section,
+  .gs-windows-page .win-outcomes,
+  .gs-icdl-page .icdl-section,
+  .gs-icdl-page .icdl-outcomes,
+  .office-course-page .office-section,
+  .office-course-page .office-outcomes,
+  .office-course-page .office-resources-section,
+  .gs-original-page > .gs-section,
+  .gs-original-page .gs-original-content,
+  #professional-profile .profile-section {
+    padding: 18px 15px;
+    border-radius: 17px !important;
+  }
+  .ba-main .ba-hero,
+  #programming-page .prog-hero,
+  #projects-page .projects-hero,
+  .gs-scratch-page .scratch-hero,
+  .gs-windows-page .win-hero,
+  .gs-icdl-page .icdl-hero,
+  .office-course-page .office-hero,
+  #professional-profile .profile-hero,
+  .gs-main > .cinematic-data-analysis-hero {
+    border-radius: 19px !important;
+    background-position: center, 50% 50% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ba-main .ba-unit-card,
+  #programming-page .prog-track-card,
+  #programming-page .prog-resource-card,
+  #projects-page .project-card,
+  .gs-scratch-page .scratch-level-card,
+  .gs-scratch-page .scratch-resource-card,
+  .gs-windows-page .win-topic-card,
+  .gs-windows-page .win-resource-card,
+  .gs-icdl-page .icdl-topic-card,
+  .gs-icdl-page .icdl-resource-card,
+  .office-course-page .office-topic-card,
+  .office-course-page .office-resource-card,
+  .gs-original-page .gs-tool-card,
+  .gs-original-page .sc-content-card,
+  #professional-profile .profile-certificate-card,
+  #professional-profile .profile-work-card,
+  #professional-profile .profile-link-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* Additional course modules and lesson-video sections also lose the repeated photo layer. */
+#programming-page .prog-basics,
+#programming-page .prog-workshop,
+#programming-page .prog-social,
+#programming-page .programming-quiz-section,
+#programming-page .channel-videos-section,
+#projects-page .projects-materials,
+#projects-page .projects-next-step,
+.gs-scratch-page .scratch-workshop,
+.gs-scratch-page .scratch-social,
+.gs-scratch-page .scratch-next-step,
+.gs-scratch-page .channel-videos-section,
+.gs-windows-page .win-intro,
+.gs-windows-page .win-resources,
+.gs-windows-page .win-next-step,
+.gs-windows-page .channel-videos-section,
+.gs-icdl-page .icdl-next-step,
+.gs-icdl-page .channel-videos-section,
+.office-course-page .office-next-step,
+.office-course-page .channel-videos-section,
+.gs-original-page .channel-videos-section,
+#professional-profile .profile-brand-showcase,
+#professional-profile .profile-photo-feature {
+  background-color: #fff !important;
+  background-image: none !important;
+  border: 1px solid var(--av-line) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 10px 30px rgba(19, 46, 79, .055);
+  animation: none !important;
+}
+
+#programming-page .prog-basics,
+#programming-page .prog-workshop,
+#programming-page .prog-social,
+#programming-page .programming-quiz-section,
+#programming-page .channel-videos-section,
+#projects-page .projects-materials,
+.gs-scratch-page .scratch-workshop,
+.gs-scratch-page .scratch-social,
+.gs-scratch-page .channel-videos-section,
+.gs-windows-page .win-intro,
+.gs-windows-page .win-resources,
+.gs-windows-page .channel-videos-section,
+.gs-icdl-page .icdl-next-step,
+.gs-icdl-page .channel-videos-section,
+.office-course-page .office-next-step,
+.office-course-page .channel-videos-section,
+.gs-original-page .channel-videos-section,
+#professional-profile .profile-brand-showcase,
+#professional-profile .profile-photo-feature {
+  padding: clamp(20px, 3vw, 32px);
+}
+
+/* Next-step bands remain visually distinct as conversion points. */
+#programming-page .prog-next-step,
+#projects-page .projects-next-step,
+.gs-scratch-page .scratch-next-step,
+.gs-windows-page .win-next-step,
+.gs-icdl-page .icdl-next-step,
+.office-course-page .office-next-step,
+#professional-profile .profile-next-step {
+  border: 1px solid #204a73 !important;
+  border-radius: 21px !important;
+  color: #f4f9ff !important;
+  background: linear-gradient(120deg, #132c4d, #1d4d76 65%, #126f78) !important;
+  box-shadow: 0 16px 34px rgba(17, 47, 79, .13) !important;
+  animation: none !important;
+}
+#programming-page .prog-next-step h2,
+#programming-page .prog-next-step p,
+#projects-page .projects-next-step h2,
+#projects-page .projects-next-step p,
+.gs-scratch-page .scratch-next-step h2,
+.gs-scratch-page .scratch-next-step p,
+.gs-windows-page .win-next-step h2,
+.gs-windows-page .win-next-step p,
+.gs-icdl-page .icdl-next-step h2,
+.gs-icdl-page .icdl-next-step p,
+.office-course-page .office-next-step h2,
+.office-course-page .office-next-step p,
+#professional-profile .profile-next-step h2,
+#professional-profile .profile-next-step p {
+  color: #f4f9ff !important;
+}
+
+/* Preserve video thumbnails, but place the video library on a clean surface. */
+.channel-videos-section {
+  background: #fff !important;
+  background-image: none !important;
+  border: 1px solid var(--av-line) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 10px 30px rgba(19, 46, 79, .055) !important;
+  padding: clamp(18px, 3vw, 30px) !important;
+}
+.channel-videos-section .platform-video-card {
+  border: 1px solid #dfe8f3 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 7px 20px rgba(19, 46, 79, .06) !important;
+}
+
+/* Section-specific accents for the non-Python course pages. */
+#office-excel-page .office-section-heading h2 { text-decoration-color: #16834b; }
+#office-powerpoint-page .office-section-heading h2 { text-decoration-color: #c94e35; }
+#office-word-page .office-section-heading h2 { text-decoration-color: #245a9a; }
+#programming-page .prog-section-heading .prog-kicker { color: #078d83 !important; }
+.gs-scratch-page .scratch-section-heading .scratch-kicker { color: #7852c7 !important; }
+.gs-windows-page .win-section-kicker { color: #1679b6 !important; }
+.gs-icdl-page .icdl-section-heading .icdl-kicker { color: #168aa0 !important; }
+#professional-profile .profile-section-heading .profile-kicker { color: #7158c9 !important; }
+
+@media (max-width: 760px) {
+  #programming-page .prog-basics,
+  #programming-page .prog-workshop,
+  #programming-page .prog-social,
+  #programming-page .programming-quiz-section,
+  #programming-page .channel-videos-section,
+  #projects-page .projects-materials,
+  .gs-scratch-page .scratch-workshop,
+  .gs-scratch-page .scratch-social,
+  .gs-scratch-page .channel-videos-section,
+  .gs-windows-page .win-intro,
+  .gs-windows-page .win-resources,
+  .gs-windows-page .channel-videos-section,
+  .gs-icdl-page .icdl-next-step,
+  .gs-icdl-page .channel-videos-section,
+  .office-course-page .office-next-step,
+  .office-course-page .channel-videos-section,
+  .gs-original-page .channel-videos-section,
+  #professional-profile .profile-brand-showcase,
+  #professional-profile .profile-photo-feature {
+    padding: 18px 15px !important;
+    border-radius: 17px !important;
+  }
+}
+
+/* High-specificity overrides for legacy ID-based cinematic background rules. */
+.ba-main .ba-hero[data-cinematic-bg="education"] {
+  background-image:
+    linear-gradient(105deg, rgba(7, 19, 38, .80), rgba(13, 40, 66, .60) 58%, rgba(17, 56, 76, .48)),
+    url("../images/backgrounds/odoo-business.jpg") !important;
+}
+
+#programming-page #programming-tracks,
+#programming-page #programming-basics,
+#programming-page #programming-workshops,
+#programming-page #programming-resources,
+#programming-page #programming-online-quiz,
+#programming-page #channel-videos-programming,
+#projects-page #projects-list,
+#projects-page #projects-materials,
+.gs-scratch-page #scratch-levels,
+.gs-scratch-page #scratch-resources,
+.gs-scratch-page #channel-videos-scratch,
+.gs-windows-page #windows-topics,
+.gs-windows-page #windows-resources,
+.gs-windows-page #channel-videos-windows,
+.gs-icdl-page #icdl-topics,
+.gs-icdl-page #icdl-resources,
+.gs-icdl-page #channel-videos-icdl,
+#office-word-page #office-topics,
+#office-word-page #office-resources,
+#office-word-page #channel-videos-word,
+#office-excel-page #office-topics,
+#office-excel-page #office-resources,
+#office-excel-page #channel-videos-excel,
+#office-powerpoint-page #office-topics,
+#office-powerpoint-page #office-resources,
+#office-powerpoint-page #channel-videos-powerpoint,
+#professional-profile #profile-certificates,
+#professional-profile #profile-work,
+#professional-profile #profile-cv {
+  background-color: #fff !important;
+  background-image: none !important;
+  border: 1px solid var(--av-line) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 10px 30px rgba(19, 46, 79, .055) !important;
+  animation: none !important;
+}
+
+#programming-page #programming-tracks,
+#programming-page #programming-basics,
+#programming-page #programming-workshops,
+#programming-page #programming-resources,
+#programming-page #programming-online-quiz,
+#programming-page #channel-videos-programming,
+#projects-page #projects-list,
+#projects-page #projects-materials,
+.gs-scratch-page #scratch-levels,
+.gs-scratch-page #scratch-resources,
+.gs-scratch-page #channel-videos-scratch,
+.gs-windows-page #windows-topics,
+.gs-windows-page #windows-resources,
+.gs-windows-page #channel-videos-windows,
+.gs-icdl-page #icdl-topics,
+.gs-icdl-page #icdl-resources,
+.gs-icdl-page #channel-videos-icdl,
+#office-word-page #office-topics,
+#office-word-page #office-resources,
+#office-word-page #channel-videos-word,
+#office-excel-page #office-topics,
+#office-excel-page #office-resources,
+#office-excel-page #channel-videos-excel,
+#office-powerpoint-page #office-topics,
+#office-powerpoint-page #office-resources,
+#office-powerpoint-page #channel-videos-powerpoint,
+#professional-profile #profile-certificates,
+#professional-profile #profile-work,
+#professional-profile #profile-cv {
+  padding: clamp(18px, 3vw, 32px) !important;
+}
+
+body:has(.cinematic-data-analysis-hero) .gs-main.gs-original-page .gs-section,
+body:has(.cinematic-data-analysis-hero) .gs-main.gs-original-page .gs-original-content,
+body:has(.cinematic-data-analysis-hero) #materials,
+body:has(.cinematic-data-analysis-hero) #channel-videos-data {
+  background-color: #fff !important;
+  background-image: none !important;
+  border: 1px solid var(--av-line) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 10px 30px rgba(19, 46, 79, .055) !important;
+  animation: none !important;
+}
+
+body:has(.cinematic-data-analysis-hero) .gs-main.gs-original-page .gs-section,
+body:has(.cinematic-data-analysis-hero) .gs-main.gs-original-page .gs-original-content,
+body:has(.cinematic-data-analysis-hero) #materials,
+body:has(.cinematic-data-analysis-hero) #channel-videos-data {
+  padding: clamp(18px, 3vw, 32px) !important;
+}
