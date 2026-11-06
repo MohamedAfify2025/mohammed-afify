@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <!-- MEMBERSHIP ACCESS PRELOAD -->
@@ -17,7 +17,71 @@
     <link rel="stylesheet" href="../assets/css/site-assistant.css">
 <link rel="stylesheet" href="../assets/css/academy-course-cards-v3.css?v=20261106-3">
 <link rel="stylesheet" href="../assets/css/accounting-course.css?v=3">
-</head>
+<style id="accounting-map-node-v1">
+
+.lm-v2 .lm-node-accounting {
+    --node: #209b8d;
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: 2.5%;
+    transform: translateX(-50%);
+    overflow: visible;
+}
+
+.lm-v2 .lm-node-accounting:hover,
+.lm-v2 .lm-node-accounting:focus-visible {
+    transform: translate(-50%, -7px) scale(1.015);
+}
+
+.lm-v2 .lm-node-accounting .lm-accounting-connector {
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 58px;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(32,155,141,.85) 0 6px,
+        transparent 6px 12px
+    );
+    pointer-events: none;
+}
+
+@media (max-width: 900px) {
+    .lm-v2 .lm-node-accounting {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
+        grid-column: 1 / -1;
+        width: calc(50% - 7px);
+        justify-self: center;
+        transform: none;
+    }
+
+    .lm-v2 .lm-node-accounting:hover,
+    .lm-v2 .lm-node-accounting:focus-visible {
+        transform: translateY(-5px) scale(1.01);
+    }
+
+    .lm-v2 .lm-node-accounting .lm-accounting-connector {
+        display: none;
+    }
+}
+
+@media (max-width: 620px) {
+    .lm-v2 .lm-node-accounting {
+        grid-column: 1;
+        width: 100%;
+        min-height: 146px;
+        grid-template-columns: 48px minmax(0,1fr);
+    }
+}
+
+</style></head>
 <body>
 <header class="gs-header"><a class="gs-brand" href="../index.html"><span>MA.</span> Mohammed Afify</a><nav class="gs-nav"><a href='../index.html#googleSitesLibrary'>الرئيسية</a><a href='index.html'>مكتبة الدورات</a><a href='programming.html'>البرمجة</a><a href='icdl.html'>ICDL</a><a href='data-analysis.html'>تحليل البيانات</a><a href='projects.html'>المشروعات</a><a href='../membership/login.html'>حساب الطالب</a><a href='../membership/register.html'>طلب الاشتراك</a></nav></header>
 <main class="gs-main">
@@ -92,6 +156,16 @@
       <span class="lm-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/><path d="m16 2 2 2-2 2"/></svg></span>
       <span class="lm-node-text"><strong>المشروعات والموارد</strong><small>PROJECTS &amp; RESOURCES</small><em>محتوى تعليمي · مشروعات · شهادات</em></span>
       <span class="lm-node-foot"><b>استكشف الموارد</b><i>↙</i></span>
+    </a>
+
+    <a class="lm-node lm-node-accounting" data-accounting-map-node="true" href="accounting.html" aria-label="استكشف المحاسبة، 5 وحدات">
+      <span class="lm-accounting-connector" aria-hidden="true"></span><span class="lm-node-head"><span class="lm-node-number">06</span><span class="lm-node-count">5 وحدات</span></span>
+      <span class="lm-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true">
+  <rect x="4" y="2.5" width="16" height="19" rx="2"/>
+  <path d="M8 6.5h8M8 11h1m3 0h1m3 0h.01M8 15h1m3 0h1m3 0h.01M8 18.5h8"/>
+</svg></span>
+      <span class="lm-node-text"><strong>المحاسبة</strong><small>ACCOUNTING &amp; FINANCE</small><em>القيود اليومية · المعادلة المحاسبية · القوائم المالية</em></span>
+      <span class="lm-node-foot"><b>استكشف المحاسبة</b><i>↙</i></span>
     </a>
   </div>
 
