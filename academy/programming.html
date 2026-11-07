@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="../assets/css/cinematic-motion.css">
     <link rel="stylesheet" href="../assets/css/site-assistant.css">
     <link rel="stylesheet" href="../assets/css/academy-visual-system-rest-v1.css?v=1">
+  <link rel="stylesheet" href="../assets/css/programming-hero-exact-v1.css?v=1">
 </head>
 <body>
 <header class="gs-header">
@@ -31,30 +32,25 @@
 </header>
 <main id="programming-page" class="gs-main gs-programming-page">
 
-  <section class="prog-hero" data-cinematic-bg="programming">
-    <div class="prog-hero-content">
-      <span class="prog-eyebrow">PROGRAMMING · LEARN BY DOING</span>
-      <h1>رحلتك في عالم البرمجة</h1>
-      <p>
-        تعلّم التفكير المنطقي، واكتشف أساسيات كتابة البرامج،
-        ثم طبّق ما تتعلمه في أنشطة ومشروعات تناسب مستواك.
-      </p>
-      <div class="prog-hero-actions">
-        <a class="prog-btn prog-btn-primary" href="#programming-tracks">
-          استكشف المسارات ↓
-        </a>
-        <a class="prog-btn prog-btn-secondary" href="#programming-resources">
-          التسجيل والاختبارات
-        </a>
-      </div>
-    </div>
+  <section class="prog-hero prog-hero-exact-art-v1" id="programming-hero-approved-v1" aria-label="واجهة مسار البرمجة والتطوير">
+  <img class="prog-hero-exact-art-image" src="../assets/images/programming/programming-hero-approved-v1.png" width="1672" height="845" alt="" role="presentation" fetchpriority="high" decoding="async">
 
-    <div class="prog-hero-visual">
-      <img src="../assets/images/programming-course-hero.jpg"
-           alt="تعلم البرمجة وتطوير المهارات الرقمية"
-           loading="eager">
-    </div>
-  </section>
+  <a class="prog-hero-hotspot prog-hero-hotspot-paths" href="#programming-tracks" aria-label="تصفح المسارات"></a>
+  <a class="prog-hero-hotspot prog-hero-hotspot-start" href="#programming-tracks" aria-label="ابدأ الآن"></a>
+  <a class="prog-hero-hotspot prog-hero-hotspot-whatsapp" href="https://wa.me/201092452759?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D9%85%D9%86%20%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D9%84%D8%AA%D8%B9%D9%84%D9%8A%D9%85%D9%8A%20Mohammed%20Afify" target="_blank" rel="noopener noreferrer" aria-label="تواصل معنا عبر واتساب"></a>  <button class="prog-hero-hotspot prog-hero-hotspot-assistant" type="button" aria-label="افتح مساعد Mohammed Afify" title="افتح المساعد الذكي"></button>
+
+  <div class="prog-hero-screenreader-copy">
+    <span>البرمجة والتطوير · Programming and Development</span>
+    <h1>رحلتك في عالم البرمجة</h1>
+    <p>تعلم أساسيات البرمجة من الصفر، وطور مهاراتك العملية بمشاريع تطبيقية تؤهلك لسوق العمل.</p>
+    <ul>
+      <li>مسارات متعددة</li>
+      <li>مشاريع عملية</li>
+      <li>شهادة معتمدة</li>
+      <li>دعم ومتابعة</li>
+    </ul>
+  </div>
+</section>
 
   <section class="prog-section" id="programming-tracks">
     <div class="prog-section-heading">
@@ -378,5 +374,39 @@
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/membership.js" defer></script>
 <script src="../assets/js/membership-access-control.js" defer></script>
+<script id="programming-hero-assistant-integration-v1">
+(() => {
+  const initProgrammingHeroAssistant = () => {
+    const hero = document.getElementById("programming-hero-approved-v1");
+    if (!hero) return;
+
+    const robotHotspot = hero.querySelector(".prog-hero-hotspot-assistant");
+    if (robotHotspot) {
+      robotHotspot.addEventListener("click", () => {
+        const launcher = document.querySelector("#ma-site-assistant .ma-assistant-launcher");
+        if (launcher) launcher.click();
+      });
+    }
+
+    const assistantRoot = document.getElementById("ma-site-assistant");
+    if (!assistantRoot || !robotHotspot || !("IntersectionObserver" in window)) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const mascotIsVisible = entry.isIntersecting && entry.intersectionRatio >= 0.12;
+        assistantRoot.classList.toggle("ma-programming-hero-visible", mascotIsVisible);
+      }
+    }, { threshold: [0, 0.12, 0.3, 0.6] });
+
+    observer.observe(robotHotspot);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initProgrammingHeroAssistant, { once: true });
+  } else {
+    initProgrammingHeroAssistant();
+  }
+})();
+</script>
 </body>
 </html>

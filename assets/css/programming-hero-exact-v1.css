@@ -1,0 +1,122 @@
+/* MOHAMMED AFIFY PROGRAMMING HERO EXACT ART V1
+   The approved artwork is displayed at its natural aspect ratio.
+   No font, color, crop, tint, overlay, filter, or scale transform is applied. */
+
+#programming-page .prog-hero.prog-hero-exact-art-v1 {
+  display: block !important;
+  position: relative !important;
+  isolation: isolate !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 0 36px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+  align-items: initial !important;
+  grid-template-columns: none !important;
+  gap: 0 !important;
+}
+
+#programming-page .prog-hero-exact-art-v1 > .prog-hero-exact-art-image {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1672 / 845;
+  object-fit: contain !important;
+  object-position: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+#programming-page .prog-hero-exact-art-v1 .prog-hero-hotspot {
+  position: absolute !important;
+  z-index: 5 !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Invisible hit areas precisely aligned to the artwork's pictured controls. */
+#programming-page .prog-hero-hotspot-paths {
+  left: 55.0% !important;
+  top: 49.8% !important;
+  width: 18.0% !important;
+  height: 12.4% !important;
+}
+
+#programming-page .prog-hero-hotspot-start {
+  left: 72.7% !important;
+  top: 49.8% !important;
+  width: 18.0% !important;
+  height: 12.4% !important;
+}
+
+#programming-page .prog-hero-hotspot-whatsapp {
+  left: 1.0% !important;
+  top: 87.5% !important;
+  width: 16.0% !important;
+  height: 11.5% !important;
+}
+
+#programming-page .prog-hero-hotspot-assistant {
+  left: 82.0% !important;
+  top: 52.5% !important;
+  width: 18.0% !important;
+  height: 45.0% !important;
+}
+
+#programming-page .prog-hero-exact-art-v1 .prog-hero-hotspot:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(111, 82, 210, .85) !important;
+}
+
+/* Keep the hero's embedded copy available to search engines and assistive technology. */
+#programming-page .prog-hero-screenreader-copy {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* The large robot inside the approved hero becomes the assistant trigger.
+   The floating launcher returns automatically after the robot leaves the viewport. */
+#ma-site-assistant.ma-programming-hero-visible .ma-assistant-launcher,
+#ma-site-assistant.ma-programming-hero-visible .ma-assistant-greeting {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #programming-page .prog-hero-exact-art-v1 .prog-hero-hotspot {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* END MOHAMMED AFIFY PROGRAMMING HERO EXACT ART V1 */
