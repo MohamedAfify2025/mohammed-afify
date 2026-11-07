@@ -72,44 +72,128 @@
 
   // Registration form: account creation creates a pending profile through the SQL trigger.
   if (page === 'register') {
+    const roleSelect = $('requestedRole');
+    const studentFields = $('studentFields');
+    const teacherFields = $('teacherFields');
+    const courseInput = $('course');
+    const specialtiesInput = $('teacherSpecialties');
+
+    const syncRoleFields = () => {
+      const isTeacher = roleSelect?.value === 'teacher';
+
+      if (studentFields) {
+        studentFields.style.display = isTeacher ? 'none' : '';
+      }
+
+      if (teacherFields) {
+        teacherFields.style.display = isTeacher ? '' : 'none';
+      }
+
+      if (courseInput) {
+        courseInput.required = !isTeacher;
+      }
+
+      if (specialtiesInput) {
+        specialtiesInput.required = isTeacher;
+      }
+    };
+
+    roleSelect?.addEventListener('change', syncRoleFields);
+    syncRoleFields();
+
     $('registerForm')?.addEventListener('submit', async (event) => {
-      event.preventDefault(); clearNotice('formNotice');
+      event.preventDefault();
+      clearNotice('formNotice');
+
       if (!(await requireClient())) return;
+
       const form = event.currentTarget;
       const data = new FormData(form);
+
       const fullName = String(data.get('fullName') || '').trim();
       const email = String(data.get('email') || '').trim().toLowerCase();
       const phone = String(data.get('phone') || '').trim();
+      const requestedRole = String(data.get('requestedRole') || 'student').trim();
       const course = String(data.get('course') || '').trim();
+      const teacherSpecialties = String(data.get('teacherSpecialties') || '').trim();
+      const rawTeacherCourses = String(data.get('teacherCourses') || '').trim();
       const password = String(data.get('password') || '');
       const confirmPassword = String(data.get('confirmPassword') || '');
-      if (password.length < 8) return notice('formNotice', 'كلمة المرور يجب ألا تقل عن 8 أحرف.', 'error');
-      if (password !== confirmPassword) return notice('formNotice', 'كلمتا المرور غير متطابقتين.', 'error');
+
+      if (!['student', 'teacher'].includes(requestedRole)) {
+        return notice('formNotice', 'نوع الحساب المحدد غير صحيح.', 'error');
+      }
+
+      if (requestedRole === 'student' && !course) {
+        return notice('formNotice', 'يرجى اختيار الدورة المطلوبة.', 'error');
+      }
+
+      if (requestedRole === 'teacher' && !teacherSpecialties) {
+        return notice('formNotice', 'يرجى كتابة التخصصات والخبرات.', 'error');
+      }
+
+      if (password.length < 8) {
+        return notice('formNotice', 'كلمة المرور يجب ألا تقل عن 8 أحرف.', 'error');
+      }
+
+      if (password !== confirmPassword) {
+        return notice('formNotice', 'كلمتا المرور غير متطابقتين.', 'error');
+      }
+
+      const teacherCourses = requestedRole === 'teacher'
+        ? rawTeacherCourses
+            .split(/[,\n،;]+/)
+            .map(item => item.trim())
+            .filter(Boolean)
+            .slice(0, 20)
+        : [];
+
       const button = form.querySelector('button[type="submit"]');
-      if (button) { button.disabled = true; button.textContent = 'جارٍ إرسال الطلب…'; }
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'جارٍ إرسال الطلب…';
+      }
+
       try {
         const { data: result, error } = await client.auth.signUp({
-          email, password,
+          email,
+          password,
           options: {
-            data: { full_name: fullName, phone, requested_course: course },
+            data: {
+              full_name: fullName,
+              phone,
+              requested_course: requestedRole === 'student' ? course : 'طلب تدريس',
+              requested_role: requestedRole,
+              teacher_specialties: requestedRole === 'teacher' ? teacherSpecialties : '',
+              requested_teaching_courses: teacherCourses
+            },
             emailRedirectTo: new URL('login.html', location.href).href
           }
         });
+
         if (error) throw error;
+
         const msg = result.session
-          ? 'تم إنشاء الحساب وإرسال الطلب للمراجعة. يمكنك تسجيل الدخول، وسيظل الوصول للمحتوى مرتبطًا باعتماد الإدارة.'
+          ? 'تم إنشاء الحساب وإرسال الطلب للمراجعة. سيظل تفعيل الصلاحيات مرتبطًا باعتماد الإدارة.'
           : 'تم تسجيل الطلب. افحص بريدك الإلكتروني واضغط رابط تأكيد الحساب أولًا، ثم سجّل الدخول لمتابعة حالة الطلب.';
+
         notice('formNotice', msg, 'success');
         form.reset();
+        syncRoleFields();
+
       } catch (err) {
         notice('formNotice', err?.message || 'تعذّر إرسال الطلب. حاول مرة أخرى.', 'error');
+
       } finally {
-        if (button) { button.disabled = false; button.textContent = 'إرسال طلب الاشتراك ←'; }
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'إرسال طلب الاشتراك ←';
+        }
       }
     });
   }
-
-  // Login and password recovery.
+// Login and password recovery.
   if (page === 'login') {
     $('loginForm')?.addEventListener('submit', async (event) => {
       event.preventDefault(); clearNotice('formNotice');
@@ -252,40 +336,195 @@
   if (page === 'admin') {
     const loadRequests = async () => {
       if (!(await requireClient('adminNotice'))) return;
+
       clearNotice('adminNotice');
+
       try {
         const session = await getSession();
+
         if (!session) return redirectToLogin();
+
         const profile = await getProfile(session.user.id);
+
         if (profile?.role !== 'admin') {
-          notice('adminNotice', 'هذا القسم مخصص لحسابات الإدارة فقط. سجّل الدخول بحساب تم تعيين role = admin له داخل Supabase.', 'error');
-          $('requestsTable').innerHTML = '<div class="m-empty">غير مصرح بعرض الطلبات.</div>';
+          notice(
+            'adminNotice',
+            'هذا القسم مخصص لحسابات الإدارة فقط.',
+            'error'
+          );
+
+          $('requestsTable').innerHTML =
+            '<div class="m-empty">غير مصرح بعرض الطلبات.</div>';
+
           return;
         }
-        const { data, error } = await client.from('profiles').select('user_id,full_name,email,phone,requested_course,status,created_at').eq('status', 'pending').order('created_at', { ascending: true });
+
+        const { data, error } = await client
+          .from('profiles')
+          .select(
+            'user_id,full_name,email,phone,requested_course,status,requested_role,teacher_specialties,requested_teaching_courses,created_at'
+          )
+          .eq('status', 'pending')
+          .order('created_at', { ascending: true });
+
         if (error) throw error;
+
         const host = $('requestsTable');
-        if (!data?.length) { host.innerHTML = '<div class="m-empty">لا توجد طلبات معلقة حاليًا.</div>'; return; }
-        host.innerHTML = `<table class="m-table"><thead><tr><th>الاسم</th><th>البريد</th><th>الهاتف</th><th>الدورة</th><th>تاريخ الطلب</th><th>الإجراء</th></tr></thead><tbody>${data.map((r) => `<tr><td>${escapeHtml(r.full_name || '—')}</td><td>${escapeHtml(r.email || '—')}</td><td>${escapeHtml(r.phone || '—')}</td><td>${escapeHtml(r.requested_course || '—')}</td><td>${formatDate(r.created_at)}</td><td><div class="m-row-actions"><button type="button" class="m-mini-button" data-review="approved" data-user="${escapeHtml(r.user_id)}">اعتماد</button><button type="button" class="m-mini-button reject" data-review="rejected" data-user="${escapeHtml(r.user_id)}">رفض</button></div></td></tr>`).join('')}</tbody></table>`;
-        host.querySelectorAll('[data-review]').forEach((button) => button.addEventListener('click', async () => {
-          const uid = button.dataset.user; const status = button.dataset.review;
-          const action = status === 'approved' ? 'اعتماد هذا الطالب' : 'رفض هذا الطلب';
-          if (!window.confirm(`هل تريد ${action}؟`)) return;
-          button.disabled = true;
-          try {
-            const { error: rpcError } = await client.rpc('set_student_status', { target_user: uid, new_status: status });
-            if (rpcError) throw rpcError;
-            notice('adminNotice', status === 'approved' ? 'تم اعتماد الطالب بنجاح.' : 'تم تحديث حالة الطلب إلى مرفوض.', 'success');
-            await loadRequests();
-          } catch (err) { notice('adminNotice', err?.message || 'تعذّر تحديث حالة الطلب. تحقق من سياسة قاعدة البيانات.', 'error'); button.disabled = false; }
-        }));
-      } catch (err) { notice('adminNotice', err?.message || 'تعذّر تحميل الطلبات.', 'error'); }
+
+        if (!host) {
+          throw new Error('لم يتم العثور على عنصر عرض الطلبات.');
+        }
+
+        if (!data?.length) {
+          host.innerHTML =
+            '<div class="m-empty">لا توجد طلبات معلقة حاليًا.</div>';
+          return;
+        }
+
+        const rows = data.map((r) => {
+          const requestedRole =
+            r.requested_role === 'teacher' ? 'teacher' : 'student';
+
+          const roleLabel =
+            requestedRole === 'teacher' ? 'مدرس' : 'طالب';
+
+          const teacherCourses = Array.isArray(r.requested_teaching_courses)
+            ? r.requested_teaching_courses
+                .map((item) => String(item))
+                .join('، ')
+            : String(r.requested_teaching_courses || '');
+
+          const details = requestedRole === 'teacher'
+            ? `
+              <div>
+                <strong>التخصصات والخبرات:</strong>
+                ${escapeHtml(r.teacher_specialties || 'لم يحدد')}
+              </div>
+              <div style="margin-top:6px">
+                <strong>الدورات المراد تدريسها:</strong>
+                ${escapeHtml(teacherCourses || 'لم يحدد')}
+              </div>
+            `
+            : `
+              <div>
+                <strong>الدورة المطلوبة:</strong>
+                ${escapeHtml(r.requested_course || 'لم يحدد')}
+              </div>
+            `;
+
+          return `
+            <tr>
+              <td>${escapeHtml(r.full_name || '—')}</td>
+              <td>${escapeHtml(r.email || '—')}</td>
+              <td>${escapeHtml(r.phone || '—')}</td>
+              <td><strong>${roleLabel}</strong></td>
+              <td>${details}</td>
+              <td>${formatDate(r.created_at)}</td>
+              <td>
+                <div class="m-row-actions">
+                  <button
+                    type="button"
+                    class="m-mini-button"
+                    data-review="approved"
+                    data-user="${escapeHtml(r.user_id)}"
+                    data-role="${requestedRole}">
+                    اعتماد
+                  </button>
+
+                  <button
+                    type="button"
+                    class="m-mini-button reject"
+                    data-review="rejected"
+                    data-user="${escapeHtml(r.user_id)}"
+                    data-role="${requestedRole}">
+                    رفض
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        host.innerHTML = `
+          <table class="m-table">
+            <thead>
+              <tr>
+                <th>الاسم</th>
+                <th>البريد الإلكتروني</th>
+                <th>الهاتف</th>
+                <th>نوع الحساب</th>
+                <th>تفاصيل الطلب</th>
+                <th>تاريخ الطلب</th>
+                <th>الإجراء</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+
+        host.querySelectorAll('[data-review]').forEach((button) => {
+          button.addEventListener('click', async () => {
+            const uid = button.dataset.user;
+            const decision = button.dataset.review;
+            const requestedRole = button.dataset.role;
+
+            const roleLabel =
+              requestedRole === 'teacher' ? 'المدرس' : 'الطالب';
+
+            const actionLabel = decision === 'approved'
+              ? `اعتماد حساب ${roleLabel}`
+              : 'رفض طلب التسجيل';
+
+            if (!window.confirm(`هل تريد ${actionLabel}؟`)) {
+              return;
+            }
+
+            button.disabled = true;
+
+            try {
+              const { error: rpcError } = await client.rpc(
+                'review_membership_request_v2',
+                {
+                  p_target_user: uid,
+                  p_decision: decision
+                }
+              );
+
+              if (rpcError) throw rpcError;
+
+              await loadRequests();
+
+              const successMessage = decision === 'approved'
+                ? `تم اعتماد طلب ${roleLabel} بنجاح.`
+                : 'تم رفض طلب التسجيل.';
+
+              notice('adminNotice', successMessage, 'success');
+
+            } catch (err) {
+              notice(
+                'adminNotice',
+                err?.message || 'تعذر تحديث الطلب. تحقق من دالة المراجعة وصلاحيات قاعدة البيانات.',
+                'error'
+              );
+
+              button.disabled = false;
+            }
+          });
+        });
+
+      } catch (err) {
+        notice(
+          'adminNotice',
+          err?.message || 'تعذر تحميل طلبات التسجيل.',
+          'error'
+        );
+      }
     };
+
     $('refreshRequests')?.addEventListener('click', loadRequests);
     loadRequests();
   }
-
-  function escapeHtml(value) {
+function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   }
   function formatDate(value) {

@@ -15,8 +15,34 @@
       <form id="registerForm" class="m-form"><div class="m-field"><label for="fullName">الاسم بالكامل *</label><input id="fullName" name="fullName" autocomplete="name" required maxlength="120" placeholder="الاسم كما تريد ظهوره في حسابك"></div>
         <div class="m-field"><label for="email">البريد الإلكتروني *</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="name@example.com"></div>
         <div class="m-field"><label for="phone">رقم الهاتف *</label><input id="phone" name="phone" type="tel" autocomplete="tel" required maxlength="30" placeholder="01xxxxxxxxx"></div>
-        <div class="m-field"><label for="course">المسار أو الدورة المطلوبة *</label><select id="course" name="course" required><option value="" selected disabled>اختر المسار المتاح حاليًا</option><option value="الإدارة والأعمال">الإدارة والأعمال — متاح الآن</option><optgroup label="مسارات ستُتاح لاحقًا"><option value="البرمجة" disabled>البرمجة — قريبًا</option><option value="تحليل البيانات" disabled>تحليل البيانات — قريبًا</option><option value="ICDL ومهارات الكمبيوتر" disabled>ICDL ومهارات الكمبيوتر — قريبًا</option><option value="Microsoft Office" disabled>Microsoft Office — قريبًا</option><option value="المحاسبة و Odoo" disabled>المحاسبة و Odoo — قريبًا</option><option value="مسار آخر / لم أحدد بعد" disabled>مسار آخر — قريبًا</option></optgroup>
+<div class="m-field">
+  <label for="requestedRole">نوع الحساب *</label>
+  <select id="requestedRole" name="requestedRole" required>
+    <option value="student" selected>طالب</option>
+    <option value="teacher">مدرس</option>
+  </select>
+</div>
+
+<div id="teacherFields" style="display:none;">
+  <div class="m-field">
+    <label for="teacherSpecialties">التخصصات والخبرات *</label>
+    <textarea id="teacherSpecialties" name="teacherSpecialties"
+      rows="3" maxlength="1000"
+      placeholder="مثال: المحاسبة المالية، تحليل البيانات، البرمجة"></textarea>
+  </div>
+
+  <div class="m-field">
+    <label for="teacherCourses">الدورات التي ترغب في تدريسها</label>
+    <textarea id="teacherCourses" name="teacherCourses"
+      rows="3" maxlength="1000"
+      placeholder="اكتب أسماء الدورات أو المجالات وافصل بينها بفواصل"></textarea>
+    <small>هذه رغبات للتقييم والمراجعة وليست تعيينًا فعليًا لدورات.</small>
+  </div>
+</div>
+        <div id="studentFields">
+<div class="m-field"><label for="course">المسار أو الدورة المطلوبة *</label><select id="course" name="course" required><option value="" selected disabled>اختر المسار المتاح حاليًا</option><option value="الإدارة والأعمال">الإدارة والأعمال — متاح الآن</option><optgroup label="مسارات ستُتاح لاحقًا"><option value="البرمجة" disabled>البرمجة — قريبًا</option><option value="تحليل البيانات" disabled>تحليل البيانات — قريبًا</option><option value="ICDL ومهارات الكمبيوتر" disabled>ICDL ومهارات الكمبيوتر — قريبًا</option><option value="Microsoft Office" disabled>Microsoft Office — قريبًا</option><option value="المحاسبة و Odoo" disabled>المحاسبة و Odoo — قريبًا</option><option value="مسار آخر / لم أحدد بعد" disabled>مسار آخر — قريبًا</option></optgroup>
 </select></div>
+</div>
         <div class="m-field"><label for="password">كلمة المرور *</label><input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required placeholder="8 أحرف على الأقل"></div>
         <div class="m-field"><label for="confirmPassword">تأكيد كلمة المرور *</label><input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="أعد كتابة كلمة المرور"></div>
         <button class="m-button" type="submit">إرسال طلب الاشتراك ←</button><p class="m-muted" style="font-size:11px;margin:0">إرسال الطلب لا يعني تفعيل الاشتراك تلقائيًا. ستظهر حالة الطلب داخل حسابك.</p>
