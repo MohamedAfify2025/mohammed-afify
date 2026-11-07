@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إدارة الاشتراكات | Mohammed Afify</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<style>
+:root {
+  --navy:#111d38;
+  --muted:#65748c;
+  --line:#e5eaf2;
+  --bg:#f4f6fb;
+  --teal:#19b7a2;
+  --purple:#7161da;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--navy);
+  font-family:inherit;line-height:1.7
+}
+button,input,select,textarea{font:inherit}
+a{color:inherit;text-decoration:none}
+.topbar{
+  background:#fff;border-bottom:1px solid var(--line);
+  padding:16px 4%;display:flex;align-items:center;
+  justify-content:space-between;gap:15px;flex-wrap:wrap
+}
+.brand{font-size:18px;font-weight:900}
+.nav{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+.nav a{font-size:13px;color:#52617a;font-weight:700}
+.container{max-width:1440px;margin:30px auto;padding:0 22px 60px}
+.hero{
+  background:linear-gradient(120deg,#111d38,#253d62);
+  color:#fff;border-radius:22px;padding:28px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;margin-bottom:22px
+}
+.hero h1{margin:4px 0;font-size:clamp(25px,3vw,36px)}
+.hero p{margin:5px 0;color:#c9d5e7}
+.eyebrow{font-size:11px;letter-spacing:2px;color:#64dccb;font-weight:900}
+.btn{
+  border:0;border-radius:10px;padding:10px 16px;
+  background:var(--navy);color:#fff;cursor:pointer;
+  font-weight:800;font-size:13px
+}
+.btn:hover{filter:brightness(1.12)}
+.btn.teal{background:var(--teal);color:#062b2a}
+.btn.light{background:#edf1f8;color:#263653}
+.btn.red{background:#a83c4c}
+.btn.small{padding:6px 10px;font-size:11px}
+button:disabled{opacity:.55;cursor:not-allowed}
+#liveMessage{
+  display:none;padding:13px 16px;border-radius:12px;
+  margin:16px 0;background:#e9f7f2;color:#126345
+}
+#liveMessage.error{background:#fff0f0;color:#9d2734}
+.metrics{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;margin-bottom:22px
+}
+.metric,.panel{
+  background:#fff;border:1px solid var(--line);
+  border-radius:18px;padding:20px;
+  box-shadow:0 7px 22px rgba(17,29,56,.035)
+}
+.metric span{font-size:12px;color:var(--muted)}
+.metric strong{display:block;font-size:27px;margin-top:6px}
+.panel{margin-bottom:20px}
+.panel-head{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px
+}
+.panel h2{font-size:19px;margin:0}
+.panel p.help{font-size:12px;color:var(--muted);margin:5px 0 14px}
+.form-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px
+}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:12px;font-weight:800;color:#52617a}
+.field input,.field select,.field textarea{
+  width:100%;border:1px solid #dce3ed;border-radius:10px;
+  background:#fff;color:var(--navy);padding:10px 12px;
+  min-height:43px;outline:none
+}
+.field textarea{min-height:75px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--purple);box-shadow:0 0 0 3px #7161da1c
+}
+.checkline{
+  display:flex;align-items:center;gap:8px;
+  color:#52617a;font-size:12px;font-weight:700
+}
+.checkline input{width:17px;height:17px;accent-color:var(--teal)}
+.course-choices{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:9px;margin-top:10px
+}
+.course-choice{
+  display:flex;align-items:center;gap:9px;
+  border:1px solid var(--line);padding:9px 11px;
+  border-radius:10px;background:#fbfcff;font-size:12px
+}
+.capabilities{
+  display:flex;gap:16px;flex-wrap:wrap;
+  padding:12px;background:#f7f8fc;border-radius:12px;margin-top:12px
+}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:780px}
+th,td{
+  border-bottom:1px solid var(--line);
+  padding:11px 10px;text-align:right;font-size:12px;vertical-align:middle
+}
+th{background:#f8f9fc;color:#52617a;font-weight:900}
+td{color:#293954}
+.muted{color:var(--muted)}
+.status{
+  display:inline-block;padding:4px 9px;border-radius:30px;
+  background:#edf1f8;color:#465673;font-size:11px;font-weight:800
+}
+.status.active,.status.paid{background:#e5f7ef;color:#11704b}
+.status.pending,.status.partial{background:#fff5dc;color:#916300}
+.status.cancelled,.status.expired,.status.suspended,.status.failed{
+  background:#ffebed;color:#9f3440
+}
+.action-cell{display:flex;gap:6px;flex-wrap:wrap}
+.empty{padding:22px;text-align:center;color:#7b8799;font-size:13px}
+.notice{font-size:12px;color:#68768c;margin-top:12px;line-height:1.9}
+.section-title{display:flex;align-items:center;gap:9px}
+.section-title:before{
+  content:"";width:5px;height:22px;border-radius:5px;background:var(--teal)
+}
+.hidden{display:none!important}
+.footer{
+  text-align:center;color:#7b8799;font-size:11px;padding:20px
+}
+@media(max-width:850px){
+  .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .container{padding:0 12px 40px}
+  .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .metric{padding:14px}.metric strong{font-size:22px}
+  .form-grid{grid-template-columns:1fr}
+  .hero{padding:22px}
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="brand">Mohammed Afify <span style="color:#19b7a2">.MA</span></div>
+  <nav class="nav">
+    <a href="../index.html">الرئيسية</a>
+    <a href="admin-requests.html">طلبات التسجيل</a>
+    <a href="student-dashboard.html">لوحة الطالب</a>
+    <a href="#" id="logoutBtn">تسجيل الخروج</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">MEMBERSHIP CONTROL CENTER</div>
+    <h1>إدارة العضويات والاشتراكات</h1>
+    <p>الباقات، الطلاب، الاشتراكات، المدفوعات والمدرسون.</p>
+  </div>
+  <button class="btn teal" id="refreshBtn">تحديث البيانات ↻</button>
+</section>
+
+<div id="liveMessage"></div>
+
+<section class="metrics">
+  <div class="metric"><span>الطلاب المعتمدون</span><strong id="studentCount">—</strong></div>
+  <div class="metric"><span>الباقات النشطة</span><strong id="planCount">—</strong></div>
+  <div class="metric"><span>الاشتراكات النشطة</span><strong id="activeCount">—</strong></div>
+  <div class="metric"><span>المدرسون</span><strong id="teacherCount">—</strong></div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="section-title">إنشاء باقة اشتراك</h2>
+  </div>
+  <p class="help">حدد الدورات التي تشملها الباقة وصلاحيات الوصول لكل الدورات المختارة.</p>
+
+  <form id="planForm">
+    <div class="form-grid">
+      <div class="field">
+        <label>اسم الباقة</label>
+        <input name="name" required placeholder="مثال: مسار تحليل البيانات">
+      </div>
+      <div class="field">
+        <label>كود الباقة (بالإنجليزية)</label>
+        <input name="code" required pattern="[A-Za-z0-9_-]+" placeholder="data-analysis-path">
+      </div>
+      <div class="field">
+        <label>نوع الباقة</label>
+        <select name="plan_type" required>
+          <option value="single_course">دورة واحدة</option>
+          <option value="learning_path">مسار تعليمي</option>
+          <option value="multi_path">عدة مسارات</option>
+          <option value="all_access">اشتراك شامل</option>
+          <option value="trial">تجربة مجانية</option>
+          <option value="custom">مخصصة</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>السعر</label>
+        <input name="price" type="number" min="0" step="0.01" value="0" required>
+      </div>
+      <div class="field">
+        <label>العملة</label>
+        <select name="currency">
+          <option value="EGP">EGP - جنيه مصري</option>
+          <option value="SAR">SAR - ريال سعودي</option>
+          <option value="USD">USD - دولار أمريكي</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>مدة الاشتراك بالأيام</label>
+        <input name="duration_days" type="number" min="1" placeholder="اتركه فارغًا لاشتراك مفتوح المدة">
+      </div>
+      <div class="field" style="grid-column:1/-1">
+        <label>وصف الباقة</label>
+        <textarea name="description" placeholder="وصف مختصر لما يحصل عليه الطالب"></textarea>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;margin:22px 0 8px">الدورات المشمولة</h3>
+    <div id="courseChoices" class="course-choices">
+      <div class="empty">جارٍ تحميل الدورات...</div>
+    </div>
+
+    <div class="capabilities">
+      <label class="checkline"><input type="checkbox" id="capVideo" checked> مشاهدة الفيديو</label>
+      <label class="checkline"><input type="checkbox" id="capDownload"> تنزيل الملفات</label>
+      <label class="checkline"><input type="checkbox" id="capAssessment"> الاختبارات</label>
+      <label class="checkline"><input type="checkbox" id="capCertificate"> الشهادة</label>
+      <label class="checkline"><input type="checkbox" id="capProgress" checked> تتبع التقدم</label>
+      <label class="checkline"><input type="checkbox" name="is_public" checked> عرض الباقة للزوار</label>
+    </div>
+
+    <div class="actions">
+      <button class="btn teal" type="submit">إنشاء الباقة</button>
+    </div>
+  </form>
+  <div class="notice">إنشاء الباقة لا ينشئ اشتراكًا للطالب تلقائيًا. يتم إصدار الاشتراك من القسم التالي.</div>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">إصدار اشتراك لطالب</h2></div>
+  <form id="subscriptionForm" class="form-grid">
+    <div class="field">
+      <label>الطالب</label>
+      <select name="student_id" id="studentSelect" required></select>
+    </div>
+    <div class="field">
+      <label>الباقة</label>
+      <select name="plan_id" id="planSelect" required></select>
+    </div>
+    <div class="field">
+      <label>ملاحظة إدارية (اختيارية)</label>
+      <input name="admin_note" placeholder="تفاصيل الاتفاق أو المراجعة">
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">إنشاء اشتراك Pending</button>
+    </div>
+  </form>
+  <p class="notice">الاشتراك الجديد يبدأ بحالة Pending وغير مدفوع. يجب تسجيل الدفعة أو اعتماد الإعفاء قبل التفعيل.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">تسجيل دفعة</h2></div>
+  <form id="paymentForm" class="form-grid">
+    <div class="field">
+      <label>الاشتراك</label>
+      <select id="paymentSubscription" name="subscription_id" required></select>
+    </div>
+    <div class="field">
+      <label>مبلغ الدفعة</label>
+      <input name="amount" type="number" min="0.01" step="0.01" required>
+    </div>
+    <div class="field">
+      <label>طريقة الدفع</label>
+      <select name="payment_method">
+        <option value="cash">نقدي</option>
+        <option value="bank_transfer">تحويل بنكي</option>
+        <option value="instapay">InstaPay</option>
+        <option value="wallet">محفظة إلكترونية</option>
+        <option value="manual">يدوي</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>رقم مرجعي / إيصال</label>
+      <input name="payment_reference">
+    </div>
+    <div class="field">
+      <label>ملاحظة الدفعة</label>
+      <input name="note">
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">تسجيل الدفعة</button>
+    </div>
+  </form>
+  <p class="notice">هذا التسجيل محاسبي داخل النظام فقط، ولا يقوم بتحصيل أموال عبر بوابة دفع إلكترونية.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">تفعيل الاشتراك</h2></div>
+  <form id="activationForm" class="form-grid">
+    <div class="field">
+      <label>الاشتراك</label>
+      <select id="activationSubscription" name="subscription_id" required></select>
+    </div>
+    <div class="field">
+      <label>بداية الاشتراك</label>
+      <input id="activationStart" name="starts_at" type="datetime-local" required>
+    </div>
+    <div class="field">
+      <label>نهاية الاشتراك (اختياري)</label>
+      <input name="expires_at" type="datetime-local">
+    </div>
+    <div class="field" style="grid-column:1/-1">
+      <label class="checkline">
+        <input name="waive_fee" type="checkbox">
+        إعفاء الطالب من الرسوم (يحوّل حالة الدفع إلى waived)
+      </label>
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">تفعيل الاشتراك</button>
+      <button class="btn light" type="button" id="expireBtn">إنهاء الاشتراكات التي انتهت مدتها</button>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="section-title">الباقات الحالية</h2>
+    <span class="muted" id="plansLabel"></span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>الباقة</th><th>النوع</th><th>السعر</th><th>المدة</th><th>الدورات</th><th>الحالة</th><th>إجراء</th>
+      </tr></thead>
+      <tbody id="plansBody"><tr><td colspan="7" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="section-title">اشتراكات الطلاب</h2>
+    <span class="muted" id="subscriptionsLabel"></span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>الطالب</th><th>الباقة</th><th>المبلغ</th><th>الدفع</th><th>الحالة</th><th>البداية</th><th>الانتهاء</th><th>إجراءات</th>
+      </tr></thead>
+      <tbody id="subscriptionsBody"><tr><td colspan="8" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">سجل المدفوعات</h2></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>الطالب</th><th>المبلغ</th><th>الطريقة</th><th>المرجع</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th>
+      </tr></thead>
+      <tbody id="paymentsBody"><tr><td colspan="7" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+  <p class="notice">زر الاسترداد يغيّر سجل الدفع داخل قاعدة البيانات فقط. لا ينفّذ تحويلًا ماليًا عكسيًا لدى البنك أو مزود الدفع.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">إدارة المدرسين</h2></div>
+
+  <form id="teacherConvertForm" class="form-grid">
+    <div class="field">
+      <label>تحويل طالب معتمد إلى مدرس</label>
+      <select id="teacherCandidate" name="student_id" required></select>
+    </div>
+    <div class="field" style="align-self:end">
+      <button class="btn teal" type="submit">تعيين كمدرس</button>
+    </div>
+  </form>
+
+  <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+
+  <form id="teacherAssignForm" class="form-grid">
+    <div class="field">
+      <label>المدرس</label>
+      <select id="teacherSelect" name="teacher_id" required></select>
+    </div>
+    <div class="field">
+      <label>الدورة</label>
+      <select id="teacherCourse" name="course_slug" required></select>
+    </div>
+    <div class="field">
+      <label>حالة الإسناد</label>
+      <select name="is_active"><option value="true">نشط</option><option value="false">غير نشط</option></select>
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">حفظ إسناد الدورة</button>
+    </div>
+  </form>
+
+  <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+
+  <form id="teacherPermissionForm" class="form-grid">
+    <div class="field">
+      <label>المدرس</label>
+      <select id="permissionTeacher" name="teacher_id" required></select>
+    </div>
+    <div class="field">
+      <label>الصلاحية</label>
+      <select name="permission_key">
+        <option value="students.view">مشاهدة الطلاب</option>
+        <option value="students.view_progress">مشاهدة تقدم الطلاب</option>
+        <option value="students.view_assessments">مشاهدة نتائج الاختبارات</option>
+        <option value="students.view_contact">مشاهدة بيانات التواصل</option>
+        <option value="lessons.manage">إدارة الدروس</option>
+        <option value="assessments.manage">إدارة الاختبارات</option>
+        <option value="assignments.grade">تصحيح التكليفات</option>
+        <option value="students.message">مراسلة الطلاب</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>الحالة</label>
+      <select name="enabled"><option value="true">مسموح</option><option value="false">ممنوع</option></select>
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">حفظ الصلاحية</button>
+    </div>
+  </form>
+
+  <h3 style="font-size:14px;margin-top:25px">إسنادات المدرسين الحالية</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المدرس</th><th>الدورة</th><th>الحالة</th><th>تاريخ الإسناد</th></tr></thead>
+      <tbody id="assignmentsBody"><tr><td colspan="4" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:14px;margin-top:25px">صلاحيات المدرسين</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المدرس</th><th>الصلاحية</th><th>الحالة</th><th>تاريخ التحديث</th></tr></thead>
+      <tbody id="permissionsBody"><tr><td colspan="4" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">Mohammed Afify | Membership Management</footer>
+
+<script>
+(() => {
+'use strict';
+
+const $ = id => document.getElementById(id);
+const state = {
+  client:null, user:null, profiles:[], courses:[],
+  plans:[], planCourses:[], subscriptions:[],
+  payments:[], assignments:[], permissions:[]
+};
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[c]);
+}
+
+function msg(text, error=false) {
+  const el = $('liveMessage');
+  el.textContent = text;
+  el.classList.toggle('error', error);
+  el.style.display = 'block';
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function clearMsg() {
+  $('liveMessage').style.display = 'none';
+}
+
+function money(amount,currency='EGP') {
+  try {
+    return new Intl.NumberFormat('ar-EG',{
+      style:'currency',currency
+    }).format(Number(amount || 0));
+  } catch (_) {
+    return Number(amount || 0).toFixed(2) + ' ' + currency;
+  }
+}
+
+function date(value) {
+  if(!value) return '—';
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? '—' :
+    d.toLocaleDateString('ar-EG');
+}
+
+function dateTime(value) {
+  if(!value) return '—';
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? '—' :
+    d.toLocaleString('ar-EG');
+}
+
+function statusLabel(value) {
+  const map = {
+    active:'نشط',pending:'قيد الانتظار',expired:'منتهي',
+    cancelled:'ملغي',suspended:'معلّق',paid:'مدفوع',
+    partial:'مدفوع جزئيًا',unpaid:'غير مدفوع',
+    waived:'معفى',refunded:'مسترد',failed:'فشل'
+  };
+  return map[value] || value || '—';
+}
+
+function statusHtml(value) {
+  return `<span class="status ${esc(value)}">${esc(statusLabel(value))}</span>`;
+}
+
+function person(userId) {
+  return state.profiles.find(p => p.user_id === userId);
+}
+
+function plan(planId) {
+  return state.plans.find(p => p.id === planId);
+}
+
+function courseTitle(slug) {
+  const c = state.courses.find(x => x.course_slug === slug);
+  return c ? c.title : slug;
+}
+
+function fillSelect(id, rows, valueKey, labelFn, placeholder) {
+  const el = $(id);
+  const old = el.value;
+  el.innerHTML = `<option value="">${esc(placeholder || 'اختر')}</option>` +
+    rows.map(row =>
+      `<option value="${esc(row[valueKey])}">${esc(labelFn(row))}</option>`
+    ).join('');
+  if(rows.some(row => row[valueKey] === old)) el.value = old;
+}
+
+function localDateTimeValue() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0,16);
+}
+
+async function boot() {
+  try {
+    const cfg = window.MEMBERSHIP_CONFIG || {};
+
+    if(!window.supabase?.createClient ||
+       !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(cfg.supabaseUrl || '') ||
+       !cfg.supabaseAnonKey || /YOUR_|REPLACE_ME/i.test(cfg.supabaseAnonKey)) {
+      throw new Error('إعداد Supabase غير مكتمل.');
+    }
+
+    state.client = window.supabase.createClient(
+      cfg.supabaseUrl,
+      cfg.supabaseAnonKey,
+      {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}
+    );
+
+    const {data:sessionData,error:sessionError} =
+      await state.client.auth.getSession();
+
+    if(sessionError) throw sessionError;
+
+    const session = sessionData?.session;
+    if(!session) {
+      location.href = 'login.html?next=' +
+        encodeURIComponent('admin-subscriptions.html');
+      return;
+    }
+
+    const {data:isAdmin,error:adminError} =
+      await state.client.rpc('is_platform_admin');
+
+    if(adminError) throw adminError;
+    if(isAdmin !== true) {
+      throw new Error('هذه الصفحة مخصصة لمدير المنصة المعتمد فقط.');
+    }
+
+    state.user = session.user;
+    $('activationStart').value = localDateTimeValue();
+
+    await loadAll();
+    msg('تم التحقق من صلاحية المدير وتحميل بيانات العضويات.',false);
+
+  } catch(error) {
+    msg(error.message || 'تعذّر فتح لوحة الإدارة.',true);
+  }
+}
+
+async function loadAll() {
+  const db = state.client;
+
+  const queries = await Promise.all([
+    db.from('profiles')
+      .select('user_id,full_name,email,phone,role,status,account_state')
+      .order('full_name'),
+    db.from('course_catalog')
+      .select('course_slug,title,is_active')
+      .eq('is_active',true)
+      .order('title'),
+    db.from('subscription_plans')
+      .select('id,code,name,description,plan_type,price,currency,duration_days,is_active,is_public,created_at')
+      .order('created_at',{ascending:false}),
+    db.from('subscription_plan_courses')
+      .select('plan_id,course_slug,can_view_course_page,can_watch_video,can_download,can_take_assessments,can_receive_certificate,can_track_progress'),
+    db.from('student_subscriptions')
+      .select('id,user_id,plan_id,agreed_amount,currency,status,payment_state,starts_at,expires_at,created_at')
+      .order('created_at',{ascending:false})
+      .limit(300),
+    db.from('subscription_payments')
+      .select('id,subscription_id,student_user_id,amount,currency,payment_method,payment_reference,status,paid_at,created_at,note')
+      .order('created_at',{ascending:false})
+      .limit(300),
+    db.from('teacher_course_assignments')
+      .select('id,teacher_user_id,course_slug,is_active,assigned_at')
+      .order('assigned_at',{ascending:false}),
+    db.from('teacher_permissions')
+      .select('teacher_user_id,permission_key,enabled,updated_at')
+      .order('updated_at',{ascending:false})
+  ]);
+
+  const names = [
+    'الملفات الشخصية','فهرس الدورات','الباقات','دورات الباقات',
+    'الاشتراكات','المدفوعات','إسنادات المدرسين','صلاحيات المدرسين'
+  ];
+
+  for(let i=0;i<queries.length;i++) {
+    if(queries[i].error) {
+      throw new Error(names[i] + ': ' + queries[i].error.message);
+    }
+  }
+
+  [
+    state.profiles,state.courses,state.plans,state.planCourses,
+    state.subscriptions,state.payments,state.assignments,state.permissions
+  ] = queries.map(r => r.data || []);
+
+  renderAll();
+}
+
+function renderAll() {
+  const students = state.profiles.filter(p =>
+    p.role === 'student' && p.status === 'approved' &&
+    p.account_state === 'active'
+  );
+  const teachers = state.profiles.filter(p =>
+    p.role === 'teacher' && p.status === 'approved' &&
+    p.account_state === 'active'
+  );
+  const activePlans = state.plans.filter(p => p.is_active);
+  const activeSubs = state.subscriptions.filter(s => s.status === 'active');
+
+  $('studentCount').textContent = students.length;
+  $('planCount').textContent = activePlans.length;
+  $('activeCount').textContent = activeSubs.length;
+  $('teacherCount').textContent = teachers.length;
+
+  fillSelect('studentSelect',students,'user_id',
+    p => `${p.full_name || 'طالب'} — ${p.email || ''}`,
+    'اختر الطالب المعتمد');
+
+  fillSelect('planSelect',activePlans,'id',
+    p => `${p.name} — ${money(p.price,p.currency)}`,
+    'اختر الباقة');
+
+  const usableSubs = state.subscriptions.filter(s =>
+    ['pending','active','suspended'].includes(s.status)
+  );
+
+  const subLabel = s => {
+    const p = person(s.user_id);
+    const pl = plan(s.plan_id);
+    return `${p?.full_name || p?.email || 'طالب'} — ${pl?.name || 'باقة'} — ${statusLabel(s.status)}`;
+  };
+
+  fillSelect('paymentSubscription',usableSubs,'id',subLabel,'اختر الاشتراك');
+  fillSelect('activationSubscription',usableSubs,'id',subLabel,'اختر الاشتراك');
+
+  const teacherCandidates = students.filter(p =>
+    !state.subscriptions.some(s =>
+      s.user_id === p.user_id && s.status === 'active'
+    )
+  );
+
+  fillSelect('teacherCandidate',teacherCandidates,'user_id',
+    p => `${p.full_name || 'طالب'} — ${p.email || ''}`,
+    'لا يوجد حساب طالب غير مرتبط باشتراك نشط');
+
+  fillSelect('teacherSelect',teachers,'user_id',
+    p => `${p.full_name || 'مدرس'} — ${p.email || ''}`,
+    'اختر المدرس');
+
+  fillSelect('permissionTeacher',teachers,'user_id',
+    p => `${p.full_name || 'مدرس'} — ${p.email || ''}`,
+    'اختر المدرس');
+
+  fillSelect('teacherCourse',state.courses,'course_slug',
+    c => c.title,
+    'اختر الدورة');
+
+  renderCourseChoices();
+  renderPlans();
+  renderSubscriptions();
+  renderPayments();
+  renderAssignments();
+  renderPermissions();
+}
+
+function renderCourseChoices() {
+  const host = $('courseChoices');
+
+  if(!state.courses.length) {
+    host.innerHTML = '<div class="empty">لا توجد دورات نشطة في فهرس الدورات.</div>';
+    return;
+  }
+
+  host.innerHTML = state.courses.map(c => `
+    <label class="course-choice">
+      <input type="checkbox" name="course_slug" value="${esc(c.course_slug)}">
+      <span>${esc(c.title)} <small class="muted">(${esc(c.course_slug)})</small></span>
+    </label>
+  `).join('');
+}
+
+function renderPlans() {
+  $('plansLabel').textContent = state.plans.length + ' باقة';
+
+  $('plansBody').innerHTML = state.plans.length
+    ? state.plans.map(p => {
+      const mappings = state.planCourses.filter(x => x.plan_id === p.id);
+      const names = mappings.map(x => courseTitle(x.course_slug)).join('، ');
+      return `<tr>
+        <td><strong>${esc(p.name)}</strong><br><span class="muted">${esc(p.code)}</span></td>
+        <td>${esc(p.plan_type)}</td>
+        <td>${esc(money(p.price,p.currency))}</td>
+        <td>${p.duration_days ? esc(p.duration_days)+' يوم' : 'مفتوح المدة'}</td>
+        <td>${esc(names || 'لم تحدد')}</td>
+        <td>${statusHtml(p.is_active ? 'active' : 'cancelled')}</td>
+        <td><button class="btn small light" data-plan-toggle="${esc(p.id)}">${p.is_active ? 'إيقاف' : 'تفعيل'}</button></td>
+      </tr>`;
+    }).join('')
+    : '<tr><td colspan="7" class="empty">لا توجد باقات.</td></tr>';
+}
+
+function renderSubscriptions() {
+  $('subscriptionsLabel').textContent = state.subscriptions.length + ' اشتراك';
+
+  $('subscriptionsBody').innerHTML = state.subscriptions.length
+    ? state.subscriptions.map(s => {
+      const p = person(s.user_id);
+      const pl = plan(s.plan_id);
+      let actions = '';
+
+      if(s.status === 'active') {
+        actions += `<button class="btn small light" data-sub-action="suspended" data-id="${esc(s.id)}">تعليق</button>`;
+      }
+
+      if(['pending','active','suspended'].includes(s.status)) {
+        actions += `<button class="btn small red" data-sub-action="cancelled" data-id="${esc(s.id)}">إلغاء</button>`;
+      }
+
+      return `<tr>
+        <td>${esc(p?.full_name || '—')}<br><span class="muted">${esc(p?.email || '')}</span></td>
+        <td>${esc(pl?.name || '—')}</td>
+        <td>${esc(money(s.agreed_amount,s.currency))}</td>
+        <td>${statusHtml(s.payment_state)}</td>
+        <td>${statusHtml(s.status)}</td>
+        <td>${esc(date(s.starts_at))}</td>
+        <td>${esc(date(s.expires_at))}</td>
+        <td><div class="action-cell">${actions || '—'}</div></td>
+      </tr>`;
+    }).join('')
+    : '<tr><td colspan="8" class="empty">لا توجد اشتراكات بعد.</td></tr>';
+}
+
+function renderPayments() {
+  $('paymentsBody').innerHTML = state.payments.length
+    ? state.payments.map(p => {
+      const student = person(p.student_user_id);
+      const refundButton = p.status === 'paid'
+        ? `<button class="btn small red" data-refund="${esc(p.id)}">تسجيل استرداد</button>`
+        : '—';
+
+      return `<tr>
+        <td>${esc(student?.full_name || student?.email || '—')}</td>
+        <td>${esc(money(p.amount,p.currency))}</td>
+        <td>${esc(p.payment_method)}</td>
+        <td>${esc(p.payment_reference || '—')}</td>
+        <td>${statusHtml(p.status)}</td>
+        <td>${esc(dateTime(p.paid_at || p.created_at))}</td>
+        <td>${refundButton}</td>
+      </tr>`;
+    }).join('')
+    : '<tr><td colspan="7" class="empty">لا توجد مدفوعات مسجلة.</td></tr>';
+}
+
+function renderAssignments() {
+  $('assignmentsBody').innerHTML = state.assignments.length
+    ? state.assignments.map(a => {
+      const t = person(a.teacher_user_id);
+      return `<tr>
+        <td>${esc(t?.full_name || t?.email || '—')}</td>
+        <td>${esc(courseTitle(a.course_slug))}</td>
+        <td>${statusHtml(a.is_active ? 'active' : 'cancelled')}</td>
+        <td>${esc(dateTime(a.assigned_at))}</td>
+      </tr>`;
+    }).join('')
+    : '<tr><td colspan="4" class="empty">لا توجد إسنادات.</td></tr>';
+}
+
+function renderPermissions() {
+  const labels = {
+    'students.view':'مشاهدة الطلاب',
+    'students.view_progress':'مشاهدة التقدم',
+    'students.view_assessments':'مشاهدة نتائج الاختبارات',
+    'students.view_contact':'بيانات التواصل',
+    'lessons.manage':'إدارة الدروس',
+    'assessments.manage':'إدارة الاختبارات',
+    'assignments.grade':'تصحيح التكليفات',
+    'students.message':'مراسلة الطلاب'
+  };
+
+  $('permissionsBody').innerHTML = state.permissions.length
+    ? state.permissions.map(p => {
+      const t = person(p.teacher_user_id);
+      return `<tr>
+        <td>${esc(t?.full_name || t?.email || '—')}</td>
+        <td>${esc(labels[p.permission_key] || p.permission_key)}</td>
+        <td>${statusHtml(p.enabled ? 'active' : 'cancelled')}</td>
+        <td>${esc(dateTime(p.updated_at))}</td>
+      </tr>`;
+    }).join('')
+    : '<tr><td colspan="4" class="empty">لا توجد صلاحيات إضافية مسجلة.</td></tr>';
+}
+
+async function rpc(name,args) {
+  const {data,error} = await state.client.rpc(name,args);
+  if(error) throw error;
+  return data;
+}
+
+$('planForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  clearMsg();
+
+  const form = event.currentTarget;
+  const fd = new FormData(form);
+  const selected = [...form.querySelectorAll('input[name="course_slug"]:checked')]
+    .map(x => x.value);
+
+  if(!selected.length) {
+    msg('اختر دورة واحدة على الأقل في الباقة.',true);
+    return;
+  }
+
+  const price = Number(fd.get('price'));
+  const durationRaw = String(fd.get('duration_days') || '').trim();
+
+  if(!Number.isFinite(price) || price < 0) {
+    msg('قيمة السعر غير صحيحة.',true);
+    return;
+  }
+
+  if(durationRaw && (!Number.isInteger(Number(durationRaw)) || Number(durationRaw) <= 0)) {
+    msg('مدة الاشتراك يجب أن تكون عدد أيام صحيحًا أكبر من صفر.',true);
+    return;
+  }
+
+  const button = form.querySelector('button[type="submit"]');
+  button.disabled = true;
+
+  try {
+    const payload = {
+      code:String(fd.get('code')).trim(),
+      name:String(fd.get('name')).trim(),
+      description:String(fd.get('description') || ''),
+      plan_type:fd.get('plan_type'),
+      price,
+      currency:fd.get('currency'),
+      duration_days:durationRaw ? Number(durationRaw) : null,
+      is_active:true,
+      is_public:fd.get('is_public') === 'on',
+      created_by:state.user.id
+    };
+
+    const {data:created,error:createError} = await state.client
+      .from('subscription_plans')
+      .insert(payload)
+      .select('id')
+      .single();
+
+    if(createError) throw createError;
+
+    const rows = selected.map(slug => ({
+      plan_id:created.id,
+      course_slug:slug,
+      can_view_course_page:true,
+      can_watch_video:$('capVideo').checked,
+      can_download:$('capDownload').checked,
+      can_take_assessments:$('capAssessment').checked,
+      can_receive_certificate:$('capCertificate').checked,
+      can_track_progress:$('capProgress').checked
+    }));
+
+    const {error:mappingError} = await state.client
+      .from('subscription_plan_courses').insert(rows);
+
+    if(mappingError) {
+      await state.client.from('subscription_plans').delete().eq('id',created.id);
+      throw mappingError;
+    }
+
+    form.reset();
+    $('capVideo').checked = true;
+    $('capProgress').checked = true;
+    msg('تم إنشاء الباقة وربط الدورات والصلاحيات بنجاح.');
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر إنشاء الباقة: ' + error.message,true);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$('subscriptionForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  clearMsg();
+
+  const fd = new FormData(event.currentTarget);
+  const button = event.currentTarget.querySelector('button[type="submit"]');
+  button.disabled = true;
+
+  try {
+    const id = await rpc('create_student_subscription_v2',{
+      p_student_user_id:fd.get('student_id'),
+      p_plan_id:fd.get('plan_id'),
+      p_admin_note:fd.get('admin_note') || ''
+    });
+
+    msg('تم إنشاء الاشتراك بحالة Pending. رقم الاشتراك: ' + id);
+    event.currentTarget.reset();
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر إنشاء الاشتراك: ' + error.message,true);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$('paymentForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  clearMsg();
+
+  const fd = new FormData(event.currentTarget);
+  const amount = Number(fd.get('amount'));
+  if(!Number.isFinite(amount) || amount <= 0) {
+    msg('أدخل مبلغ دفعة صحيحًا.',true);
+    return;
+  }
+
+  const button = event.currentTarget.querySelector('button[type="submit"]');
+  button.disabled = true;
+
+  try {
+    await rpc('record_subscription_payment_v2',{
+      p_subscription_id:fd.get('subscription_id'),
+      p_amount:amount,
+      p_payment_method:fd.get('payment_method'),
+      p_payment_reference:fd.get('payment_reference') || '',
+      p_note:fd.get('note') || ''
+    });
+
+    event.currentTarget.reset();
+    msg('تم تسجيل الدفعة وتحديث حالة السداد.');
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر تسجيل الدفعة: ' + error.message,true);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$('activationForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  clearMsg();
+
+  const fd = new FormData(event.currentTarget);
+  const starts = fd.get('starts_at');
+  const expires = fd.get('expires_at');
+
+  if(!starts) {
+    msg('حدد تاريخ بداية الاشتراك.',true);
+    return;
+  }
+
+  const startIso = new Date(starts).toISOString();
+  const expiryIso = expires ? new Date(expires).toISOString() : null;
+
+  if(expiryIso && new Date(expiryIso) <= new Date(startIso)) {
+    msg('تاريخ الانتهاء يجب أن يكون بعد تاريخ البداية.',true);
+    return;
+  }
+
+  const waive = fd.get('waive_fee') === 'on';
+
+  if(waive && !confirm('هل تؤكد إعفاء الطالب من الرسوم؟')) return;
+
+  const button = event.currentTarget.querySelector('button[type="submit"]');
+  button.disabled = true;
+
+  try {
+    await rpc('activate_student_subscription_v2',{
+      p_subscription_id:fd.get('subscription_id'),
+      p_starts_at:startIso,
+      p_expires_at:expiryIso,
+      p_waive_fee:waive
+    });
+
+    msg('تم تفعيل الاشتراك بنجاح.');
+    event.currentTarget.reset();
+    $('activationStart').value = localDateTimeValue();
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر تفعيل الاشتراك: ' + error.message,true);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$('teacherConvertForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  clearMsg();
+
+  const form = event.currentTarget;
+  const fd = new FormData(form);
+
+  if(!confirm('سيتم تحويل حساب الطالب إلى مدرس مع اعتماد الحساب. هل تتابع؟')) return;
+
+  try {
+    await rpc('set_profile_role_v2',{
+      p_target_user:fd.get('student_id'),
+      p_new_role:'teacher'
+    });
+  } catch(error) {
+    msg('تعذّر تحويل الحساب: ' + error.message,true);
+    return;
+  }
+
+  form.reset();
+
+  try {
+    await loadAll();
+    msg('تم تحويل الحساب إلى مدرس وتحديث بيانات اللوحة.');
+  } catch(error) {
+    msg('تم التحويل، لكن تعذّر تحديث عرض البيانات: ' + error.message,true);
+  }
+});
+
+$('teacherAssignForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  clearMsg();
+
+  const fd = new FormData(event.currentTarget);
+
+  try {
+    await rpc('assign_teacher_course_v2',{
+      p_teacher_user_id:fd.get('teacher_id'),
+      p_course_slug:fd.get('course_slug'),
+      p_is_active:fd.get('is_active') === 'true'
+    });
+
+    msg('تم حفظ إسناد الدورة للمدرس.');
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر حفظ الإسناد: ' + error.message,true);
+  }
+});
+
+$('teacherPermissionForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  clearMsg();
+
+  const fd = new FormData(event.currentTarget);
+
+  try {
+    await rpc('set_teacher_permission_v2',{
+      p_teacher_user_id:fd.get('teacher_id'),
+      p_permission_key:fd.get('permission_key'),
+      p_enabled:fd.get('enabled') === 'true'
+    });
+
+    msg('تم تحديث صلاحية المدرس.');
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر تحديث الصلاحية: ' + error.message,true);
+  }
+});
+
+$('plansBody').addEventListener('click',async event => {
+  const button = event.target.closest('[data-plan-toggle]');
+  if(!button) return;
+
+  const p = plan(button.dataset.planToggle);
+  if(!p) return;
+
+  const next = !p.is_active;
+  if(!confirm(next ? 'تفعيل هذه الباقة؟' : 'إيقاف هذه الباقة؟')) return;
+
+  try {
+    const {error} = await state.client
+      .from('subscription_plans')
+      .update({is_active:next})
+      .eq('id',p.id);
+
+    if(error) throw error;
+    msg('تم تحديث حالة الباقة.');
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر تحديث الباقة: ' + error.message,true);
+  }
+});
+
+$('subscriptionsBody').addEventListener('click',async event => {
+  const button = event.target.closest('[data-sub-action]');
+  if(!button) return;
+
+  const nextStatus = button.dataset.subAction;
+  const subscriptionId = button.dataset.id;
+
+  if(!confirm(nextStatus === 'cancelled'
+    ? 'هل تؤكد إلغاء الاشتراك؟'
+    : 'هل تؤكد تعليق الاشتراك؟')) return;
+
+  try {
+    await rpc('set_student_subscription_status_v2',{
+      p_subscription_id:subscriptionId,
+      p_new_status:nextStatus
+    });
+
+    msg('تم تحديث حالة الاشتراك.');
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر تحديث الاشتراك: ' + error.message,true);
+  }
+});
+
+$('paymentsBody').addEventListener('click',async event => {
+  const button = event.target.closest('[data-refund]');
+  if(!button) return;
+
+  const paymentId = button.dataset.refund;
+
+  if(!confirm('سيتم تغيير حالة الدفعة إلى مستردة في سجل النظام فقط. هذا الإجراء لا يحوّل أموالًا فعليًا. هل تتابع؟')) return;
+
+  const note = prompt('اكتب ملاحظة الاسترداد:') || '';
+
+  try {
+    await rpc('refund_subscription_payment_v2',{
+      p_payment_id:paymentId,
+      p_note:note
+    });
+
+    msg('تم تحديث سجل الاسترداد.');
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر تسجيل الاسترداد: ' + error.message,true);
+  }
+});
+
+$('expireBtn').addEventListener('click',async () => {
+  if(!confirm('سيتم إنهاء الاشتراكات النشطة التي تجاوزت تاريخ انتهائها. هل تتابع؟')) return;
+
+  try {
+    const count = await rpc('expire_due_subscriptions_v2',{});
+    msg('تم إنهاء ' + count + ' اشتراك منتهي المدة.');
+    await loadAll();
+
+  } catch(error) {
+    msg('تعذّر تحديث الاشتراكات المنتهية: ' + error.message,true);
+  }
+});
+
+$('refreshBtn').addEventListener('click',async () => {
+  clearMsg();
+  try {
+    await loadAll();
+    msg('تم تحديث البيانات.');
+  } catch(error) {
+    msg(error.message,true);
+  }
+});
+
+$('logoutBtn').addEventListener('click',async event => {
+  event.preventDefault();
+  if(!confirm('تسجيل الخروج من لوحة الإدارة؟')) return;
+  await state.client.auth.signOut();
+  location.href = 'login.html';
+});
+
+boot();
+})();
+</script>
+</body>
+</html>
