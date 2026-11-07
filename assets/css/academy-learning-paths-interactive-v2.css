@@ -1,0 +1,269 @@
+/* MA Academy Learning Paths — exact source artwork with transparent interactive areas. */
+.ma-academy-paths-scroll {
+  width: 100%;
+  max-width: 1199px;
+  margin: 26px auto 34px;
+  overflow: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ma-academy-paths-map {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 1199px;
+  aspect-ratio: 1199 / 1312;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+  line-height: 0;
+  background: transparent;
+}
+
+.ma-academy-paths-artwork {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+  object-position: center;
+  filter: none;
+  opacity: 1;
+}
+
+.ma-academy-path-hotspot,
+.ma-academy-feature-hotspot {
+  position: absolute;
+  z-index: 4;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  outline: none;
+  background: transparent;
+  color: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ma-academy-path-hotspot:hover,
+.ma-academy-feature-hotspot:hover {
+  background: transparent;
+}
+
+.ma-academy-path-hotspot:focus-visible,
+.ma-academy-feature-hotspot:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: -5px;
+  box-shadow: inset 0 0 0 3px #075bd8;
+}
+
+/* The six complete card areas. Coordinates follow the 1199 x 1312 source image. */
+.ma-path-business { left: 2.0%; top: 16.4%; width: 31.2%; height: 32.8%; }
+.ma-path-programming { left: 33.7%; top: 16.4%; width: 30.1%; height: 32.8%; }
+.ma-path-windows { left: 64.5%; top: 16.4%; width: 33.5%; height: 32.8%; }
+.ma-path-data { left: 2.0%; top: 51.4%; width: 31.2%; height: 32.9%; }
+.ma-path-office { left: 33.7%; top: 51.4%; width: 30.1%; height: 32.9%; }
+.ma-path-education { left: 64.5%; top: 51.4%; width: 33.5%; height: 32.9%; }
+
+/* Bottom feature strip: content, resources, paths, certificates, support. */
+.ma-feature-content { left: 80.0%; top: 86.8%; width: 18.0%; height: 8.5%; }
+.ma-feature-resources { left: 60.5%; top: 86.8%; width: 18.7%; height: 8.5%; }
+.ma-feature-paths { left: 40.4%; top: 86.8%; width: 19.2%; height: 8.5%; }
+.ma-feature-certificates { left: 21.0%; top: 86.8%; width: 18.7%; height: 8.5%; }
+.ma-feature-support { left: 2.0%; top: 86.8%; width: 18.2%; height: 8.5%; }
+
+/* Category menu opened by a track card. This is separate from the unchanged artwork. */
+.ma-academy-track-dialog {
+  width: min(640px, calc(100vw - 28px));
+  max-width: 640px;
+  max-height: min(82vh, 760px);
+  padding: 0;
+  border: 1px solid #dbe4f3;
+  border-radius: 22px;
+  color: #14233f;
+  background: #ffffff;
+  box-shadow: 0 24px 80px rgba(9, 28, 67, .28);
+  direction: rtl;
+  text-align: right;
+}
+
+.ma-academy-track-dialog::backdrop {
+  background: rgba(8, 19, 43, .58);
+  backdrop-filter: blur(4px);
+}
+
+.ma-academy-track-dialog-inner {
+  padding: 22px;
+}
+
+.ma-academy-track-dialog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.ma-academy-track-dialog-kicker {
+  display: block;
+  margin-bottom: 6px;
+  color: #087d8d;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.ma-academy-track-dialog h2 {
+  margin: 0;
+  color: #14233f;
+  font-size: clamp(20px, 3vw, 26px);
+  line-height: 1.5;
+}
+
+.ma-academy-track-dialog-close {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #dbe4f3;
+  border-radius: 12px;
+  color: #14233f;
+  background: #f5f8fc;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ma-academy-track-dialog-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ma-academy-track-dialog-link {
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 15px;
+  border: 1px solid #e1e8f3;
+  border-radius: 14px;
+  color: #14233f;
+  background: linear-gradient(135deg, #ffffff, #f5f8ff);
+  font-weight: 750;
+  line-height: 1.6;
+  text-decoration: none;
+  transition: border-color .18s ease, transform .18s ease;
+}
+
+.ma-academy-track-dialog-link:hover,
+.ma-academy-track-dialog-link:focus-visible {
+  border-color: #31b8c3;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.ma-academy-track-dialog-link span:last-child {
+  color: #087d8d;
+  font-size: 19px;
+}
+
+.ma-academy-track-dialog-all {
+  display: grid;
+  gap: 16px;
+}
+
+.ma-academy-track-group h3 {
+  margin: 0 0 8px;
+  color: #087d8d;
+  font-size: 15px;
+}
+
+@media (max-width: 650px) {
+  .ma-academy-paths-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+    padding-bottom: 5px;
+  }
+  .ma-academy-paths-map {
+    width: 570px;
+    max-width: none;
+    margin-inline: 0;
+  }
+  .ma-academy-track-dialog-inner { padding: 17px; }
+  .ma-academy-track-dialog-links { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ma-academy-track-dialog-link { transition: none; }
+}
+
+
+/* MA ACADEMY ORDERED LAYOUT V2.2 - ORIGINAL ARTWORK ONLY */
+.ma-academy-library-hero-v3 {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 1448px;
+  margin: 24px auto 28px;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+  line-height: 0;
+  background: transparent;
+}
+.ma-academy-library-hero-v3-artwork {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+  object-position: center;
+  filter: none;
+  opacity: 1;
+}
+.ma-academy-hero-v3-hotspot {
+  position: absolute;
+  z-index: 5;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  outline: none;
+  background: transparent;
+  color: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.ma-academy-hero-v3-hotspot:hover { background: transparent; }
+.ma-academy-hero-v3-hotspot:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: -5px;
+  box-shadow: inset 0 0 0 3px #08c9dc;
+}
+/* Transparent hit targets precisely overlay the four existing pills in the 2172x724 artwork. */
+.ma-hero-v3-all-courses { left: 80.8%; top: 59.7%; width: 12.0%; height: 14.0%; }
+.ma-hero-v3-learning-paths { left: 66.5%; top: 59.7%; width: 12.2%; height: 14.0%; }
+.ma-hero-v3-resources { left: 54.5%; top: 59.7%; width: 12.0%; height: 14.0%; }
+.ma-hero-v3-skills { left: 42.3%; top: 59.7%; width: 12.0%; height: 14.0%; }
+@media (max-width: 650px) {
+  .ma-academy-library-hero-v3 { margin: 14px auto 18px; }
+  .ma-academy-hero-v3-hotspot { border-radius: 10px; }
+}
+/* END MA ACADEMY ORDERED LAYOUT V2.2 */
