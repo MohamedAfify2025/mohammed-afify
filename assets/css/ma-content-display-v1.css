@@ -1,0 +1,84 @@
+/* MA Content Display V1 — keep the approved artwork pixel-identical. */
+.ma-content-display-v1 {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto 28px;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  line-height: 0;
+}
+
+.ma-content-display-v1__canvas {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1672 / 941;
+  overflow: hidden;
+}
+
+.ma-content-display-v1__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.ma-content-display-v1__hotspot {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  left: calc(var(--x) * 1%);
+  top: calc(var(--y) * 1%);
+  width: calc(var(--w) * 1%);
+  height: calc(var(--h) * 1%);
+  overflow: hidden;
+  border: 0;
+  border-radius: 1.4%;
+  background: transparent;
+  box-shadow: none;
+  color: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ma-content-display-v1__hotspot:hover {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.ma-content-display-v1__hotspot:focus {
+  outline: none;
+}
+
+.ma-content-display-v1__hotspot:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, .98);
+  outline-offset: -4px;
+  box-shadow: inset 0 0 0 2px rgba(25, 35, 90, .55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ma-content-display-v1,
+  .ma-content-display-v1 * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
