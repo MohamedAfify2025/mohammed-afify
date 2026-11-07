@@ -24,7 +24,7 @@
     { names: ['تحليل البيانات'], slugs: ['data-analysis'], categories: ['data'] },
     { names: ['ICDL ومهارات الكمبيوتر'], slugs: ['icdl', 'windows'], categories: [] },
     { names: ['Microsoft Office'], slugs: ['word', 'excel', 'powerpoint'], categories: ['data'] },
-    { names: ['الإدارة والأعمال'], slugs: ['business-administration'], categories: ['business'] },
+    { names: ['الإدارة والأعمال'], slugs: ['projects'], categories: [] },
     { names: ['المحاسبة و Odoo', 'المحاسبة و أودو'], slugs: [], categories: ['accounting', 'business'] },
     { names: ['مسار آخر / لم أحدد بعد', 'عام'], slugs: [], categories: [] }
   ];

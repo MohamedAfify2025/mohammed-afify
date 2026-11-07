@@ -193,7 +193,7 @@
       .toLocaleLowerCase('ar');
 
     const catalog = [
-      { names: ['الإدارة والأعمال'], title: 'الإدارة والأعمال', description: 'مسار البكالوريا المصرية للصف الثاني: خريطة الوحدات والدروس والأنشطة والتقييمات.', href: '../academy/business-administration.html', label: 'متاح الآن' },
+      { names: ['الإدارة والأعمال'], title: 'المشروعات الجاهزة', description: 'صلاحية اشتراكك الحالية تتيح محتوى المشروعات الجاهزة فقط، دون اختبار الإدارة والأعمال.', href: '../academy/projects.html', label: 'متاح الآن' },
       { names: ['البرمجة'], title: 'البرمجة', description: 'المحتوى البرمجي المرتبط بطلب اشتراكك.', href: '../academy/programming.html', label: 'مسارك المعتمد' },
       { names: ['تحليل البيانات'], title: 'تحليل البيانات', description: 'المحتوى والمهارات الخاصة بتحليل البيانات.', href: '../academy/data-analysis.html', label: 'مسارك المعتمد' },
       { names: ['ICDL ومهارات الكمبيوتر'], title: 'ICDL ومهارات الكمبيوتر', description: 'دورات مهارات الكمبيوتر وICDL المسموح بها في اشتراكك.', href: '../academy/icdl.html', label: 'مسارك المعتمد' },
