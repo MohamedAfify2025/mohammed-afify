@@ -1,0 +1,120 @@
+/* Mohammed Afify Academy Library — exact artwork with accessible click zones */
+.ma-library-banner-scroll {
+  width: 100%;
+  max-width: 1480px;
+  margin: 28px auto 34px;
+  overflow: visible;
+}
+
+.ma-library-banner-v1 {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 26px;
+  box-shadow: 0 20px 48px rgba(10, 27, 62, .14);
+  line-height: 0;
+  background: transparent;
+}
+
+.ma-library-banner-v1 .ma-library-banner-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2172 / 724;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  filter: none;
+  opacity: 1;
+}
+
+.ma-library-banner-v1 .ma-library-hotspot {
+  position: absolute;
+  z-index: 3;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ma-library-banner-v1 .ma-library-hotspot:hover {
+  background: transparent;
+}
+
+.ma-library-banner-v1 .ma-library-hotspot:focus-visible {
+  outline: 3px solid #10d9ee;
+  outline-offset: -3px;
+  background: rgba(16, 217, 238, .045);
+}
+
+/* Left-side visual elements: graduation cap, analytics, book, video, laptop */
+.ma-library-banner-v1 .ma-hotspot-cap {
+  left: 12.0%; top: 8.3%; width: 8.4%; height: 23.2%;
+}
+.ma-library-banner-v1 .ma-hotspot-analytics {
+  left: 27.5%; top: 3.8%; width: 7.0%; height: 18.8%;
+}
+.ma-library-banner-v1 .ma-hotspot-book {
+  left: 24.5%; top: 23.2%; width: 7.2%; height: 18.1%;
+}
+.ma-library-banner-v1 .ma-hotspot-video {
+  left: 32.5%; top: 35.5%; width: 6.0%; height: 17.2%;
+}
+.ma-library-banner-v1 .ma-hotspot-laptop {
+  left: 7.1%; top: 32.8%; width: 16.4%; height: 26.0%;
+}
+
+/* Four visible feature pills, in the same right-to-left order as the artwork */
+.ma-library-banner-v1 .ma-hotspot-skills {
+  left: 43.0%; top: 59.8%; width: 12.4%; height: 12.5%;
+}
+.ma-library-banner-v1 .ma-hotspot-resources {
+  left: 56.1%; top: 59.8%; width: 12.1%; height: 12.5%;
+}
+.ma-library-banner-v1 .ma-hotspot-paths {
+  left: 68.6%; top: 59.8%; width: 12.2%; height: 12.5%;
+}
+.ma-library-banner-v1 .ma-hotspot-courses {
+  left: 81.0%; top: 59.8%; width: 15.5%; height: 12.5%;
+}
+
+/* Preserve the whole image on narrow screens; horizontal scrolling avoids cropping or rewriting its text. */
+@media (max-width: 760px) {
+  .ma-library-banner-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 5px;
+  }
+  .ma-library-banner-v1 {
+    width: 860px;
+    max-width: none;
+    margin-inline: 0;
+    border-radius: 18px;
+  }
+  .ma-library-banner-v1 .ma-library-hotspot {
+    min-height: 38px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ma-library-banner-v1 .ma-library-hotspot {
+    scroll-behavior: auto;
+  }
+}
