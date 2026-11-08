@@ -214,7 +214,7 @@
         if (error) throw error;
         const profile = await getProfile(result.user.id);
         if (!profile) throw new Error('تم تسجيل الدخول لكن لم يتم إنشاء ملف الطالب. تحقق من تشغيل trigger الموجود في ملف SQL.');
-        const target = profile.role === 'admin' ? 'admin-requests.html' : 'student-dashboard.html';
+        const target = profile.role === 'admin' ? 'admin-subscriptions.html' : 'student-dashboard.html';
         notice('formNotice', 'تم تسجيل الدخول بنجاح. جارٍ فتح حسابك…', 'success');
         const requestedNext = new URLSearchParams(location.search).get('next');
         setTimeout(() => { location.href = profile.role === 'admin' ? target : (profile.status === 'approved' && requestedNext && requestedNext.startsWith('/') && !requestedNext.startsWith('//') ? requestedNext : target); }, 350);
