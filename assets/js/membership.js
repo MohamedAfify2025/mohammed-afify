@@ -51,6 +51,11 @@
     if (error) throw error;
     return data;
   }
+  async function getMyActiveCourses() {
+    const { data, error } = await client.rpc('get_my_active_courses_v2');
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  }
   function formatMinutes(seconds) {
     const minutes = Math.max(0, Math.floor(Number(seconds || 0) / 60));
     const hours = Math.floor(minutes / 60);
@@ -254,13 +259,14 @@
         if (profile.status === 'rejected') { $('rejectedPanel').hidden = false; return; }
         if (profile.status !== 'approved') throw new Error('حالة الحساب غير معروفة. تواصل مع إدارة المنصة.');
         $('approvedContent').hidden = false;
-        renderEnrolledTracks(profile);
-        await loadDashboardData(session.user.id);
+        const activeCourses = await getMyActiveCourses();
+        renderEnrolledTracks(profile, activeCourses);
+        await loadDashboardData(session.user.id, activeCourses);
       } catch (err) { notice('dashboardNotice', err?.message || 'تعذّر تحميل لوحة الطالب.', 'error'); }
     })();
   }
 
-  function renderEnrolledTracks(profile) {
+  function renderEnrolledTracks(profile, activeCourses) {
     const host = $('enrolledTracksList');
     if (!host) return;
 
@@ -269,71 +275,113 @@
       return;
     }
 
-    const requested = String(profile.requested_course || '').trim();
-    const normalizeTrack = (value) => String(value || '')
-      .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .toLocaleLowerCase('ar');
+    const rows = (Array.isArray(activeCourses) ? activeCourses : [])
+      .filter((row) => row && row.can_view_course_page === true);
 
-    const catalog = [
-      { names: ['الإدارة والأعمال'], title: 'المشروعات الجاهزة', description: 'صلاحية اشتراكك الحالية تتيح محتوى المشروعات الجاهزة فقط، دون اختبار الإدارة والأعمال.', href: '../academy/projects.html', label: 'متاح الآن' },
-      { names: ['البرمجة'], title: 'البرمجة', description: 'المحتوى البرمجي المرتبط بطلب اشتراكك.', href: '../academy/programming.html', label: 'مسارك المعتمد' },
-      { names: ['تحليل البيانات'], title: 'تحليل البيانات', description: 'المحتوى والمهارات الخاصة بتحليل البيانات.', href: '../academy/data-analysis.html', label: 'مسارك المعتمد' },
-      { names: ['ICDL ومهارات الكمبيوتر'], title: 'ICDL ومهارات الكمبيوتر', description: 'دورات مهارات الكمبيوتر وICDL المسموح بها في اشتراكك.', href: '../academy/icdl.html', label: 'مسارك المعتمد' },
-      { names: ['Microsoft Office'], title: 'Microsoft Office', description: 'افتح مكتبة الدورات لمتابعة محتوى Word وExcel وPowerPoint المسموح لاشتراكك.', href: '../academy/index.html', label: 'مسارك المعتمد' }
-    ];
-
-    if (!requested) {
-      host.innerHTML = '<div class="m-empty">لا يوجد مسار مسجل في حسابك بعد. تواصل مع الإدارة لمراجعة الاشتراك.</div>';
+    if (!rows.length) {
+      host.innerHTML = '<div class="m-empty">تم اعتماد حسابك، لكن لا يوجد اشتراك تعليمي نشط حاليًا. ستظهر الدورات هنا بعد إسناد باقة مجانية أو تأكيد دفع الباقة المدفوعة من الإدارة.</div>';
       return;
     }
 
-    const normalized = normalizeTrack(requested);
-    const track = catalog.find((item) => item.names.some((name) => normalizeTrack(name) === normalized));
-    const title = track ? track.title : requested;
-    const description = track ? track.description : 'هذا هو المسار المسجل في طلب اشتراكك. تواصل مع إدارة المنصة إذا كنت تتوقع ظهور محتوى مختلف.';
-    const label = track ? track.label : 'يحتاج إلى إعداد';
-    const action = track
-      ? `<a class="m-track-link" href="${track.href}">فتح المسار <span aria-hidden="true">←</span></a>`
-      : '<span class="m-track-link disabled" aria-disabled="true">المحتوى غير متاح بعد</span>';
+    const knownRoutes = {
+      'business-administration': 'business-administration.html',
+      'programming': 'programming.html',
+      'python': 'python.html',
+      'scratch': 'scratch.html',
+      'data-analysis': 'data-analysis.html',
+      'icdl': 'icdl.html',
+      'windows': 'windows.html',
+      'word': 'word.html',
+      'excel': 'excel.html',
+      'powerpoint': 'powerpoint.html',
+      'projects': 'projects.html'
+    };
 
-    host.innerHTML = `<article class="m-track-card">
-      <div class="m-track-top"><span class="m-track-symbol" aria-hidden="true">◎</span><span class="m-track-status">${escapeHtml(label)}</span></div>
-      <h3>${escapeHtml(title)}</h3>
-      <p>${escapeHtml(description)}</p>
-      <div class="m-track-footer"><span class="m-track-approved">اشتراك معتمد</span>${action}</div>
-    </article>`;
+    host.innerHTML = rows.map((row) => {
+      const slug = String(row.course_slug || '').trim().toLowerCase();
+      const route = knownRoutes[slug] || (/^[a-z0-9-]+$/.test(slug) ? `${slug}.html` : '');
+      const href = route ? `../academy/${route}` : '';
+      const title = String(row.course_title || slug || 'دورة تعليمية');
+      const planName = String(row.plan_name || 'اشتراك نشط');
+      const videoText = row.can_watch_video === true
+        ? 'مشاهدة الفيديو متاحة'
+        : 'مشاهدة الفيديو غير مشمولة';
+      const action = href
+        ? `<a class="m-track-link" href="${escapeHtml(href)}">فتح المسار <span aria-hidden="true">←</span></a>`
+        : '<span class="m-track-link disabled" aria-disabled="true">رابط المسار غير مهيأ</span>';
+
+      return `<article class="m-track-card">
+        <div class="m-track-top"><span class="m-track-symbol" aria-hidden="true">◎</span><span class="m-track-status">اشتراك نشط</span></div>
+        <h3>${escapeHtml(title)}</h3>
+        <p>${escapeHtml(planName)} · ${escapeHtml(videoText)}</p>
+        <div class="m-track-footer"><span class="m-track-approved">صلاحية مشاهدة الصفحة مفعّلة</span>${action}</div>
+      </article>`;
+    }).join('');
   }
-  async function loadDashboardData(userId) {
-    const [progressResult, assessmentResult] = await Promise.all([
-      client.from('learning_progress').select('course_slug, lesson_slug, lesson_title, seconds_watched, completed, updated_at').eq('user_id', userId).order('updated_at', { ascending: false }),
-      client.from('assessment_results').select('course_slug, assessment_title, score_percent, created_at').eq('user_id', userId).order('created_at', { ascending: false })
-    ]);
-    if (progressResult.error) throw progressResult.error;
-    if (assessmentResult.error) throw assessmentResult.error;
-    const progress = progressResult.data || [];
-    const assessments = assessmentResult.data || [];
+
+  async function loadDashboardData(userId, activeCourses) {
+    const slugs = [...new Set((Array.isArray(activeCourses) ? activeCourses : [])
+      .filter((row) => row && row.can_view_course_page === true)
+      .map((row) => String(row.course_slug || '').trim())
+      .filter((slug) => /^[a-z0-9-]+$/i.test(slug)))];
+
+    let progress = [];
+    let assessments = [];
+
+    if (slugs.length) {
+      const [progressResult, assessmentResult] = await Promise.all([
+        client.from('learning_progress')
+          .select('course_slug, lesson_slug, lesson_title, seconds_watched, completed, updated_at')
+          .eq('user_id', userId)
+          .in('course_slug', slugs)
+          .order('updated_at', { ascending: false }),
+        client.from('assessment_results')
+          .select('course_slug, assessment_title, score_percent, created_at')
+          .eq('user_id', userId)
+          .in('course_slug', slugs)
+          .order('created_at', { ascending: false })
+      ]);
+
+      if (progressResult.error) throw progressResult.error;
+      if (assessmentResult.error) throw assessmentResult.error;
+      progress = progressResult.data || [];
+      assessments = assessmentResult.data || [];
+    }
+
     const seconds = progress.reduce((sum, row) => sum + Number(row.seconds_watched || 0), 0);
     const completed = progress.filter((row) => row.completed).length;
-    const avg = assessments.length ? assessments.reduce((sum, row) => sum + Number(row.score_percent || 0), 0) / assessments.length : null;
+    const avg = assessments.length
+      ? assessments.reduce((sum, row) => sum + Number(row.score_percent || 0), 0) / assessments.length
+      : null;
+
     $('watchTime').textContent = formatMinutes(seconds);
     $('completedLessons').textContent = String(completed);
     $('averageScore').textContent = avg === null ? '—' : `${Math.round(avg)}%`;
+
     const progressEl = $('progressTable');
     if (progressEl) {
-      if (!progress.length) progressEl.innerHTML = '<div class="m-empty">لا توجد بيانات مشاهدة مسجّلة بعد. افتح درسًا وشغّل الفيديو بعد تفعيل حسابك.</div>';
-      else progressEl.innerHTML = `<table class="m-table"><thead><tr><th>الدورة</th><th>الدرس</th><th>وقت المشاهدة</th><th>الحالة</th><th>آخر تحديث</th></tr></thead><tbody>${progress.map((r) => `<tr><td>${escapeHtml(r.course_slug || '—')}</td><td>${escapeHtml(r.lesson_title || r.lesson_slug || 'درس')}</td><td>${formatMinutes(r.seconds_watched)}</td><td>${r.completed ? 'مكتمل' : 'قيد التعلم'}</td><td>${formatDate(r.updated_at)}</td></tr>`).join('')}</tbody></table>`;
+      if (!progress.length) {
+        progressEl.innerHTML = '<div class="m-empty">لا توجد بيانات مشاهدة مسجّلة للدورات النشطة بعد.</div>';
+      } else {
+        progressEl.innerHTML = `<table class="m-table"><thead><tr><th>الدورة</th><th>الدرس</th><th>وقت المشاهدة</th><th>الحالة</th><th>آخر تحديث</th></tr></thead><tbody>${progress.map((r) => `<tr><td>${escapeHtml(r.course_slug || '—')}</td><td>${escapeHtml(r.lesson_title || r.lesson_slug || 'درس')}</td><td>${formatMinutes(r.seconds_watched)}</td><td>${r.completed ? 'مكتمل' : 'قيد التعلم'}</td><td>${formatDate(r.updated_at)}</td></tr>`).join('')}</tbody></table>`;
+      }
     }
+
     const assessmentEl = $('assessmentTable');
     if (assessmentEl) {
-      if (!assessments.length) assessmentEl.innerHTML = '<div class="m-empty">لا توجد نتائج بعد. ستظهر هنا نتائج التقييمات بعد ربطها بقاعدة البيانات.</div>';
-      else assessmentEl.innerHTML = `<table class="m-table"><thead><tr><th>الدورة</th><th>التقييم</th><th>النتيجة</th><th>التاريخ</th></tr></thead><tbody>${assessments.map((r) => `<tr><td>${escapeHtml(r.course_slug || '—')}</td><td>${escapeHtml(r.assessment_title || 'تقييم')}</td><td>${Math.round(Number(r.score_percent || 0))}%</td><td>${formatDate(r.created_at)}</td></tr>`).join('')}</tbody></table>`;
+      if (!assessments.length) {
+        assessmentEl.innerHTML = '<div class="m-empty">لا توجد نتائج اختبارات للدورات النشطة بعد.</div>';
+      } else {
+        assessmentEl.innerHTML = `<table class="m-table"><thead><tr><th>الدورة</th><th>التقييم</th><th>النتيجة</th><th>التاريخ</th></tr></thead><tbody>${assessments.map((r) => `<tr><td>${escapeHtml(r.course_slug || '—')}</td><td>${escapeHtml(r.assessment_title || 'تقييم')}</td><td>${Math.round(Number(r.score_percent || 0))}%</td><td>${formatDate(r.created_at)}</td></tr>`).join('')}</tbody></table>`;
+      }
     }
   }
 
-  // Admin-only approvals, guarded by database authorization (not by the hidden button).
+  // Admin-only approvals. Student approval must select a plan and use the
+  // transactional V2 RPC; teacher approval and all rejections keep the legacy RPC.
   if (page === 'admin') {
+    const normalizeCourse = (value) => String(value || '').trim().toLocaleLowerCase('ar');
+
     const loadRequests = async () => {
       if (!(await requireClient('adminNotice'))) return;
 
@@ -341,76 +389,82 @@
 
       try {
         const session = await getSession();
-
         if (!session) return redirectToLogin();
 
         const profile = await getProfile(session.user.id);
-
         if (profile?.role !== 'admin') {
-          notice(
-            'adminNotice',
-            'هذا القسم مخصص لحسابات الإدارة فقط.',
-            'error'
-          );
-
-          $('requestsTable').innerHTML =
-            '<div class="m-empty">غير مصرح بعرض الطلبات.</div>';
-
+          notice('adminNotice', 'هذا القسم مخصص لحسابات الإدارة فقط.', 'error');
+          $('requestsTable').innerHTML = '<div class="m-empty">غير مصرح بعرض الطلبات.</div>';
           return;
         }
 
         const { data, error } = await client
           .from('profiles')
-          .select(
-            'user_id,full_name,email,phone,requested_course,status,requested_role,teacher_specialties,requested_teaching_courses,created_at'
-          )
+          .select('user_id,full_name,email,phone,requested_course,status,requested_role,teacher_specialties,requested_teaching_courses,created_at')
           .eq('status', 'pending')
           .order('created_at', { ascending: true });
 
         if (error) throw error;
 
-        const host = $('requestsTable');
-
-        if (!host) {
-          throw new Error('لم يتم العثور على عنصر عرض الطلبات.');
+        // Failure to load plans must never silently approve a student without a plan.
+        let reviewPlans = [];
+        let plansErrorMessage = '';
+        const planResult = await client.rpc('get_admin_review_plans_v2');
+        if (planResult.error) {
+          plansErrorMessage = planResult.error.message || 'تعذّر تحميل الباقات النشطة.';
+        } else {
+          reviewPlans = Array.isArray(planResult.data) ? planResult.data : [];
         }
 
+        const host = $('requestsTable');
+        if (!host) throw new Error('لم يتم العثور على عنصر عرض الطلبات.');
+
         if (!data?.length) {
-          host.innerHTML =
-            '<div class="m-empty">لا توجد طلبات معلقة حاليًا.</div>';
+          host.innerHTML = '<div class="m-empty">لا توجد طلبات معلقة حاليًا.</div>';
           return;
         }
 
         const rows = data.map((r) => {
-          const requestedRole =
-            r.requested_role === 'teacher' ? 'teacher' : 'student';
-
-          const roleLabel =
-            requestedRole === 'teacher' ? 'مدرس' : 'طالب';
+          const requestedRole = r.requested_role === 'teacher' ? 'teacher' : 'student';
+          const roleLabel = requestedRole === 'teacher' ? 'مدرس' : 'طالب';
 
           const teacherCourses = Array.isArray(r.requested_teaching_courses)
-            ? r.requested_teaching_courses
-                .map((item) => String(item))
-                .join('، ')
+            ? r.requested_teaching_courses.map((item) => String(item)).join('، ')
             : String(r.requested_teaching_courses || '');
 
           const details = requestedRole === 'teacher'
             ? `
-              <div>
-                <strong>التخصصات والخبرات:</strong>
-                ${escapeHtml(r.teacher_specialties || 'لم يحدد')}
-              </div>
-              <div style="margin-top:6px">
-                <strong>الدورات المراد تدريسها:</strong>
-                ${escapeHtml(teacherCourses || 'لم يحدد')}
-              </div>
+              <div><strong>التخصصات والخبرات:</strong> ${escapeHtml(r.teacher_specialties || 'لم يحدد')}</div>
+              <div style="margin-top:6px"><strong>الدورات المراد تدريسها:</strong> ${escapeHtml(teacherCourses || 'لم يحدد')}</div>
             `
-            : `
-              <div>
-                <strong>الدورة المطلوبة:</strong>
-                ${escapeHtml(r.requested_course || 'لم يحدد')}
-              </div>
-            `;
+            : `<div><strong>الدورة المطلوبة:</strong> ${escapeHtml(r.requested_course || 'لم يحدد')}</div>`;
+
+          const requestedCourse = normalizeCourse(r.requested_course);
+          const matchingPlans = requestedRole === 'student'
+            ? reviewPlans.filter((plan) =>
+                normalizeCourse(plan.course_title) === requestedCourse ||
+                normalizeCourse(plan.course_slug) === requestedCourse
+              )
+            : [];
+
+          const planSelector = requestedRole === 'student'
+            ? `<div class="m-review-plan">
+                 <label for="review-plan-${escapeHtml(r.user_id)}">الباقة المطلوبة للاعتماد</label>
+                 <select id="review-plan-${escapeHtml(r.user_id)}" data-review-plan style="display:block;width:100%;max-width:360px;margin-top:6px;padding:8px;border:1px solid #dce3ed;border-radius:8px;background:#fff;font:inherit">
+                   <option value="">${matchingPlans.length ? 'اختر الباقة' : 'لا توجد باقة نشطة مطابقة لهذه الدورة'}</option>
+                   ${matchingPlans.map((plan) => {
+                     const price = Number(plan.price || 0);
+                     const amount = new Intl.NumberFormat('ar-EG', { maximumFractionDigits: 2 }).format(price);
+                     const currency = String(plan.currency || '');
+                     const typeLabel = price === 0 ? 'مجانية' : 'مدفوعة';
+                     return `<option value="${escapeHtml(plan.plan_id)}">${escapeHtml(plan.plan_name)} — ${escapeHtml(typeLabel)} — ${escapeHtml(amount)} ${escapeHtml(currency)}</option>`;
+                   }).join('')}
+                 </select>
+                 ${plansErrorMessage ? `<small class="m-review-plan-error">${escapeHtml(plansErrorMessage)}</small>` : ''}
+               </div>`
+            : '';
+
+          const cannotApproveStudent = requestedRole === 'student' && matchingPlans.length === 0;
 
           return `
             <tr>
@@ -418,113 +472,106 @@
               <td>${escapeHtml(r.email || '—')}</td>
               <td>${escapeHtml(r.phone || '—')}</td>
               <td><strong>${roleLabel}</strong></td>
-              <td>${details}</td>
+              <td>${details}${planSelector}</td>
               <td>${formatDate(r.created_at)}</td>
               <td>
                 <div class="m-row-actions">
-                  <button
-                    type="button"
-                    class="m-mini-button"
-                    data-review="approved"
-                    data-user="${escapeHtml(r.user_id)}"
-                    data-role="${requestedRole}">
+                  <button type="button" class="m-mini-button" data-review="approved"
+                    data-user="${escapeHtml(r.user_id)}" data-role="${requestedRole}"
+                    ${cannotApproveStudent ? 'disabled title="لا يمكن اعتماد الطالب دون اختيار باقة نشطة مطابقة للدورة."' : ''}>
                     اعتماد
                   </button>
-
-                  <button
-                    type="button"
-                    class="m-mini-button reject"
-                    data-review="rejected"
-                    data-user="${escapeHtml(r.user_id)}"
-                    data-role="${requestedRole}">
+                  <button type="button" class="m-mini-button reject" data-review="rejected"
+                    data-user="${escapeHtml(r.user_id)}" data-role="${requestedRole}">
                     رفض
                   </button>
                 </div>
               </td>
-            </tr>
-          `;
+            </tr>`;
         }).join('');
 
         host.innerHTML = `
           <table class="m-table">
-            <thead>
-              <tr>
-                <th>الاسم</th>
-                <th>البريد الإلكتروني</th>
-                <th>الهاتف</th>
-                <th>نوع الحساب</th>
-                <th>تفاصيل الطلب</th>
-                <th>تاريخ الطلب</th>
-                <th>الإجراء</th>
-              </tr>
-            </thead>
+            <thead><tr>
+              <th>الاسم</th><th>البريد الإلكتروني</th><th>الهاتف</th>
+              <th>نوع الحساب</th><th>تفاصيل الطلب والباقة</th>
+              <th>تاريخ الطلب</th><th>الإجراء</th>
+            </tr></thead>
             <tbody>${rows}</tbody>
-          </table>
-        `;
+          </table>`;
 
         host.querySelectorAll('[data-review]').forEach((button) => {
           button.addEventListener('click', async () => {
             const uid = button.dataset.user;
             const decision = button.dataset.review;
             const requestedRole = button.dataset.role;
+            const isStudentApproval = decision === 'approved' && requestedRole === 'student';
+            const row = button.closest('tr');
+            const planSelect = isStudentApproval ? row?.querySelector('[data-review-plan]') : null;
 
-            const roleLabel =
-              requestedRole === 'teacher' ? 'المدرس' : 'الطالب';
-
-            const actionLabel = decision === 'approved'
-              ? `اعتماد حساب ${roleLabel}`
-              : 'رفض طلب التسجيل';
-
-            if (!window.confirm(`هل تريد ${actionLabel}؟`)) {
+            if (isStudentApproval && !planSelect?.value) {
+              notice('adminNotice', 'اختر باقة نشطة تشمل الدورة المطلوبة قبل اعتماد الطالب.', 'error');
               return;
             }
 
+            const roleLabel = requestedRole === 'teacher' ? 'المدرس' : 'الطالب';
+            const actionLabel = decision === 'approved' ? `اعتماد حساب ${roleLabel}` : 'رفض طلب التسجيل';
+            if (!window.confirm(isStudentApproval
+              ? `سيتم اعتماد الطالب وإنشاء اشتراك بالباقة المحددة. إذا كانت الباقة مجانية فسيتم تفعيلها تلقائيًا، أما المدفوعة فستظل معلقة حتى تأكيد الدفع. هل تتابع؟`
+              : `هل تريد ${actionLabel}؟`)) return;
+
             button.disabled = true;
+            const siblingButtons = row?.querySelectorAll('[data-review]') || [];
+            siblingButtons.forEach((item) => { item.disabled = true; });
 
             try {
-              const { error: rpcError } = await client.rpc(
-                'review_membership_request_v2',
-                {
-                  p_target_user: uid,
-                  p_decision: decision
-                }
-              );
-
-              if (rpcError) throw rpcError;
+              if (isStudentApproval) {
+                const { error: rpcError } = await client.rpc(
+                  'approve_student_application_with_plan_v2',
+                  {
+                    p_target_user: uid,
+                    p_plan_id: planSelect.value,
+                    p_admin_note: ''
+                  }
+                );
+                if (rpcError) throw rpcError;
+              } else {
+                const { error: rpcError } = await client.rpc(
+                  'review_membership_request_v2',
+                  {
+                    p_target_user: uid,
+                    p_decision: decision
+                  }
+                );
+                if (rpcError) throw rpcError;
+              }
 
               await loadRequests();
 
-              const successMessage = decision === 'approved'
-                ? `تم اعتماد طلب ${roleLabel} بنجاح.`
-                : 'تم رفض طلب التسجيل.';
+              const successMessage = isStudentApproval
+                ? 'تم اعتماد الطالب وإنشاء الاشتراك. راجع حالة الدفع في لوحة إدارة الاشتراكات.'
+                : decision === 'approved'
+                  ? `تم اعتماد طلب ${roleLabel} بنجاح.`
+                  : 'تم رفض طلب التسجيل.';
 
               notice('adminNotice', successMessage, 'success');
-
             } catch (err) {
-              notice(
-                'adminNotice',
-                err?.message || 'تعذر تحديث الطلب. تحقق من دالة المراجعة وصلاحيات قاعدة البيانات.',
-                'error'
-              );
-
-              button.disabled = false;
+              notice('adminNotice', err?.message || 'تعذّر تحديث الطلب. تحقق من صلاحيات الدالة والباقة المختارة.', 'error');
+              siblingButtons.forEach((item) => { item.disabled = false; });
             }
           });
         });
 
       } catch (err) {
-        notice(
-          'adminNotice',
-          err?.message || 'تعذر تحميل طلبات التسجيل.',
-          'error'
-        );
+        notice('adminNotice', err?.message || 'تعذر تحميل طلبات التسجيل.', 'error');
       }
     };
 
     $('refreshRequests')?.addEventListener('click', loadRequests);
     loadRequests();
   }
-function escapeHtml(value) {
+
+  function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   }
   function formatDate(value) {
@@ -541,9 +588,19 @@ function escapeHtml(value) {
       if (!session) return;
       const profile = await getProfile(session.user.id);
       if (!profile || profile.status !== 'approved') return;
+
+      const courseSlug = decodeURIComponent(location.pathname.split('/').pop().replace(/\.html?$/i, '') || 'course').slice(0, 100);
+      const { data: activeCourses, error: accessError } = await client.rpc('get_my_active_courses_v2');
+      if (accessError) throw accessError;
+
+      const courseAccess = (Array.isArray(activeCourses) ? activeCourses : [])
+        .find((row) => String(row.course_slug || '').toLowerCase() === courseSlug.toLowerCase());
+
+      // Watching and progress tracking are separate subscription capabilities.
+      if (!courseAccess || courseAccess.can_watch_video !== true || courseAccess.can_track_progress !== true) return;
+
       const iframes = Array.from(document.querySelectorAll('iframe[src*="youtube.com/embed/"],iframe[src*="youtube-nocookie.com/embed/"]'));
       if (!iframes.length) return;
-      const courseSlug = decodeURIComponent(location.pathname.split('/').pop().replace(/\.html?$/i, '') || 'course').slice(0, 100);
       let playerCounter = 0;
       const initPlayers = () => {
         if (!window.YT?.Player) return;
