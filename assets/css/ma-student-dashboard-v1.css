@@ -1,0 +1,134 @@
+/* Mohammed Afify Student Dashboard V1 — presentation layer only */
+.ma-student-dashboard {
+  --ma-deep: #101a32;
+  --ma-deep-2: #1c2b4b;
+  --ma-violet: #7868e7;
+  --ma-violet-soft: #f0edff;
+  --ma-mint: #56d4b5;
+  --ma-muted: #748097;
+  background:
+    radial-gradient(ellipse at 92% 2%, rgba(169,155,255,.16), transparent 28%),
+    radial-gradient(ellipse at 4% 40%, rgba(86,212,181,.08), transparent 25%),
+    #f5f7fc;
+}
+.ma-student-dashboard [hidden] { display: none !important; }
+.ma-student-shell { width: min(1160px, calc(100% - 36px)); }
+.ma-student-header { padding: 18px 0 22px; }
+.ma-brand-caption { display:block; color:#778198; font-size:10px; font-weight:600; margin-top:1px; }
+.ma-student-header .m-nav { align-items:center; gap:20px; }
+.ma-student-header .m-nav a { transition: color .18s ease; }
+.ma-student-header .m-nav .ma-logout-link { color:#9b4252; }
+.ma-dashboard-main { padding-bottom: 16px; }
+.ma-welcome {
+  position:relative; isolation:isolate; overflow:hidden;
+  display:grid; grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr);
+  gap:30px; align-items:center; min-height:250px;
+  padding:34px 38px; margin: 8px 0 24px;
+  border-radius:27px; color:#fff;
+  background:linear-gradient(116deg, #101a32 0%, #1b2c50 64%, #26385f 100%);
+  box-shadow:0 22px 50px rgba(16,26,50,.16);
+}
+.ma-welcome:before {
+  content:""; position:absolute; z-index:-1; inset:0; opacity:.24;
+  background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:34px 34px; mask-image:linear-gradient(90deg,transparent,#000 45%,#000);
+}
+.ma-welcome-copy,.ma-profile-card { position:relative; z-index:1; }
+.ma-eyebrow { display:block; color:#897cf0; font:800 10px/1.5 Inter,"Cairo",sans-serif; letter-spacing:1.45px; text-transform:uppercase; }
+.ma-welcome .ma-eyebrow { color:#b9b0ff; }
+.ma-welcome h1 { color:#fff; font-size:clamp(28px,3.6vw,42px); line-height:1.28; margin:10px 0 8px; }
+.ma-welcome-copy>p { color:#d3dced; font-size:14px; max-width:520px; margin:0; }
+.ma-welcome-actions { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:22px; }
+.ma-primary-action,.ma-secondary-action {
+  min-height:43px; display:inline-flex; justify-content:center; align-items:center; gap:10px;
+  padding:10px 16px; border-radius:12px; font:800 12px "Cairo",sans-serif; text-decoration:none;
+  transition:transform .18s ease,background .18s ease;
+}
+.ma-primary-action { background:#fff; color:#111d38; box-shadow:0 7px 18px rgba(0,0,0,.12); }
+.ma-primary-action:hover { transform:translateY(-2px); background:#f0edff; }
+.ma-secondary-action { border:1px solid rgba(255,255,255,.28); color:#fff; background:rgba(255,255,255,.07); }
+.ma-secondary-action:hover { transform:translateY(-2px); background:rgba(255,255,255,.14); }
+.ma-profile-card {
+  display:flex; align-items:center; gap:13px; flex-wrap:wrap;
+  padding:17px; border:1px solid rgba(255,255,255,.18); border-radius:19px;
+  background:rgba(255,255,255,.10); backdrop-filter:blur(9px);
+}
+.ma-profile-avatar { flex:0 0 46px; width:46px; height:46px; display:grid; place-items:center; border-radius:15px; background:linear-gradient(145deg,#a99bff,#7465dd); color:#fff; font:800 13px Inter,sans-serif; box-shadow:0 7px 18px rgba(0,0,0,.15); }
+.ma-profile-copy { min-width:0; flex:1 1 155px; }
+.ma-profile-label { display:block; color:#bec9dc; font-size:10px; font-weight:700; margin-bottom:3px; }
+.ma-student-identity { color:#fff; font-size:12px; font-weight:800; line-height:1.6; overflow-wrap:anywhere; }
+.ma-profile-card #accountStatus { border:1px solid rgba(255,255,255,.15); }
+.ma-profile-card #accountStatus.approved { background:#d8f7e9; color:#146d4b; }
+.ma-profile-card #accountStatus.pending { background:#fff1d6; color:#80540d; }
+.ma-profile-card #accountStatus.rejected { background:#ffe2e6; color:#9c2d40; }
+.ma-welcome-orbit { position:absolute; z-index:0; display:block; border:1px solid rgba(169,155,255,.22); border-radius:50%; pointer-events:none; }
+.ma-orbit-one { width:270px; height:270px; left:-82px; top:-130px; }
+.ma-orbit-two { width:180px; height:180px; left:-38px; top:-85px; border-color:rgba(86,212,181,.22); }
+.ma-dashboard-notice { margin:0 0 16px; }
+.ma-config-warning { margin:0 0 18px; }
+.ma-state-panel { display:flex; gap:16px; align-items:flex-start; padding:25px; }
+.ma-state-panel h2 { font-size:20px; margin:4px 0 5px; }
+.ma-state-panel p { margin:0 0 14px; }
+.ma-state-icon { flex:0 0 48px; width:48px; height:48px; display:grid; place-items:center; border-radius:15px; background:#fff2d8; color:#98620d; font-size:25px; font-weight:800; }
+.ma-state-icon-warn { background:#ffebed; color:#a93446; }
+.ma-section-heading { display:flex; justify-content:space-between; align-items:flex-end; gap:18px; margin-bottom:16px; }
+.ma-section-heading h2 { color:#15213b; font-size:21px; margin:5px 0 2px; }
+.ma-section-heading p { color:#778198; font-size:12px; margin:0; }
+.ma-text-link { color:#6554d5; text-decoration:none; font-size:12px; font-weight:800; white-space:nowrap; }
+.ma-text-link:hover { color:#4333ae; }
+.ma-tracks-panel,.ma-data-panel { padding:25px; border-radius:21px; box-shadow:0 12px 34px rgba(16,26,50,.04); }
+.ma-tracks-panel { margin-top:2px; margin-bottom:22px; }
+.ma-track-grid { margin-top:18px; }
+.ma-track-grid:empty { display:none; }
+.ma-track-grid .m-empty { padding:18px 0; }
+.ma-track-grid .m-track-card { border-radius:17px; box-shadow:0 8px 22px rgba(16,27,53,.035); transition:transform .18s ease,box-shadow .18s ease; }
+.ma-track-grid .m-track-card:hover { transform:translateY(-3px); box-shadow:0 14px 28px rgba(16,27,53,.075); }
+.ma-track-grid .m-track-symbol { background:#f0edff; color:#6656d9; }
+.ma-track-grid .m-track-link { background:#111d38; }
+.ma-progress-overview { margin:0 0 22px; }
+.ma-compact-heading { margin-bottom:12px; }
+.ma-stats { margin:0; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; }
+.ma-stat-card { position:relative; min-height:154px; padding:20px 20px 17px; border-radius:19px; box-shadow:0 12px 34px rgba(16,26,50,.04); }
+.ma-stat-icon { width:37px; height:37px; display:grid; place-items:center; border-radius:12px; margin-bottom:13px; font-size:19px; font-weight:800; }
+.ma-icon-watch { color:#5f50cb; background:#f0edff; }
+.ma-icon-complete { color:#167653; background:#e5f7ef; }
+.ma-icon-score { color:#a3691b; background:#fff3df; }
+.ma-stat-card small { color:#69758d; font-size:11px; font-weight:700; }
+.ma-stat-card strong { margin-top:3px; font-size:27px; }
+.ma-stat-note { display:block; color:#9aa3b3; font-size:10px; margin-top:6px; }
+.ma-data-panel { margin:0 0 18px; }
+.ma-table-wrap { border-radius:15px; box-shadow:none; }
+.ma-table-wrap .m-table { min-width:620px; }
+.ma-table-wrap .m-table th { background:#f6f7fb; }
+.ma-student-footer { padding:12px 0 27px; }
+.ma-student-footer a { color:#6b5bd7; text-decoration:none; font-weight:700; }
+@media (max-width:820px) {
+  .ma-welcome { grid-template-columns:1fr; gap:22px; padding:28px; }
+  .ma-profile-card { max-width:560px; }
+}
+@media (max-width:600px) {
+  .ma-student-shell { width:min(100% - 24px,1160px); }
+  .ma-student-header { gap:13px; padding:15px 0; }
+  .ma-student-header .m-nav { width:100%; gap:12px 16px; }
+  .ma-student-header .m-nav a { font-size:12px; }
+  .ma-welcome { min-height:0; padding:23px 20px; border-radius:21px; margin-top:4px; }
+  .ma-welcome h1 { font-size:27px; }
+  .ma-welcome-copy>p { font-size:12px; }
+  .ma-welcome-actions { align-items:stretch; }
+  .ma-welcome-actions a { flex:1 1 140px; }
+  .ma-profile-card { padding:13px; }
+  .ma-profile-card #accountStatus { margin-right:59px; }
+  .ma-section-heading { align-items:flex-start; flex-direction:column; gap:8px; }
+  .ma-section-heading h2 { font-size:19px; }
+  .ma-tracks-panel,.ma-data-panel { padding:18px 15px; border-radius:18px; }
+  .ma-stats { grid-template-columns:1fr; gap:11px; }
+  .ma-stat-card { min-height:0; display:grid; grid-template-columns:40px 1fr; column-gap:12px; align-items:center; padding:15px; }
+  .ma-stat-icon { grid-row:span 3; margin:0; }
+  .ma-stat-card small,.ma-stat-card strong,.ma-stat-note { text-align:right; }
+  .ma-stat-card strong { font-size:23px; }
+  .ma-stat-note { font-size:9px; }
+  .ma-state-panel { padding:18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ma-primary-action,.ma-secondary-action,.ma-track-grid .m-track-card { transition:none; }
+}
