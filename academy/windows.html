@@ -22,11 +22,58 @@
     <link rel="stylesheet" href="../assets/css/cinematic-motion.css">
     <link rel="stylesheet" href="../assets/css/site-assistant.css">
     <link rel="stylesheet" href="../assets/css/academy-visual-system-rest-v1.css?v=1">
+  <link rel="stylesheet" href="../assets/css/ma-global-navigation-v1.css">
 </head>
 <body>
-<header class="gs-header">
-<a class="gs-brand" href="../index.html"><span>MA.</span> Mohammed Afify</a>
-<nav class="gs-nav"><a href='../index.html#googleSitesLibrary'>الرئيسية</a><a href='index.html'>مكتبة الدورات</a><a href='programming.html'>البرمجة</a><a href='icdl.html'>ICDL</a><a href='data-analysis.html'>تحليل البيانات</a><a href='projects.html'>المشروعات</a><a href='../membership/login.html'>حساب الطالب</a><a href='../membership/register.html'>طلب الاشتراك</a></nav>
+<header class="ma-global-header" data-ma-global-header>
+  <div class="ma-header-shell">
+    <a class="ma-brand" href="../index.html#home" aria-label="Mohammed Afify home">
+      <span class="ma-brand-symbol">MA<span>.</span></span>
+      <span class="ma-brand-copy"><strong>Mohammed Afify</strong><small data-i18n="brandSub">التعليم والتقنية والأعمال</small></span>
+    </a>
+
+    <button class="ma-menu-toggle" id="menuToggle" type="button" aria-label="فتح القائمة" aria-controls="mainNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="ma-primary-nav" id="mainNav" aria-label="التنقل الرئيسي">
+      <a href="../index.html#home" data-i18n="navHome">الرئيسية</a>
+
+      <div class="ma-nav-dropdown">
+        <button class="ma-dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true">
+          <span data-i18n="navAcademy">الأكاديمية</span>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="ma-dropdown-menu">
+          <a href="index.html" data-i18n="navAcademyLibrary">مكتبة الدورات</a>
+          <a href="../index.html#learning" data-i18n="navLearningPaths">مسارات التعلّم</a>
+          <a href="projects.html" data-i18n="navProjects">المشروعات التطبيقية</a>
+          <a href="certificates.html" data-i18n="navCertificates">الشهادات</a>
+        </div>
+      </div>
+
+      <div class="ma-nav-dropdown">
+        <button class="ma-dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true">
+          <span data-i18n="navBusiness">خدمات الأعمال</span>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="ma-dropdown-menu">
+          <a href="../odoo-solutions.html" data-i18n="navOdoo">حلول Odoo</a>
+          <a href="../index.html#services" data-i18n="navConsulting">التدريب والاستشارات</a>
+          <a href="../index.html#contact" data-i18n="navContact">تواصل معنا</a>
+        </div>
+      </div>
+
+      <a href="../index.html#about" data-i18n="navAbout">عن المنصة</a>
+      <a href="../index.html#contact" data-i18n="navContact">تواصل</a>
+    </nav>
+
+    <div class="ma-header-actions">
+      
+      <a class="ma-account" href="../membership/login.html" data-i18n="navAccount">حسابي</a>
+      <a class="ma-join" href="../membership/register.html" data-i18n="navJoin">ابدأ التعلّم</a>
+    </div>
+  </div>
 </header>
 <main class="gs-main gs-windows-page">
 
@@ -376,5 +423,6 @@
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/membership.js" defer></script>
 <script src="../assets/js/membership-access-control.js" defer></script>
+  <script src="../assets/js/ma-global-navigation-v1.js" defer></script>
 </body>
 </html>
