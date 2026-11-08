@@ -149,6 +149,63 @@ td{color:#293954}
   .hero{padding:22px}
 }
 </style>
+<style id="membership-horizontal-tabs-v1">
+.membership-tabs {
+  display:flex;
+  flex-wrap:nowrap;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px;
+  margin:0 0 20px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  box-shadow:0 7px 22px rgba(17,29,56,.035);
+  position:sticky;
+  top:8px;
+  z-index:20;
+  scrollbar-width:thin;
+}
+.membership-tabs button {
+  flex:0 0 auto;
+  white-space:nowrap;
+  border:1px solid #e5eaf2;
+  border-radius:10px;
+  padding:11px 18px;
+  background:#f7f8fc;
+  color:#52617a;
+  font:inherit;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.membership-tabs button:hover {
+  border-color:#19b7a2;
+  color:#111d38;
+}
+.membership-tabs button[aria-selected="true"] {
+  background:#111d38;
+  border-color:#111d38;
+  color:#fff;
+  box-shadow:0 4px 12px rgba(17,29,56,.15);
+}
+.membership-tabs button:focus-visible {
+  outline:3px solid #19b7a255;
+  outline-offset:2px;
+}
+@media(max-width:560px) {
+  .membership-tabs {
+    top:4px;
+    padding:7px;
+    gap:6px;
+  }
+  .membership-tabs button {
+    padding:9px 13px;
+    font-size:12px;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -464,6 +521,82 @@ td{color:#293954}
 
 <footer class="footer">Mohammed Afify | Membership Management</footer>
 
+<!-- MEMBERSHIP HORIZONTAL TABS V1 -->
+<script>
+(() => {
+  'use strict';
+
+  const main = document.querySelector('main.container');
+  const metrics = main?.querySelector(':scope > section.metrics');
+  if (!main || !metrics) return;
+
+  const panels = Array.from(main.querySelectorAll(':scope > section.panel'));
+
+  if (panels.length !== 8) {
+    console.warn('Membership tabs: unexpected panel count. No sections were changed.');
+    return;
+  }
+
+  const groups = [
+    { id: 'plans', label: 'الباقات', indexes: [0, 4] },
+    { id: 'assign', label: 'إسناد باقة', indexes: [1] },
+    { id: 'subscriptions', label: 'اشتراكات الطلاب', indexes: [3, 5] },
+    { id: 'payment-entry', label: 'تسجيل دفعة', indexes: [2] },
+    { id: 'payment-history', label: 'سجل المدفوعات', indexes: [6] },
+    { id: 'teachers', label: 'المدرسون', indexes: [7] }
+  ];
+
+  const tabs = document.createElement('nav');
+  tabs.className = 'membership-tabs';
+  tabs.setAttribute('role', 'tablist');
+  tabs.setAttribute('aria-label', 'أقسام إدارة العضويات والاشتراكات');
+
+  const buttons = new Map();
+  const defaultTab = 'subscriptions';
+
+  groups.forEach(group => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'membership-tab-' + group.id;
+    button.textContent = group.label;
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-selected', 'false');
+
+    const groupPanels = group.indexes.map((index, position) => {
+      const panel = panels[index];
+      panel.dataset.membershipTab = group.id;
+      panel.id = panel.id || `membership-panel-${group.id}-${position + 1}`;
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', button.id);
+      panel.hidden = true;
+      return panel;
+    });
+
+    button.setAttribute('aria-controls', groupPanels[0].id);
+
+    button.addEventListener('click', () => {
+      groups.forEach(item => {
+        const active = item.id === group.id;
+        const itemButton = buttons.get(item.id);
+
+        itemButton.setAttribute('aria-selected', active ? 'true' : 'false');
+        itemButton.tabIndex = active ? 0 : -1;
+
+        item.indexes.forEach(index => {
+          panels[index].hidden = !active;
+        });
+      });
+    });
+
+    buttons.set(group.id, button);
+    tabs.appendChild(button);
+  });
+
+  metrics.insertAdjacentElement('afterend', tabs);
+
+  buttons.get(defaultTab).click();
+})();
+</script>
 <script src="../assets/js/admin-subscriptions.js" defer></script>
 </body>
 </html>
