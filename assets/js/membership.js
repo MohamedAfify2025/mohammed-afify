@@ -214,7 +214,7 @@
         if (error) throw error;
         const profile = await getProfile(result.user.id);
         if (!profile) throw new Error('تم تسجيل الدخول لكن لم يتم إنشاء ملف الطالب. تحقق من تشغيل trigger الموجود في ملف SQL.');
-        const target = profile.role === 'admin' ? 'admin-subscriptions.html' : 'student-dashboard.html';
+        const target = profile.role === 'admin' ? 'admin-requests.html' : 'student-dashboard.html';
         notice('formNotice', 'تم تسجيل الدخول بنجاح. جارٍ فتح حسابك…', 'success');
         const requestedNext = new URLSearchParams(location.search).get('next');
         setTimeout(() => { location.href = profile.role === 'admin' ? target : (profile.status === 'approved' && requestedNext && requestedNext.startsWith('/') && !requestedNext.startsWith('//') ? requestedNext : target); }, 350);
@@ -448,18 +448,25 @@
             : [];
 
           const planSelector = requestedRole === 'student'
-            ? `<div class="m-review-plan">
-                 <label for="review-plan-${escapeHtml(r.user_id)}">الباقة المطلوبة للاعتماد</label>
-                 <select id="review-plan-${escapeHtml(r.user_id)}" data-review-plan style="display:block;width:100%;max-width:360px;margin-top:6px;padding:8px;border:1px solid #dce3ed;border-radius:8px;background:#fff;font:inherit">
+            ? `<div class="m-review-plan" style="margin-top:10px;max-width:420px">
+                 <label for="review-plan-${escapeHtml(r.user_id)}">الباقة / الدورة والسعر الأساسي</label>
+                 <select id="review-plan-${escapeHtml(r.user_id)}" data-review-plan style="display:block;width:100%;margin-top:6px;padding:8px;border:1px solid #dce3ed;border-radius:8px;background:#fff;font:inherit">
                    <option value="">${matchingPlans.length ? 'اختر الباقة' : 'لا توجد باقة نشطة مطابقة لهذه الدورة'}</option>
                    ${matchingPlans.map((plan) => {
                      const price = Number(plan.price || 0);
                      const amount = new Intl.NumberFormat('ar-EG', { maximumFractionDigits: 2 }).format(price);
                      const currency = String(plan.currency || '');
                      const typeLabel = price === 0 ? 'مجانية' : 'مدفوعة';
-                     return `<option value="${escapeHtml(plan.plan_id)}">${escapeHtml(plan.plan_name)} — ${escapeHtml(typeLabel)} — ${escapeHtml(amount)} ${escapeHtml(currency)}</option>`;
+                     return `<option value="${escapeHtml(plan.plan_id)}" data-base-price="${escapeHtml(price)}" data-currency="${escapeHtml(currency)}">${escapeHtml(plan.plan_name)} — ${escapeHtml(typeLabel)} — ${escapeHtml(amount)} ${escapeHtml(currency)}</option>`;
                    }).join('')}
                  </select>
+                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+                   <div><label>الخصم</label><select data-review-discount-type style="width:100%;padding:8px;border:1px solid #dce3ed;border-radius:8px;font:inherit"><option value="none">بدون خصم</option><option value="percent">نسبة مئوية</option><option value="fixed">مبلغ ثابت</option><option value="waive">إعفاء كامل</option></select></div>
+                   <div><label>قيمة الخصم</label><input data-review-discount-value type="number" min="0" step="0.01" value="0" style="width:100%;padding:8px;border:1px solid #dce3ed;border-radius:8px;font:inherit"></div>
+                 </div>
+                 <label style="display:block;margin-top:8px">سبب الخصم (اختياري)</label>
+                 <input data-review-discount-reason type="text" maxlength="240" placeholder="سبب منح الخصم" style="width:100%;padding:8px;border:1px solid #dce3ed;border-radius:8px;font:inherit">
+                 <small data-review-price-preview style="display:block;margin-top:6px;color:#65748c">اختر الباقة لعرض المبلغ النهائي.</small>
                  ${plansErrorMessage ? `<small class="m-review-plan-error">${escapeHtml(plansErrorMessage)}</small>` : ''}
                </div>`
             : '';
@@ -500,6 +507,31 @@
             <tbody>${rows}</tbody>
           </table>`;
 
+        const updateReviewPrice = (row) => {
+          const select = row?.querySelector('[data-review-plan]');
+          const type = row?.querySelector('[data-review-discount-type]');
+          const valueInput = row?.querySelector('[data-review-discount-value]');
+          const preview = row?.querySelector('[data-review-price-preview]');
+          if (!select || !type || !valueInput || !preview) return;
+          const option = select.selectedOptions?.[0];
+          if (!option?.value) { preview.textContent = 'اختر الباقة لعرض المبلغ النهائي.'; return; }
+          const base = Math.max(0, Number(option.dataset.basePrice || 0));
+          const value = Math.max(0, Number(valueInput.value || 0));
+          let discount = 0;
+          if (type.value === 'waive') discount = base;
+          else if (type.value === 'percent') discount = base * Math.min(100, value) / 100;
+          else if (type.value === 'fixed') discount = Math.min(base, value);
+          discount = Math.round(discount * 100) / 100;
+          const net = Math.max(0, Math.round((base - discount) * 100) / 100);
+          const currency = option.dataset.currency || 'EGP';
+          const fmt = n => new Intl.NumberFormat('ar-EG',{maximumFractionDigits:2}).format(n) + ' ' + currency;
+          preview.textContent = `السعر الأساسي: ${fmt(base)} — الخصم: ${fmt(discount)} — الصافي: ${fmt(net)}`;
+        };
+        host.querySelectorAll('tr').forEach((row) => {
+          ['change','input'].forEach((eventName) => row.addEventListener(eventName, () => updateReviewPrice(row)));
+          updateReviewPrice(row);
+        });
+
         host.querySelectorAll('[data-review]').forEach((button) => {
           button.addEventListener('click', async () => {
             const uid = button.dataset.user;
@@ -508,6 +540,9 @@
             const isStudentApproval = decision === 'approved' && requestedRole === 'student';
             const row = button.closest('tr');
             const planSelect = isStudentApproval ? row?.querySelector('[data-review-plan]') : null;
+            const discountTypeEl = isStudentApproval ? row?.querySelector('[data-review-discount-type]') : null;
+            const discountValueEl = isStudentApproval ? row?.querySelector('[data-review-discount-value]') : null;
+            const discountReasonEl = isStudentApproval ? row?.querySelector('[data-review-discount-reason]') : null;
 
             if (isStudentApproval && !planSelect?.value) {
               notice('adminNotice', 'اختر باقة نشطة تشمل الدورة المطلوبة قبل اعتماد الطالب.', 'error');
@@ -516,8 +551,26 @@
 
             const roleLabel = requestedRole === 'teacher' ? 'المدرس' : 'الطالب';
             const actionLabel = decision === 'approved' ? `اعتماد حساب ${roleLabel}` : 'رفض طلب التسجيل';
+            let discountType = 'none';
+            let discountValue = 0;
+            let finalAmount = null;
+            let currency = 'EGP';
+            if (isStudentApproval) {
+              discountType = discountTypeEl?.value || 'none';
+              discountValue = discountType === 'waive' ? 0 : Number(discountValueEl?.value || 0);
+              const selectedOption = planSelect.selectedOptions?.[0];
+              const base = Number(selectedOption?.dataset.basePrice || 0);
+              currency = selectedOption?.dataset.currency || 'EGP';
+              let discount = discountType === 'waive' ? base : discountType === 'percent' ? base * Math.min(100,discountValue) / 100 : discountType === 'fixed' ? Math.min(base,discountValue) : 0;
+              discount = Math.round(discount * 100) / 100;
+              finalAmount = Math.max(0,Math.round((base-discount)*100)/100);
+              if (!Number.isFinite(discountValue) || discountValue < 0 || (discountType === 'percent' && discountValue > 100) || (discountType === 'fixed' && discountValue > base)) {
+                notice('adminNotice','قيمة الخصم غير صحيحة أو أكبر من السعر الأساسي.','error');
+                return;
+              }
+            }
             if (!window.confirm(isStudentApproval
-              ? `سيتم اعتماد الطالب وإنشاء اشتراك بالباقة المحددة. إذا كانت الباقة مجانية فسيتم تفعيلها تلقائيًا، أما المدفوعة فستظل معلقة حتى تأكيد الدفع. هل تتابع؟`
+              ? `السعر الأساسي ${finalAmount === null ? '' : new Intl.NumberFormat('ar-EG',{maximumFractionDigits:2}).format(Number(planSelect.selectedOptions[0].dataset.basePrice || 0)) + ' ' + currency}، وصافي المستحق ${new Intl.NumberFormat('ar-EG',{maximumFractionDigits:2}).format(finalAmount)} ${currency}. ${finalAmount === 0 ? 'سيتم التفعيل كإعفاء كامل.' : 'سيظل الاشتراك معلقًا حتى اكتمال السداد.'} هل تعتمد الطالب؟`
               : `هل تريد ${actionLabel}؟`)) return;
 
             button.disabled = true;
@@ -527,10 +580,13 @@
             try {
               if (isStudentApproval) {
                 const { error: rpcError } = await client.rpc(
-                  'approve_student_application_with_plan_v2',
+                  'approve_student_application_with_discount_v1',
                   {
                     p_target_user: uid,
                     p_plan_id: planSelect.value,
+                    p_discount_type: discountType,
+                    p_discount_value: discountValue,
+                    p_discount_reason: discountReasonEl?.value || '',
                     p_admin_note: ''
                   }
                 );
@@ -549,7 +605,7 @@
               await loadRequests();
 
               const successMessage = isStudentApproval
-                ? 'تم اعتماد الطالب وإنشاء الاشتراك. راجع حالة الدفع في لوحة إدارة الاشتراكات.'
+                ? (finalAmount === 0 ? 'تم اعتماد الطالب وإعفاؤه من الرسوم وتفعيل اشتراكه.' : 'تم اعتماد الطالب وإنشاء اشتراك بصافي المبلغ بعد الخصم. راجع الدفعة في لوحة إدارة الاشتراكات.')
                 : decision === 'approved'
                   ? `تم اعتماد طلب ${roleLabel} بنجاح.`
                   : 'تم رفض طلب التسجيل.';

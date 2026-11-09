@@ -77,6 +77,108 @@ function courseTitle(slug) {
   return c ? c.title : slug;
 }
 
+
+function ensurePricingControls() {
+  const assignmentForm = $('subscriptionForm');
+  if (assignmentForm && !$('assignDiscountType')) {
+    const actions = assignmentForm.querySelector('.actions');
+    const controls = document.createElement('div');
+    controls.className = 'form-grid';
+    controls.style.gridColumn = '1/-1';
+    controls.innerHTML = `
+      <div class="field">
+        <label for="assignDiscountType">نوع الخصم</label>
+        <select name="discount_type" id="assignDiscountType">
+          <option value="none">بدون خصم</option>
+          <option value="percent">خصم بنسبة مئوية</option>
+          <option value="fixed">خصم بمبلغ ثابت</option>
+          <option value="waive">إعفاء كامل</option>
+        </select>
+      </div>
+      <div class="field" id="assignDiscountValueWrap">
+        <label for="assignDiscountValue">قيمة الخصم</label>
+        <input name="discount_value" id="assignDiscountValue" type="number" min="0" step="0.01" value="0">
+      </div>
+      <div class="field">
+        <label for="assignDiscountReason">سبب الخصم (اختياري)</label>
+        <input name="discount_reason" id="assignDiscountReason" maxlength="240" placeholder="مثال: خصم طالب متفوق">
+      </div>
+      <div class="notice" id="assignPricePreview" style="grid-column:1/-1">اختر الطالب والباقة لحساب السعر والخصم.</div>`;
+    if (actions) actions.before(controls);
+    else assignmentForm.appendChild(controls);
+  }
+
+  const paymentAmount = $('paymentForm')?.querySelector('[name="amount"]');
+  if (paymentAmount && !$('paymentBalance')) {
+    const balance = document.createElement('small');
+    balance.id = 'paymentBalance';
+    balance.className = 'muted';
+    balance.textContent = 'اختر الاشتراك لمعرفة المبلغ المتبقي.';
+    paymentAmount.insertAdjacentElement('afterend', balance);
+    paymentAmount.id = 'paymentAmount';
+  }
+
+  const subscriptionsBody = $('subscriptionsBody');
+  const table = subscriptionsBody?.closest('table');
+  const headRow = table?.querySelector('thead tr');
+  if (headRow && headRow.children.length !== 12) {
+    headRow.innerHTML = '<th>الطالب</th><th>الباقة</th><th>السعر الأساسي</th><th>الخصم</th><th>الصافي المستحق</th><th>المدفوع</th><th>المتبقي</th><th>حالة الدفع</th><th>حالة الاشتراك</th><th>البداية</th><th>الانتهاء</th><th>إجراءات</th>';
+  }
+
+  const planHelp = $('planForm')?.closest('.panel')?.querySelector('.help');
+  if (planHelp) {
+    planHelp.textContent = 'أنشئ باقة لدورة واحدة عند تحديد سعرها الأساسي. السعر المسجل هو السعر الثابت قبل خصم الطالب، ويمكن تطبيق خصم مستقل لكل طالب عند الاعتماد.';
+  }
+}
+
+function calculateDiscount(baseAmount, type, rawValue) {
+  const base = Math.max(0, Number(baseAmount || 0));
+  const value = Math.max(0, Number(rawValue || 0));
+  let discount = 0;
+  if (type === 'waive') discount = base;
+  else if (type === 'percent') discount = base * Math.min(100, value) / 100;
+  else if (type === 'fixed') discount = Math.min(base, value);
+  discount = Math.round(discount * 100) / 100;
+  return {base, discount, net:Math.max(0, Math.round((base - discount) * 100) / 100)};
+}
+
+function updateAssignPricePreview() {
+  const student = state.profiles.find(p => p.user_id === $('studentSelect').value);
+  const selectedPlan = state.plans.find(p => p.id === $('planSelect').value);
+  const host = $('assignPricePreview');
+  if (!host) return;
+  if (!student || !selectedPlan) {
+    host.textContent = 'اختر الطالب والباقة لحساب السعر والخصم.';
+    return;
+  }
+  const type = $('assignDiscountType').value;
+  const value = $('assignDiscountValue').value;
+  const calc = calculateDiscount(selectedPlan.price, type, value);
+  host.textContent = `السعر الأساسي: ${money(calc.base, selectedPlan.currency)} — الخصم: ${money(calc.discount, selectedPlan.currency)} — صافي المستحق: ${money(calc.net, selectedPlan.currency)}`;
+}
+
+function paymentRemaining(subscriptionId) {
+  const sub = state.subscriptions.find(s => s.id === subscriptionId);
+  if (!sub) return null;
+  const paid = state.payments
+    .filter(p => p.subscription_id === subscriptionId && p.status === 'paid')
+    .reduce((sum,p) => sum + Number(p.amount || 0), 0);
+  return Math.max(0, Math.round((Number(sub.agreed_amount || 0) - paid) * 100) / 100);
+}
+
+function updatePaymentBalance() {
+  const remaining = paymentRemaining($('paymentSubscription').value);
+  const host = $('paymentBalance');
+  const amount = $('paymentAmount');
+  if (remaining === null) {
+    host.textContent = 'اختر الاشتراك لمعرفة المبلغ المتبقي.';
+    amount.removeAttribute('max');
+    return;
+  }
+  host.textContent = `المبلغ المتبقي: ${money(remaining, state.subscriptions.find(s => s.id === $('paymentSubscription').value)?.currency || 'EGP')}`;
+  amount.max = String(remaining);
+}
+
 function fillSelect(id, rows, valueKey, labelFn, placeholder) {
   const el = $(id);
   const old = el.value;
@@ -202,7 +304,7 @@ async function loadAll() {
     db.from('subscription_plan_courses')
       .select('plan_id,course_slug,can_view_course_page,can_watch_video,can_download,can_take_assessments,can_receive_certificate,can_track_progress'),
     db.from('student_subscriptions')
-      .select('id,user_id,plan_id,agreed_amount,currency,status,payment_state,starts_at,expires_at,created_at')
+      .select('id,user_id,plan_id,base_amount,discount_type,discount_value,discount_amount,discount_reason,agreed_amount,currency,status,payment_state,starts_at,expires_at,created_at')
       .order('created_at',{ascending:false})
       .limit(300),
     db.from('subscription_payments')
@@ -262,6 +364,7 @@ function renderAll() {
   const usableSubs = state.subscriptions.filter(s =>
     ['pending','active','suspended'].includes(s.status)
   );
+  const payableSubs = usableSubs.filter(s => paymentRemaining(s.id) > 0);
 
   const subLabel = s => {
     const p = person(s.user_id);
@@ -269,7 +372,7 @@ function renderAll() {
     return `${p?.full_name || p?.email || 'طالب'} — ${pl?.name || 'باقة'} — ${statusLabel(s.status)}`;
   };
 
-  fillSelect('paymentSubscription',usableSubs,'id',subLabel,'اختر الاشتراك');
+  fillSelect('paymentSubscription',payableSubs,'id',subLabel,'اختر اشتراكًا له رصيد مستحق');
   fillSelect('activationSubscription',usableSubs,'id',subLabel,'اختر الاشتراك');
 
   const teacherCandidates = students.filter(p =>
@@ -300,6 +403,8 @@ function renderAll() {
   renderPayments();
   renderAssignments();
   renderPermissions();
+  updateAssignPricePreview();
+  updatePaymentBalance();
 }
 
 function renderCourseChoices() {
@@ -325,7 +430,7 @@ function renderPlans() {
     ? state.plans.map(p => {
       const mappings = state.planCourses.filter(x => x.plan_id === p.id);
       const names = mappings.map(x => courseTitle(x.course_slug)).join('، ');
-      const paidPlanNeedsPrice = p.code === 'business-administration-paid-v1' && Number(p.price || 0) <= 0;
+      const paidPlanNeedsPrice = /(?:^|[-_])paid(?:[-_]|$)/i.test(String(p.code || '')) && Number(p.price || 0) <= 0;
       const toggleDisabled = !p.is_active && paidPlanNeedsPrice;
       const extraNote = paidPlanNeedsPrice
         ? '<br><small class="muted">أدخل السعر الحقيقي قبل التفعيل</small>'
@@ -333,11 +438,17 @@ function renderPlans() {
       return `<tr>
         <td><strong>${esc(p.name)}</strong><br><span class="muted">${esc(p.code)}</span></td>
         <td>${esc(p.plan_type)}</td>
-        <td>${esc(money(p.price,p.currency))}${extraNote}</td>
+        <td>
+          <div style="display:flex;gap:6px;align-items:center;min-width:180px">
+            <input data-plan-price="${esc(p.id)}" type="number" min="0" step="0.01" value="${esc(p.price)}" aria-label="السعر الأساسي" style="width:110px;min-height:34px;padding:5px 7px;border:1px solid #dce3ed;border-radius:8px">
+            <span class="muted">${esc(p.currency)}</span>
+            <button class="btn small light" data-plan-save="${esc(p.id)}">حفظ</button>
+          </div>${extraNote}
+        </td>
         <td>${p.duration_days ? esc(p.duration_days)+' يوم' : 'مفتوح المدة'}</td>
         <td>${esc(names || 'لم تحدد')}</td>
         <td>${statusHtml(p.is_active ? 'active' : 'cancelled')}</td>
-        <td><button class="btn small light" data-plan-toggle="${esc(p.id)}" ${toggleDisabled ? 'disabled title="أدخل السعر الحقيقي للباقة المدفوعة قبل تفعيلها."' : ''}>${p.is_active ? 'إيقاف' : 'تفعيل'}</button></td>
+        <td><button class="btn small light" data-plan-toggle="${esc(p.id)}" ${toggleDisabled ? 'disabled title="أدخل السعر الحقيقي قبل تفعيل الباقة المدفوعة."' : ''}>${p.is_active ? 'إيقاف' : 'تفعيل'}</button></td>
       </tr>`;
     }).join('')
     : '<tr><td colspan="7" class="empty">لا توجد باقات.</td></tr>';
@@ -363,7 +474,11 @@ function renderSubscriptions() {
       return `<tr>
         <td>${esc(p?.full_name || '—')}<br><span class="muted">${esc(p?.email || '')}</span></td>
         <td>${esc(pl?.name || '—')}</td>
-        <td>${esc(money(s.agreed_amount,s.currency))}</td>
+        <td>${esc(money(s.base_amount ?? s.agreed_amount,s.currency))}</td>
+        <td>${esc(money(s.discount_amount || 0,s.currency))}${s.discount_type && s.discount_type !== 'none' ? `<br><small class="muted">${esc(s.discount_type)} ${esc(s.discount_value ?? '')}</small>` : ''}</td>
+        <td><strong>${esc(money(s.agreed_amount,s.currency))}</strong></td>
+        <td>${esc(money(state.payments.filter(p => p.subscription_id === s.id && p.status === 'paid').reduce((sum,p) => sum + Number(p.amount || 0),0),s.currency))}</td>
+        <td>${esc(money(paymentRemaining(s.id),s.currency))}</td>
         <td>${statusHtml(s.payment_state)}</td>
         <td>${statusHtml(s.status)}</td>
         <td>${esc(date(s.starts_at))}</td>
@@ -371,7 +486,7 @@ function renderSubscriptions() {
         <td><div class="action-cell">${actions || '—'}</div></td>
       </tr>`;
     }).join('')
-    : '<tr><td colspan="8" class="empty">لا توجد اشتراكات بعد.</td></tr>';
+    : '<tr><td colspan="12" class="empty">لا توجد اشتراكات بعد.</td></tr>';
 }
 
 function renderPayments() {
@@ -455,10 +570,15 @@ $('planForm').addEventListener('submit',async event => {
   }
 
   const price = Number(fd.get('price'));
+  const planCode = String(fd.get('code') || '').trim();
   const durationRaw = String(fd.get('duration_days') || '').trim();
 
   if(!Number.isFinite(price) || price < 0) {
     msg('قيمة السعر غير صحيحة.',true);
+    return;
+  }
+  if (/(?:^|[-_])paid(?:[-_]|$)/i.test(planCode) && price <= 0) {
+    msg('الباقة المدفوعة تحتاج سعرًا أساسيًا أكبر من صفر قبل إنشائها.',true);
     return;
   }
 
@@ -472,7 +592,7 @@ $('planForm').addEventListener('submit',async event => {
 
   try {
     const payload = {
-      code:String(fd.get('code')).trim(),
+      code:planCode,
       name:String(fd.get('name')).trim(),
       description:String(fd.get('description') || ''),
       plan_type:fd.get('plan_type'),
@@ -539,10 +659,16 @@ $('subscriptionForm').addEventListener('submit',async event => {
     return;
   }
 
-  const amount = Number(selectedPlan.price || 0);
-  const confirmText = amount === 0
-    ? `سيتم إسناد الباقة المجانية "${selectedPlan.name}" إلى ${selectedStudent.full_name || selectedStudent.email} وتفعيل الاشتراك تلقائيًا. هل تتابع؟`
-    : `سيتم إسناد الباقة المدفوعة "${selectedPlan.name}" إلى ${selectedStudent.full_name || selectedStudent.email}. سيظل الاشتراك Pending حتى تسجيل الدفع وتفعيله. هل تتابع؟`;
+  const discountType = String(fd.get('discount_type') || 'none');
+  const discountValue = discountType === 'waive' ? 0 : Number(fd.get('discount_value') || 0);
+  const calc = calculateDiscount(selectedPlan.price, discountType, discountValue);
+  if (!Number.isFinite(discountValue) || discountValue < 0 || (discountType === 'percent' && discountValue > 100) || (discountType === 'fixed' && discountValue > calc.base)) {
+    msg('قيمة الخصم غير صحيحة أو أكبر من السعر الأساسي.',true);
+    return;
+  }
+  const confirmText = calc.net === 0
+    ? `سيتم إسناد ${selectedPlan.name} إلى ${selectedStudent.full_name || selectedStudent.email} بصافي صفر جنيه وتفعيل الاشتراك كإعفاء. هل تتابع؟`
+    : `السعر الأساسي ${money(calc.base,selectedPlan.currency)}، الخصم ${money(calc.discount,selectedPlan.currency)}، الصافي ${money(calc.net,selectedPlan.currency)}. سيظل الاشتراك معلقًا حتى اكتمال السداد. هل تتابع؟`;
 
   if(!confirm(confirmText)) return;
 
@@ -550,16 +676,19 @@ $('subscriptionForm').addEventListener('submit',async event => {
   button.disabled = true;
 
   try {
-    const id = await rpc('admin_assign_plan_to_approved_student_v2',{
+    const id = await rpc('admin_assign_student_with_discount_v1',{
       p_target_user:studentId,
       p_plan_id:planId,
+      p_discount_type:discountType,
+      p_discount_value:discountValue,
+      p_discount_reason:fd.get('discount_reason') || '',
       p_admin_note:fd.get('admin_note') || ''
     });
 
     msg(
-      amount === 0
-        ? 'تم إسناد الباقة المجانية وتفعيل الاشتراك بنجاح. رقم الاشتراك: ' + id
-        : 'تم إسناد الباقة المدفوعة بحالة Pending. سجّل الدفع ثم فعّل الاشتراك. رقم الاشتراك: ' + id
+      calc.net === 0
+        ? 'تم إسناد الاشتراك وإعفاء الطالب وتفعيله. رقم الاشتراك: ' + id
+        : 'تم إسناد الاشتراك. المستحق ' + money(calc.net,selectedPlan.currency) + '، وسيظل معلقًا حتى اكتمال السداد. رقم الاشتراك: ' + id
     );
 
     event.currentTarget.reset();
@@ -579,8 +708,13 @@ $('paymentForm').addEventListener('submit',async event => {
 
   const fd = new FormData(event.currentTarget);
   const amount = Number(fd.get('amount'));
+  const remaining = paymentRemaining(String(fd.get('subscription_id') || ''));
   if(!Number.isFinite(amount) || amount <= 0) {
     msg('أدخل مبلغ دفعة صحيحًا.',true);
+    return;
+  }
+  if (remaining === null || amount > remaining + 0.001) {
+    msg('مبلغ الدفعة أكبر من الرصيد المتبقي.',true);
     return;
   }
 
@@ -588,7 +722,7 @@ $('paymentForm').addEventListener('submit',async event => {
   button.disabled = true;
 
   try {
-    await rpc('record_subscription_payment_v2',{
+    await rpc('record_subscription_payment_v3',{
       p_subscription_id:fd.get('subscription_id'),
       p_amount:amount,
       p_payment_method:fd.get('payment_method'),
@@ -727,6 +861,34 @@ $('teacherPermissionForm').addEventListener('submit',async event => {
 });
 
 $('plansBody').addEventListener('click',async event => {
+  const saveButton = event.target.closest('[data-plan-save]');
+  if (saveButton) {
+    const p = plan(saveButton.dataset.planSave);
+    const input = $('plansBody').querySelector(`[data-plan-price="${CSS.escape(saveButton.dataset.planSave)}"]`);
+    const nextPrice = Number(input?.value);
+    if (!p || !Number.isFinite(nextPrice) || nextPrice < 0) {
+      msg('أدخل سعرًا أساسيًا صحيحًا.',true);
+      return;
+    }
+    if (/(?:^|[-_])paid(?:[-_]|$)/i.test(String(p.code || '')) && nextPrice <= 0 && p.is_active) {
+      msg('لا يمكن إبقاء الباقة المدفوعة نشطة بسعر صفر. أوقفها أولًا أو أدخل السعر الصحيح.',true);
+      return;
+    }
+    if (!confirm(`تأكيد السعر الأساسي الجديد للباقة «${p.name}»: ${money(nextPrice,p.currency)}؟ سيؤثر هذا السعر على الاشتراكات الجديدة فقط.`)) return;
+    saveButton.disabled = true;
+    try {
+      const {error} = await state.client.from('subscription_plans').update({price:nextPrice}).eq('id',p.id);
+      if (error) throw error;
+      msg('تم حفظ السعر الأساسي. الاشتراكات السابقة لن تتغير.');
+      await loadAll();
+    } catch(error) {
+      msg('تعذّر حفظ السعر: ' + error.message,true);
+    } finally {
+      saveButton.disabled = false;
+    }
+    return;
+  }
+
   const button = event.target.closest('[data-plan-toggle]');
   if(!button) return;
 
@@ -735,8 +897,8 @@ $('plansBody').addEventListener('click',async event => {
 
   const next = !p.is_active;
 
-  if(next && p.code === 'business-administration-paid-v1' && Number(p.price || 0) <= 0) {
-    msg('لا يمكن تفعيل باقة الإدارة والأعمال المدفوعة قبل إدخال السعر الحقيقي واعتماده.',true);
+  if(next && /(?:^|[-_])paid(?:[-_]|$)/i.test(String(p.code || '')) && Number(p.price || 0) <= 0) {
+    msg('لا يمكن تفعيل باقة مدفوعة قبل إدخال السعر الأساسي الحقيقي.',true);
     return;
   }
 
@@ -836,7 +998,20 @@ $('logoutBtn').addEventListener('click',async event => {
   location.href = 'login.html';
 });
 
-$('studentSelect').addEventListener('change', refreshPlanOptionsForSelectedStudent);
+ensurePricingControls();
+$('assignDiscountValueWrap').classList.toggle('hidden', $('assignDiscountType').value === 'none' || $('assignDiscountType').value === 'waive');
+
+$('studentSelect').addEventListener('change', () => {
+  refreshPlanOptionsForSelectedStudent();
+  updateAssignPricePreview();
+});
+$('planSelect').addEventListener('change', updateAssignPricePreview);
+$('assignDiscountType').addEventListener('change', () => {
+  $('assignDiscountValueWrap').classList.toggle('hidden', $('assignDiscountType').value === 'none' || $('assignDiscountType').value === 'waive');
+  updateAssignPricePreview();
+});
+$('assignDiscountValue').addEventListener('input', updateAssignPricePreview);
+$('paymentSubscription').addEventListener('change', updatePaymentBalance);
 
 boot();
 })();
