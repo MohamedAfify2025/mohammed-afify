@@ -648,7 +648,8 @@ $('subscriptionForm').addEventListener('submit',async event => {
   event.preventDefault();
   clearMsg();
 
-  const fd = new FormData(event.currentTarget);
+  const form = event.currentTarget;
+  const fd = new FormData(form);
   const studentId = String(fd.get('student_id') || '');
   const planId = String(fd.get('plan_id') || '');
   const selectedPlan = state.plans.find(item => item.id === planId);
@@ -672,7 +673,7 @@ $('subscriptionForm').addEventListener('submit',async event => {
 
   if(!confirm(confirmText)) return;
 
-  const button = event.currentTarget.querySelector('button[type="submit"]');
+  const button = form.querySelector('button[type="submit"]');
   button.disabled = true;
 
   try {
@@ -691,7 +692,7 @@ $('subscriptionForm').addEventListener('submit',async event => {
         : 'تم إسناد الاشتراك. المستحق ' + money(calc.net,selectedPlan.currency) + '، وسيظل معلقًا حتى اكتمال السداد. رقم الاشتراك: ' + id
     );
 
-    event.currentTarget.reset();
+    form.reset();
     refreshPlanOptionsForSelectedStudent();
     await loadAll();
 
