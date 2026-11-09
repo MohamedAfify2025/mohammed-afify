@@ -1,0 +1,139 @@
+/* Mohammed Afify Academy - Accounting Hero V1 */
+.ac-hero.ac-hero-image-v1 {
+  position: relative !important;
+  display: block !important;
+  width: min(100%, 1280px) !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin-inline: auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  aspect-ratio: 1672 / 941;
+  border: 1px solid rgba(210, 203, 237, .78) !important;
+  border-radius: 28px !important;
+  background: #f4efff !important;
+  box-shadow: 0 22px 54px rgba(43, 26, 83, .14) !important;
+  animation: none !important;
+}
+
+.ac-hero-image-v1__image {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1672 / 941;
+  object-fit: cover;
+  margin: 0 !important;
+}
+
+.ac-hero-image-v1__actions {
+  position: absolute;
+  z-index: 3;
+  left: 53.5%;
+  right: 3.1%;
+  top: 63.9%;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  direction: rtl;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 2%;
+}
+
+.ac-hero-image-v1__actions a {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  color: transparent !important;
+  background: transparent;
+  text-decoration: none !important;
+  font-size: 0 !important;
+  line-height: 1;
+  outline: none;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.ac-hero-image-v1__actions a:hover {
+  border-color: rgba(93, 48, 150, .8);
+  box-shadow: 0 0 0 3px rgba(123, 78, 177, .16);
+}
+
+.ac-hero-image-v1__actions a:focus-visible {
+  border-color: #4d237f;
+  box-shadow: 0 0 0 4px rgba(93, 48, 150, .24);
+}
+
+.ac-hero-image-v1__actions span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 760px) {
+  .ac-hero.ac-hero-image-v1 {
+    width: 100% !important;
+    border-radius: 18px !important;
+    aspect-ratio: auto;
+  }
+
+  .ac-hero-image-v1__image {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .ac-hero-image-v1__actions {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 12px;
+    background: #f5f1ff;
+  }
+
+  .ac-hero-image-v1__actions a {
+    min-height: 48px;
+    padding: 10px 12px;
+    color: #32145f !important;
+    background: #fff;
+    border: 1px solid #d5c6f0;
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 13px !important;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .ac-hero-image-v1__actions a:first-child {
+    color: #fff !important;
+    background: linear-gradient(135deg, #8c4ac0, #4d237f);
+    border-color: transparent;
+  }
+
+  .ac-hero-image-v1__actions span {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-hero-image-v1__actions a {
+    transition: none;
+  }
+}
