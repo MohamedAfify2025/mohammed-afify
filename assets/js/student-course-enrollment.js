@@ -173,8 +173,14 @@
       if (results[0].error) throw results[0].error;
       if (results[1].error) throw results[1].error;
 
+      const requestRows = results[1].data || [];
+      state.pendingPlanIds = new Set(
+        requestRows
+          .filter(row => ['pending', 'fulfilled'].includes(row.status))
+          .map(row => row.plan_id)
+      );
       renderOffers(results[0].data || []);
-      renderRequests(results[1].data || []);
+      renderRequests(requestRows);
     } catch (error) {
       showNotice(error?.message || 'تعذّر تحميل الدورات المتاحة.', 'error');
       offersHost.innerHTML = '';
