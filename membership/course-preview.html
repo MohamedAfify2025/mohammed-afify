@@ -75,6 +75,7 @@
       <ol id="courseUnits"></ol>
       <div class="actions">
         <a class="btn primary" href="register.html">إنشاء حساب وطلب الاشتراك</a>
+        <a class="btn secondary" id="openCourseLink" href="#" hidden>فتح صفحة الدورة للمشتركين</a>
         <a class="btn secondary" href="../academy/index.html">العودة إلى مكتبة الدورات</a>
       </div>
     </section>
@@ -210,6 +211,19 @@
           ]
         }
       };
+      const courseRoutes = {
+        'accounting':'accounting.html',
+        'business-administration':'business-administration.html',
+        'programming':'programming.html',
+        'python':'python.html',
+        'scratch':'scratch.html',
+        'data-analysis':'data-analysis.html',
+        'icdl':'icdl.html',
+        'windows':'windows.html',
+        'word':'word.html',
+        'excel':'excel.html',
+        'powerpoint':'powerpoint.html'
+      };
       const requested = new URLSearchParams(location.search).get('course') || '';
       const course = courses[requested.toLowerCase()];
       const title = document.getElementById('courseTitle');
@@ -225,6 +239,11 @@
         count.textContent = 'لا توجد دورة محددة';
         list.innerHTML = '<li class="missing">لم يتم تحديد دورة صحيحة. استخدم رابط الاستعراض من بطاقة الدورة.</li>';
       } else {
+        const openCourseLink = document.getElementById('openCourseLink');
+        if (openCourseLink && courseRoutes[requested.toLowerCase()]) {
+          openCourseLink.href = '../academy/' + courseRoutes[requested.toLowerCase()];
+          openCourseLink.hidden = false;
+        }
         document.title = 'محتوى ' + course.title + ' | Mohammed Afify Academy';
         title.textContent = course.title;
         tagline.textContent = course.tagline;
