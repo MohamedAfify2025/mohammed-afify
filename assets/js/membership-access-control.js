@@ -19,6 +19,7 @@
   const isAcademyPage = /\/academy\/[^/]+\.html?$/i.test(path);
   const isHomepage = !/\/academy\//i.test(path) && (/\/index\.html?$/i.test(path) || path.endsWith('/'));
   const currentSlug = (path.split('/').pop() || '').replace(/\.html?$/i, '').toLowerCase();
+  const isPublicCatalog = isAcademyPage && currentSlug === 'index';
   const gateClass = 'm-access-checking';
 
   const CATEGORY_SLUGS = {
@@ -281,6 +282,12 @@
     try {
       const profile = await getSignedInProfile();
       if (!profile) {
+        if (isPublicCatalog) {
+          document.documentElement.classList.remove(gateClass);
+          const main = document.querySelector('main');
+          if (main) main.style.visibility = 'visible';
+          return;
+        }
         if (isAcademyPage) redirectToLogin();
         else if (isHomepage) filterGuestHomepage();
         return;
@@ -294,6 +301,12 @@
       }
 
       if (profile.status !== 'approved' || profile.account_state !== 'active') {
+        if (isPublicCatalog) {
+          document.documentElement.classList.remove(gateClass);
+          const main = document.querySelector('main');
+          if (main) main.style.visibility = 'visible';
+          return;
+        }
         if (isAcademyPage) {
           location.href = '../membership/student-dashboard.html';
           return;
@@ -342,6 +355,13 @@
       document.documentElement.classList.remove(gateClass);
       if (main) main.style.visibility = 'visible';
     } catch (error) {
+      if (isPublicCatalog) {
+        document.documentElement.classList.remove(gateClass);
+        const main = document.querySelector('main');
+        if (main) main.style.visibility = 'visible';
+        console.warn('Public course catalogue opened without membership verification:', error?.message || error);
+        return;
+      }
       if (isAcademyPage) {
         addNotice(
           document.querySelector('main'),
