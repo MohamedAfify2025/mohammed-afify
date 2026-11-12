@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="استعرض محاور ووحدات الدورات التعليمية في منصة محمد عفيفي قبل الاشتراك.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#111d38">
+  <title>استعراض محتوى الدورة | Mohammed Afify Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--navy:#111d38;--navy2:#243d65;--teal:#19a995;--ink:#1a2a46;--muted:#718096;--line:#e5eaf2;--bg:#f4f6fb}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,Tahoma,sans-serif;line-height:1.8}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;cursor:pointer}
+    .topbar{height:auto;min-height:68px;background:#fff;border-bottom:1px solid var(--line);padding:12px max(18px,calc((100% - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;color:var(--navy);font-weight:900}
+    .mark{width:41px;height:41px;border-radius:12px;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:15px}
+    .mark span{color:#63ddcc}
+    .brand small{display:block;margin-top:-4px;color:#8390a4;font-size:10px;font-weight:600}
+    .navlinks{display:flex;gap:16px;align-items:center;color:#63718a;font-size:12px;font-weight:800}
+    .navlinks a:last-child{background:#edf8f6;color:#177c71;padding:8px 12px;border-radius:9px}
+    main{width:min(980px,calc(100% - 32px));margin:30px auto 60px}
+    .crumb{font-size:11px;color:#8792a4;margin-bottom:14px}
+    .crumb a{color:#317f77;font-weight:800}
+    .hero{position:relative;overflow:hidden;border-radius:22px;padding:28px 30px;background:linear-gradient(120deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 15px 38px #14234216}
+    .hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff20;border-radius:50%;left:-90px;top:-155px;box-shadow:0 0 0 32px #ffffff08,0 0 0 65px #ffffff05}
+    .eyebrow{font-size:10px;letter-spacing:1.5px;color:#75e2d3;font-weight:900}
+    h1{font-size:clamp(25px,4vw,34px);margin:7px 0 5px;line-height:1.4}
+    .hero p{position:relative;z-index:1;max-width:720px;margin:0;color:#d1dceb;font-size:13px}
+    .summary{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:17px 0}
+    .summary h2{margin:0 0 5px;font-size:15px;color:var(--navy)}
+    .summary p{margin:0;color:#68768d;font-size:12px;line-height:2}
+    .contents{background:#fff;border:1px solid var(--line);border-radius:17px;padding:19px 20px}
+    .contents-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+    .contents-head h2{font-size:17px;color:var(--navy);margin:0}
+    .count{background:#eef2f7;color:#6a7890;border-radius:30px;padding:5px 10px;font-size:10px;white-space:nowrap}
+    ol{list-style:none;padding:0;margin:0;display:grid;gap:9px}
+    li{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid #e9edf3;border-radius:12px;background:#fff}
+    .num{flex:0 0 30px;width:30px;height:30px;border-radius:9px;background:#eaf7f4;color:#147f73;display:grid;place-items:center;font-size:10px;font-weight:900}
+    .unit strong{display:block;color:#243653;font-size:13px}
+    .unit small{display:block;color:#7a879a;font-size:11px;margin-top:2px;line-height:1.8}
+    .read-only{margin:14px 0;padding:11px 14px;background:#eef8f6;border:1px solid #dbeeea;color:#24786e;border-radius:11px;font-size:11px;font-weight:800}
+    .actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:19px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;padding:11px 17px;font-size:12px;font-weight:900}
+    .btn.primary{background:var(--navy);color:#fff}
+    .btn.secondary{background:#e9f5f3;color:#16776e}
+    .missing{background:#fff;border:1px dashed #d6deea;border-radius:13px;padding:18px;text-align:center;color:#718096;font-size:12px}
+    footer{text-align:center;color:#96a0af;font-size:10px;padding:25px}
+    @media(max-width:580px){.topbar{padding:10px 13px}.navlinks{gap:9px;font-size:10px}.navlinks a:first-child{display:none}main{width:calc(100% - 22px);margin-top:17px}.hero{padding:22px 18px;border-radius:17px}.summary,.contents{padding:15px}.contents-head{align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../index.html"><span class="mark">MA<span>.</span></span><span>Mohammed Afify<small>منصة التعلم والتطبيق</small></span></a>
+    <nav class="navlinks"><a href="../academy/index.html">مكتبة الدورات</a><a href="login.html">تسجيل الدخول</a><a href="register.html">اشترك الآن</a></nav>
+  </header>
+  <main>
+    <div class="crumb"><a href="../academy/index.html">مكتبة الدورات</a> / استعراض محتوى الدورة</div>
+    <section class="hero">
+      <div class="eyebrow">MOHAMMED AFIFY ACADEMY · COURSE OVERVIEW</div>
+      <h1 id="courseTitle">محتوى الدورة</h1>
+      <p id="courseTagline">استعرض الوحدات والمحاور التعليمية قبل الاشتراك.</p>
+    </section>
+    <section class="summary">
+      <h2>نبذة عن الدورة</h2>
+      <p id="courseSummary"></p>
+    </section>
+    <section class="contents">
+      <div class="contents-head"><h2>الوحدات والمحاور التعليمية</h2><span id="courseCount" class="count"></span></div>
+      <div class="read-only">وضع الاستعراض فقط: يمكنك قراءة المنهج والتعرف على موضوعاته دون تشغيل فيديو أو فتح درس أو تسجيل تقدم.</div>
+      <ol id="courseUnits"></ol>
+      <div class="actions">
+        <a class="btn primary" href="register.html">إنشاء حساب وطلب الاشتراك</a>
+        <a class="btn secondary" href="../academy/index.html">العودة إلى مكتبة الدورات</a>
+      </div>
+    </section>
+  </main>
+  <footer>Mohammed Afify Academy · Learn · Analyze · Build · Transform</footer>
+  <script>
+    (() => {
+      'use strict';
+      const courses = {
+        'accounting': {
+          title:'المحاسبة', tagline:'من المبادئ المحاسبية إلى إعداد القوائم المالية.',
+          summary:'منهج تمهيدي يعرّف الطالب بوظيفة المحاسبة وأساسيات التسجيل المزدوج والدفاتر وميزان المراجعة والقوائم المالية للمنشأة الفردية.',
+          units:[
+            ['الوحدة الأولى: لماذا نتعلم المحاسبة؟','فهم دور المحاسبة في تسجيل العمليات وتوفير معلومات تساعد على اتخاذ القرار.'],
+            ['الوحدة الثانية: قاعدة القيد المزدوج وحسابات دفاتر الأستاذ','فهم طبيعة الحسابات وقاعدة المدين والدائن وترحيل القيود.'],
+            ['الوحدة الثالثة: دفاتر اليومية المساعدة','التعرف على الدفاتر المساعدة واستخدامها في تنظيم العمليات المتكررة.'],
+            ['الوحدة الرابعة: ميزان المراجعة وتصحيح الأخطاء','إعداد ميزان المراجعة والتعرف على الأخطاء المحاسبية وطرق معالجتها.'],
+            ['الوحدة الخامسة: القوائم المالية للمنشأة الفردية','التعرف على القوائم المالية الأساسية والعلاقة بين نتائج النشاط والمركز المالي.']
+          ]
+        },
+        'business-administration': {
+          title:'الإدارة والأعمال',tagline:'مسار البكالوريا المصرية · Grade 2',
+          summary:'مسار لفهم منظمات الأعمال، وأهدافها، وأصحاب المصلحة، والبيئة الداخلية والخارجية، ودور الإدارة والقيادة في اتخاذ القرارات.',
+          units:[
+            ['الوحدة الأولى: مدخل إلى الأعمال وغايتها','الاحتياجات والرغبات والسلع والخدمات والقطاعات وخلق القيمة وأصحاب المصلحة.'],
+            ['الوحدة الثانية: أنواع منظمات الأعمال','المنظمة الفردية وشركات الأشخاص وشركات الأموال، والمقارنة بين الملكية والمسؤولية والسيطرة والتمويل.'],
+            ['الوحدة الثالثة: أهداف منظمات الأعمال وأصحاب المصلحة','البقاء والربح والنمو والحصة السوقية والأهداف الاجتماعية والأخلاقية وتعارض المصالح.'],
+            ['الوحدة الرابعة: البيئة الداخلية والخارجية','تحليل العوامل الداخلية والخارجية التي تؤثر في المنظمة وقراراتها.'],
+            ['الوحدة الخامسة: الإدارة والقيادة','مبادئ الإدارة والقيادة وتوجيه الأفراد والموارد نحو الأهداف.'],
+            ['مشروع تطبيقي: خطة قرار لمشروع مريم','تطبيق مفاهيم المنهج على موقف عملي وموازنة البدائل والمصالح.']
+          ]
+        },
+        'programming': {
+          title:'البرمجة',tagline:'ابدأ بالمفاهيم ثم انتقل إلى التطبيق والمشروعات.',
+          summary:'مدخل إلى التفكير البرمجي يتدرج من فهم المفاهيم الأساسية إلى اختيار مسار مناسب مثل البرمجة للأطفال أو أساسيات البرمجة أو Python.',
+          units:[
+            ['البرمجة للأطفال: ScratchJr وScratch','التعرف على اللبنات والأوامر وبناء قصص وألعاب تفاعلية بسيطة.'],
+            ['أساسيات البرمجة','التفكير المنطقي والخوارزميات والمتغيرات وأنواع البيانات والشروط.'],
+            ['تعلم Python','مدخل إلى كتابة الأوامر وبناء البرامج خطوة بخطوة.'],
+            ['ورش العمل والتطبيقات','أنشطة عملية ومشروعات صغيرة لتثبيت المفاهيم.']
+          ]
+        },
+        'python': {
+          title:'Python',tagline:'تعلّم Python خطوة بخطوة.',
+          summary:'مسار تمهيدي لتعلم لغة Python وكتابة الكود وفهم البيانات والشروط وتطبيق المفاهيم لحل المشكلات.',
+          units:[
+            ['مدخل إلى Python','التعرف على اللغة ومجالات استخدامها وبيئة التطوير.'],
+            ['أساسيات كتابة الكود','كتابة الأوامر وتنظيمها وتشغيل البرامج.'],
+            ['المتغيرات وأنواع البيانات','تخزين القيم والتعامل مع النصوص والأرقام والبيانات.'],
+            ['الشروط والمنطق','استخدام الشروط لبناء قرارات داخل البرنامج.'],
+            ['التطبيق وحل المشكلات','توظيف ما تعلمته في تمارين وبرامج صغيرة.']
+          ]
+        },
+        'scratch': {
+          title:'Scratch — البرمجة للأطفال',tagline:'تعلّم البرمجة من خلال القصص والألعاب.',
+          summary:'مسار مبسط يساعد المتعلم الصغير على فهم التسلسل والأوامر والتفاعل من خلال مشروعات مرئية.',
+          units:[
+            ['المستوى الأول: ScratchJr','التعرف على الواجهة والشخصيات والخلفيات وتركيب الأوامر الأساسية.'],
+            ['المستوى الثاني: Scratch','استخدام اللبنات والأحداث والحركة والتكرار والتفاعل.'],
+            ['ماذا سيكتسب المتعلم؟','تنمية التفكير المنطقي والتسلسل وحل المشكلات والإبداع.'],
+            ['التعلم من خلال المشروعات','بناء قصص وألعاب وأنشطة تفاعلية بسيطة.']
+          ]
+        },
+        'data-analysis': {
+          title:'تحليل البيانات',tagline:'حوّل البيانات إلى مؤشرات وتقارير تدعم القرار.',
+          summary:'مسار يعرض أدوات تحليل البيانات المستخدمة في تنظيم البيانات وتجهيزها وتحليلها وتصميم التقارير ولوحات المعلومات، مع مشروع تطبيقي.',
+          units:[
+            ['Excel','تنظيم البيانات وإعداد الجداول والتقارير.'],
+            ['Power Query','تجهيز البيانات وتنظيفها وتحويلها قبل التحليل.'],
+            ['Power BI','تصميم التقارير ولوحات المعلومات التفاعلية.'],
+            ['Python','التعرف على استخدام البرمجة ضمن أدوات تحليل البيانات.'],
+            ['مشروع تطبيقي: تحليل بيانات سوبر ماركت','قراءة بيانات المبيعات وتحليل أداء الفروع وسلوك العملاء واستخلاص مؤشرات.']
+          ]
+        },
+        'icdl': {
+          title:'ICDL ومهارات الكمبيوتر',tagline:'مهارات رقمية عملية للدراسة والعمل.',
+          summary:'منهج في أساسيات الكمبيوتر وتطبيقات Microsoft Office والإنترنت والبريد الإلكتروني والأمان الرقمي.',
+          units:[
+            ['أساسيات الكمبيوتر','مكونات الجهاز ونظام التشغيل وإدارة الملفات والمجلدات.'],
+            ['Microsoft Word','إنشاء المستندات وتنسيق النصوص والجداول وتجهيز الملفات للطباعة.'],
+            ['Microsoft Excel','تنظيم البيانات واستخدام الصيغ وإنشاء الجداول والتقارير.'],
+            ['Microsoft PowerPoint','إعداد العروض التقديمية باستخدام الشرائح والعناصر المرئية.'],
+            ['الإنترنت والبريد الإلكتروني','البحث والتصفح وإرسال الرسائل وإدارة المرفقات.'],
+            ['الأمان الرقمي','حماية البيانات والحسابات والتعامل الآمن مع الروابط والمواقع.']
+          ]
+        },
+        'windows': {
+          title:'Windows والإنترنت',tagline:'أساسيات الكمبيوتر والإنترنت ومهارات الاستخدام اليومي.',
+          summary:'تعلّم التعامل مع نظام Windows وإدارة الملفات والمجلدات واستخدام الإنترنت والبريد الإلكتروني بأسلوب منظم وآمن.',
+          units:[
+            ['أساسيات Windows','التعرف على سطح المكتب والنوافذ والإعدادات الأساسية.'],
+            ['إدارة الملفات والمجلدات','إنشاء الملفات والمجلدات وتنظيمها ونسخها ونقلها.'],
+            ['استخدام الإنترنت','التصفح والبحث والوصول إلى المعلومات.'],
+            ['البريد الإلكتروني والتواصل','إرسال الرسائل وإدارة المرفقات ووسائل التواصل.'],
+            ['الأمان الرقمي','مبادئ حماية الحسابات والبيانات وتجنب الروابط المشبوهة.'],
+            ['مهارات الاستخدام اليومي','تطبيق المهارات في المهام المكتبية والدراسية.']
+          ]
+        },
+        'word': {
+          title:'Microsoft Word',tagline:'إنشاء المستندات وتنسيقها وتجهيزها للطباعة.',
+          summary:'مسار عملي لتنسيق النصوص والفقرات وإضافة الجداول والصور وضبط تخطيط الصفحة ومراجعة المستندات.',
+          units:[
+            ['إنشاء المستندات','فتح المستندات وإنشاؤها وحفظها وتنظيمها.'],
+            ['تنسيق النصوص','اختيار الخطوط والأحجام والألوان وإبراز النص.'],
+            ['الفقرات والقوائم','ضبط المحاذاة والتباعد وإنشاء القوائم.'],
+            ['الجداول والصور','إدراج الجداول والصور وتنسيقها داخل المستند.'],
+            ['تخطيط الصفحة','الهوامش والاتجاه والحجم وتقسيم الصفحات.'],
+            ['المراجعة والطباعة','مراجعة المستند وتجهيزه للطباعة والمشاركة.']
+          ]
+        },
+        'excel': {
+          title:'Microsoft Excel',tagline:'تنظيم البيانات والحسابات والتقارير.',
+          summary:'مسار لتعلم الجداول الإلكترونية وتنسيق البيانات واستخدام الصيغ والدوال والفرز والتصفية والرسوم والتقارير.',
+          units:[
+            ['أساسيات الجداول','أوراق العمل والخلايا وإدخال البيانات.'],
+            ['تنسيق البيانات','تنسيق الأرقام والتواريخ والخلايا لتحسين القراءة.'],
+            ['الصيغ والدوال','العمليات الحسابية والدوال الأساسية.'],
+            ['الفرز والتصفية','ترتيب البيانات والعثور على المعلومات المطلوبة.'],
+            ['الرسوم البيانية','تحويل البيانات إلى رسوم تساعد على فهم النتائج.'],
+            ['التقارير والطباعة','تنظيم الجداول وتجهيز أوراق العمل للطباعة.']
+          ]
+        },
+        'powerpoint': {
+          title:'Microsoft PowerPoint',tagline:'أنشئ عروضًا تقديمية واضحة ومنظمة.',
+          summary:'مسار لتصميم العروض وتنظيم الشرائح وإضافة النصوص والصور والعناصر المرئية وضبط الانتقالات ومراجعة العرض.',
+          units:[
+            ['إنشاء عرض تقديمي','إنشاء ملف العرض واختيار التصميم المناسب.'],
+            ['تنظيم الشرائح','إضافة الشرائح وترتيبها واختيار التخطيطات.'],
+            ['النصوص والعناوين','كتابة النصوص وتنسيق العناوين والمحتوى.'],
+            ['الصور والعناصر المرئية','استخدام الصور والأشكال والجداول والرسوم.'],
+            ['الانتقالات والحركة','إضافة الانتقالات والحركة بصورة تخدم الرسالة.'],
+            ['مراجعة العرض','مراجعة التصميم وتجهيز العرض للتقديم.']
+          ]
+        }
+      };
+      const requested = new URLSearchParams(location.search).get('course') || '';
+      const course = courses[requested.toLowerCase()];
+      const title = document.getElementById('courseTitle');
+      const tagline = document.getElementById('courseTagline');
+      const summary = document.getElementById('courseSummary');
+      const list = document.getElementById('courseUnits');
+      const count = document.getElementById('courseCount');
+
+      if (!course) {
+        title.textContent = 'اختر دورة من مكتبة الدورات';
+        tagline.textContent = 'هذه الصفحة مخصصة لاستعراض المنهج قبل بدء الدروس.';
+        summary.textContent = 'عد إلى مكتبة الدورات واختر «استعراض المحتوى» بجوار الدورة التي تريد التعرف عليها.';
+        count.textContent = 'لا توجد دورة محددة';
+        list.innerHTML = '<li class="missing">لم يتم تحديد دورة صحيحة. استخدم رابط الاستعراض من بطاقة الدورة.</li>';
+      } else {
+        document.title = 'محتوى ' + course.title + ' | Mohammed Afify Academy';
+        title.textContent = course.title;
+        tagline.textContent = course.tagline;
+        summary.textContent = course.summary;
+        count.textContent = course.units.length + ' وحدات ومحاور';
+        course.units.forEach((unit,index) => {
+          const li = document.createElement('li');
+          const number = document.createElement('span');
+          number.className = 'num';
+          number.textContent = String(index + 1).padStart(2,'0');
+          const body = document.createElement('div');
+          body.className = 'unit';
+          const heading = document.createElement('strong');
+          heading.textContent = unit[0];
+          const detail = document.createElement('small');
+          detail.textContent = unit[1];
+          body.append(heading,detail);
+          li.append(number,body);
+          list.append(li);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
