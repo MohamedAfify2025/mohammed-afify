@@ -63,7 +63,7 @@
     const userIds = Array.from(new Set(requests.map(row => row.student_user_id)));
     const planIds = Array.from(new Set(requests.map(row => row.plan_id)));
 
-    const [profilesResult, plansResult, mapResult] = await Promise.all([
+    const [profilesResult, plansResult, mapResult, catalogResult] = await Promise.all([
       userIds.length
         ? client.from('profiles').select('user_id,full_name,email,phone').in('user_id', userIds)
         : Promise.resolve({ data: [], error: null }),
@@ -72,19 +72,22 @@
         : Promise.resolve({ data: [], error: null }),
       planIds.length
         ? client.from('subscription_plan_courses').select('plan_id,course_slug').in('plan_id', planIds)
-        : Promise.resolve({ data: [], error: null })
+        : Promise.resolve({ data: [], error: null }),
+      client.from('course_catalog').select('course_slug,title')
     ]);
 
     if (profilesResult.error) throw profilesResult.error;
     if (plansResult.error) throw plansResult.error;
     if (mapResult.error) throw mapResult.error;
+    if (catalogResult.error) throw catalogResult.error;
 
     const profiles = new Map((profilesResult.data || []).map(row => [row.user_id, row]));
     const plans = new Map((plansResult.data || []).map(row => [row.id, row]));
+    const courseTitles = new Map((catalogResult.data || []).map(row => [row.course_slug, row.title]));
     const coursesByPlan = new Map();
     (mapResult.data || []).forEach(row => {
       const list = coursesByPlan.get(row.plan_id) || [];
-      list.push(row.course_slug);
+      list.push(courseTitles.get(row.course_slug) || row.course_slug);
       coursesByPlan.set(row.plan_id, list);
     });
 
