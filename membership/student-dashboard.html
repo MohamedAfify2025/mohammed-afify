@@ -166,6 +166,25 @@
       </section>
     </main>
 
+      <dialog id="coursePreviewDialog" class="ma-course-preview-dialog" aria-labelledby="coursePreviewTitle">
+        <div class="ma-course-preview-shell">
+          <header class="ma-course-preview-header">
+            <div>
+              <span class="ma-eyebrow">COURSE CONTENT OVERVIEW</span>
+              <h2 id="coursePreviewTitle">محتوى الدورة</h2>
+            </div>
+            <button class="ma-course-preview-close" type="button" data-close-course-preview aria-label="إغلاق">×</button>
+          </header>
+          <p id="coursePreviewSummary" class="ma-course-preview-summary"></p>
+          <div class="ma-course-preview-notice">استعراض المنهج فقط — لن يتم تشغيل فيديو أو فتح درس أو تسجيل تقدمك.</div>
+          <ol id="coursePreviewList" class="ma-course-preview-list"></ol>
+          <footer class="ma-course-preview-footer">
+            <span>Mohammed Afify Academy</span>
+            <button type="button" data-close-course-preview>إغلاق الاستعراض</button>
+          </footer>
+        </div>
+      </dialog>
+
     <footer class="m-footer ma-student-footer">© <span id="year"></span> Mohammed Afify <span aria-hidden="true">·</span> <a href="../academy/index.html">العودة إلى الدورات</a></footer>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
