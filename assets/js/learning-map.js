@@ -27,7 +27,7 @@
   };
 
   const getFileName = (card) => {
-    const raw = card.getAttribute('href') || '';
+    const raw = card.dataset.coursePage || card.getAttribute('href') || '';
     return raw.split(/[?#]/, 1)[0].split('/').pop().trim();
   };
 
