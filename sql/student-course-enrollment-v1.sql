@@ -89,23 +89,11 @@ create policy "course_enrollment_requests_read_own_or_admin"
 
 drop policy if exists "course_enrollment_requests_insert_approved_student"
   on public.student_course_enrollment_requests;
-create policy "course_enrollment_requests_insert_approved_student"
-  on public.student_course_enrollment_requests
-  for insert to authenticated
-  with check (
-    student_user_id = auth.uid()
-    and exists (
-      select 1
-      from public.profiles p
-      where p.user_id = auth.uid()
-        and p.role = 'student'
-        and p.status = 'approved'
-        and p.account_state = 'active'
-    )
-  );
 
+-- Students submit requests only through request_course_enrollment_v1().
+-- Do not grant direct INSERT: otherwise a client could bypass public-plan checks.
 revoke all on public.student_course_enrollment_requests from anon, authenticated;
-grant select, insert on public.student_course_enrollment_requests to authenticated;
+grant select on public.student_course_enrollment_requests to authenticated;
 
 -- Public catalogue data is limited to active courses attached to active, public plans.
 -- The function is SECURITY DEFINER so students do not need direct access to admin tables.
@@ -287,6 +275,27 @@ begin
 
   if not found then
     raise exception 'الباقة لم تعد متاحة. حدّث فهرس الباقات قبل معالجة الطلب.' using errcode = '22023';
+  end if;
+
+  if not exists (
+    select 1
+    from public.profiles p
+    where p.user_id = v_request.student_user_id
+      and p.role = 'student'
+      and p.status = 'approved'
+      and p.account_state = 'active'
+  ) then
+    raise exception 'حساب الطالب لم يعد معتمدًا أو نشطًا. راجع حالة الحساب قبل إنشاء الاشتراك.' using errcode = '42501';
+  end if;
+
+  if exists (
+    select 1
+    from public.student_subscriptions s
+    where s.user_id = v_request.student_user_id
+      and s.plan_id = v_request.plan_id
+      and s.status in ('pending', 'active', 'suspended')
+  ) then
+    raise exception 'يوجد بالفعل اشتراك قائم أو طلب اشتراك لهذه الباقة لدى الطالب.' using errcode = '23505';
   end if;
 
   v_discount_type := case when coalesce(v_plan.price, 0) <= 0 then 'waive' else 'none' end;
