@@ -246,12 +246,12 @@ begin
   v_discount_type := case when coalesce(v_plan.price, 0) <= 0 then 'waive' else 'none' end;
 
   v_subscription_id := public.admin_assign_student_with_discount_v1(
-    p_target_user := v_request.student_user_id,
-    p_plan_id := v_request.plan_id,
-    p_discount_type := v_discount_type,
-    p_discount_value := 0,
-    p_discount_reason := case when v_discount_type = 'waive' then 'باقة مجانية منشورة - طلب طالب' else '' end,
-    p_admin_note := left(coalesce(p_admin_note, 'طلب اشتراك ذاتي من الطالب'), 1000)
+    p_target_user => v_request.student_user_id,
+    p_plan_id => v_request.plan_id,
+    p_discount_type => v_discount_type,
+    p_discount_value => 0,
+    p_discount_reason => case when v_discount_type = 'waive' then 'باقة مجانية منشورة - طلب طالب' else '' end,
+    p_admin_note => left(coalesce(p_admin_note, 'طلب اشتراك ذاتي من الطالب'), 1000)
   );
 
   update public.student_course_enrollment_requests
