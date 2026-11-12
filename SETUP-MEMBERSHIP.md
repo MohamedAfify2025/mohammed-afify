@@ -25,7 +25,7 @@
 
 ## تفعيل الاشتراك الذاتي في الدورات
 
-بعد تشغيل ملف `sql/membership-schema.sql` الموجود في المستودع، شغّل ملف الترحيل الجديد `sql/student-course-enrollment-v1.sql` مرة واحدة من **Supabase → SQL Editor**. يضيف هذا الترحيل فهرسًا آمنًا للباقات المنشورة، وجدول طلبات الاشتراك الذاتي، وإجراءات قاعدة البيانات التي تستقبل طلب الطالب وتعالج الطلب من الإدارة.
+تأكد أولًا أن ترحيل نظام إدارة الاشتراكات الحالي قد أنشأ جداول `course_catalog` و`subscription_plans` و`subscription_plan_courses` و`student_subscriptions`، وحقل `profiles.account_state`، وإجراءات الإدارة `is_platform_admin` و`admin_assign_student_with_discount_v1`. ملف `membership-schema.sql` الأساسي وحده لا ينشئ هذه الجداول المتقدمة. بعد ذلك، شغّل ملف الترحيل الجديد `sql/student-course-enrollment-v1.sql` مرة واحدة من **Supabase → SQL Editor**. يضيف هذا الترحيل فهرسًا آمنًا للباقات المنشورة، وجدول طلبات الاشتراك الذاتي، وإجراءات قاعدة البيانات التي تستقبل طلب الطالب وتعالج الطلب من الإدارة.
 
 حتى تظهر دورة للطالب في لوحة حسابه:
 1. تأكد من وجودها في `course_catalog` وأن `is_active = true`.
