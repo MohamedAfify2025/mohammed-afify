@@ -110,6 +110,8 @@
         const matchesText = !term || normalize(card.textContent).includes(term);
         const visible = matchesDomain && matchesText;
 
+        // Keep the preview action paired with its course card while filtering.
+        const cardShell = card.closest('.ma-course-catalog-shell') || card;
         // Use both the HTML hidden state and an important inline display rule.
         // This prevents older Academy styles from keeping filtered cards visible.
         if (visible) {
@@ -118,12 +120,24 @@
           card.style.removeProperty('display');
           card.setAttribute('aria-hidden', 'false');
           card.classList.add('lm-card-visible');
+          if (cardShell !== card) {
+            cardShell.hidden = false;
+            cardShell.removeAttribute('hidden');
+            cardShell.style.removeProperty('display');
+            cardShell.setAttribute('aria-hidden', 'false');
+          }
         } else {
           card.hidden = true;
           card.setAttribute('hidden', '');
           card.style.setProperty('display', 'none', 'important');
           card.setAttribute('aria-hidden', 'true');
           card.classList.remove('lm-card-visible');
+          if (cardShell !== card) {
+            cardShell.hidden = true;
+            cardShell.setAttribute('hidden', '');
+            cardShell.style.setProperty('display', 'none', 'important');
+            cardShell.setAttribute('aria-hidden', 'true');
+          }
         }
 
         if (visible) shown += 1;
