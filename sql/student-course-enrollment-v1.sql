@@ -5,6 +5,52 @@
 
 create extension if not exists pgcrypto;
 
+-- The platform's subscription-management schema must already be installed.
+do $preflight$
+declare
+  required_table text;
+begin
+  foreach required_table in array array[
+    'public.profiles',
+    'public.course_catalog',
+    'public.subscription_plans',
+    'public.subscription_plan_courses',
+    'public.student_subscriptions'
+  ] loop
+    if to_regclass(required_table) is null then
+      raise exception 'Missing required table: %. Install the existing membership/subscription schema first.', required_table;
+    end if;
+  end loop;
+
+  if not exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'profiles'
+      and column_name = 'account_state'
+  ) then
+    raise exception 'Missing profiles.account_state. Apply the current membership account-state migration first.';
+  end if;
+
+  if not exists (
+    select 1 from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public'
+      and p.proname = 'is_platform_admin'
+  ) then
+    raise exception 'Missing public.is_platform_admin(). Install the current membership admin functions first.';
+  end if;
+
+  if not exists (
+    select 1 from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public'
+      and p.proname = 'admin_assign_student_with_discount_v1'
+  ) then
+    raise exception 'Missing public.admin_assign_student_with_discount_v1(). Install the current subscription management functions first.';
+  end if;
+end;
+$preflight$;
+
 create table if not exists public.student_course_enrollment_requests (
   id uuid primary key default gen_random_uuid(),
   student_user_id uuid not null references auth.users(id) on delete cascade,
