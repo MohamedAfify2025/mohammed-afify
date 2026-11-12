@@ -315,6 +315,14 @@
         return;
       }
 
+      // The library is a public discovery surface; only individual lesson pages require an active subscription.
+      if (isPublicCatalog) {
+        document.documentElement.classList.remove(gateClass);
+        const main = document.querySelector('main');
+        if (main) main.style.visibility = 'visible';
+        return;
+      }
+
       const courses = await getActiveCourses();
 
       if (isHomepage) {
