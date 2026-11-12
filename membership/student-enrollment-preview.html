@@ -55,6 +55,26 @@
     .price strong{display:block;color:var(--navy);font-size:13px}
     .request{border:0;border-radius:9px;background:var(--navy);color:#fff;padding:9px 13px;font-size:11px;font-weight:900}
     .request:hover{background:#233b63}
+
+    .course-foot{flex-wrap:wrap}
+    .course-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+    .preview-course{border:1px solid #d7e8e5;border-radius:9px;background:#eef8f6;color:#147d71;padding:9px 11px;font-size:11px;font-weight:900}
+    .preview-course:hover{background:#e0f2ee}
+    .course-modal{width:min(650px,calc(100% - 28px));max-width:650px;max-height:86vh;border:0;border-radius:18px;padding:0;color:var(--ink);box-shadow:0 24px 80px #101a324d}
+    .course-modal::backdrop{background:#0b1830b8;backdrop-filter:blur(3px)}
+    .course-modal-inner{padding:22px 24px;direction:rtl}
+    .course-modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid var(--line);padding-bottom:14px}
+    .course-modal-head h2{margin:4px 0 0;color:var(--navy);font-size:21px}
+    .course-modal-close{width:36px;height:36px;border:0;border-radius:10px;background:#f0f3f8;color:#53627a;font-size:23px;cursor:pointer}
+    .course-modal-summary{margin:14px 0;color:#65748a;font-size:12px;line-height:1.9}
+    .course-modal-note{padding:10px 12px;border-radius:10px;background:#edf7f5;color:#177b70;font-size:11px;font-weight:800;line-height:1.8}
+    .course-modal-list{display:grid;gap:8px;list-style:none;padding:0;margin:15px 0;max-height:46vh;overflow:auto}
+    .course-modal-list li{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border:1px solid #e8edf3;border-radius:11px;color:#34445f;font-size:12px;line-height:1.8}
+    .course-modal-list li b{flex:0 0 27px;width:27px;height:27px;display:grid;place-items:center;border-radius:8px;background:#eaf7f4;color:#168575;font-size:10px}
+    .course-modal-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:13px;color:#8b96a7;font-size:10px}
+    .course-modal-foot button{border:0;border-radius:9px;background:var(--navy);color:#fff;padding:8px 14px;font:inherit;font-size:11px;font-weight:900}
+    @media(max-width:560px){.course-actions{width:100%}.course-actions button{flex:1}.course-modal-inner{padding:17px}}
+
     .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
     .step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;align-items:center;gap:9px}
     .step b{width:27px;height:27px;border-radius:9px;background:#eaf7f4;color:#138576;display:grid;place-items:center;font-size:11px}
@@ -127,42 +147,42 @@
           <h3>المحاسبة المالية</h3>
           <p>أساسيات المحاسبة، القيود، الدورة المحاسبية والتطبيقات العملية.</p>
           <div class="course-meta"><span>دورة مستقلة</span><span>شهادة حسب الباقة</span></div>
-          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><button class="request" type="button" data-demo-request="المحاسبة المالية">طلب الاشتراك</button></div>
+          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><div class="course-actions"><button class="preview-course" type="button" data-preview-course="accounting" data-preview-title="المحاسبة المالية">استعراض المحتوى</button><button class="request" type="button" data-demo-request="المحاسبة المالية">طلب الاشتراك</button></div></div>
         </article>
         <article class="course">
           <div class="course-top"><span class="course-icon">▥</span><span class="available">متاحة للاشتراك</span></div>
           <h3>تحليل البيانات</h3>
           <p>تنظيم البيانات وتحليلها واستخراج المؤشرات وبناء التقارير.</p>
           <div class="course-meta"><span>دورة مستقلة</span><span>تتبع التقدم</span></div>
-          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><button class="request" type="button" data-demo-request="تحليل البيانات">طلب الاشتراك</button></div>
+          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><div class="course-actions"><button class="preview-course" type="button" data-preview-course="data-analysis" data-preview-title="تحليل البيانات">استعراض المحتوى</button><button class="request" type="button" data-demo-request="تحليل البيانات">طلب الاشتراك</button></div></div>
         </article>
         <article class="course">
           <div class="course-top"><span class="course-icon">⌘</span><span class="available">متاحة للاشتراك</span></div>
           <h3>البرمجة</h3>
           <p>مفاهيم البرمجة والتطبيق العملي ومشروعات تناسب مستوى المتعلم.</p>
           <div class="course-meta"><span>دورة مستقلة</span><span>تعلم تدريجي</span></div>
-          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><button class="request" type="button" data-demo-request="البرمجة">طلب الاشتراك</button></div>
+          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><div class="course-actions"><button class="preview-course" type="button" data-preview-course="programming" data-preview-title="البرمجة">استعراض المحتوى</button><button class="request" type="button" data-demo-request="البرمجة">طلب الاشتراك</button></div></div>
         </article>
         <article class="course">
           <div class="course-top"><span class="course-icon">▦</span><span class="available">متاحة للاشتراك</span></div>
           <h3>ICDL ومهارات الكمبيوتر</h3>
           <p>مهارات استخدام الكمبيوتر والتطبيقات المكتبية بكفاءة.</p>
           <div class="course-meta"><span>دورة مستقلة</span><span>تدريب عملي</span></div>
-          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><button class="request" type="button" data-demo-request="ICDL ومهارات الكمبيوتر">طلب الاشتراك</button></div>
+          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><div class="course-actions"><button class="preview-course" type="button" data-preview-course="icdl" data-preview-title="ICDL ومهارات الكمبيوتر">استعراض المحتوى</button><button class="request" type="button" data-demo-request="ICDL ومهارات الكمبيوتر">طلب الاشتراك</button></div></div>
         </article>
         <article class="course">
           <div class="course-top"><span class="course-icon">◫</span><span class="available">متاحة للاشتراك</span></div>
           <h3>إدارة الأعمال</h3>
           <p>مبادئ الإدارة والتخطيط والتنظيم واتخاذ القرار داخل المؤسسات.</p>
           <div class="course-meta"><span>دورة مستقلة</span><span>مسار تطبيقي</span></div>
-          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><button class="request" type="button" data-demo-request="إدارة الأعمال">طلب الاشتراك</button></div>
+          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><div class="course-actions"><button class="preview-course" type="button" data-preview-course="business-administration" data-preview-title="إدارة الأعمال">استعراض المحتوى</button><button class="request" type="button" data-demo-request="إدارة الأعمال">طلب الاشتراك</button></div></div>
         </article>
         <article class="course">
           <div class="course-top"><span class="course-icon">▣</span><span class="available">متاحة للاشتراك</span></div>
           <h3>Microsoft Office</h3>
           <p>تطبيقات Word وExcel وPowerPoint ومهارات العمل المكتبي.</p>
           <div class="course-meta"><span>دورة مستقلة</span><span>مهارات رقمية</span></div>
-          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><button class="request" type="button" data-demo-request="Microsoft Office">طلب الاشتراك</button></div>
+          <div class="course-foot"><div class="price">السعر<strong>حسب العرض المنشور</strong></div><div class="course-actions"><button class="preview-course" type="button" data-preview-course="microsoft-office" data-preview-title="Microsoft Office">استعراض المحتوى</button><button class="request" type="button" data-demo-request="Microsoft Office">طلب الاشتراك</button></div></div>
         </article>
       </div>
 
@@ -208,6 +228,20 @@
 
     <footer>Mohammed Afify Academy · صفحة معاينة مستقلة وليست نموذج اشتراك متصلًا بقاعدة البيانات.</footer>
   </main>
+
+  <dialog class="course-modal" id="coursePreviewModal" aria-labelledby="coursePreviewModalTitle">
+    <div class="course-modal-inner">
+      <header class="course-modal-head">
+        <div><div class="eyebrow" style="color:#168a7b">COURSE CONTENT OVERVIEW</div><h2 id="coursePreviewModalTitle">محتوى الدورة</h2></div>
+        <button class="course-modal-close" type="button" data-close-preview aria-label="إغلاق">×</button>
+      </header>
+      <p class="course-modal-summary" id="coursePreviewModalSummary"></p>
+      <div class="course-modal-note">استعراض المنهج فقط — لن يتم تشغيل فيديو أو فتح درس أو تسجيل تقدمك.</div>
+      <ol class="course-modal-list" id="coursePreviewModalList"></ol>
+      <footer class="course-modal-foot"><span>Mohammed Afify Academy</span><button type="button" data-close-preview>إغلاق الاستعراض</button></footer>
+    </div>
+  </dialog>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
     (() => {
@@ -228,6 +262,60 @@
         admin.classList.toggle('hidden', !isAdmin);
         tabs.forEach(item => item.setAttribute('aria-selected', item === tab ? 'true' : 'false'));
       }));
+
+      const courseOutlines = {
+        accounting: {
+          summary: 'منهج تمهيدي في مبادئ المحاسبة والتسجيل المحاسبي وإعداد القوائم المالية.',
+          sections: ['الوحدة الأولى: لماذا نتعلم المحاسبة؟','الوحدة الثانية: قاعدة القيد المزدوج وحسابات دفاتر الأستاذ','الوحدة الثالثة: دفاتر اليومية المساعدة','الوحدة الرابعة: ميزان المراجعة وتصحيح الأخطاء','الوحدة الخامسة: القوائم المالية للمنشأة الفردية']
+        },
+        'data-analysis': {
+          summary: 'التعرف على أدوات تحليل البيانات وتحويل البيانات إلى مؤشرات وتقارير تساعد على اتخاذ القرار.',
+          sections: ['Excel: تنظيم البيانات وإعداد الجداول والتقارير','Power Query: تجهيز البيانات وتنظيفها قبل التحليل','Power BI: تصميم التقارير ولوحات المعلومات التفاعلية','Python: استخدام البرمجة ضمن أدوات تحليل البيانات','مشروع تطبيقي: تحليل بيانات مبيعات سوبر ماركت وقياس أداء الفروع وسلوك العملاء']
+        },
+        programming: {
+          summary: 'مدخل تدريجي إلى التفكير البرمجي، مع مسارات للأطفال والأساسيات وPython والتطبيق.',
+          sections: ['البرمجة للأطفال: البداية باستخدام ScratchJr ثم Scratch','أساسيات البرمجة: المفاهيم والمتغيرات وأنواع البيانات والشروط','تعلم Python: كتابة الأوامر وبناء البرامج خطوة بخطوة','ورش العمل والتطبيقات: أنشطة ومشروعات عملية']
+        },
+        icdl: {
+          summary: 'مهارات الكمبيوتر الأساسية واستخدام تطبيقات المكتب والإنترنت بأمان.',
+          sections: ['أساسيات الكمبيوتر ومكونات الجهاز ونظام التشغيل','Microsoft Word: إنشاء المستندات وتنسيق النصوص والجداول','Microsoft Excel: تنظيم البيانات والصيغ والجداول والتقارير','Microsoft PowerPoint: إعداد العروض التقديمية','الإنترنت والبريد الإلكتروني والبحث وإدارة المرفقات','الأمان الرقمي وحماية البيانات والحسابات']
+        },
+        'business-administration': {
+          summary: 'مسار الإدارة والأعمال لفهم المنظمات وقراراتها والبيئة وأصحاب المصلحة.',
+          sections: ['الوحدة الأولى: مدخل إلى الأعمال وغايتها','الوحدة الثانية: أنواع منظمات الأعمال','الوحدة الثالثة: أهداف منظمات الأعمال وأصحاب المصلحة','الوحدة الرابعة: البيئة الداخلية والخارجية','الوحدة الخامسة: الإدارة والقيادة','مشروع تطبيقي: خطة قرار لمشروع مريم']
+        },
+        'microsoft-office': {
+          summary: 'نظرة متكاملة على تطبيقات Microsoft Office الأكثر استخدامًا.',
+          sections: ['Microsoft Word: إنشاء المستندات وتنسيق النصوص والجداول','Microsoft Excel: تنظيم البيانات والصيغ والدوال والتقارير','Microsoft PowerPoint: تصميم الشرائح والعروض التقديمية','التكامل بين التطبيقات واستخدام الملفات في الدراسة والعمل']
+        }
+      };
+      const coursePreviewModal = document.getElementById('coursePreviewModal');
+      document.querySelectorAll('[data-preview-course]').forEach(button => {
+        button.addEventListener('click', () => {
+          const course = courseOutlines[button.dataset.previewCourse];
+          document.getElementById('coursePreviewModalTitle').textContent = button.dataset.previewTitle || 'محتوى الدورة';
+          document.getElementById('coursePreviewModalSummary').textContent = course?.summary || 'المحتوى التفصيلي قيد الإعداد.';
+          const list = document.getElementById('coursePreviewModalList');
+          list.innerHTML = course
+            ? course.sections.map((item, index) => '<li><b>' + String(index + 1).padStart(2, '0') + '</b><span>' + item + '</span></li>').join('')
+            : '<li><span>سيتم إضافة الوحدات والمحاور التفصيلية لهذا المسار عند اكتمال توثيق المنهج.</span></li>';
+          if (coursePreviewModal.showModal) coursePreviewModal.showModal();
+          else coursePreviewModal.setAttribute('open', '');
+        });
+      });
+      coursePreviewModal?.querySelectorAll('[data-close-preview]').forEach(button => {
+        button.addEventListener('click', () => {
+          if (coursePreviewModal.close) coursePreviewModal.close();
+          else coursePreviewModal.removeAttribute('open');
+        });
+      });
+      coursePreviewModal?.addEventListener('click', event => {
+        if (event.target === coursePreviewModal) {
+          if (coursePreviewModal.close) coursePreviewModal.close();
+          else coursePreviewModal.removeAttribute('open');
+        }
+      });
+
       document.querySelectorAll('[data-demo-request]').forEach(button => {
         button.addEventListener('click', () => showToast('هذه معاينة فقط. لن يتم إرسال طلب حقيقي من هذه الصفحة.'));
       });
