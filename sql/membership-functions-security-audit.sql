@@ -76,3 +76,29 @@ where (n.nspname = 'membership_v2_private'
    or (n.nspname = 'public'
        and p.proname in ('get_my_active_courses_v2','get_admin_review_plans_v2'))
 order by n.nspname, p.proname, argument_signature;
+
+
+-- Result 3: registration/profile triggers. This confirms which function creates
+-- the profile row after Supabase Auth signup and whether the trigger is enabled.
+select
+  event_schema.nspname as table_schema,
+  table_class.relname as table_name,
+  trigger_row.tgname as trigger_name,
+  trigger_row.tgenabled as trigger_enabled_mode,
+  pg_get_triggerdef(trigger_row.oid, true) as trigger_definition,
+  function_schema.nspname as function_schema,
+  trigger_function.proname as trigger_function,
+  trigger_function.prosecdef as trigger_security_definer,
+  coalesce(array_to_string(trigger_function.proconfig, ', '), '(not explicitly set)') as function_settings,
+  pg_get_functiondef(trigger_function.oid) as trigger_function_definition
+from pg_trigger trigger_row
+join pg_class table_class on table_class.oid = trigger_row.tgrelid
+join pg_namespace event_schema on event_schema.oid = table_class.relnamespace
+join pg_proc trigger_function on trigger_function.oid = trigger_row.tgfoid
+join pg_namespace function_schema on function_schema.oid = trigger_function.pronamespace
+where not trigger_row.tgisinternal
+  and (
+    (event_schema.nspname = 'auth' and table_class.relname = 'users')
+    or (event_schema.nspname = 'public' and table_class.relname = 'profiles')
+  )
+order by event_schema.nspname, table_class.relname, trigger_row.tgname;
