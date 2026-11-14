@@ -9,6 +9,8 @@ select
   pg_get_function_identity_arguments(p.oid) as argument_signature,
   p.prosecdef as security_definer,
   coalesce(array_to_string(p.proconfig, ', '), '(not explicitly set)') as function_settings,
+  has_schema_privilege('anon', 'public', 'CREATE') as anon_can_create_public_schema,
+  has_schema_privilege('authenticated', 'public', 'CREATE') as authenticated_can_create_public_schema,
   pg_get_functiondef(p.oid) as function_definition
 from pg_proc p
 join pg_namespace n on n.oid = p.pronamespace
