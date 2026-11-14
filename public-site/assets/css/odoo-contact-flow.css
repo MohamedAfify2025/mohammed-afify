@@ -1,0 +1,20 @@
+/* ODOO CONTACT PREFILL V1 */
+.odoo-contact-prefill-notice {
+    margin: 0 0 16px;
+    padding: 13px 15px;
+    border: 1px solid #b9e7dc;
+    border-right: 4px solid #138d7d;
+    border-radius: 11px;
+    background: #effaf6;
+    color: #17483f;
+    font-size: .92rem;
+    font-weight: 700;
+    line-height: 1.9;
+}
+@media (max-width: 600px) {
+    .odoo-contact-prefill-notice {
+        font-size: .86rem;
+        padding: 11px 12px;
+    }
+}
+/* END ODOO CONTACT PREFILL V1 */

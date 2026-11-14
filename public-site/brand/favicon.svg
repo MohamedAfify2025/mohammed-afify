@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#101A32"/>
+  <text x="27" y="42" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="24" fill="#F4F6FB">MA</text>
+  <circle cx="53" cy="41" r="4" fill="#F5B83D"/>
+</svg>

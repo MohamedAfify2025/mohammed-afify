@@ -1,0 +1,2011 @@
+/* CINEMATIC MOTION - shared visual layer */
+:root {
+  --cinematic-night: #091326;
+  --cinematic-violet: #a99bff;
+  --cinematic-mint: #70dfcc;
+}
+
+/* Homepage: cinematic navy, moving light and a subtle technical grid */
+#home.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #f4f7ff;
+  background:
+    radial-gradient(ellipse at 72% 28%, rgba(92,113,235,.24), transparent 36%),
+    radial-gradient(ellipse at 18% 84%, rgba(40,192,171,.13), transparent 38%),
+    linear-gradient(128deg, #081122 0%, #101a32 52%, #142a42 100%);
+}
+#home.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .48;
+  background-image:
+    linear-gradient(rgba(190,205,255,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(190,205,255,.055) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(to bottom, #000, rgba(0,0,0,.7) 58%, transparent);
+  animation: cinematic-grid-shift 42s linear infinite;
+}
+#home.hero::after {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 72% 22%, rgba(117,102,230,.2), transparent 34%),
+    radial-gradient(ellipse at 26% 70%, rgba(66,210,187,.12), transparent 31%);
+  filter: blur(18px);
+  animation: cinematic-glow 16s ease-in-out infinite alternate;
+}
+#home.hero > *,
+#home.hero .hero-grid,
+#home.hero .hero-bottom {
+  position: relative;
+  z-index: 1;
+}
+#home.hero h1 { color: #f7f8ff; }
+#home.hero h1 span { color: #9ce9df; }
+#home.hero .hero-lead { color: #c2cce0; }
+#home.hero .hero-proof p { color: #aab6cd; }
+#home.hero .eyebrow {
+  color: #c1b8ff;
+  border-color: rgba(169,155,255,.28);
+  background: rgba(169,155,255,.09);
+}
+#home.hero .eyebrow-dot {
+  background: #70dfcc;
+  box-shadow: 0 0 0 4px rgba(112,223,204,.13);
+}
+#home.hero .button-primary {
+  color: #092038;
+  background: linear-gradient(120deg, #95eedc, #70d6ca);
+  box-shadow: 0 12px 28px rgba(42,202,177,.15);
+}
+#home.hero .button-ghost {
+  color: #f3f6ff;
+  background: rgba(255,255,255,.055);
+  border-color: rgba(222,231,255,.24);
+}
+#home.hero .hero-bottom {
+  color: #9ca9c2;
+  border-color: rgba(222,231,255,.14);
+}
+#home.hero .hero-bottom > div { color: #bdc7dc; }
+#home.hero .hero-bottom i { background: #9ce9df; }
+#home.hero .orbit { border-color: rgba(186,196,255,.19); }
+#home.hero .orbit-two { border-color: rgba(255,190,115,.17); }
+#home.hero .visual-glow {
+  background: radial-gradient(circle, rgba(119,129,255,.29), transparent 70%);
+}
+#home.hero .code-window {
+  box-shadow: 0 32px 90px rgba(0,0,0,.38), 0 0 0 1px rgba(194,204,255,.08);
+  animation: cinematic-code-float 8s ease-in-out infinite;
+}
+#home.hero .orbit-one { animation: cinematic-orbit-one 18s ease-in-out infinite alternate; }
+#home.hero .orbit-two { animation: cinematic-orbit-two 22s ease-in-out infinite alternate; }
+#home.hero .float-card-top { animation: cinematic-float-top 7s ease-in-out infinite; }
+#home.hero .float-card-bottom { animation: cinematic-float-bottom 8s ease-in-out infinite; }
+#home.hero .hero-stamp { animation: cinematic-stamp 8s ease-in-out infinite; }
+
+/* Odoo: maintain its teal identity and add depth to the existing diagram */
+.odoo-detail-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-image:
+    radial-gradient(ellipse at 76% 22%, rgba(83,217,194,.19), transparent 32%),
+    linear-gradient(125deg, #101a32, #172e4c 70%, #11434a);
+}
+.odoo-detail-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .38;
+  background-image:
+    linear-gradient(rgba(222,255,249,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(222,255,249,.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(120deg, transparent, #000 45%, #000);
+}
+.odoo-detail-hero > * { position: relative; z-index: 1; }
+.odoo-system-orbit { animation: cinematic-orbit-breathe 9s ease-in-out infinite alternate; }
+.odoo-system-orbit.orbit-two { animation-delay: -3s; }
+.odoo-system-node { animation: cinematic-node-float 6s ease-in-out infinite; }
+.odoo-system-node.node-two { animation-delay: -2s; }
+.odoo-system-node.node-three { animation-delay: -4s; }
+
+.services-section { isolation: isolate; }
+.services-section::after {
+  content: "";
+  position: absolute;
+  width: min(60vw, 650px);
+  height: min(60vw, 650px);
+  inset-inline-end: -20%;
+  bottom: -62%;
+  border-radius: 50%;
+  border: 1px solid rgba(169,155,255,.11);
+  box-shadow: 0 0 0 45px rgba(169,155,255,.025), 0 0 0 90px rgba(169,155,255,.018);
+  pointer-events: none;
+}
+.services-layout { z-index: 1; }
+
+/* Cards react to pointer movement without replacing their content */
+.category-card, .course-card, .gs-card, .gs-resource, .gs-catalog,
+.gs-source-block, .gs-tool-card, .platform-video-card, .odoo-detail-card,
+.odoo-home-cta-cards > a, .office-topic-card, .office-resource-card,
+.prog-track-card, .prog-resource-card, .py-topic-card, .py-resource-card,
+.win-topic-card, .win-resource-card, .scratch-level-card, .scratch-resource-card,
+.icdl-topic-card, .icdl-resource-card {
+  transition: transform .35s cubic-bezier(.2,.75,.25,1),
+              box-shadow .35s ease, border-color .35s ease;
+}
+.category-card:hover, .course-card:hover, .gs-card:hover, .gs-resource:hover,
+.gs-catalog:hover, .gs-source-block:hover, .gs-tool-card:hover,
+.platform-video-card:hover, .odoo-detail-card:hover, .odoo-home-cta-cards > a:hover,
+.office-topic-card:hover, .office-resource-card:hover, .prog-track-card:hover,
+.prog-resource-card:hover, .py-topic-card:hover, .py-resource-card:hover,
+.win-topic-card:hover, .win-resource-card:hover, .scratch-level-card:hover,
+.scratch-resource-card:hover, .icdl-topic-card:hover, .icdl-resource-card:hover {
+  transform: translateY(-4px);
+}
+
+/* The reveal effect activates only after the independent JS loads correctly */
+html.cinematic-motion-ready [data-cinematic-reveal] {
+  transition: opacity .65s cubic-bezier(.2,.7,.2,1),
+              transform .65s cubic-bezier(.2,.7,.2,1),
+              filter .65s ease;
+  transition-delay: var(--cinematic-delay, 0ms);
+}
+html.cinematic-motion-ready [data-cinematic-reveal]:not(.is-cinematic-visible) {
+  opacity: 0;
+  transform: translate3d(0,22px,0) scale(.992);
+  filter: blur(2px);
+}
+html.cinematic-motion-ready [data-cinematic-reveal].is-cinematic-visible {
+  opacity: 1;
+  filter: none;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible {
+  outline: 3px solid #6adcc9;
+  outline-offset: 3px;
+}
+
+@keyframes cinematic-grid-shift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 52px 52px, 52px 52px; }
+}
+@keyframes cinematic-glow {
+  from { transform: translate3d(-1%,-1%,0) scale(1); }
+  to { transform: translate3d(1.5%,1%,0) scale(1.04); }
+}
+@keyframes cinematic-code-float {
+  0%,100% { transform: rotate(-3deg) translateY(0); }
+  50% { transform: rotate(-1.8deg) translateY(-8px); }
+}
+@keyframes cinematic-orbit-one {
+  from { transform: rotate(-25deg) translateY(0); }
+  to { transform: rotate(-23deg) translateY(-8px); }
+}
+@keyframes cinematic-orbit-two {
+  from { transform: rotate(42deg) translateY(0); }
+  to { transform: rotate(39deg) translateY(7px); }
+}
+@keyframes cinematic-float-top {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes cinematic-float-bottom {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+@keyframes cinematic-stamp {
+  0%,100% { transform: rotate(12deg) translateY(0); }
+  50% { transform: rotate(8deg) translateY(-5px); }
+}
+@keyframes cinematic-orbit-breathe {
+  from { opacity: .72; }
+  to { opacity: 1; }
+}
+@keyframes cinematic-node-float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@media (hover: none) {
+  .category-card:hover, .course-card:hover, .gs-card:hover, .gs-resource:hover,
+  .gs-catalog:hover, .gs-source-block:hover, .gs-tool-card:hover,
+  .platform-video-card:hover, .odoo-detail-card:hover, .odoo-home-cta-cards > a:hover,
+  .office-topic-card:hover, .office-resource-card:hover, .prog-track-card:hover,
+  .prog-resource-card:hover, .py-topic-card:hover, .py-resource-card:hover,
+  .win-topic-card:hover, .win-resource-card:hover, .scratch-level-card:hover,
+  .scratch-resource-card:hover, .icdl-topic-card:hover, .icdl-resource-card:hover {
+    transform: none;
+  }
+}
+@media (max-width: 640px) {
+  #home.hero::before { background-size: 40px 40px; }
+  .odoo-detail-hero::before { background-size: 44px 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  html.cinematic-motion-ready [data-cinematic-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* ACADEMY CINEMATIC HERO ENHANCEMENT */
+.gs-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, .90);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 28px rgba(12, 24, 46, .045);
+}
+
+.gs-main > .gs-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(184, 222, 239, .13);
+  background:
+    radial-gradient(ellipse at 84% 14%, rgba(100, 137, 255, .30), transparent 34%),
+    radial-gradient(ellipse at 14% 92%, rgba(55, 220, 190, .19), transparent 36%),
+    linear-gradient(125deg, #0a192b 0%, #172d50 55%, #263d70 100%);
+  box-shadow: 0 24px 65px rgba(16, 31, 58, .17);
+}
+
+.gs-main > .gs-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .42;
+  background-image:
+    linear-gradient(rgba(205, 223, 255, .075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(205, 223, 255, .075) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(115deg, transparent 0%, #000 45%, #000 100%);
+  animation: academy-cinematic-grid 38s linear infinite;
+}
+
+.gs-main > .gs-hero::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  inset-inline-start: -130px;
+  bottom: -190px;
+  z-index: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(117, 231, 214, .25);
+  box-shadow:
+    0 0 0 28px rgba(117, 231, 214, .035),
+    0 0 0 58px rgba(117, 231, 214, .025);
+  pointer-events: none;
+}
+
+.gs-main > .gs-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.gs-main > .gs-hero .gs-kicker {
+  color: #77efda;
+}
+
+.gs-main > .gs-hero h1 {
+  color: #fff;
+  text-shadow: 0 5px 28px rgba(0, 0, 0, .15);
+}
+
+.gs-main > .gs-hero p {
+  color: #d8e5f5;
+}
+
+.gs-main .gs-catalog {
+  position: relative;
+  overflow: hidden;
+  border-color: #e0e7f2;
+  box-shadow: 0 8px 25px rgba(16, 32, 61, .045);
+}
+
+.gs-main .gs-catalog:hover {
+  border-color: rgba(120, 103, 231, .45);
+  box-shadow: 0 20px 40px rgba(16, 32, 61, .11);
+}
+
+.gs-main .gs-catalog img {
+  transition: transform .55s cubic-bezier(.2, .7, .25, 1);
+}
+
+.gs-main .gs-catalog:hover img {
+  transform: scale(1.045);
+}
+
+@keyframes academy-cinematic-grid {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 42px 42px, 42px 42px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-main > .gs-hero::before {
+    animation: none !important;
+  }
+
+  .gs-main .gs-catalog img {
+    transition: none !important;
+  }
+}
+
+/* CINEMATIC REAL PHOTO PHASE 2 */
+#home.hero .hero-visual {
+  background-image:
+    linear-gradient(
+      145deg,
+      rgba(7, 15, 31, .40) 0%,
+      rgba(7, 15, 31, .15) 48%,
+      rgba(7, 15, 31, .34) 100%
+    ),
+    url("../images/profile-office-hero.jpg");
+  background-size: cover;
+  background-position: 48% 42%;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(230, 240, 255, .20);
+  border-radius: 26px;
+  box-shadow:
+    inset 0 0 0 1px rgba(230, 240, 255, .07),
+    0 25px 60px rgba(0, 0, 0, .16);
+  animation: cinematic-photo-pan 32s ease-in-out infinite alternate;
+}
+
+#home.hero .hero-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    rgba(7, 15, 31, .18),
+    transparent 58%
+  );
+}
+
+@keyframes cinematic-photo-pan {
+  from { background-position: 48% 42%; }
+  to   { background-position: 58% 54%; }
+}
+
+@media (max-width: 640px) {
+  #home.hero .hero-visual {
+    animation-duration: 42s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home.hero .hero-visual {
+    animation: none !important;
+  }
+}
+
+/* CINEMATIC HERO BALANCE */
+#home.hero .hero-visual {
+  background-position: 42% 42%;
+}
+
+#home.hero .code-window {
+  width: min(100%, 340px);
+}
+
+@media (max-width: 640px) {
+  #home.hero .code-window {
+    width: min(100%, 300px);
+  }
+}
+
+/* CINEMATIC DATA ANALYSIS REAL BACKGROUND */
+.gs-main > .cinematic-data-analysis-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 17, 34, .24) 0%,
+      rgba(8, 17, 34, .52) 48%,
+      rgba(8, 17, 34, .86) 100%
+    ),
+    url("../google-sites/content/41b836c7aa8663eb5263542fd2fe116e.jpg")
+      center 50% / cover no-repeat;
+  border: 1px solid rgba(190, 223, 244, .19);
+  box-shadow: 0 24px 65px rgba(10, 25, 48, .20);
+}
+
+.gs-main > .cinematic-data-analysis-hero h1 {
+  color: #fff;
+  text-shadow: 0 3px 22px rgba(0, 0, 0, .22);
+}
+
+.gs-main > .cinematic-data-analysis-hero .gs-kicker {
+  color: #77efda;
+}
+
+.gs-main > .cinematic-data-analysis-hero p {
+  color: #e0eaf7;
+}
+
+@media (max-width: 640px) {
+  .gs-main > .cinematic-data-analysis-hero {
+    background-position: 42% center;
+  }
+}
+
+/* CINEMATIC PROGRAMMING LIVE MOTION */
+#programming-page .prog-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Animated technical grid and colored light */
+#programming-page .prog-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .8;
+  background-image:
+    linear-gradient(rgba(190,211,255,.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(190,211,255,.10) 1px, transparent 1px),
+    radial-gradient(ellipse at 78% 22%, rgba(132,116,255,.28), transparent 46%),
+    radial-gradient(ellipse at 15% 88%, rgba(63,220,195,.22), transparent 42%);
+  background-size: 48px 48px, 48px 48px, 100% 100%, 100% 100%;
+  animation: programming-data-field 18s linear infinite;
+}
+
+/* A visible but soft light beam crossing the hero */
+#programming-page .prog-hero::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: -10%;
+  bottom: -10%;
+  left: -40%;
+  width: 30%;
+  pointer-events: none;
+  transform: skewX(-18deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139,236,222,.22),
+    rgba(177,166,255,.23),
+    transparent
+  );
+  animation: programming-light-sweep 8s ease-in-out infinite;
+}
+
+/* Keep all existing hero content above the effects */
+#programming-page .prog-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+#programming-page .prog-hero .prog-hero-visual img {
+  animation: programming-image-drift 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes programming-data-field {
+  from {
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 96px 48px, 48px 96px, 0 0, 0 0;
+  }
+}
+
+@keyframes programming-light-sweep {
+  0%, 8% {
+    left: -40%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  58% {
+    left: 120%;
+    opacity: .85;
+  }
+  72%, 100% {
+    left: 120%;
+    opacity: 0;
+  }
+}
+
+@keyframes programming-image-drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@media (max-width: 640px) {
+  #programming-page .prog-hero::before {
+    background-size: 36px 36px, 36px 36px, 100% 100%, 100% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #programming-page .prog-hero::before,
+  #programming-page .prog-hero::after,
+  #programming-page .prog-hero .prog-hero-visual img {
+    animation: none !important;
+    will-change: auto;
+  }
+}
+
+/* CINEMATIC HOME INTERACTIVE BACKGROUND */
+
+/* 1. Reveal more of the real office photo in the main hero */
+#home.hero .hero-visual {
+  min-height: 455px;
+  background-position: 54% 44%;
+  background-size: cover;
+  border-radius: 28px;
+}
+
+#home.hero .code-window {
+  width: min(62%, 280px);
+  justify-self: end;
+  align-self: end;
+  margin-inline-end: 12px;
+  margin-bottom: 28px;
+}
+
+#home.hero .hero-stamp {
+  top: 18px;
+  bottom: auto;
+  inset-inline-start: 14px;
+  inset-inline-end: auto;
+}
+
+/* 2. Turn the learning path section into an interactive visual scene */
+.learning-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #f4f7ff;
+  background:
+    radial-gradient(
+      ellipse at 84% 24%,
+      rgba(102, 119, 255, .20),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 12% 76%,
+      rgba(44, 199, 180, .15),
+      transparent 36%
+    ),
+    linear-gradient(135deg, #0a1428 0%, #111e37 58%, #172d48 100%);
+}
+
+.learning-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .42;
+  background-image:
+    linear-gradient(rgba(190, 209, 255, .075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(190, 209, 255, .075) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 18%,
+    #000 80%,
+    transparent 100%
+  );
+  animation: learning-grid-motion 36s linear infinite;
+}
+
+.learning-section::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  width: min(65vw, 680px);
+  height: min(65vw, 680px);
+  top: 8%;
+  inset-inline-start: -24%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(94, 125, 255, .16) 0%,
+    rgba(65, 205, 188, .07) 36%,
+    transparent 70%
+  );
+  filter: blur(24px);
+  animation: learning-light-drift 15s ease-in-out infinite alternate;
+}
+
+.learning-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.learning-section .section-kicker {
+  color: #78e6d6;
+}
+
+.learning-section .section-heading h2 {
+  color: #f8f9ff;
+  text-shadow: 0 5px 24px rgba(0, 0, 0, .18);
+}
+
+.learning-section .section-heading > p {
+  color: #c2cde1;
+}
+
+.learning-section .category-card {
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, .15),
+    inset 0 1px 0 rgba(255, 255, 255, .5);
+  transition:
+    transform .35s cubic-bezier(.2, .75, .25, 1),
+    box-shadow .35s ease,
+    border-color .35s ease;
+}
+
+.learning-section .category-card:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow:
+    0 25px 46px rgba(0, 0, 0, .25),
+    0 0 0 1px rgba(139, 226, 220, .24);
+  border-color: rgba(255, 255, 255, .85);
+}
+
+.learning-section .category-card .text-link span {
+  transition: transform .25s ease;
+}
+
+.learning-section .category-card:hover .text-link span {
+  transform: translateX(-4px);
+}
+
+.learning-section .category-card .card-decoration {
+  transition:
+    opacity .35s ease,
+    transform .45s ease;
+}
+
+.learning-section .category-card:hover .card-decoration {
+  opacity: .16;
+  transform: translateY(-5px) scale(1.06);
+}
+
+@keyframes learning-grid-motion {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 96px 48px, 48px 96px; }
+}
+
+@keyframes learning-light-drift {
+  from { transform: translate3d(-2%, -1%, 0) scale(.96); }
+  to { transform: translate3d(4%, 3%, 0) scale(1.08); }
+}
+
+@media (max-width: 640px) {
+  #home.hero .hero-visual {
+    min-height: 380px;
+    background-position: 54% center;
+  }
+
+  #home.hero .code-window {
+    width: min(72%, 270px);
+    margin-bottom: 24px;
+  }
+
+  .learning-section::before {
+    background-size: 36px 36px;
+  }
+
+  .learning-section .category-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .learning-section::before,
+  .learning-section::after {
+    animation: none !important;
+  }
+
+  .learning-section .category-card,
+  .learning-section .category-card .card-decoration,
+  .learning-section .category-card .text-link span {
+    transition: none !important;
+  }
+
+  .learning-section .category-card:hover {
+    transform: none !important;
+  }
+}
+
+/* LEARNING PATHS LIGHT IMAGE STYLE */
+.learning-section {
+  color: #172641 !important;
+  background-color: #f7faff !important;
+  background-image:
+    linear-gradient(
+      100deg,
+      rgba(255,255,255,.25),
+      rgba(255,255,255,.43) 52%,
+      rgba(255,255,255,.50)
+    ),
+    url("../images/learning-paths-cinematic-light.png") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: scroll !important;
+}
+
+.learning-section::before {
+  opacity: .24 !important;
+  background-image:
+    linear-gradient(rgba(35,65,110,.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35,65,110,.075) 1px, transparent 1px) !important;
+  background-size: 48px 48px !important;
+}
+
+.learning-section .section-heading h2 {
+  color: #172641 !important;
+  text-shadow: none !important;
+}
+
+.learning-section .section-heading > p {
+  color: #586780 !important;
+}
+
+.learning-section .section-kicker {
+  color: #168d88 !important;
+}
+
+.learning-section .category-card h3 {
+  color: #172641 !important;
+}
+
+.learning-section .category-card p {
+  color: #586780 !important;
+}
+
+.learning-section .category-card .text-link {
+  color: #243657 !important;
+}
+
+.learning-section .category-card .tag-row span {
+  color: #4d5d78 !important;
+  background: rgba(255,255,255,.94) !important;
+}
+
+/* HOME CONTACT LIGHT CINEMATIC PHASE */
+
+/* Homepage: light, professional background while preserving the real photo */
+#home.hero {
+  color: #17233d !important;
+  background:
+    radial-gradient(ellipse at 78% 18%, rgba(194,219,255,.45), transparent 38%),
+    radial-gradient(ellipse at 8% 90%, rgba(190,242,232,.34), transparent 36%),
+    linear-gradient(135deg, #fbfdff 0%, #f1f6fc 58%, #f8fbff 100%) !important;
+}
+#home.hero h1 {
+  color: #17233d !important;
+  text-shadow: none !important;
+}
+#home.hero h1 span { color: #138e8a !important; }
+#home.hero .hero-lead { color: #586780 !important; }
+#home.hero .hero-proof p { color: #63718a !important; }
+#home.hero .eyebrow {
+  color: #387c92 !important;
+  border-color: #d5e7f2 !important;
+  background: rgba(255,255,255,.82) !important;
+}
+#home.hero .hero-bottom {
+  color: #718099 !important;
+  border-color: #dfe7f1 !important;
+}
+#home.hero .hero-bottom > div { color: #66768d !important; }
+#home.hero .button-ghost {
+  color: #20324e !important;
+  background: rgba(255,255,255,.92) !important;
+  border-color: #d7e1ed !important;
+}
+#home.hero .hero-visual {
+  border: 1px solid rgba(255,255,255,.9) !important;
+  box-shadow: 0 24px 62px rgba(27,48,82,.19) !important;
+}
+
+/* Learning paths: near-white image with restrained technical accents */
+.learning-section {
+  color: #172641 !important;
+  background-color: #f7faff !important;
+  background-image:
+    linear-gradient(
+      100deg,
+      rgba(255,255,255,.22),
+      rgba(255,255,255,.40) 54%,
+      rgba(255,255,255,.46)
+    ),
+    url("../images/learning-paths-cinematic-light.png") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: scroll !important;
+}
+.learning-section::before {
+  opacity: .22 !important;
+  background-image:
+    linear-gradient(rgba(35,65,110,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35,65,110,.07) 1px, transparent 1px) !important;
+  background-size: 48px 48px !important;
+}
+.learning-section::after {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: radial-gradient(
+    circle,
+    rgba(120,185,255,.12),
+    rgba(115,225,215,.06) 40%,
+    transparent 72%
+  ) !important;
+}
+.learning-section .section-heading h2 {
+  color: #172641 !important;
+  text-shadow: none !important;
+}
+.learning-section .section-heading > p { color: #586780 !important; }
+.learning-section .section-kicker { color: #168d88 !important; }
+.learning-section .category-card h3 { color: #172641 !important; }
+.learning-section .category-card p { color: #586780 !important; }
+.learning-section .category-card .text-link { color: #243657 !important; }
+.learning-section .category-card .tag-row span {
+  color: #4d5d78 !important;
+  background: rgba(255,255,255,.94) !important;
+  border-color: rgba(220,228,241,.9) !important;
+}
+.learning-section .category-card {
+  box-shadow: 0 12px 28px rgba(40,67,108,.10) !important;
+}
+.learning-section .category-card:hover {
+  box-shadow: 0 20px 38px rgba(40,67,108,.17) !important;
+}
+
+/* Contact: bright, clear and easy to scan */
+#contact.contact-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 8% 18%, rgba(190,222,255,.28), transparent 35%),
+    radial-gradient(ellipse at 90% 84%, rgba(194,241,232,.30), transparent 38%),
+    linear-gradient(135deg, #fbfdff 0%, #f1f6fc 100%) !important;
+}
+#contact.contact-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .20;
+  background-image:
+    linear-gradient(rgba(64,104,155,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(64,104,155,.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+#contact.contact-section > * { position: relative; z-index: 1; }
+#contact .contact-panel {
+  background: rgba(255,255,255,.93) !important;
+  border-color: rgba(218,229,241,.95) !important;
+  box-shadow: 0 22px 58px rgba(27,48,82,.09) !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+#contact .contact-panel h2 { color: #172641 !important; }
+#contact .contact-panel > div > p { color: #586780 !important; }
+#contact .contact-form label > span { color: #34435d !important; }
+#contact .contact-form input,
+#contact .contact-form textarea,
+#contact .contact-form select {
+  background: #fff !important;
+  color: #172641 !important;
+  border-color: #d8e2ee !important;
+}
+#contact .contact-form input:focus,
+#contact .contact-form textarea:focus,
+#contact .contact-form select:focus {
+  border-color: #52bdb4 !important;
+  box-shadow: 0 0 0 3px rgba(82,189,180,.14) !important;
+}
+
+@media (max-width: 700px) {
+  #contact.contact-section::before { background-size: 36px 36px; }
+}
+
+/* PAGE-SPECIFIC IMAGE BACKGROUNDS */
+[data-cinematic-bg="home-tech"] { --cinematic-page-image: url("../images/backgrounds/home-tech.png"); }
+[data-cinematic-bg="odoo-business"] { --cinematic-page-image: url("../images/backgrounds/odoo-business.png"); }
+[data-cinematic-bg="education"] { --cinematic-page-image: url("../images/backgrounds/education.png"); }
+[data-cinematic-bg="education"] { --cinematic-page-image: url("../images/backgrounds/education.png"); }
+[data-cinematic-bg="data-analysis"] { --cinematic-page-image: url("../images/backgrounds/data-analysis.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+[data-cinematic-bg="education"] { --cinematic-page-image: url("../images/backgrounds/education.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+[data-cinematic-bg="programming"] { --cinematic-page-image: url("../images/backgrounds/programming.png"); }
+[data-cinematic-bg="home-tech"] { --cinematic-page-image: url("../images/backgrounds/home-tech.png"); }
+[data-cinematic-bg="programming"] { --cinematic-page-image: url("../images/backgrounds/programming.png"); }
+[data-cinematic-bg="programming"] { --cinematic-page-image: url("../images/backgrounds/programming.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+[data-cinematic-bg="office-skills"] { --cinematic-page-image: url("../images/backgrounds/office-skills.png"); }
+/* Bright, readable backgrounds with a gentle image drift */
+[data-cinematic-bg] {
+  background-image:
+    linear-gradient(
+      105deg,
+      rgba(255,255,255,.70),
+      rgba(246,250,255,.57) 52%,
+      rgba(255,255,255,.43)
+    ),
+    var(--cinematic-page-image) !important;
+  background-size: cover, cover !important;
+  background-position: center, 48% 48%;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: cinematic-page-background-drift 30s ease-in-out infinite alternate;
+}
+
+/* Show the home feature image more clearly */
+#home.hero .hero-visual[data-cinematic-bg="home-tech"] {
+  background-image:
+    linear-gradient(100deg, rgba(255,255,255,.04), rgba(255,255,255,.08)),
+    var(--cinematic-page-image) !important;
+  background-size: cover, cover !important;
+  background-position: center, 50% 50%;
+  background-repeat: no-repeat, no-repeat !important;
+}
+
+/* Dark text stays readable over light image backgrounds */
+[data-cinematic-bg]:not(.hero-visual) h1,
+[data-cinematic-bg]:not(.hero-visual) h2 {
+  color: #173052 !important;
+  text-shadow: none !important;
+}
+
+[data-cinematic-bg]:not(.hero-visual) p {
+  color: #536982;
+}
+
+/* Keep the digital identity consistent */
+[data-cinematic-bg] {
+  border-color: rgba(214,228,244,.8);
+}
+
+/* Slow, subtle background movement */
+@keyframes cinematic-page-background-drift {
+  from { background-position: center, 46% 48%; }
+  to   { background-position: center, 54% 52%; }
+}
+
+@media (max-width: 640px) {
+  [data-cinematic-bg] {
+    background-position: center, 52% center;
+    animation-duration: 38s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-cinematic-bg] {
+    animation: none !important;
+  }
+}
+
+/* ODOO RTL LIGHT HERO REFINEMENT */
+[data-cinematic-bg="odoo-business"] {
+  background-color: #f8fbff !important;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.08) 0%,
+      rgba(255,255,255,.18) 30%,
+      rgba(255,255,255,.58) 65%,
+      rgba(255,255,255,.86) 100%
+    ),
+    url("../images/backgrounds/odoo-business-rtl.png") !important;
+  background-size: cover, cover !important;
+  background-position: center center, center center !important;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: odoo-hero-image-drift 34s ease-in-out infinite alternate;
+}
+
+[data-cinematic-bg="odoo-business"] h1,
+[data-cinematic-bg="odoo-business"] h2 {
+  color: #173052 !important;
+  text-shadow: none !important;
+}
+
+[data-cinematic-bg="odoo-business"] p {
+  color: #405975 !important;
+}
+
+@keyframes odoo-hero-image-drift {
+  from { background-position: center center, 47% 49%; }
+  to   { background-position: center center, 53% 51%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-cinematic-bg="odoo-business"] {
+    animation: none !important;
+  }
+}
+
+/* PROGRAMMING HERO IMAGE COMPOSITION */
+#programming-page .prog-hero[data-cinematic-bg="programming"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #f7faff !important;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.04) 0%,
+      rgba(255,255,255,.13) 34%,
+      rgba(255,255,255,.76) 58%,
+      rgba(255,255,255,.97) 100%
+    ),
+    url("../images/backgrounds/programming-rtl.png") !important;
+  background-size: cover, cover !important;
+  background-position: center, center !important;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: programming-hero-drift 32s ease-in-out infinite alternate;
+}
+
+/* Prevent the old illustration and photo from appearing together */
+#programming-page .prog-hero[data-cinematic-bg="programming"] .prog-hero-visual {
+  visibility: hidden !important;
+}
+
+/* Clear, high-contrast Arabic content */
+#programming-page .prog-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+#programming-page .prog-hero-content h1 {
+  color: #173052 !important;
+  text-shadow: none !important;
+}
+
+#programming-page .prog-hero-content h1 span {
+  color: #1674d5 !important;
+}
+
+#programming-page .prog-hero-content p {
+  color: #415a75 !important;
+  text-shadow: none !important;
+}
+
+#programming-page .prog-hero-content .prog-hero-actions a {
+  text-shadow: none !important;
+}
+
+@keyframes programming-hero-drift {
+  from { background-position: center, 46% 48%; }
+  to   { background-position: center, 54% 52%; }
+}
+
+@media (max-width: 640px) {
+  #programming-page .prog-hero[data-cinematic-bg="programming"] {
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(255,255,255,.90) 0%,
+        rgba(255,255,255,.80) 52%,
+        rgba(255,255,255,.28) 100%
+      ),
+      url("../images/backgrounds/programming-rtl.png") !important;
+    background-position: center, center !important;
+  }
+
+  #programming-page .prog-hero[data-cinematic-bg="programming"] .prog-hero-visual {
+    visibility: visible !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #programming-page .prog-hero[data-cinematic-bg="programming"] {
+    animation: none !important;
+  }
+}
+
+/* PROGRAMMING SECONDARY CTA CONTRAST FIX */
+#programming-page .prog-hero-actions a:nth-of-type(2) {
+  color: #173052 !important;
+  -webkit-text-fill-color: #173052 !important;
+  background: rgba(255, 255, 255, .97) !important;
+  border: 1px solid #9bb5d2 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  box-shadow: 0 5px 16px rgba(35, 67, 105, .08);
+}
+
+#programming-page .prog-hero-actions a:nth-of-type(2) * {
+  color: #173052 !important;
+  -webkit-text-fill-color: #173052 !important;
+  text-shadow: none !important;
+}
+
+#programming-page .prog-hero-actions a:nth-of-type(2):hover {
+  background: #edf6ff !important;
+  border-color: #2678cc !important;
+  transform: translateY(-2px);
+}
+
+/* PROGRAMMING SCROLL SECTIONS LIVE BACKGROUNDS */
+#programming-page #programming-tracks {
+  --prog-scroll-image: url("../images/backgrounds/education.jpg");
+}
+#programming-page #programming-basics {
+  --prog-scroll-image: url("../images/backgrounds/programming.jpg");
+}
+#programming-page #programming-workshops {
+  --prog-scroll-image: url("../images/backgrounds/artificial-intelligence.jpg");
+}
+#programming-page #programming-resources {
+  --prog-scroll-image: url("../images/backgrounds/office-skills.jpg");
+}
+#programming-page .prog-social {
+  --prog-scroll-image: url("../images/backgrounds/home-tech.jpg");
+}
+#programming-page .prog-next-step {
+  --prog-scroll-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#programming-page #programming-online-quiz {
+  --prog-scroll-image: url("../images/backgrounds/data-analysis.jpg");
+}
+#programming-page #channel-videos-programming {
+  --prog-scroll-image: url("../images/backgrounds/programming.jpg");
+}
+
+#programming-page #programming-tracks,
+#programming-page #programming-basics,
+#programming-page #programming-workshops,
+#programming-page #programming-resources,
+#programming-page .prog-social,
+#programming-page .prog-next-step,
+#programming-page #programming-online-quiz,
+#programming-page #channel-videos-programming {
+  position: relative;
+  isolation: isolate;
+  background-color: #f8fbff !important;
+  background-image:
+    linear-gradient(
+      110deg,
+      rgba(255,255,255,.72),
+      rgba(247,251,255,.65) 52%,
+      rgba(255,255,255,.78)
+    ),
+    var(--prog-scroll-image) !important;
+  background-size: cover, cover !important;
+  background-position: center, 46% 48%;
+  background-repeat: no-repeat, no-repeat !important;
+  border: 1px solid rgba(212,228,245,.82);
+  border-radius: 24px;
+  box-shadow: 0 16px 38px rgba(41,71,109,.07);
+  animation: programming-scroll-background-drift 32s ease-in-out infinite alternate;
+}
+
+#programming-page #programming-tracks h2,
+#programming-page #programming-basics h2,
+#programming-page #programming-workshops h2,
+#programming-page #programming-resources h2,
+#programming-page .prog-social h2,
+#programming-page .prog-next-step h2,
+#programming-page #programming-online-quiz h2,
+#programming-page #channel-videos-programming h2 {
+  color: #173052;
+  text-shadow: none;
+}
+
+#programming-page #programming-tracks p,
+#programming-page #programming-basics p,
+#programming-page #programming-workshops p,
+#programming-page #programming-resources p,
+#programming-page .prog-social p,
+#programming-page .prog-next-step p,
+#programming-page #programming-online-quiz p,
+#programming-page #channel-videos-programming p {
+  color: #4d637e;
+}
+
+@keyframes programming-scroll-background-drift {
+  from { background-position: center, 46% 48%; }
+  to   { background-position: center, 54% 52%; }
+}
+
+@media (max-width: 640px) {
+  #programming-page #programming-tracks,
+  #programming-page #programming-basics,
+  #programming-page #programming-workshops,
+  #programming-page #programming-resources,
+  #programming-page .prog-social,
+  #programming-page .prog-next-step,
+  #programming-page #programming-online-quiz,
+  #programming-page #channel-videos-programming {
+    background-position: center, 52% center;
+    animation-duration: 40s;
+    border-radius: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #programming-page #programming-tracks,
+  #programming-page #programming-basics,
+  #programming-page #programming-workshops,
+  #programming-page #programming-resources,
+  #programming-page .prog-social,
+  #programming-page .prog-next-step,
+  #programming-page #programming-online-quiz,
+  #programming-page #channel-videos-programming {
+    animation: none !important;
+  }
+}
+
+/* ALL PAGE SCROLL BACKGROUNDS V1 */
+/* ALL PAGE SCROLL BACKGROUNDS V1 */
+
+/* Homepage sections */
+#learning,
+#courses {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+#googleSitesLibrary {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+#services,
+#odoo-solutions-preview {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#resources {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+#about,
+#contact.contact-section,
+.sc-semantic-section {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+
+/* Odoo business and accounting */
+.odoo-detail-hero,
+#solutions.odoo-detail-solutions,
+#channel-odoo-videos.odoo-detail-solutions {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#accounting-management.odoo-accounting-course,
+.odoo-detail-contact {
+  --live-section-image: url("../images/backgrounds/accounting.jpg");
+}
+
+/* Professional profile and certificates */
+.profile-hero,
+.profile-brand-showcase,
+.profile-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+.profile-photo-feature,
+.profile-intro-section {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+#profile-certificates,
+#profile-cv {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+#profile-work {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+
+/* Educational content pages */
+.gs-hero:not(.cinematic-data-analysis-hero) {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+.gs-section,
+.gs-original-content.sc-content-page {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+#materials {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+
+/* Data analysis page overrides the generic educational sections */
+.gs-main > .cinematic-data-analysis-hero,
+body:has(.cinematic-data-analysis-hero) .gs-section,
+body:has(.cinematic-data-analysis-hero) .gs-original-content,
+body:has(.cinematic-data-analysis-hero) #materials,
+#channel-videos-data {
+  --live-section-image: url("../images/backgrounds/data-analysis.jpg");
+}
+
+/* Excel, Word and PowerPoint */
+.office-hero,
+#office-topics,
+.office-outcomes,
+#office-resources,
+#channel-videos-excel,
+#channel-videos-word,
+#channel-videos-powerpoint {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.office-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* ICDL and digital skills */
+.icdl-hero,
+#icdl-topics,
+.icdl-outcomes,
+#icdl-resources,
+#channel-videos-icdl {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.icdl-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Projects */
+.projects-hero,
+.projects-method {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+#projects-list {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#projects-materials {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.projects-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Python */
+.py-hero,
+#python-topics,
+.py-outcomes,
+.py-outline {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+#python-resources {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.py-social {
+  --live-section-image: url("../images/backgrounds/artificial-intelligence.jpg");
+}
+.py-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Scratch and kids coding */
+.scratch-hero,
+#scratch-levels,
+.scratch-outcomes,
+#scratch-resources,
+#channel-videos-scratch {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+.scratch-workshop {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+.scratch-social {
+  --live-section-image: url("../images/backgrounds/artificial-intelligence.jpg");
+}
+.scratch-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Windows and internet */
+.win-hero,
+#windows-topics,
+.win-outcomes,
+#windows-resources,
+#channel-videos-windows {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.win-next-step {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+
+/* Shared treatment — photo background with a bright readable overlay */
+#learning,
+#courses,
+#googleSitesLibrary,
+#services,
+#resources,
+#about,
+#odoo-solutions-preview,
+#contact.contact-section,
+.sc-semantic-section,
+.odoo-detail-hero,
+#solutions.odoo-detail-solutions,
+#channel-odoo-videos.odoo-detail-solutions,
+#accounting-management.odoo-accounting-course,
+.odoo-detail-contact,
+.profile-hero,
+.profile-brand-showcase,
+.profile-photo-feature,
+.profile-intro-section,
+#profile-certificates,
+#profile-work,
+#profile-cv,
+.profile-next-step,
+.gs-hero:not(.cinematic-data-analysis-hero),
+.gs-section,
+.gs-original-content.sc-content-page,
+.gs-main > .cinematic-data-analysis-hero,
+body:has(.cinematic-data-analysis-hero) .gs-original-content,
+body:has(.cinematic-data-analysis-hero) #materials,
+#channel-videos-data,
+.office-hero,
+#office-topics,
+.office-outcomes,
+#office-resources,
+.office-next-step,
+#channel-videos-excel,
+#channel-videos-word,
+#channel-videos-powerpoint,
+.icdl-hero,
+#icdl-topics,
+.icdl-outcomes,
+#icdl-resources,
+.icdl-next-step,
+#channel-videos-icdl,
+.projects-hero,
+#projects-list,
+.projects-method,
+#projects-materials,
+.projects-next-step,
+.py-hero,
+#python-topics,
+.py-outcomes,
+.py-outline,
+#python-resources,
+.py-social,
+.py-next-step,
+.scratch-hero,
+#scratch-levels,
+.scratch-outcomes,
+.scratch-workshop,
+#scratch-resources,
+.scratch-social,
+.scratch-next-step,
+#channel-videos-scratch,
+.win-hero,
+#windows-topics,
+.win-outcomes,
+#windows-resources,
+.win-next-step,
+#channel-videos-windows {
+  background-color: #f8fbff !important;
+  background-image:
+    linear-gradient(
+      110deg,
+      rgba(255,255,255,.73),
+      rgba(246,250,255,.63) 52%,
+      rgba(255,255,255,.79)
+    ),
+    var(--live-section-image) !important;
+  background-size: 100% 100%, 112% 112% !important;
+  background-position: 0 0, 46% 48%;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: all-page-background-drift 36s ease-in-out infinite alternate;
+}
+
+/* Keep each section's headings readable */
+#learning > h1,
+#learning > h2,
+#courses > h1,
+#courses > h2,
+#googleSitesLibrary > h1,
+#googleSitesLibrary > h2,
+#services > h1,
+#services > h2,
+#resources > h1,
+#resources > h2,
+#about > h1,
+#about > h2,
+#contact.contact-section h2,
+.odoo-detail-hero h1,
+.odoo-detail-solutions h2,
+.odoo-accounting-course h2,
+.profile-hero h1,
+.profile-section h2,
+.gs-hero h1,
+.gs-section h2,
+.office-hero h1,
+.office-section h2,
+.icdl-hero h1,
+.icdl-section h2,
+.projects-hero h1,
+.projects-section h2,
+.py-hero h1,
+.py-section h2,
+.scratch-hero h1,
+.scratch-section h2,
+.win-hero h1,
+.win-intro h2 {
+  text-shadow: none;
+}
+
+/* Subtle, continuous movement as the visitor scrolls */
+@keyframes all-page-background-drift {
+  from { background-position: 0 0, 46% 48%; }
+  to   { background-position: 0 0, 54% 52%; }
+}
+
+@media (max-width: 640px) {
+  #learning,
+  #courses,
+  #googleSitesLibrary,
+  #services,
+  #resources,
+  #about,
+  #odoo-solutions-preview,
+  #contact.contact-section,
+  .sc-semantic-section,
+  .odoo-detail-hero,
+  #solutions.odoo-detail-solutions,
+  #channel-odoo-videos.odoo-detail-solutions,
+  #accounting-management.odoo-accounting-course,
+  .odoo-detail-contact,
+  .profile-hero,
+  .profile-brand-showcase,
+  .profile-photo-feature,
+  .profile-intro-section,
+  #profile-certificates,
+  #profile-work,
+  #profile-cv,
+  .profile-next-step,
+  .gs-hero:not(.cinematic-data-analysis-hero),
+  .gs-section,
+  .gs-original-content.sc-content-page,
+  .gs-main > .cinematic-data-analysis-hero,
+  body:has(.cinematic-data-analysis-hero) .gs-original-content,
+  body:has(.cinematic-data-analysis-hero) #materials,
+  #channel-videos-data,
+  .office-hero,
+  #office-topics,
+  .office-outcomes,
+  #office-resources,
+  .office-next-step,
+  #channel-videos-excel,
+  #channel-videos-word,
+  #channel-videos-powerpoint,
+  .icdl-hero,
+  #icdl-topics,
+  .icdl-outcomes,
+  #icdl-resources,
+  .icdl-next-step,
+  #channel-videos-icdl,
+  .projects-hero,
+  #projects-list,
+  .projects-method,
+  #projects-materials,
+  .projects-next-step,
+  .py-hero,
+  #python-topics,
+  .py-outcomes,
+  .py-outline,
+  #python-resources,
+  .py-social,
+  .py-next-step,
+  .scratch-hero,
+  #scratch-levels,
+  .scratch-outcomes,
+  .scratch-workshop,
+  #scratch-resources,
+  .scratch-social,
+  .scratch-next-step,
+  #channel-videos-scratch,
+  .win-hero,
+  #windows-topics,
+  .win-outcomes,
+  #windows-resources,
+  .win-next-step,
+  #channel-videos-windows {
+    background-size: 100% 100%, 120% 120% !important;
+    background-position: 0 0, 52% 50%;
+    animation-duration: 42s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #learning,
+  #courses,
+  #googleSitesLibrary,
+  #services,
+  #resources,
+  #about,
+  #odoo-solutions-preview,
+  #contact.contact-section,
+  .sc-semantic-section,
+  .odoo-detail-hero,
+  #solutions.odoo-detail-solutions,
+  #channel-odoo-videos.odoo-detail-solutions,
+  #accounting-management.odoo-accounting-course,
+  .odoo-detail-contact,
+  .profile-hero,
+  .profile-brand-showcase,
+  .profile-photo-feature,
+  .profile-intro-section,
+  #profile-certificates,
+  #profile-work,
+  #profile-cv,
+  .profile-next-step,
+  .gs-hero:not(.cinematic-data-analysis-hero),
+  .gs-section,
+  .gs-original-content.sc-content-page,
+  .gs-main > .cinematic-data-analysis-hero,
+  body:has(.cinematic-data-analysis-hero) .gs-original-content,
+  body:has(.cinematic-data-analysis-hero) #materials,
+  #channel-videos-data,
+  .office-hero,
+  #office-topics,
+  .office-outcomes,
+  #office-resources,
+  .office-next-step,
+  #channel-videos-excel,
+  #channel-videos-word,
+  #channel-videos-powerpoint,
+  .icdl-hero,
+  #icdl-topics,
+  .icdl-outcomes,
+  #icdl-resources,
+  .icdl-next-step,
+  #channel-videos-icdl,
+  .projects-hero,
+  #projects-list,
+  .projects-method,
+  #projects-materials,
+  .projects-next-step,
+  .py-hero,
+  #python-topics,
+  .py-outcomes,
+  .py-outline,
+  #python-resources,
+  .py-social,
+  .py-next-step,
+  .scratch-hero,
+  #scratch-levels,
+  .scratch-outcomes,
+  .scratch-workshop,
+  #scratch-resources,
+  .scratch-social,
+  .scratch-next-step,
+  #channel-videos-scratch,
+  .win-hero,
+  #windows-topics,
+  .win-outcomes,
+  #windows-resources,
+  .win-next-step,
+  #channel-videos-windows {
+    animation: none !important;
+  }
+}
+
+/* VISUAL BALANCE AND IMAGE DISTRIBUTION FIX */
+
+/* Light, readable education library hero */
+.gs-hero:not(.cinematic-data-analysis-hero) {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+  color: #173052 !important;
+  background-color: #f8fbff !important;
+  background-image:
+    linear-gradient(
+      105deg,
+      rgba(255,255,255,.30) 0%,
+      rgba(255,255,255,.63) 45%,
+      rgba(255,255,255,.94) 100%
+    ),
+    url("../images/backgrounds/education.jpg") !important;
+  background-size: 100% 100%, cover !important;
+  background-position: center, center !important;
+}
+
+.gs-hero:not(.cinematic-data-analysis-hero) h1,
+.gs-hero:not(.cinematic-data-analysis-hero) h2 {
+  color: #173052 !important;
+  text-shadow: none !important;
+}
+
+.gs-hero:not(.cinematic-data-analysis-hero) p {
+  color: #455f7c !important;
+}
+
+/* Each business section gets a different visual */
+.odoo-detail-hero {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#solutions.odoo-detail-solutions {
+  --live-section-image: url("../images/backgrounds/accounting.jpg");
+}
+#channel-odoo-videos.odoo-detail-solutions {
+  --live-section-image: url("../images/backgrounds/data-analysis.jpg");
+}
+#accounting-management.odoo-accounting-course {
+  --live-section-image: url("../images/backgrounds/accounting.jpg");
+}
+.odoo-detail-contact {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+
+/* Microsoft Office page: distinguish lessons from resources */
+.office-hero {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+#office-topics {
+  --live-section-image: url("../images/backgrounds/data-analysis.jpg");
+}
+.office-outcomes {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+#office-resources {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+.office-next-step {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+#channel-videos-excel,
+#channel-videos-word,
+#channel-videos-powerpoint {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+
+/* Homepage: use a light background under dark text */
+#learning,
+#courses,
+#googleSitesLibrary,
+#services,
+#resources,
+#about,
+#odoo-solutions-preview,
+#contact.contact-section {
+  background-color: #f8fbff !important;
+}
+
+#learning,
+#courses {
+  --live-section-image: url("../images/backgrounds/education.jpg");
+}
+#googleSitesLibrary {
+  --live-section-image: url("../images/backgrounds/office-skills.jpg");
+}
+#services,
+#odoo-solutions-preview {
+  --live-section-image: url("../images/backgrounds/odoo-business.jpg");
+}
+#resources {
+  --live-section-image: url("../images/backgrounds/programming.jpg");
+}
+#about,
+#contact.contact-section {
+  --live-section-image: url("../images/backgrounds/home-tech.jpg");
+}
+
+/* Bright photographic layer for content sections */
+#learning,
+#courses,
+#googleSitesLibrary,
+#services,
+#resources,
+#about,
+#odoo-solutions-preview,
+#contact.contact-section,
+.odoo-detail-solutions,
+.odoo-accounting-course,
+.odoo-detail-contact,
+.profile-hero,
+.profile-brand-showcase,
+.profile-photo-feature,
+.profile-intro-section,
+.profile-section,
+.profile-next-step,
+.gs-section,
+.office-section,
+.office-outcomes,
+.office-resources-section,
+.office-next-step,
+.icdl-section,
+.icdl-outcomes,
+.icdl-next-step,
+.projects-section,
+.projects-method,
+.projects-materials,
+.projects-next-step,
+.py-section,
+.py-outcomes,
+.py-outline,
+.py-next-step,
+.scratch-section,
+.scratch-outcomes,
+.scratch-workshop,
+.scratch-next-step,
+.win-intro,
+.win-outcomes,
+.win-resources,
+.win-next-step {
+  background-color: #f8fbff;
+  background-image:
+    linear-gradient(
+      110deg,
+      rgba(255,255,255,.86),
+      rgba(248,251,255,.78) 55%,
+      rgba(255,255,255,.88)
+    ),
+    var(--live-section-image, none);
+  background-size: 100% 100%, cover;
+  background-position: center, 50% 50%;
+  background-repeat: no-repeat;
+  animation: balanced-section-drift 38s ease-in-out infinite alternate;
+}
+
+/* Cards remain clean and legible */
+.category-card,
+.platform-video-card,
+.gs-tool-card,
+.project-card,
+.office-card,
+.icdl-card {
+  color: #173052;
+}
+
+/* Animate backgrounds gently, not the text */
+@keyframes balanced-section-drift {
+  from { background-position: center, 47% 48%; }
+  to   { background-position: center, 53% 52%; }
+}
+
+@media (max-width: 640px) {
+  #learning,
+  #courses,
+  #googleSitesLibrary,
+  #services,
+  #resources,
+  #about,
+  #odoo-solutions-preview,
+  #contact.contact-section,
+  .odoo-detail-solutions,
+  .odoo-accounting-course,
+  .odoo-detail-contact,
+  .profile-hero,
+  .profile-section,
+  .gs-section,
+  .office-section,
+  .office-outcomes,
+  .office-resources-section,
+  .icdl-section,
+  .icdl-outcomes,
+  .projects-section,
+  .projects-method,
+  .projects-materials,
+  .py-section,
+  .py-outcomes,
+  .py-outline,
+  .scratch-section,
+  .scratch-outcomes,
+  .scratch-workshop,
+  .win-intro,
+  .win-outcomes,
+  .win-resources {
+    background-size: 100% 100%, cover;
+    background-position: center, 50% center;
+    animation-duration: 44s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #learning,
+  #courses,
+  #googleSitesLibrary,
+  #services,
+  #resources,
+  #about,
+  #odoo-solutions-preview,
+  #contact.contact-section,
+  .odoo-detail-solutions,
+  .odoo-accounting-course,
+  .odoo-detail-contact,
+  .profile-hero,
+  .profile-section,
+  .gs-section,
+  .office-section,
+  .office-outcomes,
+  .office-resources-section,
+  .icdl-section,
+  .icdl-outcomes,
+  .projects-section,
+  .projects-method,
+  .projects-materials,
+  .py-section,
+  .py-outcomes,
+  .py-outline,
+  .scratch-section,
+  .scratch-outcomes,
+  .scratch-workshop,
+  .win-intro,
+  .win-outcomes,
+  .win-resources {
+    animation: none !important;
+  }
+}
+
+/* Restore personal portrait in the homepage hero */
+#home.hero .hero-visual[data-cinematic-bg="home-tech"] {
+  background-image:
+    linear-gradient(100deg, rgba(7,15,31,.16), rgba(7,15,31,.10)),
+    url("../images/profile-office-hero.jpg") !important;
+  background-size: cover, cover !important;
+  background-position: center, 54% 44% !important;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: cinematic-photo-pan 32s ease-in-out infinite alternate !important;
+}
+
+/* ==========================================================
+   MOHAMMED AFIFY ACADEMY HERO CONTRAST FIX V3
+   Scoped exclusively to the course library page
+   ========================================================== */
+
+body:has(.gs-catalog) .gs-main > .gs-hero > h1,
+body:has(.gs-catalog) .gs-main > .gs-hero > h2 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+    text-shadow: 0 4px 22px rgba(0,0,0,.24) !important;
+}
+
+body:has(.gs-catalog) .gs-main > .gs-hero > p {
+    color: #e6eef8 !important;
+    -webkit-text-fill-color: #e6eef8 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    text-shadow: none !important;
+}
+
+body:has(.gs-catalog) .gs-main .gs-grid > a.gs-catalog
+.pro-course-generated > .pro-course-label {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    opacity: 1 !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,.2) !important;
+}
+
+/* END MOHAMMED AFIFY ACADEMY HERO CONTRAST FIX V3 */

@@ -1,0 +1,58 @@
+
+
+/* COURSE CARD IMAGES V1 START */
+#courses .course-card .course-art.course-image-art {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: clamp(180px, 17vw, 220px) !important;
+    min-height: 180px !important;
+    flex: 0 0 auto !important;
+    aspect-ratio: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    isolation: isolate;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #eaf1f7 !important;
+}
+
+#courses .course-card .course-art.course-image-art::before,
+#courses .course-card .course-art.course-image-art::after {
+    content: none !important;
+    display: none !important;
+}
+
+#courses .course-card .course-art.course-image-art img {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+}
+
+#courses .course-card .course-body {
+    min-width: 0;
+}
+
+#courses .course-card .course-body h3 {
+    line-height: 1.8 !important;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+@media (max-width: 650px) {
+    #courses .course-card .course-art.course-image-art {
+        height: 190px !important;
+        min-height: 190px !important;
+    }
+}
+/* COURSE CARD IMAGES V1 END */

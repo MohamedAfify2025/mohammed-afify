@@ -1,0 +1,47 @@
+﻿/* BUSINESS COURSE REFERENCE CARD V1 START */
+#courses .course-card.business-course-hero .course-art.business-grade2-reference {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    aspect-ratio: 2.76 / 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #eaf1f8 !important;
+}
+#courses .course-card.business-course-hero .course-art.business-grade2-reference::before,
+#courses .course-card.business-course-hero .course-art.business-grade2-reference::after {
+    content: none !important;
+    display: none !important;
+}
+#courses .course-card.business-course-hero .course-art.business-grade2-reference img {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+}
+#courses .course-card.business-course-hero .course-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+}
+@media (max-width: 650px) {
+    #courses .course-card.business-course-hero .course-art.business-grade2-reference {
+        aspect-ratio: 2.35 / 1 !important;
+    }
+}
+/* BUSINESS COURSE REFERENCE CARD V1 END */

@@ -1,0 +1,690 @@
+
+
+/* ODOO PREVIEW SHOWCASE V2 START */
+
+/* The original site background is deliberately untouched. */
+#odoo-solutions-preview {
+    position: relative;
+    isolation: isolate;
+    padding-block: clamp(65px, 7vw, 100px) !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-inner {
+    width: min(100% - 44px, 1450px);
+    max-width: 1450px !important;
+    margin-inline: auto !important;
+    display: grid;
+    grid-template-columns: minmax(0,.88fr) minmax(0,1.12fr);
+    align-items: center;
+    gap: clamp(25px, 4vw, 64px);
+}
+
+/* Elegant copy panel */
+#odoo-solutions-preview .odoo-home-cta-copy {
+    min-width: 0;
+    padding: clamp(25px,3.4vw,45px);
+    border: 1px solid rgba(255,255,255,.92);
+    border-radius: 24px;
+    background: rgba(255,255,255,.86);
+    box-shadow: 0 18px 48px rgba(18,39,65,.10);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#odoo-solutions-preview .odoo-tagline {
+    color: #087f73 !important;
+    font-family: 'Inter','Cairo',sans-serif;
+    font-size: .76rem !important;
+    line-height: 1.9;
+    font-weight: 900 !important;
+    letter-spacing: .045em;
+}
+
+#odoo-solutions-preview h2 {
+    color: #142743 !important;
+    font-family: 'Cairo',sans-serif;
+    font-size: clamp(2rem,3.3vw,3.15rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.55 !important;
+    margin: 14px 0 17px !important;
+    text-wrap: balance;
+}
+
+#odoo-solutions-preview p {
+    color: #40556e !important;
+    font-family: 'Cairo',sans-serif;
+    font-size: clamp(.98rem,1.1vw,1.08rem) !important;
+    font-weight: 500;
+    line-height: 2.15 !important;
+    max-width: 100%;
+}
+
+#odoo-solutions-preview .odoo-home-cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: #5bdac3 !important;
+    color: #10243a !important;
+    font-family: 'Cairo',sans-serif;
+    font-size: .92rem;
+    font-weight: 900;
+    box-shadow: 0 9px 21px rgba(8,139,125,.17);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+#odoo-solutions-preview .odoo-home-cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(8,139,125,.23);
+}
+
+/* Five solution tiles */
+#odoo-solutions-preview .odoo-home-cta-cards {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    align-items: stretch;
+    gap: 13px;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards a.odoo-solution-tile {
+    --tile-from: #105b59;
+    --tile-to: #137e75;
+    --tile-accent: #a7f3e4;
+
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: 35px 48px minmax(0,1fr) 25px;
+    grid-template-areas: "number glyph copy arrow";
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 145px;
+    padding: 19px 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.24);
+    border-bottom: 3px solid var(--tile-accent);
+    border-radius: 18px;
+    background: linear-gradient(135deg,var(--tile-from),var(--tile-to));
+    color: #fff !important;
+    text-decoration: none !important;
+    box-shadow: 0 11px 27px rgba(18,39,65,.13);
+    transition: transform .22s ease, box-shadow .22s ease;
+}
+
+#odoo-solutions-preview .odoo-solution-tile.tile-nursery {
+    --tile-from: #104c49;
+    --tile-to: #16857a;
+    --tile-accent: #a8f4e5;
+}
+
+#odoo-solutions-preview .odoo-solution-tile.tile-tutoring {
+    --tile-from: #1d426b;
+    --tile-to: #287db0;
+    --tile-accent: #b9e4ff;
+}
+
+#odoo-solutions-preview .odoo-solution-tile.tile-school {
+    --tile-from: #40315f;
+    --tile-to: #7051a0;
+    --tile-accent: #e0d0ff;
+}
+
+#odoo-solutions-preview .odoo-solution-tile.tile-hr {
+    --tile-from: #643248;
+    --tile-to: #a44e68;
+    --tile-accent: #ffd5e0;
+}
+
+#odoo-solutions-preview .odoo-solution-tile.tile-accounting {
+    --tile-from: #67441d;
+    --tile-to: #a97932;
+    --tile-accent: #ffe4a9;
+}
+
+/* First solution is featured across the full card grid. */
+#odoo-solutions-preview .odoo-solution-tile.tile-nursery {
+    grid-column: 1 / -1;
+    min-height: 132px;
+}
+
+#odoo-solutions-preview .odoo-solution-tile::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -85px;
+    left: -45px;
+    width: 220px;
+    height: 220px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 50%;
+    background: radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);
+    box-shadow: 0 0 0 22px rgba(255,255,255,.035),
+                0 0 0 45px rgba(255,255,255,.025);
+    pointer-events: none;
+}
+
+#odoo-solutions-preview .odoo-solution-tile > b {
+    grid-area: number;
+    display: grid;
+    place-items: center;
+    width: 33px;
+    height: 33px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 9px;
+    background: rgba(255,255,255,.13);
+    color: #fff !important;
+    font-family: 'Inter',sans-serif;
+    font-size: .72rem;
+    font-weight: 900;
+}
+
+#odoo-solutions-preview .odoo-solution-glyph {
+    grid-area: glyph;
+    display: grid;
+    place-items: center;
+    width: 47px;
+    height: 47px;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 14px;
+    background: rgba(255,255,255,.14);
+    color: var(--tile-accent) !important;
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+#odoo-solutions-preview .odoo-solution-copy {
+    grid-area: copy;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+#odoo-solutions-preview .odoo-solution-copy strong {
+    color: #fff !important;
+    font-family: 'Cairo',sans-serif;
+    font-size: clamp(.98rem,1.18vw,1.12rem);
+    font-weight: 900;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+#odoo-solutions-preview .odoo-solution-copy small {
+    color: rgba(255,255,255,.91) !important;
+    font-family: 'Cairo',sans-serif;
+    font-size: .79rem;
+    font-weight: 500;
+    line-height: 1.85;
+}
+
+#odoo-solutions-preview .odoo-solution-tile > i {
+    grid-area: arrow;
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.14);
+    color: #fff !important;
+    font-size: .95rem;
+    font-style: normal;
+    font-weight: 900;
+    transition: transform .2s ease, background .2s ease;
+}
+
+#odoo-solutions-preview .odoo-solution-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 37px rgba(18,39,65,.21);
+}
+
+#odoo-solutions-preview .odoo-solution-tile:hover > i {
+    transform: translate(-3px,-3px);
+    background: rgba(255,255,255,.25);
+}
+
+#odoo-solutions-preview .odoo-solution-tile:focus-visible {
+    outline: 3px solid #5bdac3;
+    outline-offset: 4px;
+}
+
+@media (max-width: 1000px) {
+    #odoo-solutions-preview .odoo-home-cta-inner {
+        grid-template-columns: minmax(0,1fr);
+        gap: 24px;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-copy {
+        max-width: 900px;
+    }
+}
+
+@media (max-width: 650px) {
+    #odoo-solutions-preview {
+        padding-block: 48px !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-inner {
+        width: min(100% - 26px,560px);
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-copy {
+        padding: 22px 17px;
+        border-radius: 18px;
+    }
+
+    #odoo-solutions-preview h2 {
+        font-size: clamp(1.8rem,7vw,2.4rem) !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards {
+        grid-template-columns: minmax(0,1fr);
+        gap: 11px;
+    }
+
+    #odoo-solutions-preview .odoo-solution-tile.tile-nursery {
+        grid-column: auto;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards a.odoo-solution-tile {
+        min-height: 112px;
+        padding: 15px 13px;
+        grid-template-columns: 30px 43px minmax(0,1fr) 23px;
+        gap: 8px;
+    }
+
+    #odoo-solutions-preview .odoo-solution-glyph {
+        width: 42px;
+        height: 42px;
+        font-size: 1.6rem;
+    }
+
+    #odoo-solutions-preview .odoo-solution-copy strong {
+        font-size: .96rem;
+    }
+
+    #odoo-solutions-preview .odoo-solution-copy small {
+        font-size: .74rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #odoo-solutions-preview .odoo-solution-tile,
+    #odoo-solutions-preview .odoo-solution-tile > i,
+    #odoo-solutions-preview .odoo-home-cta-button {
+        transition: none;
+    }
+
+    #odoo-solutions-preview .odoo-solution-tile:hover {
+        transform: none;
+    }
+}
+
+/* ODOO PREVIEW SHOWCASE V2 END */
+
+/* ODOO PREVIEW CONTRAST V3 START */
+
+/* Force visible, high-contrast cards over the existing page background. */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile,
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile:visited {
+    position: relative !important;
+    isolation: isolate !important;
+    display: grid !important;
+    opacity: 1 !important;
+    filter: none !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1px solid rgba(255,255,255,.28) !important;
+    box-shadow: 0 13px 28px rgba(16,34,57,.19) !important;
+    overflow: hidden !important;
+}
+
+/* Nursery — featured card */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-nursery {
+    background-color: #105b59 !important;
+    background-image: linear-gradient(120deg,#104c49 0%,#087f73 55%,#15988b 100%) !important;
+    border-bottom: 4px solid #8cebd9 !important;
+    min-height: 150px !important;
+}
+
+/* Tutoring */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-tutoring {
+    background-color: #1d426b !important;
+    background-image: linear-gradient(135deg,#193c62,#286fa7) !important;
+    border-bottom: 4px solid #acd9ff !important;
+}
+
+/* School */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-school {
+    background-color: #40315f !important;
+    background-image: linear-gradient(135deg,#382951,#7051a0) !important;
+    border-bottom: 4px solid #d5c3ff !important;
+}
+
+/* Human resources */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-hr {
+    background-color: #643248 !important;
+    background-image: linear-gradient(135deg,#592b41,#a44e68) !important;
+    border-bottom: 4px solid #ffc7d7 !important;
+}
+
+/* Accounting */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-accounting {
+    background-color: #67441d !important;
+    background-image: linear-gradient(135deg,#5d3d19,#a97932) !important;
+    border-bottom: 4px solid #ffe0a1 !important;
+}
+
+/* Keep all card content readable, regardless of older global rules. */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy {
+    position: relative !important;
+    z-index: 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy strong {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: clamp(1rem,1.25vw,1.16rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.85 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy small {
+    color: #f2f8fc !important;
+    -webkit-text-fill-color: #f2f8fc !important;
+    font-size: .84rem !important;
+    font-weight: 600 !important;
+    line-height: 1.95 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile > b {
+    position: relative !important;
+    z-index: 2 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: rgba(255,255,255,.16) !important;
+    border: 1px solid rgba(255,255,255,.30) !important;
+    opacity: 1 !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-glyph {
+    position: relative !important;
+    z-index: 2 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: rgba(255,255,255,.15) !important;
+    border: 1px solid rgba(255,255,255,.27) !important;
+    opacity: 1 !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile > i {
+    position: relative !important;
+    z-index: 2 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: rgba(255,255,255,.17) !important;
+    opacity: 1 !important;
+}
+
+/* Soft decorative circles without obscuring the copy. */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile::before {
+    z-index: 0 !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile > * {
+    position: relative;
+    z-index: 2;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 20px 38px rgba(16,34,57,.25) !important;
+}
+
+@media (max-width: 650px) {
+    #odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile {
+        min-height: 115px !important;
+        padding: 15px !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-nursery {
+        min-height: 130px !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy strong {
+        font-size: .98rem !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy small {
+        font-size: .78rem !important;
+    }
+}
+
+/* ODOO PREVIEW CONTRAST V3 END */
+
+/* CLINIC SOLUTION TILE V1 START */
+#odoo-solutions-preview .odoo-home-cta-cards {
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > .tile-nursery {
+    grid-column: auto !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > .tile-clinic {
+    --tile-from: #17424b;
+    --tile-to: #267d83;
+    --tile-accent: #b6f2e8;
+    min-height: 145px;
+    background-color: #17424b !important;
+    background-image: linear-gradient(135deg,#17424b,#267d83) !important;
+    border-bottom: 4px solid #b6f2e8 !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > .tile-clinic .odoo-solution-glyph {
+    color: #ffffff !important;
+}
+
+@media (max-width: 1000px) {
+    #odoo-solutions-preview .odoo-home-cta-cards {
+        grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    }
+}
+
+@media (max-width: 650px) {
+    #odoo-solutions-preview .odoo-home-cta-cards {
+        grid-template-columns: minmax(0,1fr) !important;
+    }
+}
+/* CLINIC SOLUTION TILE V1 END */
+
+/* ODOO PREVIEW LAYOUT V3 START */
+
+/* Wider two-column solution cards */
+#odoo-solutions-preview .odoo-home-cta-inner {
+    grid-template-columns: minmax(0,1.08fr) minmax(0,.92fr) !important;
+    align-items: center !important;
+    gap: clamp(24px,3vw,46px) !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards {
+    display: grid !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    grid-auto-rows: 184px;
+    align-items: stretch !important;
+    gap: 14px !important;
+    min-width: 0;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards::before {
+    content: "اكتشف الحل المناسب لنشاطك · 06 SOLUTIONS";
+    grid-column: 1 / -1;
+    color: #087f73;
+    font-family: 'Cairo',sans-serif;
+    font-size: .83rem;
+    font-weight: 900;
+    line-height: 1.9;
+    letter-spacing: .025em;
+}
+
+/* Remove special spanning so all six cards align consistently. */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile,
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-nursery {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+    min-width: 0 !important;
+    min-height: 184px !important;
+    height: 184px !important;
+    padding: 67px 19px 43px !important;
+    overflow: hidden !important;
+    border-radius: 17px !important;
+    box-sizing: border-box !important;
+}
+
+/* Number badge */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile > b {
+    position: absolute !important;
+    top: 15px;
+    right: 15px;
+    left: auto;
+    display: grid !important;
+    place-items: center;
+    width: 31px;
+    height: 31px;
+    margin: 0;
+    border-radius: 9px;
+    font-family: 'Inter',sans-serif;
+    font-size: .72rem !important;
+}
+
+/* Icon occupies its own clear space on the opposite corner. */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-glyph {
+    position: absolute !important;
+    top: 13px;
+    left: 14px;
+    right: auto;
+    display: grid !important;
+    place-items: center;
+    width: 43px;
+    height: 43px;
+    border-radius: 13px;
+    font-size: 1.65rem !important;
+}
+
+/* Text uses the full card width. */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: right !important;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy strong {
+    display: block;
+    width: 100%;
+    margin: 0;
+    color: #ffffff !important;
+    font-size: clamp(1rem,1.2vw,1.13rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.8 !important;
+    text-align: right !important;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy small {
+    display: block;
+    width: 100%;
+    margin: 0;
+    color: #f3f8fc !important;
+    font-size: .81rem !important;
+    font-weight: 600 !important;
+    line-height: 1.85 !important;
+    text-align: right !important;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+/* Move the arrow away from the description. */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile > i {
+    position: absolute !important;
+    bottom: 11px;
+    left: 14px;
+    top: auto;
+    right: auto;
+    display: grid !important;
+    place-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    font-size: .88rem !important;
+}
+
+/* Keep the clinic tile's dedicated teal palette. */
+#odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-clinic {
+    background-color: #17424b !important;
+    background-image: linear-gradient(135deg,#17424b,#267d83) !important;
+}
+
+/* Tablet */
+@media (max-width: 1050px) {
+    #odoo-solutions-preview .odoo-home-cta-inner {
+        grid-template-columns: minmax(0,1fr) !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards {
+        grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 620px) {
+    #odoo-solutions-preview .odoo-home-cta-cards {
+        grid-template-columns: minmax(0,1fr) !important;
+        grid-auto-rows: auto;
+        gap: 11px !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile,
+    #odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile.tile-nursery {
+        min-height: 145px !important;
+        height: auto !important;
+        padding: 64px 16px 43px !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy strong {
+        font-size: 1rem !important;
+    }
+
+    #odoo-solutions-preview .odoo-home-cta-cards > a.odoo-solution-tile .odoo-solution-copy small {
+        font-size: .79rem !important;
+    }
+}
+
+/* ODOO PREVIEW LAYOUT V3 END */

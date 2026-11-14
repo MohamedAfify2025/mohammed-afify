@@ -1,0 +1,130 @@
+/* Readability-only overrides for homepage photo sections.
+   Intentionally does not change background images, background positions, or animations. */
+
+/* Section headings and descriptions over bright animated photos */
+#learning .section-heading h2,
+#courses .section-heading h2,
+#googleSitesLibrary .section-heading h2,
+#services .services-intro h2,
+#resources .resource-copy h2,
+#about .about-copy h2 {
+  color: #172641 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.28) !important;
+}
+
+#learning .section-heading h2 span,
+#courses .section-heading h2 span,
+#googleSitesLibrary .section-heading h2 span,
+#services .services-intro h2 span,
+#resources .resource-copy h2 span,
+#about .about-copy h2 span {
+  color: #087f78 !important;
+}
+
+#learning .section-heading > p,
+#courses .section-heading > p,
+#googleSitesLibrary .section-heading > p,
+#services .services-intro > p,
+#resources .resource-copy > p,
+#about .about-copy > p {
+  color: #3d4d66 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+#learning .section-kicker,
+#courses .section-kicker,
+#googleSitesLibrary .section-kicker,
+#services .section-kicker,
+#resources .section-kicker,
+#about .section-kicker {
+  color: #5643b8 !important;
+  font-weight: 800 !important;
+  opacity: 1 !important;
+}
+
+/* Learning path category cards retain their original pastel backgrounds */
+#learning .category-card h3 { color: #172641 !important; }
+#learning .category-card p { color: #40516a !important; opacity: 1 !important; }
+#learning .category-card .text-link { color: #223b5a !important; font-weight: 800 !important; }
+#learning .category-card .tag-row span {
+  color: #354760 !important;
+  border-color: rgba(91,111,145,.20) !important;
+}
+
+/* Course cards retain their original artwork and white card surfaces */
+#courses .course-body h3 { color: #172641 !important; }
+#courses .course-body p { color: #43536b !important; opacity: 1 !important; }
+#courses .course-meta { color: #52627a !important; }
+#courses .course-body .text-link { color: #5141b6 !important; font-weight: 800 !important; }
+
+/* Migrated course library cards */
+#googleSitesLibrary .gs-home-card h3 { color: #172641 !important; }
+#googleSitesLibrary .gs-home-card p { color: #43536b !important; opacity: 1 !important; }
+#googleSitesLibrary .gs-home-card b { color: #5141b6 !important; }
+
+/* Services section: maintain photo movement, make copy readable on top of it */
+#services .service-list { border-top-color: rgba(61,77,102,.25) !important; }
+#services .service-item {
+  background: rgba(255,255,255,.88) !important;
+  border: 1px solid rgba(210,222,237,.95) !important;
+  border-radius: 14px !important;
+  padding: 16px 15px !important;
+  margin-bottom: 10px !important;
+  box-shadow: 0 8px 22px rgba(20,39,69,.06) !important;
+}
+#services .service-item h3 { color: #172641 !important; }
+#services .service-item p { color: #43536b !important; opacity: 1 !important; }
+#services .service-icon { color: #5141b6 !important; border-color: #d8deed !important; }
+#services .service-arrow { color: #805000 !important; }
+
+/* The resource panel is already light; strengthen smaller copy and labels */
+#resources .resource-copy { color: #172641 !important; }
+#resources .file-card b { color: #172641 !important; }
+#resources .file-card small { color: #56647a !important; }
+
+/* About section copy: leave the dark monogram artwork unchanged */
+#about .about-copy { color: #172641 !important; }
+#about .principles span { color: #33455e !important; }
+#about .about-copy .text-link { color: #5141b6 !important; font-weight: 800 !important; }
+
+/* The Odoo call-to-action receives a bright photo layer in this theme.
+   Use translucent light cards and dark copy rather than altering the photo. */
+#odoo-solutions-preview .odoo-home-cta-copy h2 { color: #172641 !important; }
+#odoo-solutions-preview .odoo-home-cta-copy p { color: #3d4d66 !important; opacity: 1 !important; }
+#odoo-solutions-preview .odoo-tagline { color: #5141b6 !important; font-weight: 800 !important; }
+#odoo-solutions-preview .odoo-home-cta-cards a {
+  color: #172641 !important;
+  background: rgba(255,255,255,.90) !important;
+  border-color: rgba(207,220,237,.98) !important;
+  box-shadow: 0 8px 22px rgba(20,39,69,.06) !important;
+}
+#odoo-solutions-preview .odoo-home-cta-cards b,
+#odoo-solutions-preview .odoo-home-cta-cards i { color: #087f78 !important; }
+#odoo-solutions-preview .odoo-home-cta-button { color: #10243a !important; }
+
+/* Semantic/social area already has white cards; ensure body text and links stay dark */
+.sc-semantic-section { color: #172641 !important; }
+.sc-semantic-heading h2,
+.sc-semantic-card h3 { color: #172641 !important; }
+.sc-semantic-heading p,
+.sc-semantic-card p { color: #43536b !important; opacity: 1 !important; }
+.sc-semantic-link { color: #5141b6 !important; }
+.sc-social-links a { color: #263950 !important; }
+
+/* Contact form colors are already designed for the light panel; reinforce field text only. */
+#contact .contact-panel h2 { color: #172641 !important; }
+#contact .contact-panel > div > p,
+#contact .contact-note { color: #43536b !important; opacity: 1 !important; }
+#contact .form-hint { color: #52627a !important; }
+
+@media (prefers-contrast: more) {
+  #learning .section-heading > p,
+  #courses .section-heading > p,
+  #googleSitesLibrary .section-heading > p,
+  #services .services-intro > p,
+  #resources .resource-copy > p,
+  #about .about-copy > p,
+  #courses .course-body p,
+  #googleSitesLibrary .gs-home-card p { color: #23344d !important; }
+}

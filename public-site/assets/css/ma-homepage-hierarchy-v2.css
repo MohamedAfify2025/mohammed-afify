@@ -1,0 +1,16 @@
+/* Homepage hierarchy V2 — scoped refinements; preserves the existing brand system. */
+.gs-library-home .section-heading > p {
+  max-width: 460px;
+}
+.gs-library-home .gs-home-card p {
+  min-height: 58px;
+}
+.file-icon.pdf {
+  background: #fff0dc;
+  color: #a96b22;
+}
+@media (max-width: 760px) {
+  .gs-library-home .gs-home-card p {
+    min-height: 0;
+  }
+}

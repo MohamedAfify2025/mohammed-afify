@@ -1,0 +1,160 @@
+/* MA LEARNING PATHS - EXACT ORIGINAL ARTWORK V1
+   The image is rendered as-is. Only transparent clickable hit areas are added. */
+section.ma-exact-image-section {
+  padding: clamp(24px, 3.2vw, 52px) 0 !important;
+  background: transparent !important;
+}
+
+.ma-exact-image-frame {
+  position: relative;
+  width: min(100% - 32px, 1672px);
+  margin-inline: auto;
+  line-height: 0;
+  isolation: isolate;
+}
+
+.ma-exact-learning-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+  object-fit: initial;
+  background: transparent;
+}
+
+.ma-learning-hitbox {
+  position: absolute;
+  display: block;
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.ma-learning-hitbox:hover,
+.ma-learning-hitbox:active {
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.ma-learning-hitbox:focus-visible {
+  outline: 3px solid rgba(20, 55, 180, .9);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Top-left brand mark */
+.ma-lp-home {
+  left: 2.5%;
+  top: 2.2%;
+  width: 18.0%;
+  height: 8.0%;
+}
+
+/* Top-right course-library pill */
+.ma-lp-library {
+  left: 81.25%;
+  top: 2.5%;
+  width: 15.0%;
+  height: 7.5%;
+}
+
+/* Four full course cards. The order follows the original artwork. */
+.ma-lp-programming {
+  left: 70.1%;
+  top: 29.2%;
+  width: 20.8%;
+  height: 50.0%;
+}
+.ma-lp-data {
+  left: 49.5%;
+  top: 29.2%;
+  width: 20.8%;
+  height: 50.0%;
+}
+.ma-lp-business {
+  left: 28.0%;
+  top: 29.2%;
+  width: 20.8%;
+  height: 50.0%;
+}
+.ma-lp-accounting {
+  left: 6.8%;
+  top: 29.2%;
+  width: 20.8%;
+  height: 50.0%;
+}
+
+/* Bottom feature labels */
+.ma-lp-support {
+  left: 24.0%;
+  top: 82.8%;
+  width: 14.8%;
+  height: 9.6%;
+}
+.ma-lp-certificates {
+  left: 38.9%;
+  top: 82.8%;
+  width: 13.9%;
+  height: 9.6%;
+}
+.ma-lp-resources {
+  left: 52.7%;
+  top: 82.8%;
+  width: 13.9%;
+  height: 9.6%;
+}
+.ma-lp-pathways {
+  left: 66.5%;
+  top: 82.8%;
+  width: 16.4%;
+  height: 9.6%;
+}
+
+/* WhatsApp call-to-action in the artwork */
+.ma-lp-whatsapp {
+  left: 1.4%;
+  top: 83.8%;
+  width: 20.4%;
+  height: 8.3%;
+}
+
+/* Robot in the artwork opens the existing assistant */
+.ma-lp-assistant {
+  left: 88.0%;
+  top: 61.5%;
+  width: 11.3%;
+  height: 27.5%;
+  z-index: 4;
+}
+
+@media (max-width: 600px) {
+  .ma-exact-image-frame {
+    width: 100%;
+  }
+  section.ma-exact-image-section {
+    padding: 16px 0 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ma-learning-hitbox {
+    scroll-behavior: auto;
+  }
+}
