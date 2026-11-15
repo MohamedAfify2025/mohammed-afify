@@ -53,7 +53,7 @@ SELECT
     CASE WHEN p.oid IS NOT NULL THEN pg_get_function_result(p.oid) END AS return_type
 FROM expected_functions e
 LEFT JOIN pg_proc p
-  ON p.oid = to_regprocedure(e.regprocedure_signature)
+  ON p.oid = to_regprocedure(e.regprocedure_signature)::oid
 ORDER BY e.function_name;
 
 
