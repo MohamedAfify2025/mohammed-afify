@@ -74,11 +74,12 @@ BEGIN
             USING ERRCODE = 'P0002';
     END IF;
 
-    SELECT sp.price, sp.currency
+    SELECT round(sp.price, 2), sp.currency
     INTO v_plan_amount, v_currency
     FROM public.subscription_plans sp
     WHERE sp.id = p_plan_id
-      AND sp.is_active = true;
+      AND sp.is_active = true
+    FOR SHARE;
 
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Active subscription plan not found.'
@@ -363,6 +364,7 @@ DECLARE
     v_remaining_amount numeric(12,2);
     v_payment_amount numeric(12,2);
     v_subscription_status text;
+    v_payment_state text;
 BEGIN
     IF NOT membership_v2_private.is_admin() THEN
         RAISE EXCEPTION 'Only an active platform admin may record payments.'
@@ -387,12 +389,14 @@ BEGIN
         ss.user_id,
         ss.currency,
         ss.agreed_amount,
-        ss.status
+        ss.status,
+        ss.payment_state
     INTO
         v_student,
         v_currency,
         v_due_amount,
-        v_subscription_status
+        v_subscription_status,
+        v_payment_state
     FROM public.student_subscriptions ss
     WHERE ss.id = p_subscription_id
     FOR UPDATE;
@@ -407,12 +411,17 @@ BEGIN
             USING ERRCODE = '22023';
     END IF;
 
+    IF v_payment_state = 'waived' THEN
+        RAISE EXCEPTION 'Payments cannot be added to a waived subscription.'
+            USING ERRCODE = '22023';
+    END IF;
+
     IF coalesce(v_due_amount, 0) <= 0 THEN
         RAISE EXCEPTION 'This subscription has no amount due. It may be free or waived.'
             USING ERRCODE = '22023';
     END IF;
 
-    SELECT coalesce(sum(spay.amount), 0)
+    SELECT round(coalesce(sum(spay.amount), 0), 2)
     INTO v_total_paid
     FROM public.subscription_payments spay
     WHERE spay.subscription_id = p_subscription_id
