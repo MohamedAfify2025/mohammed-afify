@@ -282,8 +282,8 @@ BEGIN
 
     IF p_waive_fee OR v_plan_price = 0 THEN
         v_payment_state := 'waived';
-    ELSIF v_payment_state <> 'paid' THEN
-        RAISE EXCEPTION 'The subscription must be fully paid before activation.'
+    ELSIF v_payment_state NOT IN ('paid', 'waived') THEN
+        RAISE EXCEPTION 'The subscription must be fully paid or previously waived before activation.'
             USING ERRCODE = '22023';
     END IF;
 
