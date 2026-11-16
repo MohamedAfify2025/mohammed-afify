@@ -53,9 +53,30 @@ SELECT
     evt.evtevent::text AS object_version,
     evt.evtenabled::text AS enabled_state,
     evt.evtname::text AS object_name,
-    (pg_get_event_triggerdef(evt.oid) || E'\n\n' ||
-     pg_get_functiondef(evt.evtfoid))::text AS object_definition
+    (
+      format(
+        'CREATE EVENT TRIGGER %I ON %s%s EXECUTE FUNCTION %I.%I();',
+        evt.evtname,
+        evt.evtevent,
+        CASE
+          WHEN evt.evttags IS NOT NULL THEN
+            ' WHEN TAG IN (' ||
+            array_to_string(
+              ARRAY(
+                SELECT quote_literal(tag_name)
+                FROM unnest(evt.evttags) AS tag_list(tag_name)
+              ),
+              ', '
+            ) || ')'
+          ELSE ''
+        END,
+        fn_schema.nspname,
+        fn.proname
+      ) || E'\n\n' || pg_get_functiondef(fn.oid)
+    )::text AS object_definition
 FROM pg_catalog.pg_event_trigger evt
+JOIN pg_catalog.pg_proc fn ON fn.oid = evt.evtfoid
+JOIN pg_catalog.pg_namespace fn_schema ON fn_schema.oid = fn.pronamespace
 ORDER BY evt.evtname;
 SELECT
     'EXTENSION'::text AS section,
