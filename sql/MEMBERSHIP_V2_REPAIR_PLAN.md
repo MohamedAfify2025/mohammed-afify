@@ -163,6 +163,37 @@
 - `extensions` ومخططات الامتدادات؛ لا تنسخ ككائنات تطبيق. يجب أن تتوفر الامتدادات المطلوبة في مشروع TEST من خلال ميزات Supabase/CREATE EXTENSION المناسبة.
 - يحتوي المصدر على Trigger واحد مفعل `auth.users.on_auth_user_created` يستدعي `public.handle_new_auth_user()`. تصدير مخططي `public` و`membership_v2_private` لا يصدر الـTrigger المرتبط بجدول `auth.users`؛ يجب إنشاء هذا الـTrigger على جدول Auth الافتراضي في TEST كخطوة منفصلة بعد تجهيز الدالة، دون استيراد سجل مستخدمين.
 
+### نتائج Event Trigger / Extension / Roles — 16 نوفمبر 2026
+
+تم تشغيل الاستعلام النهائي بنجاح داخل معاملة `READ ONLY`. النتيجة:
+- 7 Event Triggers.
+- 5 Extensions.
+- 7 أدوار تمت مراجعتها.
+- 4 نتائج صلاحيات للمخطط `membership_v2_private`.
+
+#### Event Triggers السبعة
+- `ensure_rls` — مملوك لـ`postgres`، حدث `ddl_command_end`، ومقيد بالوسوم `CREATE TABLE`, `CREATE TABLE AS`, `SELECT INTO`. يشغّل `public.rls_auto_enable()`، وهي `SECURITY DEFINER` و`search_path=pg_catalog` وتفعّل RLS على الجداول الجديدة داخل `public`.
+- الستة الأخرى مملوكة لـ`supabase_admin`، وهي أحداث إدارة Supabase: `issue_graphql_placeholder`, `issue_pg_cron_access`, `issue_pg_graphql_access`, `issue_pg_net_access`, `pgrst_ddl_watch`, `pgrst_drop_watch`. لا تُنسخ يدويًا؛ Stack Supabase الهدف مسؤول عن تهيئتها.
+
+#### Extensions الخمسة
+- `pg_stat_statements 1.11`
+- `pgcrypto 1.3`
+- `plpgsql 1.0`
+- `supabase_vault 0.3.1`
+- `uuid-ossp 1.1`
+
+لا يستخدم SQL التطبيق `uuid_generate_v4()` أو دوال امتداد خاصة أخرى في المراجعة النصية. لا يتم نقل أي صفوف أو أسرار من Vault.
+
+#### أدوار وصلاحيات المخطط الخاص
+- `postgres`: ليس superuser في المصدر، لكنه يملك `BYPASSRLS` و`CREATEROLE` و`CREATEDB`.
+- `service_role`: لديه `BYPASSRLS`.
+- `anon`: لا يملك USAGE أو CREATE على `membership_v2_private`.
+- `authenticated`: لديه USAGE ولا يملك CREATE.
+- `service_role`: لا يملك USAGE أو CREATE.
+- `postgres`: لديه USAGE وCREATE.
+
+**قرار TEST بشأن Event Triggers:** لا ننقل Event Triggers الستة التابعة لـSupabase؛ يوفرها مشروع Supabase الهدف. لا ننشئ `ensure_rls` أثناء استيراد المخطط؛ جميع الجداول الحالية الأربعة عشر لديها `ENABLE ROW LEVEL SECURITY` صريح. وبما أن دور `postgres` في المصدر ليس superuser، لا نفترض أنه يستطيع إنشاء Event Trigger على مشروع سحابي. إلى أن نتحقق من إمكانية ذلك في TEST، يجب أن تتضمن كل Migration مستقبلية `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` صراحةً لكل جدول جديد.
+
 ### مراجعة ملف Schema-only الفعلي
 
 تم فحص `MohammedAfify_V2_SCHEMA_ONLY.sql`:
