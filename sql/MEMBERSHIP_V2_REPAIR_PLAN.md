@@ -121,6 +121,43 @@
 
 هذه المؤشرات لا تثبت خلو جميع بيانات المنصة من الأخطاء؛ لكنها تؤكد أن خط الأساس الذي فحصناه نظيف وفق العدادات المحددة، وأن تواقيع الدوال متوافقة مع المسودة.
 
+## 3.3 الجرد الشامل لمخطط المصدر — 16 نوفمبر 2026
+
+تم تحليل ملف `Supabase_V2_Source_Inventory_20261116_140202.zip`. هذا الجرد قرأ بيانات الكتالوج فقط؛ لم يتضمن DDL كاملًا أو صفوفًا من الجداول.
+
+### هوية المصدر
+- PostgreSQL **17.11**، `server_encoding=UTF8`، `client_encoding=UTF8`.
+- الاتصال بدور `postgres`، و`transaction_read_only=on` أثناء الجرد.
+- 10 مخططات، و5 امتدادات: `pg_stat_statements` و`pgcrypto` و`plpgsql` و`supabase_vault` و`uuid-ossp`.
+
+### مخططات التطبيق
+- `public`: **14 جدولًا**، كلها RLS-enabled، ولا يوجد بينها جدول FORCE RLS.
+- `public`: **26 دالة**.
+- `membership_v2_private`: **5 دوال**، ولا جداول.
+- مجموع سياسات RLS في `public`: **24 سياسة على 13 جدولًا**.
+- جدول `public.membership_schema_versions` لديه RLS مفعّل لكنه لا يظهر له أي Policy في جرد السياسات. قد يكون مقصودًا كدفتر داخلي، لكن يجب التحقق من صلاحيات الجدول قبل استعادته.
+- الفحص الأولي السابق الذي ذكر 10 جداول و21 سياسة كان أضيق نطاقًا؛ الجرد الشامل الحالي هو المرجع الأحدث: 14 جدولًا و24 سياسة.
+
+### دوال التطبيق
+- المخطط الخاص يحتوي على `is_admin` و`my_course_access` و`has_teacher_permission` و`teacher_can_view_student` و`touch_updated_at`.
+- كل دوال التطبيق المفحوصة SECURITY DEFINER مع `search_path=""`، باستثناء `touch_updated_at` وهي ليست SECURITY DEFINER. ودالة الحدث `public.rls_auto_enable` تستخدم `search_path=pg_catalog`.
+- يوجد كل من `record_subscription_payment_v2` و`record_subscription_payment_v3`. واجهة إدارة الاشتراكات التي راجعناها تستدعي V3؛ يجب عدم حذف V2 قبل تتبع كل المستهلكين.
+- جرد الدوال الحالي يؤكد وجود `submit_business_unit1_quiz` فقط. لا تظهر دوال إرسال الوحدات السبع الأخرى ولا `_record_academy_assessment_v1`.
+
+### مخططات لا يجب نسخها إلى TEST كجزء من مخطط التطبيق
+- `auth`: 27 جدولًا، ويضم `auth.users` وجداول الهويات والجلسات ورموز التحديث؛ ممنوع تصدير بياناته.
+- `storage`: 10 جداول وبيانات كائنات/تخزين؛ يستبعد من نسخة التطبيق.
+- `realtime`: جداول داخلية وpartitioned table؛ يستبعد.
+- `vault`: يتضمن `secrets` و`decrypted_secrets`؛ يستبعد كليًا، ولا يتم نسخ أي أسرار.
+- `extensions` ومخططات الامتدادات؛ لا تنسخ ككائنات تطبيق. يجب أن تتوفر الامتدادات المطلوبة في مشروع TEST من خلال ميزات Supabase/CREATE EXTENSION المناسبة.
+- يحتوي المصدر على Trigger واحد مفعل `auth.users.on_auth_user_created` يستدعي `public.handle_new_auth_user()`. تصدير مخططي `public` و`membership_v2_private` لا يصدر الـTrigger المرتبط بجدول `auth.users`؛ يجب إنشاء هذا الـTrigger على جدول Auth الافتراضي في TEST كخطوة منفصلة بعد تجهيز الدالة، دون استيراد سجل مستخدمين.
+
+### أداة التصدير
+- الخادم المصدر PostgreSQL 17.11، بينما عميل Windows الموجود في مجلد Odoo هو PostgreSQL 16.14؛ لا تستخدم `pg_dump 16.14` لعمل dump من هذا الخادم.
+- المسار المفضل هو تصدير schema-only لمخططي `public,membership_v2_private` فقط باستخدام Supabase CLI `db dump` المحدث أو عميل PostgreSQL 17 متوافق.
+- أمر Supabase CLI `db dump` الافتراضي لا يصدر صفوف البيانات ولا الأدوار المخصصة، ويستبعد مخططات Supabase المدارة مثل Auth وStorage ومخططات الامتدادات. ومع ذلك يجب تحديد المخططين صراحةً ومراجعة ملف SQL الناتج قبل الاستعادة.
+- لا يستخدم `supabase db pull` على المصدر في هذه المرحلة؛ لأنه قد يصلح سجل migrations البعيد، ونحن نريد تصديرًا بلا أي كتابة على المصدر.
+
 ## 4. اختبارات قبول المرحلة الأولى
 
 ### إنشاء الاشتراك
