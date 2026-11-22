@@ -1,3 +1,9 @@
+-- ============================================================================
+-- LEGACY V1 SCHEMA — DO NOT EXECUTE AGAINST THE CURRENT MEMBERSHIP V2 DATABASE.
+-- Kept only as historical reference for the early starter implementation.
+-- Current work is governed by sql/MEMBERSHIP_V2_REPAIR_PLAN.md.
+-- Do not run this over source, TEST, or LIVE V2 projects.
+-- ============================================================================
 -- Mohammed Afify learning platform: membership, approval, watch progress and assessment records.
 -- Run the whole script in Supabase Dashboard > SQL Editor, using the project SQL editor.
 -- Do NOT put a service_role key or database password in any browser file.
