@@ -175,31 +175,54 @@ function Upload-CloudflareTus {
             $patch.Content = [System.Net.Http.ByteArrayContent]::new($buffer, 0, $read)
             $patch.Content.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse("application/offset+octet-stream")
 
-            try {
-                $patchResponse = $Client.SendAsync($patch).GetAwaiter().GetResult()
-                if (-not $patchResponse.IsSuccessStatusCode) {
-                    $patchText = $patchResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult()
-                    Stop-With "TUS chunk upload failed (HTTP $([int]$patchResponse.StatusCode)): $patchText"
+            $chunkAccepted = $false
+            for ($retry = 1; $retry -le 5 -and -not $chunkAccepted; $retry++) {
+                $patchResponse = $null
+                $patch = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::new("PATCH"), $uploadUri)
+                $patch.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::new("Bearer", $ApiToken)
+                $patch.Headers.Add("Tus-Resumable", "1.0.0")
+                $patch.Headers.Add("Upload-Offset", [string]$offset)
+                $patch.Content = [System.Net.Http.ByteArrayContent]::new($buffer, 0, $read)
+                $patch.Content.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse("application/offset+octet-stream")
+                try {
+                    $patchResponse = $Client.SendAsync($patch).GetAwaiter().GetResult()
+                    if (-not $patchResponse.IsSuccessStatusCode) {
+                        $patchText = $patchResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult()
+                        Stop-With "TUS chunk upload failed (HTTP $([int]$patchResponse.StatusCode)): $patchText"
+                    }
+                    $nextOffset = Get-HeaderValue $patchResponse.Headers "Upload-Offset"
+                    if (-not $nextOffset) { Stop-With "TUS response did not include Upload-Offset." }
+                    $offset = [int64]$nextOffset
+                    $chunkAccepted = $true
                 }
-                $nextOffset = Get-HeaderValue $patchResponse.Headers "Upload-Offset"
-                if (-not $nextOffset) { Stop-With "TUS response did not include Upload-Offset." }
-                $offset = [int64]$nextOffset
-                $patchResponse.Dispose()
+                catch {
+                    $head = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Head, $uploadUri)
+                    $head.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::new("Bearer", $ApiToken)
+                    $head.Headers.Add("Tus-Resumable", "1.0.0")
+                    $headResponse = $Client.SendAsync($head).GetAwaiter().GetResult()
+                    if (-not $headResponse.IsSuccessStatusCode) { Stop-With "TUS upload interrupted and its resume offset could not be recovered." }
+                    $serverOffset = Get-HeaderValue $headResponse.Headers "Upload-Offset"
+                    if (-not $serverOffset) { Stop-With "TUS HEAD response did not include Upload-Offset." }
+                    $serverOffsetValue = [int64]$serverOffset
+                    $head.Dispose()
+                    $headResponse.Dispose()
+                    if ($serverOffsetValue -gt $offset) {
+                        $offset = $serverOffsetValue
+                        $chunkAccepted = $true
+                        Write-Warning "Cloudflare accepted the previous chunk despite a lost response. Continuing from byte $offset."
+                    } elseif ($retry -lt 5) {
+                        Write-Warning "Upload interrupted before this chunk was acknowledged. Retry $retry of 5."
+                        Start-Sleep -Seconds ([Math]::Min(15, 2 * $retry))
+                    } else {
+                        throw
+                    }
+                }
+                finally {
+                    if ($patchResponse) { $patchResponse.Dispose() }
+                    $patch.Dispose()
+                }
             }
-            catch {
-                $head = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Head, $uploadUri)
-                $head.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::new("Bearer", $ApiToken)
-                $head.Headers.Add("Tus-Resumable", "1.0.0")
-                $headResponse = $Client.SendAsync($head).GetAwaiter().GetResult()
-                if (-not $headResponse.IsSuccessStatusCode) { Stop-With "TUS upload interrupted and its resume offset could not be recovered." }
-                $serverOffset = Get-HeaderValue $headResponse.Headers "Upload-Offset"
-                if (-not $serverOffset) { Stop-With "TUS HEAD response did not include Upload-Offset." }
-                $offset = [int64]$serverOffset
-                $head.Dispose()
-                $headResponse.Dispose()
-                Write-Warning "Upload interrupted. Resuming from acknowledged byte $offset."
-            }
-            finally { $patch.Dispose() }
+            if (-not $chunkAccepted) { Stop-With "TUS could not acknowledge the current chunk after five attempts." }
 
             $percent = [Math]::Round(($offset / [double]$length) * 100, 1)
             Write-Progress -Activity "Uploading to Cloudflare Stream (TUS)" -Status "$percent% ($offset / $length bytes)" -PercentComplete $percent
