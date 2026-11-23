@@ -1,0 +1,9 @@
+# Local-only Supabase/browser configuration
+public-site/assets/js/membership-config.local.js
+supabase/functions/.env
+.env
+.env.*
+
+# Local build and runtime artifacts
+.DS_Store
+Thumbs.db
