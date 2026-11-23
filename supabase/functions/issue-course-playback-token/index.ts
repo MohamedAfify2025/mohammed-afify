@@ -3,10 +3,10 @@ import {
   getCourseVideoUid,
   hasVideoCapability,
   isStreamOriginAllowed,
-  isStreamVideoReadyAndPrivate,
   normalizeSlug,
   normalizeTokenTtl,
   parseCourseMediaManifest,
+  resolveSupabasePublishableKey,
 } from "../_shared/course-playback.mjs";
 
 const JSON_HEADERS = {
@@ -76,8 +76,7 @@ Deno.serve(async (req: Request) => {
   }
 
   if (req.method === "OPTIONS") {
-    const headers = makeHeaders(origin, true);
-    return new Response(null, { status: 204, headers });
+    return new Response(null, { status: 204, headers: makeHeaders(origin, true) });
   }
   if (req.method !== "POST") {
     return jsonResponse(405, { error: "Method not allowed." }, origin, true);
@@ -99,9 +98,10 @@ Deno.serve(async (req: Request) => {
     }
 
     const supabaseUrl = readRequiredEnv("SUPABASE_URL");
-    const publishableKey = Deno.env.get("SUPABASE_PUBLISHABLE_KEY") ||
-      Deno.env.get("SUPABASE_ANON_KEY");
-    if (!publishableKey) throw new Error("Missing Supabase publishable/anon key.");
+    const publishableKey = resolveSupabasePublishableKey(
+      Deno.env.get("SUPABASE_PUBLISHABLE_KEYS"),
+      Deno.env.get("SUPABASE_ANON_KEY"),
+    );
 
     const supabase = createClient(supabaseUrl, publishableKey, {
       auth: {
@@ -147,8 +147,6 @@ Deno.serve(async (req: Request) => {
     const videoEndpoint = "https://api.cloudflare.com/client/v4/accounts/" +
       encodeURIComponent(accountId) + "/stream/" + encodeURIComponent(videoUid);
 
-    // Fail closed unless the video is ready, requires signed URLs and allows
-    // exactly this website host. No wildcard or public-by-UID video is accepted.
     const videoResponse = await fetch(videoEndpoint, {
       method: "GET",
       headers: { "Authorization": "Bearer " + apiToken },
