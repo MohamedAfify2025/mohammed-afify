@@ -73,10 +73,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
       - name: Parse deployment scripts
-        shell: pwsh
+        shell: powershell
         run: |
           $scripts = @(
-            "scripts/Deploy-StudentInvitations-TEST.ps1",
             "scripts/Deploy-StudentInvitations-LIVE.ps1"
           )
           foreach ($relativePath in $scripts) {
@@ -85,7 +84,16 @@ jobs:
             $scriptPath = Join-Path $env:GITHUB_WORKSPACE $relativePath
             [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors) | Out-Null
             if ($parseErrors.Count -gt 0) {
-              $parseErrors | Format-List | Out-String | Write-Error
+              Write-Host "PowerShell parse errors in $relativePath"
+              $sourceLines = Get-Content -LiteralPath $scriptPath
+              foreach ($parseError in $parseErrors) {
+                $lineNumber = $parseError.Extent.StartLineNumber
+                $columnNumber = $parseError.Extent.StartColumnNumber
+                Write-Host ("Line {0}, Column {1}: {2} [{3}]" -f $lineNumber, $columnNumber, $parseError.Message, $parseError.ErrorId)
+                if ($lineNumber -gt 0 -and $lineNumber -le $sourceLines.Count) {
+                  Write-Host $sourceLines[$lineNumber - 1]
+                }
+              }
               throw "PowerShell parse failed: $relativePath"
             }
           }

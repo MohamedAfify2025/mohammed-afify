@@ -31,7 +31,7 @@ function Convert-SecureStringToPlainText([Security.SecureString]$Value) {
 
 function Test-SupabasePublicKey([string]$Key) {
     if ([string]::IsNullOrWhiteSpace($Key)) { return $false }
-    $Key = $Key.Trim().Trim([char]0xFEFF).Trim().Trim('"').Trim("'")
+    $Key = $Key.Trim().Trim([char]0xFEFF).Trim()
     if ($Key.StartsWith("sb_publishable_")) { return $Key.Length -gt 20 }
     if ($Key.StartsWith("sb_secret_") -or $Key.StartsWith("sb_service_role_")) { return $false }
     if (-not $Key.StartsWith("eyJ")) { return $false }
@@ -73,7 +73,7 @@ $repoRoot = $repoRoot.Trim()
 Push-Location $repoRoot
 $tempEnvFile = $null
 try {
-    Write-Host "Student invitations — LIVE deployment" -ForegroundColor Cyan
+    Write-Host "Student invitations - LIVE deployment" -ForegroundColor Cyan
 
     $branch = (& git branch --show-current).Trim()
     if ($branch -ne $ExpectedBranch) {
@@ -113,7 +113,7 @@ try {
     $authReady = Read-Host "Type AUTH_READY only after both Redirect URL and custom SMTP are configured"
     if ($authReady -cne "AUTH_READY") { Stop-With "Cancelled: Auth redirect/email readiness was not confirmed." }
 
-    $publishableSecure = Read-Host "LIVE Supabase Publishable Key (hidden; sb_publishable_... or legacy anon key only)" -AsSecureString
+    $publishableSecure = Read-Host -Prompt 'LIVE Supabase Publishable Key' -AsSecureString
     $publishableKey = (Convert-SecureStringToPlainText $publishableSecure).Trim()
     if (-not (Test-SupabasePublicKey $publishableKey)) {
         Stop-With "Rejected key. Secret/service_role keys are not allowed here."
@@ -169,33 +169,16 @@ try {
     # Publishable keys are designed for browser use. Secret/service-role keys are rejected above.
     $urlJson = ConvertTo-Json -InputObject $supabaseUrl -Compress
     $keyJson = ConvertTo-Json -InputObject $publishableKey -Compress
-    # Build JavaScript from ordinary PowerShell strings. This is compatible with Windows PowerShell 5.1.
-    $configLines = @(
-        "// Public browser configuration. Publishable keys are intended for browser clients."
-        "// Row Level Security and RPC authorization remain the actual access controls."
-        "window.MEMBERSHIP_CONFIG = {"
-        "  supabaseUrl: $urlJson,"
-        "  supabasePublishableKey: $keyJson,"
-        '  supabaseAnonKey: ""'
-        "};"
-        ""
-        "window.isMembershipPublicKey = function (value) {"
-        '  const key = String(value || "").trim();'
-        '  if (key.startsWith("sb_publishable_")) return key.length > 20;'
-        '  if (key.startsWith("sb_secret_") || key.startsWith("sb_service_role_")) return false;'
-        '  if (!key.startsWith("eyJ")) return false;'
-        '  const parts = key.split(".");'
-        '  if (parts.length !== 3) return false;'
-        '  let payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");'
-        '  while (payload.length % 4) payload += "=";'
-        '  try {'
-        '    return JSON.parse(atob(payload)).role === "anon";'
-        '  } catch (_) {'
-        '    return false;'
-        '  }'
-        "};"
-    )
-    $configJs = $configLines -join [Environment]::NewLine
+    # Keep JavaScript in a separate template file so Windows PowerShell does not parse JS syntax.
+    $templatePath = Join-Path $repoRoot "scripts/membership-config.template.js"
+    if (-not (Test-Path -LiteralPath $templatePath)) {
+        Stop-With "The browser configuration template is missing: scripts/membership-config.template.js"
+    }
+    $configTemplate = [IO.File]::ReadAllText($templatePath)
+    $configJs = $configTemplate.Replace("__SUPABASE_URL_JSON__", $urlJson).Replace("__SUPABASE_PUBLISHABLE_KEY_JSON__", $keyJson)
+    if ($configJs -match "__SUPABASE_[A-Z_]+__") {
+        Stop-With "A browser configuration placeholder was not replaced."
+    }
     [IO.File]::WriteAllText($configPath, $configJs, [Text.UTF8Encoding]::new($false))
 
     node --check $configPath
