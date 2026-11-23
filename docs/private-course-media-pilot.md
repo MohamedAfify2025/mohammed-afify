@@ -25,7 +25,7 @@ Set these only in the Supabase Edge Function secret store for the isolated TEST 
 | Secret | Purpose |
 |---|---|
 | SUPABASE_URL | Supabase project URL (platform-provided in the Edge Function environment) |
-| SUPABASE_PUBLISHABLE_KEY or SUPABASE_ANON_KEY | Public project key used with the caller's Authorization JWT; never a service-role key |
+| SUPABASE_PUBLISHABLE_KEYS | Automatically supplied Supabase JSON dictionary; the function reads its default publishable key. Legacy projects can fall back to SUPABASE_ANON_KEY. |
 | ALLOWED_ORIGINS | Comma-separated exact website origins, e.g. https://test.example.com,http://localhost:5500 |
 | CF_ACCOUNT_ID | Cloudflare account identifier |
 | CF_STREAM_API_TOKEN | Cloudflare API token with permissions to read Stream video metadata and create signed playback tokens |
@@ -51,7 +51,7 @@ Do not set COURSE_MEDIA_MAP_JSON until the corresponding Stream videos exist, ea
 1. Confirm the Supabase project reference is the isolated TEST project and take a verified backup/export before any database work. This pilot currently includes no database migration.
 2. Confirm get_my_active_courses_v2() exists in that TEST project and returns course_slug, can_view_course_page, and can_watch_video as expected.
 3. Review ALLOWED_ORIGINS and list only the exact TEST website origin(s). Do not use *.
-4. Set the function secrets in Supabase TEST. Never use LIVE secrets for TEST.
+4. Set the function secrets in Supabase TEST. Never use LIVE secrets for TEST. SUPABASE_URL and SUPABASE_PUBLISHABLE_KEYS are supplied by Supabase; do not try to create secrets with the reserved SUPABASE_ prefix.
 5. Deploy only the issue-course-playback-token function to TEST. Keep JWT verification enabled; do not set verify_jwt = false.
 6. Configure one Cloudflare Stream video as private / requiring signed URLs, and set the exact TEST host in that video's allowed origins.
 7. Add a single excel lesson mapping to the function secret, then call the function using the authenticated TEST student account.
