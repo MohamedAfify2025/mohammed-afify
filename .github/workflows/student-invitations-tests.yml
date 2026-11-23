@@ -16,6 +16,10 @@ on:
       - "public-site/assets/js/membership-config.js"
       - "tests/student-invites.test.mjs"
       - "tests/admin-subscriptions-ui.test.mjs"
+      - "supabase/migrations/**"
+      - "public-site/admin-permissions.html"
+      - "public-site/assets/js/admin-permissions.js"
+      - "tests/platform-permissions.test.mjs"
       - ".github/workflows/student-invitations-tests.yml"
   push:
     branches:
@@ -55,6 +59,7 @@ jobs:
         run: |
           node tests/student-invites.test.mjs
           node tests/admin-subscriptions-ui.test.mjs
+          node tests/platform-permissions.test.mjs
       - name: Syntax-check browser scripts
         run: |
           node --check public-site/assets/js/membership-config.js
@@ -63,6 +68,7 @@ jobs:
           node --check public-site/assets/js/student-login.js
           node --check public-site/assets/js/student-set-password.js
           node --check public-site/assets/js/student-space.js
+          node --check public-site/assets/js/admin-permissions.js
 
   edge-function-type-check:
     runs-on: ubuntu-latest
