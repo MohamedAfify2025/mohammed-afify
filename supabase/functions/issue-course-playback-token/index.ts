@@ -3,6 +3,7 @@ import {
   getCourseVideoUid,
   hasVideoCapability,
   isStreamOriginAllowed,
+  isStreamVideoReadyAndPrivate,
   normalizeSlug,
   normalizeTokenTtl,
   parseCourseMediaManifest,
@@ -27,7 +28,10 @@ function makeHeaders(origin: string | null, allowOrigin: boolean): Headers {
   if (allowOrigin && origin) {
     headers.set("Access-Control-Allow-Origin", origin);
     headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
-    headers.set("Access-Control-Allow-Headers", "authorization, apikey, content-type, x-client-info");
+    headers.set(
+      "Access-Control-Allow-Headers",
+      "authorization, apikey, content-type, x-client-info, x-retry-count, traceparent, tracestate, baggage",
+    );
   }
   return headers;
 }
@@ -135,7 +139,7 @@ Deno.serve(async (req: Request) => {
     const accountId = readRequiredEnv("CF_ACCOUNT_ID");
     const apiToken = readRequiredEnv("CF_STREAM_API_TOKEN");
     const customerCode = readRequiredEnv("CF_STREAM_CUSTOMER_CODE");
-    if (!/^[a-z0-9]{1,64}$/i.test(customerCode)) {
+    if (!/^[a-z0-9-]{1,64}$/i.test(customerCode)) {
       throw new Error("CF_STREAM_CUSTOMER_CODE is invalid.");
     }
     const ttl = normalizeTokenTtl(Deno.env.get("STREAM_TOKEN_TTL_SECONDS"));
@@ -143,8 +147,8 @@ Deno.serve(async (req: Request) => {
     const videoEndpoint = "https://api.cloudflare.com/client/v4/accounts/" +
       encodeURIComponent(accountId) + "/stream/" + encodeURIComponent(videoUid);
 
-    // Fail closed: never mint a signed token for a video that is still publicly
-    // playable by UID, or whose Cloudflare hotlink allowlist excludes this origin.
+    // Fail closed unless the video is ready, requires signed URLs and allows
+    // exactly this website host. No wildcard or public-by-UID video is accepted.
     const videoResponse = await fetch(videoEndpoint, {
       method: "GET",
       headers: { "Authorization": "Bearer " + apiToken },
@@ -158,12 +162,14 @@ Deno.serve(async (req: Request) => {
     if (videoPayload.result.requireSignedURLs !== true) {
       return jsonResponse(409, { error: "This video is not configured to require signed playback URLs." }, origin, true);
     }
+    if (videoPayload.result.readyToStream !== true) {
+      return jsonResponse(409, { error: "This video is not ready to stream yet." }, origin, true);
+    }
     if (!isStreamOriginAllowed(videoPayload.result.allowedOrigins, origin)) {
       return jsonResponse(403, { error: "This video is not restricted to the requesting website origin." }, origin, true);
     }
 
-    const tokenEndpoint = videoEndpoint + "/token";
-    const cfResponse = await fetch(tokenEndpoint, {
+    const cfResponse = await fetch(videoEndpoint + "/token", {
       method: "POST",
       headers: {
         "Authorization": "Bearer " + apiToken,
