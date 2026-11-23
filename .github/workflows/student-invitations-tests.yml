@@ -5,6 +5,7 @@ on:
     paths:
       - "supabase/functions/**"
       - "supabase/config.toml"
+      - "scripts/Deploy-StudentInvitations-TEST.ps1"
       - "public-site/admin-students.html"
       - "public-site/student-*.html"
       - "public-site/assets/js/admin-students.js"
