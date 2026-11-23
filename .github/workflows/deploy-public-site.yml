@@ -1,0 +1,77 @@
+name: Deploy isolated public website to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "public-site/**"
+      - ".github/workflows/deploy-public-site.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Verify isolated public-site package
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f public-site/index.html || {
+            echo "Missing public-site/index.html"
+            exit 1
+          }
+
+          forbidden_paths=(
+            "public-site/membership/login.html"
+            "public-site/membership/register.html"
+            "public-site/membership/student-dashboard.html"
+            "public-site/membership/admin-requests.html"
+            "public-site/membership/admin-subscriptions.html"
+            "public-site/assets/js/supabase-config.js"
+          )
+          for file in "${forbidden_paths[@]}"; do
+            if [ -e "$file" ]; then
+              echo "Refusing to publish private path: $file"
+              exit 1
+            fi
+          done
+
+          if grep -RInE \
+            'sb_secret_|sb_service_role_|SUPABASE_SERVICE_ROLE_KEY|CF_STREAM_API_TOKEN|postgres(ql)?://' \
+            public-site --include='*.html' --include='*.js'; then
+            echo "Potential server credential detected in public-site; refusing deployment."
+            exit 1
+          fi
+
+          echo "Public-site safety checks passed."
+
+      - name: Upload only public-site directory
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public-site/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
