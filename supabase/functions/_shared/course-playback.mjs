@@ -98,6 +98,25 @@ export function isStreamVideoReadyAndPrivate(video, requestOrigin) {
     isStreamOriginAllowed(video.allowedOrigins, requestOrigin);
 }
 
+export function resolveSupabasePublishableKey(publishableKeysJson, legacyAnonKey) {
+  if (typeof publishableKeysJson === "string" && publishableKeysJson.trim()) {
+    let keys;
+    try {
+      keys = JSON.parse(publishableKeysJson);
+    } catch {
+      throw new Error("SUPABASE_PUBLISHABLE_KEYS must be valid JSON.");
+    }
+    if (isPlainObject(keys) && typeof keys.default === "string" && keys.default.trim()) {
+      return keys.default.trim();
+    }
+    throw new Error("SUPABASE_PUBLISHABLE_KEYS does not contain a default key.");
+  }
+  if (typeof legacyAnonKey === "string" && legacyAnonKey.trim()) {
+    return legacyAnonKey.trim();
+  }
+  throw new Error("No Supabase publishable or anon API key is available.");
+}
+
 export function normalizeTokenTtl(rawValue) {
   if (rawValue === undefined || rawValue === null || rawValue === "") return 3600;
   const ttl = Number(rawValue);
