@@ -3,6 +3,7 @@ import {
   getCourseVideoUid,
   hasVideoCapability,
   isStreamOriginAllowed,
+  isStreamVideoReadyAndPrivate,
   normalizeSlug,
   normalizeTokenTtl,
   parseCourseMediaManifest,
@@ -38,11 +39,20 @@ assert.equal(isStreamOriginAllowed(["example.com"], "https://example.com"), true
 assert.equal(isStreamOriginAllowed(["example.com"], "https://other.example.com"), false);
 assert.equal(isStreamOriginAllowed(["*.example.com"], "https://test.example.com"), false);
 assert.equal(isStreamOriginAllowed(["localhost:5500"], "http://localhost:5500"), true);
+assert.equal(isStreamVideoReadyAndPrivate({
+  readyToStream: true, requireSignedURLs: true, allowedOrigins: ["example.com"],
+}, "https://example.com"), true);
+assert.equal(isStreamVideoReadyAndPrivate({
+  readyToStream: false, requireSignedURLs: true, allowedOrigins: ["example.com"],
+}, "https://example.com"), false);
+assert.equal(isStreamVideoReadyAndPrivate({
+  readyToStream: true, requireSignedURLs: false, allowedOrigins: ["example.com"],
+}, "https://example.com"), false);
 
-assert.equal(normalizeTokenTtl(undefined), 300);
-assert.equal(normalizeTokenTtl("120"), 120);
-assert.throws(() => normalizeTokenTtl("30"), /60 to 600/);
-assert.throws(() => normalizeTokenTtl("601"), /60 to 600/);
+assert.equal(normalizeTokenTtl(undefined), 3600);
+assert.equal(normalizeTokenTtl("300"), 300);
+assert.throws(() => normalizeTokenTtl("299"), /300 to 3600/);
+assert.throws(() => normalizeTokenTtl("3601"), /300 to 3600/);
 
 assert.throws(() => parseCourseMediaManifest("{not json"), /valid JSON/);
 assert.throws(() => parseCourseMediaManifest("[]"), /JSON object/);
@@ -50,4 +60,4 @@ assert.throws(() => parseCourseMediaManifest(JSON.stringify({
   excel: { "lesson-01": "not-a-stream-uid" },
 })), /invalid lesson or Stream video UID/);
 
-console.log("PASS: course media manifest, slug, capability, Stream origin, and token TTL checks.");
+console.log("PASS: manifest, course capability, private/ready Stream metadata, origin and token TTL checks.");
