@@ -169,33 +169,33 @@ try {
     # Publishable keys are designed for browser use. Secret/service-role keys are rejected above.
     $urlJson = ConvertTo-Json -InputObject $supabaseUrl -Compress
     $keyJson = ConvertTo-Json -InputObject $publishableKey -Compress
-    # Build JavaScript from ordinary PowerShell strings. This is compatible with Windows PowerShell 5.1.
-    $configLines = @(
-        "// Public browser configuration. Publishable keys are intended for browser clients."
-        "// Row Level Security and RPC authorization remain the actual access controls."
-        "window.MEMBERSHIP_CONFIG = {"
-        "  supabaseUrl: $urlJson,"
-        "  supabasePublishableKey: $keyJson,"
-        '  supabaseAnonKey: ""'
-        "};"
-        ""
-        "window.isMembershipPublicKey = function (value) {"
-        '  const key = String(value || "").trim();'
-        '  if (key.startsWith("sb_publishable_")) return key.length > 20;'
-        '  if (key.startsWith("sb_secret_") || key.startsWith("sb_service_role_")) return false;'
-        '  if (!key.startsWith("eyJ")) return false;'
-        '  const parts = key.split(".");'
-        '  if (parts.length !== 3) return false;'
-        '  let payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");'
-        '  while (payload.length % 4) payload += "=";'
-        '  try {'
-        '    return JSON.parse(atob(payload)).role === "anon";'
-        '  } catch (_) {'
-        '    return false;'
-        '  }'
-        "};"
-    )
-    $configJs = $configLines -join [Environment]::NewLine
+    # Build the browser configuration with a standard Windows PowerShell 5.1 here-string.
+    $configJs = @"
+ // Public browser configuration. Publishable keys are intended for browser clients.
+ // Row Level Security and RPC authorization remain the actual access controls.
+window.MEMBERSHIP_CONFIG = {
+  supabaseUrl: $urlJson,
+  supabasePublishableKey: $keyJson,
+  supabaseAnonKey: ""
+};
+
+window.isMembershipPublicKey = function (value) {
+  const key = String(value || "").trim();
+  if (key.startsWith("sb_publishable_")) return key.length > 20;
+  if (key.startsWith("sb_secret_") || key.startsWith("sb_service_role_")) return false;
+  if (!key.startsWith("eyJ")) return false;
+  const parts = key.split(".");
+  if (parts.length !== 3) return false;
+  let payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+  while (payload.length % 4) payload += "=";
+  try {
+    return JSON.parse(atob(payload)).role === "anon";
+  } catch (_) {
+    return false;
+  }
+};
+"@
+    $configJs = $configJs.TrimStart()
     [IO.File]::WriteAllText($configPath, $configJs, [Text.UTF8Encoding]::new($false))
 
     node --check $configPath
