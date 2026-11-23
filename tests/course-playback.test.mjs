@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   getCourseVideoUid,
   hasVideoCapability,
+  isStreamOriginAllowed,
   normalizeSlug,
   normalizeTokenTtl,
   parseCourseMediaManifest,
@@ -33,6 +34,11 @@ assert.equal(hasVideoCapability([
 ], "excel"), false);
 assert.equal(hasVideoCapability([], "excel"), false);
 
+assert.equal(isStreamOriginAllowed(["example.com"], "https://example.com"), true);
+assert.equal(isStreamOriginAllowed(["example.com"], "https://other.example.com"), false);
+assert.equal(isStreamOriginAllowed(["*.example.com"], "https://test.example.com"), false);
+assert.equal(isStreamOriginAllowed(["localhost:5500"], "http://localhost:5500"), true);
+
 assert.equal(normalizeTokenTtl(undefined), 300);
 assert.equal(normalizeTokenTtl("120"), 120);
 assert.throws(() => normalizeTokenTtl("30"), /60 to 600/);
@@ -44,4 +50,4 @@ assert.throws(() => parseCourseMediaManifest(JSON.stringify({
   excel: { "lesson-01": "not-a-stream-uid" },
 })), /invalid lesson or Stream video UID/);
 
-console.log("PASS: course media manifest, slug, capability, and token TTL checks.");
+console.log("PASS: course media manifest, slug, capability, Stream origin, and token TTL checks.");
