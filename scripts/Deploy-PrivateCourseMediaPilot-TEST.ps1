@@ -476,7 +476,116 @@ try {
 
     Write-Step "Optional end-to-end TEST student check"
     $doSmokeTest = (Read-Host "Do you already have a dedicated TEST student with an active course subscription and can_watch_video=true? (Y/N)").Trim()
-    if ($doSmokeTest -match '^(Y|YES) = (Read-Host "TEST student email").Trim()
+    if ($doSmokeTest -match '^(Y|YES)
+        $studentPasswordSecure = Read-Host "TEST student password (hidden input)" -AsSecureString
+        $studentPassword = Convert-SecureStringToPlainText $studentPasswordSecure
+        try {
+            $supabaseUrl = "https://$testProjectRef.supabase.co"
+            $authBody = @{ email = $studentEmail; password = $studentPassword } | ConvertTo-Json -Compress
+            $authResult = Invoke-RestMethod -Method POST -Uri "$supabaseUrl/auth/v1/token?grant_type=password" -Headers @{ apikey = $publishableKey } -ContentType "application/json" -Body $authBody -TimeoutSec 60
+            if (-not $authResult.access_token) { Stop-With "Supabase did not return a student session token." }
+
+            $functionBody = @{ course_slug = $courseSlug; lesson_slug = $lessonSlug } | ConvertTo-Json -Compress
+            $functionResult = Invoke-RestMethod -Method POST -Uri "$supabaseUrl/functions/v1/issue-course-playback-token" -Headers @{
+                Authorization = "Bearer $($authResult.access_token)"
+                apikey = $publishableKey
+                Origin = $testOrigin
+            } -ContentType "application/json" -Body $functionBody -TimeoutSec 60
+
+            if (-not $functionResult.iframeUrl -or $functionResult.expires_in_seconds -lt 300) {
+                Stop-With "Function response did not contain the expected signed playback URL."
+            }
+            Write-Host "TEST student authorization succeeded." -ForegroundColor Green
+            Write-Host "Course: $($functionResult.course_slug); Lesson: $($functionResult.lesson_slug)"
+            Write-Host "Signed token lifetime: $($functionResult.expires_in_seconds) seconds"
+            Write-Host "Signed iframe URL was intentionally not printed."
+        } finally {
+            $studentPassword = $null
+            $authBody = $null
+            $functionBody = $null
+        }
+    } else {
+        Write-Warning "Function deployed, but end-to-end student playback was not tested."
+    }
+
+    Write-Step "TEST pilot setup completed"
+    Write-Host "Cloudflare upload, signed-URL protection, origin restriction, Supabase secrets, and function deployment completed for TEST." -ForegroundColor Green
+    Write-Host "Course: $courseSlug | Lesson: $lessonSlug"
+    Write-Host "No SQL migrations or LIVE changes were made."
+    Write-Host "Next: verify a TEST student with an active matching subscription, then migrate the matching lesson player. Do not leave a public YouTube fallback."
+}
+catch {
+    Write-Error $_
+    Write-Host "STOPPED. Review the last successful step before rerunning." -ForegroundColor Red
+    throw
+}
+finally {
+    if ($tempEnvFile -and (Test-Path $tempEnvFile)) { Remove-Item -LiteralPath $tempEnvFile -Force -ErrorAction SilentlyContinue }
+    if ($httpClient) { $httpClient.Dispose() }
+    $cloudflareToken = $null
+    $publishableKey = $null
+    Pop-Location
+}
+) {
+        $publishableSecure = Read-Host "Supabase TEST Publishable Key for this optional student smoke test (hidden input)" -AsSecureString
+        $publishableKey = (Convert-SecureStringToPlainText $publishableSecure).Trim().Trim([char]0xFEFF).Trim()
+        if (-not (Test-SupabasePublishableOrAnonKey $publishableKey)) {
+            $safeKeyDescription = Get-SupabaseKeySafeDescription $publishableKey
+            Stop-With "Smoke-test key rejected ($safeKeyDescription). Use the exact Publishable key or legacy anon JWT only."
+        }
+
+        $studentEmail = (Read-Host "TEST student email").Trim()
+        $studentPasswordSecure = Read-Host "TEST student password (hidden input)" -AsSecureString
+        $studentPassword = Convert-SecureStringToPlainText $studentPasswordSecure
+        try {
+            $supabaseUrl = "https://$testProjectRef.supabase.co"
+            $authBody = @{ email = $studentEmail; password = $studentPassword } | ConvertTo-Json -Compress
+            $authResult = Invoke-RestMethod -Method POST -Uri "$supabaseUrl/auth/v1/token?grant_type=password" -Headers @{ apikey = $publishableKey } -ContentType "application/json" -Body $authBody -TimeoutSec 60
+            if (-not $authResult.access_token) { Stop-With "Supabase did not return a student session token." }
+
+            $functionBody = @{ course_slug = $courseSlug; lesson_slug = $lessonSlug } | ConvertTo-Json -Compress
+            $functionResult = Invoke-RestMethod -Method POST -Uri "$supabaseUrl/functions/v1/issue-course-playback-token" -Headers @{
+                Authorization = "Bearer $($authResult.access_token)"
+                apikey = $publishableKey
+                Origin = $testOrigin
+            } -ContentType "application/json" -Body $functionBody -TimeoutSec 60
+
+            if (-not $functionResult.iframeUrl -or $functionResult.expires_in_seconds -lt 300) {
+                Stop-With "Function response did not contain the expected signed playback URL."
+            }
+            Write-Host "TEST student authorization succeeded." -ForegroundColor Green
+            Write-Host "Course: $($functionResult.course_slug); Lesson: $($functionResult.lesson_slug)"
+            Write-Host "Signed token lifetime: $($functionResult.expires_in_seconds) seconds"
+            Write-Host "Signed iframe URL was intentionally not printed."
+        } finally {
+            $studentPassword = $null
+            $authBody = $null
+            $functionBody = $null
+        }
+    } else {
+        Write-Warning "Function deployed, but end-to-end student playback was not tested."
+    }
+
+    Write-Step "TEST pilot setup completed"
+    Write-Host "Cloudflare upload, signed-URL protection, origin restriction, Supabase secrets, and function deployment completed for TEST." -ForegroundColor Green
+    Write-Host "Course: $courseSlug | Lesson: $lessonSlug"
+    Write-Host "No SQL migrations or LIVE changes were made."
+    Write-Host "Next: migrate the matching lesson player separately; do not leave a public YouTube fallback."
+}
+catch {
+    Write-Error $_
+    Write-Host "STOPPED. Review the last successful step before rerunning." -ForegroundColor Red
+    throw
+}
+finally {
+    if ($tempEnvFile -and (Test-Path $tempEnvFile)) { Remove-Item -LiteralPath $tempEnvFile -Force -ErrorAction SilentlyContinue }
+    if ($httpClient) { $httpClient.Dispose() }
+    $cloudflareToken = $null
+    $publishableKey = $null
+    Pop-Location
+}
+) {
+        $studentEmail = (Read-Host "TEST student email").Trim()
         $studentPasswordSecure = Read-Host "TEST student password (hidden input)" -AsSecureString
         $studentPassword = Convert-SecureStringToPlainText $studentPasswordSecure
         try {
