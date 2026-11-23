@@ -68,12 +68,27 @@ export function getCourseVideoUid(manifest, courseSlug, lessonSlug) {
 export function hasVideoCapability(rows, courseSlug) {
   const target = normalizeSlug(courseSlug);
   if (!target || !Array.isArray(rows)) return false;
-
   return rows.some((row) =>
     row &&
     normalizeSlug(row.course_slug) === target &&
     row.can_view_course_page === true &&
     row.can_watch_video === true
+  );
+}
+
+export function isStreamOriginAllowed(allowedOrigins, requestOrigin) {
+  if (!Array.isArray(allowedOrigins) || typeof requestOrigin !== "string") return false;
+  let host;
+  try {
+    const parsed = new URL(requestOrigin);
+    if (!["https:", "http:"].includes(parsed.protocol) || parsed.origin !== requestOrigin) return false;
+    host = parsed.host;
+  } catch {
+    return false;
+  }
+  // Intentionally do not accept wildcards for paid course embeds.
+  return allowedOrigins.some((value) =>
+    typeof value === "string" && value.trim() === host && !value.includes("*")
   );
 }
 
