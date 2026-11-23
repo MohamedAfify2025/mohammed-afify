@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>إدارة الاشتراكات والمدفوعات | Mohammed Afify Learning</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.js"></script>
+<style>
+:root {
+  --navy:#111d38;
+  --muted:#65748c;
+  --line:#e5eaf2;
+  --bg:#f4f6fb;
+  --teal:#19b7a2;
+  --purple:#7161da;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--navy);
+  font-family:inherit;line-height:1.7
+}
+button,input,select,textarea{font:inherit}
+a{color:inherit;text-decoration:none}
+.topbar{
+  background:#fff;border-bottom:1px solid var(--line);
+  padding:16px 4%;display:flex;align-items:center;
+  justify-content:space-between;gap:15px;flex-wrap:wrap
+}
+.brand{font-size:18px;font-weight:900}
+.nav{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+.nav a{font-size:13px;color:#52617a;font-weight:700}
+.container{max-width:1440px;margin:30px auto;padding:0 22px 60px}
+.hero{
+  background:linear-gradient(120deg,#111d38,#253d62);
+  color:#fff;border-radius:22px;padding:28px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;margin-bottom:22px
+}
+.hero h1{margin:4px 0;font-size:clamp(25px,3vw,36px)}
+.hero p{margin:5px 0;color:#c9d5e7}
+.eyebrow{font-size:11px;letter-spacing:2px;color:#64dccb;font-weight:900}
+.btn{
+  border:0;border-radius:10px;padding:10px 16px;
+  background:var(--navy);color:#fff;cursor:pointer;
+  font-weight:800;font-size:13px
+}
+.btn:hover{filter:brightness(1.12)}
+.btn.teal{background:var(--teal);color:#062b2a}
+.btn.light{background:#edf1f8;color:#263653}
+.btn.red{background:#a83c4c}
+.btn.small{padding:6px 10px;font-size:11px}
+button:disabled{opacity:.55;cursor:not-allowed}
+#liveMessage{
+  display:none;padding:13px 16px;border-radius:12px;
+  margin:16px 0;background:#e9f7f2;color:#126345
+}
+#liveMessage.error{background:#fff0f0;color:#9d2734}
+.metrics{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;margin-bottom:22px
+}
+.metric,.panel{
+  background:#fff;border:1px solid var(--line);
+  border-radius:18px;padding:20px;
+  box-shadow:0 7px 22px rgba(17,29,56,.035)
+}
+.metric span{font-size:12px;color:var(--muted)}
+.metric strong{display:block;font-size:27px;margin-top:6px}
+.panel{margin-bottom:20px}
+.panel-head{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px
+}
+.panel h2{font-size:19px;margin:0}
+.panel p.help{font-size:12px;color:var(--muted);margin:5px 0 14px}
+.form-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px
+}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:12px;font-weight:800;color:#52617a}
+.field input,.field select,.field textarea{
+  width:100%;border:1px solid #dce3ed;border-radius:10px;
+  background:#fff;color:var(--navy);padding:10px 12px;
+  min-height:43px;outline:none
+}
+.field textarea{min-height:75px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--purple);box-shadow:0 0 0 3px #7161da1c
+}
+.checkline{
+  display:flex;align-items:center;gap:8px;
+  color:#52617a;font-size:12px;font-weight:700
+}
+.checkline input{width:17px;height:17px;accent-color:var(--teal)}
+.course-choices{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:9px;margin-top:10px
+}
+.course-choice{
+  display:flex;align-items:center;gap:9px;
+  border:1px solid var(--line);padding:9px 11px;
+  border-radius:10px;background:#fbfcff;font-size:12px
+}
+.capabilities{
+  display:flex;gap:16px;flex-wrap:wrap;
+  padding:12px;background:#f7f8fc;border-radius:12px;margin-top:12px
+}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:780px}
+th,td{
+  border-bottom:1px solid var(--line);
+  padding:11px 10px;text-align:right;font-size:12px;vertical-align:middle
+}
+th{background:#f8f9fc;color:#52617a;font-weight:900}
+td{color:#293954}
+.muted{color:var(--muted)}
+.status{
+  display:inline-block;padding:4px 9px;border-radius:30px;
+  background:#edf1f8;color:#465673;font-size:11px;font-weight:800
+}
+.status.active,.status.paid{background:#e5f7ef;color:#11704b}
+.status.pending,.status.partial{background:#fff5dc;color:#916300}
+.status.cancelled,.status.expired,.status.suspended,.status.failed{
+  background:#ffebed;color:#9f3440
+}
+.action-cell{display:flex;gap:6px;flex-wrap:wrap}
+.empty{padding:22px;text-align:center;color:#7b8799;font-size:13px}
+.notice{font-size:12px;color:#68768c;margin-top:12px;line-height:1.9}
+.section-title{display:flex;align-items:center;gap:9px}
+.section-title:before{
+  content:"";width:5px;height:22px;border-radius:5px;background:var(--teal)
+}
+.hidden{display:none!important}
+.footer{
+  text-align:center;color:#7b8799;font-size:11px;padding:20px
+}
+@media(max-width:850px){
+  .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .container{padding:0 12px 40px}
+  .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .metric{padding:14px}.metric strong{font-size:22px}
+  .form-grid{grid-template-columns:1fr}
+  .hero{padding:22px}
+}
+</style>
+<style id="membership-horizontal-tabs-v1">
+.membership-tabs {
+  display:flex;
+  flex-wrap:nowrap;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px;
+  margin:0 0 20px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  box-shadow:0 7px 22px rgba(17,29,56,.035);
+  position:sticky;
+  top:8px;
+  z-index:20;
+  scrollbar-width:thin;
+}
+.membership-tabs button {
+  flex:0 0 auto;
+  white-space:nowrap;
+  border:1px solid #e5eaf2;
+  border-radius:10px;
+  padding:11px 18px;
+  background:#f7f8fc;
+  color:#52617a;
+  font:inherit;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.membership-tabs button:hover {
+  border-color:#19b7a2;
+  color:#111d38;
+}
+.membership-tabs button[aria-selected="true"] {
+  background:#111d38;
+  border-color:#111d38;
+  color:#fff;
+  box-shadow:0 4px 12px rgba(17,29,56,.15);
+}
+.membership-tabs button:focus-visible {
+  outline:3px solid #19b7a255;
+  outline-offset:2px;
+}
+@media(max-width:560px) {
+  .membership-tabs {
+    top:4px;
+    padding:7px;
+    gap:6px;
+  }
+  .membership-tabs button {
+    padding:9px 13px;
+    font-size:12px;
+  }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="brand">Mohammed Afify <span style="color:#19b7a2">.MA</span></div>
+  <nav class="nav">
+    <a href="index.html">الرئيسية</a>
+    <a href="admin-students.html">إدارة الطلاب والدعوات</a>
+    <a href="student-login.html">دخول المتدربين</a>
+    <a href="#" id="logoutBtn">تسجيل الخروج</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">MEMBERSHIP CONTROL CENTER</div>
+    <h1>إدارة العضويات والاشتراكات</h1>
+    <p>الباقات، الطلاب، الاشتراكات، المدفوعات والمدرسون.</p>
+  </div>
+  <button class="btn teal" id="refreshBtn">تحديث البيانات ↻</button>
+</section>
+
+<div id="liveMessage"></div>
+
+<section class="metrics">
+  <div class="metric"><span>الطلاب المعتمدون</span><strong id="studentCount">—</strong></div>
+  <div class="metric"><span>الباقات النشطة</span><strong id="planCount">—</strong></div>
+  <div class="metric"><span>الاشتراكات النشطة</span><strong id="activeCount">—</strong></div>
+  <div class="metric"><span>المدرسون</span><strong id="teacherCount">—</strong></div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="section-title">إنشاء باقة اشتراك</h2>
+  </div>
+  <p class="help">حدد الدورات التي تشملها الباقة وصلاحيات الوصول لكل الدورات المختارة.</p>
+
+  <form id="planForm">
+    <div class="form-grid">
+      <div class="field">
+        <label>اسم الباقة</label>
+        <input name="name" required placeholder="مثال: مسار تحليل البيانات">
+      </div>
+      <div class="field">
+        <label>كود الباقة (بالإنجليزية)</label>
+        <input name="code" required pattern="[A-Za-z0-9_-]+" placeholder="data-analysis-path">
+      </div>
+      <div class="field">
+        <label>نوع الباقة</label>
+        <select name="plan_type" required>
+          <option value="single_course">دورة واحدة</option>
+          <option value="learning_path">مسار تعليمي</option>
+          <option value="multi_path">عدة مسارات</option>
+          <option value="all_access">اشتراك شامل</option>
+          <option value="trial">تجربة مجانية</option>
+          <option value="custom">مخصصة</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>السعر</label>
+        <input name="price" type="number" min="0" step="0.01" value="0" required>
+      </div>
+      <div class="field">
+        <label>العملة</label>
+        <select name="currency">
+          <option value="EGP">EGP - جنيه مصري</option>
+          <option value="SAR">SAR - ريال سعودي</option>
+          <option value="USD">USD - دولار أمريكي</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>مدة الاشتراك بالأيام</label>
+        <input name="duration_days" type="number" min="1" placeholder="اتركه فارغًا لاشتراك مفتوح المدة">
+      </div>
+      <div class="field" style="grid-column:1/-1">
+        <label>وصف الباقة</label>
+        <textarea name="description" placeholder="وصف مختصر لما يحصل عليه الطالب"></textarea>
+      </div>
+    </div>
+
+    <h3 style="font-size:14px;margin:22px 0 8px">الدورات المشمولة</h3>
+    <div id="courseChoices" class="course-choices">
+      <div class="empty">جارٍ تحميل الدورات...</div>
+    </div>
+
+    <div class="capabilities">
+      <label class="checkline"><input type="checkbox" id="capVideo" checked> مشاهدة الفيديو</label>
+      <label class="checkline"><input type="checkbox" id="capDownload"> تنزيل الملفات</label>
+      <label class="checkline"><input type="checkbox" id="capAssessment"> الاختبارات</label>
+      <label class="checkline"><input type="checkbox" id="capCertificate"> الشهادة</label>
+      <label class="checkline"><input type="checkbox" id="capProgress" checked> تتبع التقدم</label>
+      <label class="checkline"><input type="checkbox" name="is_public" checked> عرض الباقة للزوار</label>
+    </div>
+
+    <div class="actions">
+      <button class="btn teal" type="submit">إنشاء الباقة</button>
+    </div>
+  </form>
+  <div class="notice">إنشاء الباقة لا ينشئ اشتراكًا للطالب تلقائيًا. يتم إصدار الاشتراك من القسم التالي.</div>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">إسناد باقة لطالب معتمد</h2></div>
+  <form id="subscriptionForm" class="form-grid">
+    <div class="field">
+      <label>الطالب</label>
+      <select name="student_id" id="studentSelect" required></select>
+    </div>
+    <div class="field">
+      <label>الباقة</label>
+      <select name="plan_id" id="planSelect" required></select>
+    </div>
+    <div class="field">
+      <label>ملاحظة إدارية (اختيارية)</label>
+      <input name="admin_note" placeholder="تفاصيل الاتفاق أو المراجعة">
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">إسناد الباقة للطالب</button>
+    </div>
+  </form>
+  <p class="notice">تظهر فقط الباقات النشطة التي تشمل الدورة المطلوبة في ملف الطالب. الباقة المجانية تُفعّل تلقائيًا، أما الباقة المدفوعة فتُنشأ Pending وتظل مغلقة حتى تسجيل الدفع وتفعيلها.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">تسجيل دفعة</h2></div>
+  <form id="paymentForm" class="form-grid">
+    <div class="field">
+      <label>الاشتراك</label>
+      <select id="paymentSubscription" name="subscription_id" required></select>
+    </div>
+    <div class="field">
+      <label>مبلغ الدفعة</label>
+      <input name="amount" type="number" min="0.01" step="0.01" required>
+    </div>
+    <div class="field">
+      <label>طريقة الدفع</label>
+      <select name="payment_method">
+        <option value="cash">نقدي</option>
+        <option value="bank_transfer">تحويل بنكي</option>
+        <option value="instapay">InstaPay</option>
+        <option value="wallet">محفظة إلكترونية</option>
+        <option value="manual">يدوي</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>رقم مرجعي / إيصال</label>
+      <input name="payment_reference">
+    </div>
+    <div class="field">
+      <label>ملاحظة الدفعة</label>
+      <input name="note">
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">تسجيل الدفعة</button>
+    </div>
+  </form>
+  <p class="notice">هذا التسجيل محاسبي داخل النظام فقط، ولا يقوم بتحصيل أموال عبر بوابة دفع إلكترونية.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">تفعيل الاشتراك</h2></div>
+  <form id="activationForm" class="form-grid">
+    <div class="field">
+      <label>الاشتراك</label>
+      <select id="activationSubscription" name="subscription_id" required></select>
+    </div>
+    <div class="field">
+      <label>بداية الاشتراك</label>
+      <input id="activationStart" name="starts_at" type="datetime-local" required>
+    </div>
+    <div class="field">
+      <label>نهاية الاشتراك (اختياري)</label>
+      <input name="expires_at" type="datetime-local">
+    </div>
+    <div class="field" style="grid-column:1/-1">
+      <label class="checkline">
+        <input name="waive_fee" type="checkbox">
+        إعفاء الطالب من الرسوم (يحوّل حالة الدفع إلى waived)
+      </label>
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">تفعيل الاشتراك</button>
+      <button class="btn light" type="button" id="expireBtn">إنهاء الاشتراكات التي انتهت مدتها</button>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="section-title">الباقات الحالية</h2>
+    <span class="muted" id="plansLabel"></span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>الباقة</th><th>النوع</th><th>السعر</th><th>المدة</th><th>الدورات</th><th>الحالة</th><th>إجراء</th>
+      </tr></thead>
+      <tbody id="plansBody"><tr><td colspan="7" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="section-title">اشتراكات الطلاب</h2>
+    <span class="muted" id="subscriptionsLabel"></span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>الطالب</th><th>الباقة</th><th>المبلغ</th><th>الدفع</th><th>الحالة</th><th>البداية</th><th>الانتهاء</th><th>إجراءات</th>
+      </tr></thead>
+      <tbody id="subscriptionsBody"><tr><td colspan="8" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">سجل المدفوعات</h2></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>الطالب</th><th>المبلغ</th><th>الطريقة</th><th>المرجع</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th>
+      </tr></thead>
+      <tbody id="paymentsBody"><tr><td colspan="7" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+  <p class="notice">زر الاسترداد يغيّر سجل الدفع داخل قاعدة البيانات فقط. لا ينفّذ تحويلًا ماليًا عكسيًا لدى البنك أو مزود الدفع.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="section-title">إدارة المدرسين</h2></div>
+
+  <form id="teacherConvertForm" class="form-grid">
+    <div class="field">
+      <label>تحويل طالب معتمد إلى مدرس</label>
+      <select id="teacherCandidate" name="student_id" required></select>
+    </div>
+    <div class="field" style="align-self:end">
+      <button class="btn teal" type="submit">تعيين كمدرس</button>
+    </div>
+  </form>
+
+  <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+
+  <form id="teacherAssignForm" class="form-grid">
+    <div class="field">
+      <label>المدرس</label>
+      <select id="teacherSelect" name="teacher_id" required></select>
+    </div>
+    <div class="field">
+      <label>الدورة</label>
+      <select id="teacherCourse" name="course_slug" required></select>
+    </div>
+    <div class="field">
+      <label>حالة الإسناد</label>
+      <select name="is_active"><option value="true">نشط</option><option value="false">غير نشط</option></select>
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">حفظ إسناد الدورة</button>
+    </div>
+  </form>
+
+  <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+
+  <form id="teacherPermissionForm" class="form-grid">
+    <div class="field">
+      <label>المدرس</label>
+      <select id="permissionTeacher" name="teacher_id" required></select>
+    </div>
+    <div class="field">
+      <label>الصلاحية</label>
+      <select name="permission_key">
+        <option value="students.view">مشاهدة الطلاب</option>
+        <option value="students.view_progress">مشاهدة تقدم الطلاب</option>
+        <option value="students.view_assessments">مشاهدة نتائج الاختبارات</option>
+        <option value="students.view_contact">مشاهدة بيانات التواصل</option>
+        <option value="lessons.manage">إدارة الدروس</option>
+        <option value="assessments.manage">إدارة الاختبارات</option>
+        <option value="assignments.grade">تصحيح التكليفات</option>
+        <option value="students.message">مراسلة الطلاب</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>الحالة</label>
+      <select name="enabled"><option value="true">مسموح</option><option value="false">ممنوع</option></select>
+    </div>
+    <div class="actions" style="grid-column:1/-1">
+      <button class="btn teal" type="submit">حفظ الصلاحية</button>
+    </div>
+  </form>
+
+  <h3 style="font-size:14px;margin-top:25px">إسنادات المدرسين الحالية</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المدرس</th><th>الدورة</th><th>الحالة</th><th>تاريخ الإسناد</th></tr></thead>
+      <tbody id="assignmentsBody"><tr><td colspan="4" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:14px;margin-top:25px">صلاحيات المدرسين</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المدرس</th><th>الصلاحية</th><th>الحالة</th><th>تاريخ التحديث</th></tr></thead>
+      <tbody id="permissionsBody"><tr><td colspan="4" class="empty">جارٍ التحميل...</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">Mohammed Afify | Membership Management</footer>
+
+<!-- MEMBERSHIP HORIZONTAL TABS V1 -->
+<script>
+(() => {
+  'use strict';
+
+  const main = document.querySelector('main.container');
+  const metrics = main?.querySelector(':scope > section.metrics');
+  if (!main || !metrics) return;
+
+  const panels = Array.from(main.querySelectorAll(':scope > section.panel'));
+
+  if (panels.length !== 8) {
+    console.warn('Membership tabs: unexpected panel count. No sections were changed.');
+    return;
+  }
+
+  const groups = [
+    { id: 'plans', label: 'الباقات', indexes: [0, 4] },
+    { id: 'assign', label: 'إسناد باقة', indexes: [1] },
+    { id: 'subscriptions', label: 'اشتراكات الطلاب', indexes: [3, 5] },
+    { id: 'payment-entry', label: 'تسجيل دفعة', indexes: [2] },
+    { id: 'payment-history', label: 'سجل المدفوعات', indexes: [6] },
+    { id: 'teachers', label: 'المدرسون', indexes: [7] }
+  ];
+
+  const tabs = document.createElement('nav');
+  tabs.className = 'membership-tabs';
+  tabs.setAttribute('role', 'tablist');
+  tabs.setAttribute('aria-label', 'أقسام إدارة العضويات والاشتراكات');
+
+  const buttons = new Map();
+  const defaultTab = 'subscriptions';
+
+  groups.forEach(group => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'membership-tab-' + group.id;
+    button.textContent = group.label;
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-selected', 'false');
+
+    const groupPanels = group.indexes.map((index, position) => {
+      const panel = panels[index];
+      panel.dataset.membershipTab = group.id;
+      panel.id = panel.id || `membership-panel-${group.id}-${position + 1}`;
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', button.id);
+      panel.hidden = true;
+      return panel;
+    });
+
+    button.setAttribute('aria-controls', groupPanels[0].id);
+
+    button.addEventListener('click', () => {
+      groups.forEach(item => {
+        const active = item.id === group.id;
+        const itemButton = buttons.get(item.id);
+
+        itemButton.setAttribute('aria-selected', active ? 'true' : 'false');
+        itemButton.tabIndex = active ? 0 : -1;
+
+        item.indexes.forEach(index => {
+          panels[index].hidden = !active;
+        });
+      });
+    });
+
+    buttons.set(group.id, button);
+    tabs.appendChild(button);
+  });
+
+  metrics.insertAdjacentElement('afterend', tabs);
+
+  buttons.get(defaultTab).click();
+})();
+</script>
+<script src="assets/js/admin-subscriptions.js" defer></script>
+</body>
+</html>
