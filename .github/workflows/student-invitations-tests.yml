@@ -19,6 +19,8 @@ on:
       - "tests/student-invites.test.mjs"
       - "tests/admin-subscriptions-ui.test.mjs"
       - "tests/role-permissions.test.mjs"
+      - "sql/membership-v2-per-user-course-permissions.sql"
+      - "docs/MEMBERSHIP-V2-THREE-ROLE-ACCESS.md"
       - ".github/workflows/student-invitations-tests.yml"
   push:
     branches:
