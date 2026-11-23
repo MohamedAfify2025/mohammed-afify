@@ -1,6 +1,6 @@
 # Mohammed Afify Platform — Membership V2 Status
 
-**Status date:** 22 November 2026  
+**Status date:** 23 November 2026  
 **Working branch:** `work/waived-payment-guard-ui-2026-11-22`  
 **Production / database writes:** None performed in this work session.
 
@@ -24,6 +24,27 @@
 1. Updated `assets/js/admin-subscriptions.js`: `paymentRemaining()` now returns zero for `payment_state = 'waived'`, even when the historical `agreed_amount` is positive. Because the payment selector is built from this helper, waived subscriptions are excluded from the payable list.
 2. Marked `SETUP-MEMBERSHIP.md` as a historical V1 guide so its old instructions cannot be mistaken for the V2 deployment procedure.
 3. Marked `sql/membership-schema.sql` as a legacy V1 schema that must not be run over V2.
+
+4. Added `tests/payment-remaining.test.mjs` and documented the command `node tests/payment-remaining.test.mjs` in the README. The five core balance cases and the payable-selector integration were executed against the actual helper extracted from this branch; all five cases passed.
+
+## Public-site isolation check — 23 November 2026
+
+- The current `public-site/index.html` does not load the Supabase browser SDK/configuration and contains no links to the private login, registration, student dashboard, or admin pages.
+- The public package contains static access/academy information pages; the checked paths `public-site/membership/login.html` and `public-site/assets/js/supabase-config.js` are absent.
+- `public-site/_headers` contains baseline response headers: `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, and a restrictive `Permissions-Policy`.
+- The Cloudflare Pages dashboard build-directory setting was not accessible through this review. The isolation is therefore verified in the repository files, not in the live Cloudflare configuration or deployed runtime.
+
+## Other open development request
+
+- PR #1, `Enable student self-service course enrollment`, remains an open draft and is not included in this branch. Its feature branch is diverged from current `main` (18 commits ahead and 45 behind in the current comparison) and requires rebase/reconciliation.
+- PR #1 includes a separate SQL migration, student course catalogue/request UI, and admin request queue. Its migration has not been run against Supabase TEST, and the feature has not received live RLS/RPC/end-to-end validation.
+- PR #1 and this PR both touch `SETUP-MEMBERSHIP.md`. Preserve the feature work, but reconcile the guide when rebasing; do not merge the stale branch as-is.
+
+## Supabase TEST execution status
+
+- The database-only patch `sql/membership-v2-block-waived-payment-test.sql` remains prepared but unapplied.
+- No Supabase connection or TEST dashboard access was available in this work session. Consequently no database backup, preflight SQL, migration, RLS check, or RPC test is claimed as completed.
+- Keep PR #2 in draft until the isolated TEST acceptance checklist is completed.
 
 ## Database patch prepared but not applied
 
