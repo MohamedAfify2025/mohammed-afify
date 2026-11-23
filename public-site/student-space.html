@@ -17,6 +17,11 @@ li{padding:8px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-right
 <p class="muted">مساحتك التعليمية الشخصية</p><h1>أهلًا <span id="studentName">بك</span></h1><p class="muted" id="studentEmail"></p>
 <div id="pageMessage" class="notice" hidden></div>
 <div id="coursePanel" hidden><h2>الدورات المسندة إلى حسابك</h2><ul id="courseList"></ul><p class="muted">سيتم إظهار المحاضرات والملفات بعد نشرها وربطها باشتراكك.</p></div>
+<div id="permissionPanel" hidden style="margin-top:24px;border-top:1px solid #e9eef4;padding-top:18px">
+  <h2>صلاحيات حسابك</h2>
+  <p class="muted" id="permissionModeText"></p>
+  <ul id="permissionList"></ul>
+</div>
 </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
