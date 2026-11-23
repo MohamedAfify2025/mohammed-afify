@@ -86,17 +86,23 @@ export function isStreamOriginAllowed(allowedOrigins, requestOrigin) {
   } catch {
     return false;
   }
-  // Intentionally do not accept wildcards for paid course embeds.
   return allowedOrigins.some((value) =>
     typeof value === "string" && value.trim() === host && !value.includes("*")
   );
 }
 
+export function isStreamVideoReadyAndPrivate(video, requestOrigin) {
+  return isPlainObject(video) &&
+    video.readyToStream === true &&
+    video.requireSignedURLs === true &&
+    isStreamOriginAllowed(video.allowedOrigins, requestOrigin);
+}
+
 export function normalizeTokenTtl(rawValue) {
-  if (rawValue === undefined || rawValue === null || rawValue === "") return 300;
+  if (rawValue === undefined || rawValue === null || rawValue === "") return 3600;
   const ttl = Number(rawValue);
-  if (!Number.isInteger(ttl) || ttl < 60 || ttl > 600) {
-    throw new Error("STREAM_TOKEN_TTL_SECONDS must be an integer from 60 to 600.");
+  if (!Number.isInteger(ttl) || ttl < 300 || ttl > 3600) {
+    throw new Error("STREAM_TOKEN_TTL_SECONDS must be an integer from 300 to 3600.");
   }
   return ttl;
 }
