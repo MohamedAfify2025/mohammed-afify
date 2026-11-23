@@ -107,7 +107,7 @@ try {
         Stop-With "Redirect URL must use the exact configured website origin and end with /student-set-password.html."
     }
 
-    $publishableSecure = Read-Host -Prompt 'Supabase TEST Publishable Key' -AsSecureString
+    $publishableSecure = Read-Host "Supabase TEST Publishable Key (hidden input; never use a secret key)" -AsSecureString
     $publishableKey = (Convert-SecureStringToPlainText $publishableSecure).Trim()
     if (-not (Test-SupabasePublicKey $publishableKey)) {
         Stop-With "Rejected key. Enter sb_publishable_... or a legacy JWT with role=anon. Secret/service_role keys are blocked."
