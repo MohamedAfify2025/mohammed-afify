@@ -55,3 +55,44 @@ The current access controller is a browser-side presentation gate, not a server-
 ## Release decision
 
 **Do not open paid lesson pages as private yet.** The public marketing site can be made available separately, but paid courses remain blocked from a security acceptance standpoint until media and lesson delivery are moved behind server-side access checks. This report does not change any course page, media URL, database object, or production deployment.
+
+
+## Recommended private-media architecture
+
+A practical target design that fits the existing Cloudflare + Supabase stack:
+
+### Video — Cloudflare Stream
+
+- Upload only original video files that the platform owner has rights to use.
+- Set each paid video to require signed URLs and set allowed origins to the exact production domain(s), plus the TEST domain during testing.
+- Store the mapping from `course_slug` / `lesson_slug` to the Stream video UID in a server-controlled table. Do not place UIDs or playback URLs in static lesson HTML.
+- Add a Supabase Edge Function such as `issue-course-playback-token`. It must verify the caller's Supabase JWT, check the existing Membership V2 access result for the exact course and `can_watch_video` capability, then call the Cloudflare Stream token endpoint using a secret stored only in Edge Function environment variables.
+- Return only a short-lived playback URL/token to an authorized user. A starting TTL of 5–10 minutes is reasonable for a first TEST; confirm the player can refresh it without interrupting playback.
+- Do not send Cloudflare API tokens or signing keys to browser JavaScript.
+
+Cloudflare documents `requireSignedURLs`, signed tokens, token expiry, and allowed-origin restrictions in its [Stream security guide](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/).
+
+### Documents — Supabase Storage
+
+- Store PDFs, Office files, downloadable resources, and private attachments in a non-public bucket.
+- Use RLS policies on `storage.objects` that match the user's active subscription and the plan's exact `can_download` capability.
+- Issue short-lived signed download URLs only after the server-side authorization check. Do not add public object URLs to HTML or a public course catalogue.
+- Keep expiry short because an issued signed URL remains usable until its expiry; individual URLs cannot generally be revoked independently. Define an operational cache/expiry policy for suspensions and account revocation.
+
+See Supabase's [private bucket and signed download guidance](https://supabase.com/docs/guides/storage/serving/downloads), [Storage access-control guide](https://supabase.com/docs/guides/storage/security/access-control), and [URL signing-key guidance](https://supabase.com/docs/guides/storage/security/signing-keys).
+
+### Lesson and assessment data
+
+- Keep private lesson bodies and question banks out of static HTML files.
+- Fetch lesson/quiz payloads from authenticated RPCs or Edge Functions after authorization.
+- Keep correct quiz answers on the server and calculate/store scores server-side.
+- The browser may receive questions and choices for the active attempt, but never the answer key or privileged grading logic.
+
+### Migration and acceptance order
+
+1. Inventory the source video files and ownership/usage rights; map every existing static YouTube embed to an approved replacement or explicitly mark it as a free/public preview.
+2. Create the media mapping table and the private Storage bucket in TEST, with explicit RLS and grants.
+3. Build the Edge Functions and player integration in a separate development branch.
+4. Migrate one pilot course first (not all courses at once) and verify that logged-out, pending, unpaid, suspended, wrong-course, and no-video-capability accounts cannot obtain playback tokens or signed file URLs.
+5. Confirm that a valid paid/active student can play the pilot course, that tokens expire, and that suspending/revoking access stops the next token issuance.
+6. Only after pilot acceptance, migrate the remaining courses and retire the public YouTube embed references from the root `academy/` pages.
