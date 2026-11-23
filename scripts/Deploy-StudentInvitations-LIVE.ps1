@@ -113,7 +113,7 @@ try {
     $authReady = Read-Host "Type AUTH_READY only after both Redirect URL and custom SMTP are configured"
     if ($authReady -cne "AUTH_READY") { Stop-With "Cancelled: Auth redirect/email readiness was not confirmed." }
 
-    $publishableSecure = Read-Host "LIVE Supabase Publishable Key (hidden; sb_publishable_... or legacy anon key only)" -AsSecureString
+    $publishableSecure = Read-Host -Prompt 'LIVE Supabase Publishable Key' -AsSecureString
     $publishableKey = (Convert-SecureStringToPlainText $publishableSecure).Trim()
     if (-not (Test-SupabasePublicKey $publishableKey)) {
         Stop-With "Rejected key. Secret/service_role keys are not allowed here."
