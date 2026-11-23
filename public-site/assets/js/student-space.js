@@ -84,14 +84,12 @@
     }
 
     let allowedCourses = [];
-    let individualPermissionsReady = true;
     const { data: permissions, error: permissionsError } = await client.rpc("get_my_course_permissions_v2");
 
     if (permissionsError) {
       const migrationNotApplied = permissionsError.code === "PGRST202" ||
         /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(permissionsError.message || "");
       if (!migrationNotApplied) throw permissionsError;
-      individualPermissionsReady = false;
       const { data: legacyCourses, error: legacyError } = await client.rpc("get_my_active_courses_v2");
       if (legacyError) throw legacyError;
       allowedCourses = Array.isArray(legacyCourses) ? legacyCourses : [];
