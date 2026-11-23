@@ -28,11 +28,14 @@ on:
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
+      - "public-site/admin-subscriptions.html"
       - "public-site/student-*.html"
       - "public-site/assets/js/admin-students.js"
+      - "public-site/assets/js/admin-subscriptions.js"
       - "public-site/assets/js/student-*.js"
       - "public-site/assets/js/membership-config.js"
       - "tests/student-invites.test.mjs"
+      - "tests/admin-subscriptions-ui.test.mjs"
       - ".github/workflows/student-invitations-tests.yml"
 
 permissions:
