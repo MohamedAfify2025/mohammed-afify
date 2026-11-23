@@ -169,33 +169,16 @@ try {
     # Publishable keys are designed for browser use. Secret/service-role keys are rejected above.
     $urlJson = ConvertTo-Json -InputObject $supabaseUrl -Compress
     $keyJson = ConvertTo-Json -InputObject $publishableKey -Compress
-    # Build the browser configuration with a standard Windows PowerShell 5.1 here-string.
-    $configJs = @"
- // Public browser configuration. Publishable keys are intended for browser clients.
- // Row Level Security and RPC authorization remain the actual access controls.
-window.MEMBERSHIP_CONFIG = {
-  supabaseUrl: $urlJson,
-  supabasePublishableKey: $keyJson,
-  supabaseAnonKey: ""
-};
-
-window.isMembershipPublicKey = function (value) {
-  const key = String(value || "").trim();
-  if (key.startsWith("sb_publishable_")) return key.length > 20;
-  if (key.startsWith("sb_secret_") || key.startsWith("sb_service_role_")) return false;
-  if (!key.startsWith("eyJ")) return false;
-  const parts = key.split(".");
-  if (parts.length !== 3) return false;
-  let payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-  while (payload.length % 4) payload += "=";
-  try {
-    return JSON.parse(atob(payload)).role === "anon";
-  } catch (_) {
-    return false;
-  }
-};
-"@
-    $configJs = $configJs.TrimStart()
+    # Keep JavaScript in a separate template file so Windows PowerShell does not parse JS syntax.
+    $templatePath = Join-Path $repoRoot "scripts/membership-config.template.js"
+    if (-not (Test-Path -LiteralPath $templatePath)) {
+        Stop-With "The browser configuration template is missing: scripts/membership-config.template.js"
+    }
+    $configTemplate = [IO.File]::ReadAllText($templatePath)
+    $configJs = $configTemplate.Replace("__SUPABASE_URL_JSON__", $urlJson).Replace("__SUPABASE_PUBLISHABLE_KEY_JSON__", $keyJson)
+    if ($configJs -match "__SUPABASE_[A-Z_]+__") {
+        Stop-With "A browser configuration placeholder was not replaced."
+    }
     [IO.File]::WriteAllText($configPath, $configJs, [Text.UTF8Encoding]::new($false))
 
     node --check $configPath
