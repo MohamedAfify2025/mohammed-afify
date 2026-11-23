@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import {
   getCourseVideoUid,
   hasVideoCapability,
+  isStreamOriginAllowed,
   normalizeSlug,
   normalizeTokenTtl,
   parseCourseMediaManifest,
@@ -66,8 +67,8 @@ Deno.serve(async (req: Request) => {
   if (origins.length === 0 || origins.some((value) => !isValidOrigin(value))) {
     return jsonResponse(500, { error: "Playback service origin allowlist is not configured safely." }, null);
   }
-  if (origin !== null && !origins.includes(origin)) {
-    return jsonResponse(403, { error: "Origin is not allowed." }, null);
+  if (!origin || !origins.includes(origin)) {
+    return jsonResponse(403, { error: "A trusted browser origin is required." }, null);
   }
 
   if (req.method === "OPTIONS") {
@@ -134,12 +135,35 @@ Deno.serve(async (req: Request) => {
     const accountId = readRequiredEnv("CF_ACCOUNT_ID");
     const apiToken = readRequiredEnv("CF_STREAM_API_TOKEN");
     const customerCode = readRequiredEnv("CF_STREAM_CUSTOMER_CODE");
+    if (!/^[a-z0-9]{1,64}$/i.test(customerCode)) {
+      throw new Error("CF_STREAM_CUSTOMER_CODE is invalid.");
+    }
     const ttl = normalizeTokenTtl(Deno.env.get("STREAM_TOKEN_TTL_SECONDS"));
     const expiresAt = Math.floor(Date.now() / 1000) + ttl;
-    const endpoint = "https://api.cloudflare.com/client/v4/accounts/" +
-      encodeURIComponent(accountId) + "/stream/" + encodeURIComponent(videoUid) + "/token";
+    const videoEndpoint = "https://api.cloudflare.com/client/v4/accounts/" +
+      encodeURIComponent(accountId) + "/stream/" + encodeURIComponent(videoUid);
 
-    const cfResponse = await fetch(endpoint, {
+    // Fail closed: never mint a signed token for a video that is still publicly
+    // playable by UID, or whose Cloudflare hotlink allowlist excludes this origin.
+    const videoResponse = await fetch(videoEndpoint, {
+      method: "GET",
+      headers: { "Authorization": "Bearer " + apiToken },
+      signal: AbortSignal.timeout(10000),
+    });
+    const videoPayload = await videoResponse.json().catch(() => null);
+    if (!videoResponse.ok || videoPayload?.success !== true || !videoPayload?.result) {
+      console.error("Cloudflare Stream metadata lookup failed:", videoResponse.status);
+      return jsonResponse(502, { error: "The private video configuration could not be verified." }, origin, true);
+    }
+    if (videoPayload.result.requireSignedURLs !== true) {
+      return jsonResponse(409, { error: "This video is not configured to require signed playback URLs." }, origin, true);
+    }
+    if (!isStreamOriginAllowed(videoPayload.result.allowedOrigins, origin)) {
+      return jsonResponse(403, { error: "This video is not restricted to the requesting website origin." }, origin, true);
+    }
+
+    const tokenEndpoint = videoEndpoint + "/token";
+    const cfResponse = await fetch(tokenEndpoint, {
       method: "POST",
       headers: {
         "Authorization": "Bearer " + apiToken,
