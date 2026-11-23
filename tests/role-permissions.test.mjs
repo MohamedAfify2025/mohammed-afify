@@ -20,7 +20,7 @@ assert.match(migration, /ss\.payment_state IN \('paid', 'waived'\)/i);
 assert.match(migration, /ss\.status = 'active'/i);
 assert.match(migration, /p\.status = 'approved'/i);
 assert.match(migration, /p\.account_state = 'active'/i);
-assert.match(migration, /can_view_course_page\\s+OR NOT/i);
+assert.match(migration, /can_view_course_page\s+OR NOT/i);
 assert.match(migration, /student\.course_permissions\.updated/i);
 assert.match(migration, /student\.course_permissions\.reset_to_plan/i);
 assert.match(migration, /SELECT membership_v2_private\.is_admin\(\)\s+OR EXISTS/i);
