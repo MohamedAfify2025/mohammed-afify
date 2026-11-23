@@ -182,7 +182,6 @@ Deno.serve(async (req: Request) => {
           ? "يوجد حساب مسجل بهذا البريد الإلكتروني بالفعل."
           : "تعذر إرسال الدعوة لهذا البريد. راجع إعدادات البريد أو سجل Auth.";
         console.warn("Student invitation failed:", {
-          email: student.email,
           code: error?.code || "unknown",
           status: error?.status || null,
         });
