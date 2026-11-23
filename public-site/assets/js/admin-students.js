@@ -8,6 +8,7 @@
 
   let client = null;
   let adminReady = false;
+  let previewFingerprint = "";
 
   function message(text, isError = false) {
     const host = $("adminMessage");
@@ -209,6 +210,7 @@
         return;
       }
       renderPreview(rows);
+      previewFingerprint = JSON.stringify(rows);
       message("المعاينة جاهزة. راجع الأسماء والبريد الإلكتروني قبل إرسال الدعوات.");
     });
 
@@ -225,6 +227,10 @@
         message(errors.slice(0, 8).join(" | "), true);
         return;
       }
+      if (!previewFingerprint || previewFingerprint !== JSON.stringify(rows)) {
+        message("اعرض معاينة القائمة أولًا، ثم راجع البيانات قبل إرسال الدعوات.", true);
+        return;
+      }
 
       const button = $("sendInvitesButton");
       button.disabled = true;
@@ -236,6 +242,7 @@
         );
         if (error) throw error;
         renderResults(data?.results || []);
+        previewFingerprint = "";
         message(
           "تم إرسال " + Number(data?.invited_count || 0) +
           " دعوة، وتعذر إرسال " + Number(data?.failed_count || 0) + "."
