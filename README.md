@@ -37,6 +37,10 @@ Open `index.html` in a browser. For a more realistic local test, serve the folde
 ## Brand line
 **Learn • Analyze • Build • Transform**
 
+## Student account invitations (Membership V2)
+
+The current TEST-first invitation workflow uses Supabase Auth: the student's email is the login name, and each student chooses their own password from a time-limited invitation link. See [Student Account Invitations](docs/STUDENT-ACCOUNT-INVITATIONS-2026-11-23.md). Do not run the legacy V1 SQL schema against Membership V2.
+
 ## Student accounts and memberships
 
 See [SETUP-MEMBERSHIP.md](SETUP-MEMBERSHIP.md) for the Supabase setup, SQL schema, admin account setup, limitations, and testing checklist.
