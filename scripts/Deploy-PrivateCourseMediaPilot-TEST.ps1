@@ -40,12 +40,24 @@ function Convert-SecureStringToPlainText([Security.SecureString]$Value) {
 }
 
 function Test-SupabasePublishableOrAnonKey([string]$Key) {
-    if ($Key.StartsWith("sb_publishable_")) { return $Key.Length -gt 20 }
+    if ($null -eq $Key) { return $false }
+
+    # Normalize accidental whitespace/BOM/quote characters from clipboard pastes.
+    $Key = $Key.Trim().Trim([char]0xFEFF).Trim()
+    if (($Key.StartsWith('"') -and $Key.EndsWith('"')) -or
+        ($Key.StartsWith("'") -and $Key.EndsWith("'"))) {
+        $Key = $Key.Substring(1, $Key.Length - 2).Trim()
+    }
+    $Key = $Key -replace '[\u200B-\u200D\uFEFF]', ''
+
+    if ($Key.StartsWith("sb_publishable_") -and $Key.Length -gt 20) { return $true }
     if ($Key.StartsWith("sb_secret_") -or $Key.StartsWith("sb_service_role_")) { return $false }
     if (-not $Key.StartsWith("eyJ")) { return $false }
 
+    # Legacy anon keys are JWTs with a payload claim role=anon.
     $parts = $Key.Split(".")
-    if ($parts.Count -lt 2) { return $false }
+    if ($parts.Count -ne 3) { return $false }
+
     $payloadSegment = $parts[1].Replace("-", "+").Replace("_", "/")
     switch ($payloadSegment.Length % 4) {
         0 { }
@@ -55,10 +67,23 @@ function Test-SupabasePublishableOrAnonKey([string]$Key) {
     }
     try {
         $payloadText = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($payloadSegment))
-        $payload = $payloadText | ConvertFrom-Json
-        return ($payload.role -eq "anon")
+        $payload = $payloadText | ConvertFrom-Json -ErrorAction Stop
+        return ([string]$payload.role -eq "anon")
     }
     catch { return $false }
+}
+
+function Get-SupabaseKeySafeDescription([string]$Key) {
+    if ([string]::IsNullOrEmpty($Key)) { return "empty" }
+    $normalized = $Key.Trim().Trim([char]0xFEFF).Trim().Trim('"').Trim("'")
+    if ($normalized.StartsWith("sb_publishable_")) { return "publishable prefix; length=$($normalized.Length)" }
+    if ($normalized.StartsWith("sb_secret_")) { return "secret prefix; length=$($normalized.Length)" }
+    if ($normalized.StartsWith("sb_service_role_")) { return "service-role prefix; length=$($normalized.Length)" }
+    if ($normalized.StartsWith("eyJ")) {
+        $parts = $normalized.Split(".")
+        return "legacy JWT prefix; segments=$($parts.Count); length=$($normalized.Length)"
+    }
+    return "unrecognized prefix; length=$($normalized.Length)"
 }
 
 function Invoke-SupabaseCli([string[]]$CliArguments) {
@@ -369,9 +394,10 @@ try {
     if (-not $cloudflareToken) { Stop-With "Cloudflare API token is required." }
 
     $publishableSecure = Read-Host "Supabase TEST Publishable Key (hidden input; not a service-role key)" -AsSecureString
-    $publishableKey = Convert-SecureStringToPlainText $publishableSecure
+    $publishableKey = (Convert-SecureStringToPlainText $publishableSecure).Trim().Trim([char]0xFEFF).Trim()
     if (-not (Test-SupabasePublishableOrAnonKey $publishableKey)) {
-        Stop-With "Key rejected. Enter a Supabase publishable key or legacy anon JWT only; service_role and secret keys are blocked."
+        $safeKeyDescription = Get-SupabaseKeySafeDescription $publishableKey
+        Stop-With "Key rejected ($safeKeyDescription). Enter the exact Publishable key beginning with sb_publishable_, or a legacy anon JWT with role=anon. Never enter a secret/service_role key."
     }
 
     Write-Step "Verify Cloudflare API access"
