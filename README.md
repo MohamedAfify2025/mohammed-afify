@@ -48,6 +48,16 @@ Open `index.html` in a browser. For a more realistic local test, serve the folde
 ## Brand line
 **Learn • Analyze • Build • Transform**
 
+## Membership regression test
+
+Run the waived-subscription balance regression test with Node.js 18 or later:
+
+```bash
+node tests/payment-remaining.test.mjs
+```
+
+The test executes the current `paymentRemaining()` implementation from `assets/js/admin-subscriptions.js` and verifies the payment-selector integration. It does not connect to Supabase or replace database acceptance testing.
+
 ## Student accounts and memberships
 
 See [SETUP-MEMBERSHIP.md](SETUP-MEMBERSHIP.md) for the Supabase setup, SQL schema, admin account setup, limitations, and testing checklist.
