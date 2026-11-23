@@ -73,7 +73,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
       - name: Parse deployment scripts
-        shell: pwsh
+        shell: powershell
         run: |
           $scripts = @(
             "scripts/Deploy-StudentInvitations-TEST.ps1",
