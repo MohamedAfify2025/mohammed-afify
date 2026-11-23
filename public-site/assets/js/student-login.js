@@ -14,7 +14,7 @@
 
   async function boot() {
     if (!window.supabase?.createClient || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
-        !(key.startsWith("sb_publishable_") || key.startsWith("eyJ"))) {
+        !window.isMembershipPublicKey?.(key) === true) {
       show("بوابة الدخول لم تُربط بمشروع Supabase بعد.", true);
       return;
     }
