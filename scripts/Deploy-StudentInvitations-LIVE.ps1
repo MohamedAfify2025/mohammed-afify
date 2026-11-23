@@ -73,7 +73,7 @@ $repoRoot = $repoRoot.Trim()
 Push-Location $repoRoot
 $tempEnvFile = $null
 try {
-    Write-Host "Student invitations — LIVE deployment" -ForegroundColor Cyan
+    Write-Host "Student invitations - LIVE deployment" -ForegroundColor Cyan
 
     $branch = (& git branch --show-current).Trim()
     if ($branch -ne $ExpectedBranch) {
