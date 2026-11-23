@@ -14,7 +14,7 @@
 
   async function boot() {
     if (!window.supabase?.createClient || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
-        !window.isMembershipPublicKey?.(key) === true) {
+        window.isMembershipPublicKey?.(key) !== true) {
       show("لم يتم إعداد بوابة الدخول على مشروع Supabase بعد. تواصل مع إدارة المنصة.", true);
       return;
     }
@@ -28,7 +28,7 @@
     const type = params.get("type");
 
     if (tokenHash && ["invite", "recovery"].includes(type)) {
-      const { error } = await client.auth.verifyOtp({ token_hash: tokenHash, type: "invite" });
+      const { error } = await client.auth.verifyOtp({ token_hash: tokenHash, type });
       if (error) {
         show("رابط الدعوة غير صالح أو انتهت صلاحيته. اطلب من الإدارة إعادة إرسال الدعوة.", true);
         return;
