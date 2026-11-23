@@ -31,7 +31,7 @@ function Convert-SecureStringToPlainText([Security.SecureString]$Value) {
 
 function Test-SupabasePublicKey([string]$Key) {
     if ([string]::IsNullOrWhiteSpace($Key)) { return $false }
-    $Key = $Key.Trim().Trim([char]0xFEFF).Trim().Trim('"').Trim("'")
+    $Key = $Key.Trim().Trim([char]0xFEFF).Trim()
     if ($Key.StartsWith("sb_publishable_")) { return $Key.Length -gt 20 }
     if ($Key.StartsWith("sb_secret_") -or $Key.StartsWith("sb_service_role_")) { return $false }
     if (-not $Key.StartsWith("eyJ")) { return $false }
