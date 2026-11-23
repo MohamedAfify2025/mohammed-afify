@@ -76,7 +76,6 @@ jobs:
         shell: powershell
         run: |
           $scripts = @(
-            "scripts/Deploy-StudentInvitations-TEST.ps1",
             "scripts/Deploy-StudentInvitations-LIVE.ps1"
           )
           foreach ($relativePath in $scripts) {
