@@ -14,8 +14,9 @@ The current static academy pages embed public YouTube URLs directly in HTML. A b
 2. Supabase Edge Functions keep their default JWT verification enabled. The handler also calls Supabase Auth getUser(accessToken) to verify the session.
 3. The handler calls the existing public.get_my_active_courses_v2() RPC as the signed-in user. It issues a token only when the exact course row has can_view_course_page = true and can_watch_video = true.
 4. The server looks up the Cloudflare Stream UID in the server-side COURSE_MEDIA_MAP_JSON secret. The UID is never returned to the browser.
-5. The function calls Cloudflare's POST /accounts/{account_id}/stream/{video_uid}/token endpoint with a short expiry and returns only the signed iframe URL.
-6. The browser renders the iframe only after receiving that URL. It must not retain a public YouTube fallback for paid lessons.
+5. Before token creation, the function retrieves Cloudflare video metadata and fails closed unless requireSignedURLs is true and allowedOrigins contains the exact requesting website host. Wildcard Stream origins are deliberately rejected.
+6. The function calls Cloudflare's POST /accounts/{account_id}/stream/{video_uid}/token endpoint with a short expiry and returns only the signed iframe URL.
+7. The browser renders the iframe only after receiving that URL. It must not retain a public YouTube fallback for paid lessons.
 
 ## Function secrets
 
@@ -25,9 +26,9 @@ Set these only in the Supabase Edge Function secret store for the isolated TEST 
 |---|---|
 | SUPABASE_URL | Supabase project URL (platform-provided in the Edge Function environment) |
 | SUPABASE_PUBLISHABLE_KEY or SUPABASE_ANON_KEY | Public project key used with the caller's Authorization JWT; never a service-role key |
-| ALLOWED_ORIGINS | Comma-separated exact origins, e.g. https://test.example.com,http://localhost:5500 |
+| ALLOWED_ORIGINS | Comma-separated exact website origins, e.g. https://test.example.com,http://localhost:5500 |
 | CF_ACCOUNT_ID | Cloudflare account identifier |
-| CF_STREAM_API_TOKEN | Cloudflare API token with the minimum Stream permissions required to create playback tokens |
+| CF_STREAM_API_TOKEN | Cloudflare API token with permissions to read Stream video metadata and create signed playback tokens |
 | CF_STREAM_CUSTOMER_CODE | The customer code from the Stream playback hostname |
 | COURSE_MEDIA_MAP_JSON | Server-side JSON object mapping course and lesson slugs to 32-character Stream video UIDs |
 | STREAM_TOKEN_TTL_SECONDS | Optional integer from 60 to 600; defaults to 300 seconds |
@@ -43,7 +44,7 @@ Example manifest shape (replace the example UID with the real UID after the sour
 }
 ~~~
 
-Do not set COURSE_MEDIA_MAP_JSON until the corresponding Stream videos exist and each paid video has requireSignedURLs = true. For a pilot, upload one rights-cleared video first. Never make an old unlisted YouTube link the fallback.
+Do not set COURSE_MEDIA_MAP_JSON until the corresponding Stream videos exist, each paid video has requireSignedURLs = true, and allowedOrigins includes the exact website host. For a pilot, upload one rights-cleared video first. Never make an old unlisted YouTube link the fallback.
 
 ## Deploy to TEST only
 
@@ -52,7 +53,7 @@ Do not set COURSE_MEDIA_MAP_JSON until the corresponding Stream videos exist and
 3. Review ALLOWED_ORIGINS and list only the exact TEST website origin(s). Do not use *.
 4. Set the function secrets in Supabase TEST. Never use LIVE secrets for TEST.
 5. Deploy only the issue-course-playback-token function to TEST. Keep JWT verification enabled; do not set verify_jwt = false.
-6. Configure one Cloudflare Stream video as private / requiring signed URLs, and add the exact TEST origin to the video's allowed-origin settings where applicable.
+6. Configure one Cloudflare Stream video as private / requiring signed URLs, and set the exact TEST host in that video's allowed origins.
 7. Add a single excel lesson mapping to the function secret, then call the function using the authenticated TEST student account.
 
 ## Browser invocation example
@@ -89,7 +90,9 @@ Do not put the Cloudflare API token, Stream UID, or an unsigned public video URL
 | Active subscription for another course only | 403; no iframe URL |
 | Active Excel subscription with both page and video capabilities | 200; short-lived signed iframe URL |
 | Unknown lesson slug | 404; no iframe URL |
-| Unknown or unprotected Stream video | Fail closed; no public fallback |
+| Unknown Stream video or Cloudflare metadata error | Fail closed; no iframe URL |
+| Stream video has requireSignedURLs = false | 409; no iframe URL |
+| Stream video allowedOrigins excludes the request host | 403; no iframe URL |
 | Function called from an origin outside the allowlist | 403 |
 | Token after its expiry | Cloudflare player refuses playback |
 
