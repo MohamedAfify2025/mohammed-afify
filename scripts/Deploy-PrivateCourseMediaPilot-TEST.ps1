@@ -28,6 +28,28 @@ function Convert-SecureStringToPlainText([Security.SecureString]$Value) {
     finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr) }
 }
 
+function Test-SupabasePublishableOrAnonKey([string]$Key) {
+    if ($Key.StartsWith("sb_publishable_")) { return $Key.Length -gt 20 }
+    if ($Key.StartsWith("sb_secret_") -or $Key.StartsWith("sb_service_role_")) { return $false }
+    if (-not $Key.StartsWith("eyJ")) { return $false }
+
+    $parts = $Key.Split(".")
+    if ($parts.Count -lt 2) { return $false }
+    $payloadSegment = $parts[1].Replace("-", "+").Replace("_", "/")
+    switch ($payloadSegment.Length % 4) {
+        0 { }
+        2 { $payloadSegment += "==" }
+        3 { $payloadSegment += "=" }
+        default { return $false }
+    }
+    try {
+        $payloadText = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($payloadSegment))
+        $payload = $payloadText | ConvertFrom-Json
+        return ($payload.role -eq "anon")
+    }
+    catch { return $false }
+}
+
 function Invoke-SupabaseCli([string[]]$CliArguments) {
     $supabaseCommand = Get-Command "supabase" -ErrorAction SilentlyContinue
     if ($supabaseCommand) {
@@ -337,8 +359,8 @@ try {
 
     $publishableSecure = Read-Host "Supabase TEST Publishable Key (hidden input; not a service-role key)" -AsSecureString
     $publishableKey = Convert-SecureStringToPlainText $publishableSecure
-    if (-not $publishableKey.StartsWith("sb_publishable_") -and -not $publishableKey.StartsWith("eyJ")) {
-        Stop-With "Enter a Supabase publishable key, or a legacy anon JWT. Never enter a service_role or secret key."
+    if (-not (Test-SupabasePublishableOrAnonKey $publishableKey)) {
+        Stop-With "Key rejected. Enter a Supabase publishable key or legacy anon JWT only; service_role and secret keys are blocked."
     }
 
     Write-Step "Verify Cloudflare API access"
