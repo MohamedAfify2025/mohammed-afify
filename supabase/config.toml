@@ -1,0 +1,4 @@
+project_id = "mohammed-afify"
+
+[functions.issue-course-playback-token]
+verify_jwt = true

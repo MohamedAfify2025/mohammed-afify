@@ -1,0 +1,59 @@
+name: Private course playback helper tests
+
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/**"
+      - "supabase/config.toml"
+      - "scripts/Deploy-PrivateCourseMediaPilot-TEST.ps1"
+      - "tests/course-playback.test.mjs"
+      - ".github/workflows/private-course-playback-tests.yml"
+  push:
+    branches:
+      - main
+      - "feature/private-course-media-pilot-2026-11-23"
+    paths:
+      - "supabase/functions/**"
+      - "supabase/config.toml"
+      - "scripts/Deploy-PrivateCourseMediaPilot-TEST.ps1"
+      - "tests/course-playback.test.mjs"
+      - ".github/workflows/private-course-playback-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  node-helper-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run private playback helper tests
+        run: node tests/course-playback.test.mjs
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check the Edge Function
+        run: deno check supabase/functions/issue-course-playback-token/index.ts
+
+  powershell-script-parse:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Parse the TEST deployment script
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          $scriptPath = Join-Path $env:GITHUB_WORKSPACE "scripts/Deploy-PrivateCourseMediaPilot-TEST.ps1"
+          [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors) | Out-Null
+          if ($parseErrors.Count -gt 0) {
+            $parseErrors | Format-List | Out-String | Write-Error
+          }
+          Write-Host "PowerShell syntax check passed."
