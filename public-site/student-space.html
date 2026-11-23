@@ -9,14 +9,19 @@
 main{max-width:850px;margin:24px auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.card{background:#fff;border:1px solid #e3eaf2;border-radius:20px;padding:25px;margin:16px 0;box-shadow:0 12px 35px #17243b09}
 .brand{font-weight:900;color:#0b8379}.muted{color:#6a7890;font-size:13px;line-height:1.9}h1{font-size:30px;margin:9px 0}button,a{display:inline-block;border:0;border-radius:10px;padding:10px 15px;background:#14233d;color:#fff;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}
 .notice{padding:14px;border-radius:11px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.9;margin:14px 0}.notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
-li{padding:8px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-right:22px}
+li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-right:22px}
+.course-item{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.course-name{font-weight:800}.course-slug{display:block;color:#7a8799;font-size:11px;direction:ltr;text-align:right;margin-top:3px}
+.permission-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.permission-badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:4px 8px;background:#eef1f5;color:#69778b;font-size:11px;font-weight:700}
+.permission-badge.yes{background:#e5f7ef;color:#14704c}
 </style></head>
 <body><main>
 <header class="top"><div class="brand">MOHAMMED AFIFY · LEARNING SPACE</div><button id="logoutButton" type="button">تسجيل الخروج</button></header>
 <section class="card">
 <p class="muted">مساحتك التعليمية الشخصية</p><h1>أهلًا <span id="studentName">بك</span></h1><p class="muted" id="studentEmail"></p>
 <div id="pageMessage" class="notice" hidden></div>
-<div id="coursePanel" hidden><h2>الدورات المسندة إلى حسابك</h2><ul id="courseList"></ul><p class="muted">سيتم إظهار المحاضرات والملفات بعد نشرها وربطها باشتراكك.</p></div>
+<div id="coursePanel" hidden><h2>الدورات وصلاحيات حسابك</h2><ul id="courseList"></ul><p class="muted">تعرض هذه القائمة صلاحياتك لكل دورة. لن تتمكن من فتح أي درس أو ملف إلا إذا كانت صلاحيته مفعّلة.</p></div>
 </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

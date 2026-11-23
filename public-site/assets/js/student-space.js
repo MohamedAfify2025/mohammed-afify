@@ -12,9 +12,37 @@
     el.hidden = !text;
   }
 
-  function addCourse(slug) {
+  function addCourse(course) {
     const li = document.createElement("li");
-    li.textContent = slug;
+    li.className = "course-item";
+
+    const details = document.createElement("div");
+    const name = document.createElement("div");
+    name.className = "course-name";
+    name.textContent = course.course_title || course.course_slug || "دورة";
+    const slug = document.createElement("small");
+    slug.className = "course-slug";
+    slug.textContent = course.course_slug || "";
+    details.append(name, slug);
+
+    const permissions = [
+      ["مشاهدة الصفحة", "can_view_course_page"],
+      ["الفيديو", "can_watch_video"],
+      ["التنزيل", "can_download"],
+      ["الاختبارات", "can_take_assessments"],
+      ["الشهادة", "can_receive_certificate"],
+      ["متابعة التقدم", "can_track_progress"]
+    ];
+    const badges = document.createElement("div");
+    badges.className = "permission-list";
+    for (const [label, keyName] of permissions) {
+      const badge = document.createElement("span");
+      const allowed = course[keyName] === true;
+      badge.className = "permission-badge" + (allowed ? " yes" : "");
+      badge.textContent = label + (allowed ? " · متاح" : " · غير متاح");
+      badges.appendChild(badge);
+    }
+    li.append(details, badges);
     $("courseList").appendChild(li);
   }
 
@@ -55,17 +83,28 @@
       return;
     }
 
-    const { data: courses, error: coursesError } = await client.rpc("get_my_active_courses_v2");
-    if (coursesError) throw coursesError;
-    const allowedCourses = Array.isArray(courses) ? courses : [];
-    allowedCourses.forEach((course) => addCourse(course.course_slug || "دورة"));
+    let allowedCourses = [];
+    const { data: permissions, error: permissionsError } = await client.rpc("get_my_course_permissions_v2");
 
+    if (permissionsError) {
+      const migrationNotApplied = permissionsError.code === "PGRST202" ||
+        /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(permissionsError.message || "");
+      if (!migrationNotApplied) throw permissionsError;
+      const { data: legacyCourses, error: legacyError } = await client.rpc("get_my_active_courses_v2");
+      if (legacyError) throw legacyError;
+      allowedCourses = Array.isArray(legacyCourses) ? legacyCourses : [];
+      show("يتم عرض صلاحيات الباقة الحالية. ستظهر الصلاحيات الفردية لكل طالب بعد تحديث إعدادات المنصة.");
+    } else {
+      allowedCourses = Array.isArray(permissions) ? permissions : [];
+      show("هذه هي الصلاحيات المفعّلة لحسابك في كل دورة. لا يمكن للحساب تعديلها بنفسه.");
+    }
+
+    allowedCourses.forEach((course) => addCourse(course));
     if (!allowedCourses.length) {
-      show("حسابك معتمد، لكن لم يتم إسناد اشتراك تدريبي نشط بعد. تواصل مع الإدارة لاستكمال التفعيل.");
+      show("حسابك معتمد، لكن لا يوجد اشتراك تدريبي نشط مسند إلى حسابك حاليًا.");
       return;
     }
 
-    show("حسابك نشط. ستظهر المحاضرات والمواد بعد نشرها وربطها باشتراكك.");
     $("coursePanel").hidden = false;
   }
 

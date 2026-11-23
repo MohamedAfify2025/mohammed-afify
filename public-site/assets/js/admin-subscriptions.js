@@ -5,7 +5,8 @@ const $ = id => document.getElementById(id);
 const state = {
   client:null, user:null, profiles:[], courses:[],
   plans:[], planCourses:[], subscriptions:[],
-  payments:[], assignments:[], permissions:[]
+  payments:[], assignments:[], permissions:[],
+  accessPermissions:[], permissionsReady:false
 };
 
 function esc(value) {
@@ -245,6 +246,92 @@ function localDateTimeValue() {
   return d.toISOString().slice(0,16);
 }
 
+function studentSubscriptionIsEntitled(subscription) {
+  if(subscription.status !== 'active' || !['paid','waived'].includes(subscription.payment_state)) return false;
+  if(!subscription.starts_at || new Date(subscription.starts_at) > new Date()) return false;
+  if(subscription.expires_at && new Date(subscription.expires_at) <= new Date()) return false;
+  const selectedPlan = plan(subscription.plan_id);
+  return selectedPlan?.is_active === true;
+}
+
+function activeCourseMappingsForStudent(studentId) {
+  const activePlanIds = new Set(state.subscriptions
+    .filter(s => s.user_id === studentId && studentSubscriptionIsEntitled(s))
+    .map(s => s.plan_id));
+  const map = new Map();
+  for(const row of state.planCourses) {
+    if(!activePlanIds.has(row.plan_id)) continue;
+    const current = map.get(row.course_slug) || {
+      can_view_course_page:false,can_watch_video:false,can_download:false,
+      can_take_assessments:false,can_receive_certificate:false,can_track_progress:false
+    };
+    for(const key of Object.keys(current)) current[key] = current[key] || row[key] === true;
+    map.set(row.course_slug,current);
+  }
+  return map;
+}
+
+function readStudentPermissionForm() {
+  return {
+    can_view_course_page:$('permCanPage').checked,
+    can_watch_video:$('permCanVideo').checked,
+    can_download:$('permCanDownload').checked,
+    can_take_assessments:$('permCanAssessment').checked,
+    can_receive_certificate:$('permCanCertificate').checked,
+    can_track_progress:$('permCanProgress').checked
+  };
+}
+
+function setStudentPermissionForm(values) {
+  $('permCanPage').checked = values.can_view_course_page === true;
+  $('permCanVideo').checked = values.can_watch_video === true;
+  $('permCanDownload').checked = values.can_download === true;
+  $('permCanAssessment').checked = values.can_take_assessments === true;
+  $('permCanCertificate').checked = values.can_receive_certificate === true;
+  $('permCanProgress').checked = values.can_track_progress === true;
+}
+
+function renderStudentCoursePermissions() {
+  const ready = state.permissionsReady === true;
+  $('individualPermissionsSetup').hidden = ready;
+  $('studentPermissionsForm').hidden = !ready;
+  if(!ready) return;
+  refreshStudentPermissionCourseOptions();
+}
+
+function refreshStudentPermissionCourseOptions() {
+  const studentId = $('accessStudentSelect').value;
+  const mappings = activeCourseMappingsForStudent(studentId);
+  const rows = state.courses.filter(c => mappings.has(c.course_slug));
+  fillSelect('accessCourseSelect',rows,'course_slug',c => c.title,'اختر دورة لها اشتراك نشط');
+  loadStudentCoursePermissionForm();
+}
+
+function loadStudentCoursePermissionForm() {
+  const studentId = $('accessStudentSelect').value;
+  const courseSlug = $('accessCourseSelect').value;
+  const host = $('studentPermissionSource');
+
+  if(!studentId || !courseSlug) {
+    setStudentPermissionForm({
+      can_view_course_page:false,can_watch_video:false,can_download:false,
+      can_take_assessments:false,can_receive_certificate:false,can_track_progress:false
+    });
+    host.textContent = 'اختر طالبًا ودورة لها اشتراك نشط لعرض الصلاحيات.';
+    return;
+  }
+
+  const override = state.accessPermissions.find(p =>
+    p.user_id === studentId && p.course_slug === courseSlug
+  );
+  const defaults = activeCourseMappingsForStudent(studentId).get(courseSlug);
+  const values = override || defaults || {};
+  setStudentPermissionForm(values);
+  host.textContent = override
+    ? 'توجد صلاحيات فردية مخصصة لهذا الطالب. تعديلها لن يؤثر على بقية المشتركين.'
+    : 'لا توجد صلاحيات فردية محفوظة؛ يتم استخدام صلاحيات الباقة الحالية. يمكنك تخصيصها لهذا الطالب.';
+}
+
 async function boot() {
   try {
     const cfg = window.MEMBERSHIP_CONFIG || {};
@@ -356,6 +443,19 @@ async function loadAll() {
     state.subscriptions,state.payments,state.assignments,state.permissions
   ] = queries.map(r => r.data || []);
 
+  const accessResult = await db.from('student_course_permissions')
+    .select('user_id,course_slug,can_view_course_page,can_watch_video,can_download,can_take_assessments,can_receive_certificate,can_track_progress,updated_by,updated_at');
+  if(accessResult.error) {
+    const missingSchema = ['42P01','PGRST205'].includes(accessResult.error.code) ||
+      /student_course_permissions.*(not found|does not exist)|could not find the table/i.test(accessResult.error.message || '');
+    if(!missingSchema) throw new Error('صلاحيات الطلاب الفردية: ' + accessResult.error.message);
+    state.accessPermissions = [];
+    state.permissionsReady = false;
+  } else {
+    state.accessPermissions = accessResult.data || [];
+    state.permissionsReady = true;
+  }
+
   renderAll();
 }
 
@@ -418,6 +518,11 @@ function renderAll() {
     c => c.title,
     'اختر الدورة');
 
+  fillSelect('accessStudentSelect',students,'user_id',
+    p => `${p.full_name || 'طالب'} — ${p.email || ''}`,
+    'اختر الطالب المعتمد');
+
+  renderStudentCoursePermissions();
   renderCourseChoices();
   renderPlans();
   renderSubscriptions();
@@ -1022,6 +1127,83 @@ $('logoutBtn').addEventListener('click',async event => {
 
 ensurePricingControls();
 $('assignDiscountValueWrap').classList.toggle('hidden', $('assignDiscountType').value === 'none' || $('assignDiscountType').value === 'waive');
+
+$('accessStudentSelect').addEventListener('change', refreshStudentPermissionCourseOptions);
+$('accessCourseSelect').addEventListener('change', loadStudentCoursePermissionForm);
+
+$('permCanPage').addEventListener('change', () => {
+  if(!$('permCanPage').checked) {
+    $('permCanVideo').checked = false;
+    $('permCanDownload').checked = false;
+    $('permCanAssessment').checked = false;
+    $('permCanCertificate').checked = false;
+    $('permCanProgress').checked = false;
+  }
+});
+['permCanVideo','permCanDownload','permCanAssessment','permCanCertificate','permCanProgress'].forEach(id => {
+  $(id).addEventListener('change', () => {
+    if($(id).checked) $('permCanPage').checked = true;
+  });
+});
+
+$('studentPermissionsForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  clearMsg();
+  const studentId = $('accessStudentSelect').value;
+  const courseSlug = $('accessCourseSelect').value;
+  const permissions = readStudentPermissionForm();
+
+  if(!state.permissionsReady || !studentId || !courseSlug) {
+    msg('اختر طالبًا ودورة لها اشتراك نشط أولًا.',true);
+    return;
+  }
+  if(!permissions.can_view_course_page && Object.entries(permissions).some(([key,value]) => key !== 'can_view_course_page' && value)) {
+    msg('يجب تفعيل مشاهدة صفحة الدورة قبل تفعيل أي صلاحية أخرى.',true);
+    return;
+  }
+
+  const button = $('saveStudentPermissionsBtn');
+  button.disabled = true;
+  try {
+    await rpc('admin_set_student_course_permissions_v2',{
+      p_target_user:studentId,
+      p_course_slug:courseSlug,
+      p_can_view_course_page:permissions.can_view_course_page,
+      p_can_watch_video:permissions.can_watch_video,
+      p_can_download:permissions.can_download,
+      p_can_take_assessments:permissions.can_take_assessments,
+      p_can_receive_certificate:permissions.can_receive_certificate,
+      p_can_track_progress:permissions.can_track_progress,
+      p_note:'من لوحة إدارة صلاحيات الطلاب'
+    });
+    msg('تم حفظ صلاحيات الطالب لهذه الدورة فقط.');
+    await loadAll();
+  } catch(error) {
+    msg('تعذّر حفظ الصلاحيات: ' + error.message,true);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$('resetStudentPermissionsBtn').addEventListener('click',async () => {
+  const studentId = $('accessStudentSelect').value;
+  const courseSlug = $('accessCourseSelect').value;
+  if(!studentId || !courseSlug) {
+    msg('اختر طالبًا ودورة أولًا.',true);
+    return;
+  }
+  if(!confirm('إعادة صلاحيات الطالب إلى إعدادات الباقة لهذه الدورة؟')) return;
+  try {
+    await rpc('admin_reset_student_course_permissions_v2',{
+      p_target_user:studentId,
+      p_course_slug:courseSlug
+    });
+    msg('تمت إعادة صلاحيات الدورة إلى إعدادات الباقة.');
+    await loadAll();
+  } catch(error) {
+    msg('تعذّر إعادة الصلاحيات: ' + error.message,true);
+  }
+});
 
 $('studentSelect').addEventListener('change', () => {
   refreshPlanOptionsForSelectedStudent();

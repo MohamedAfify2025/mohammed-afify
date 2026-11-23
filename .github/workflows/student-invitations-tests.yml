@@ -9,19 +9,25 @@ on:
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
       - "public-site/admin-subscriptions.html"
+      - "public-site/academy-access.html"
       - "public-site/student-*.html"
       - "public-site/assets/js/admin-students.js"
       - "public-site/assets/js/admin-subscriptions.js"
       - "public-site/assets/js/student-*.js"
+      - "public-site/assets/js/academy-access.js"
       - "public-site/assets/js/membership-config.js"
       - "tests/student-invites.test.mjs"
       - "tests/admin-subscriptions-ui.test.mjs"
+      - "tests/role-permissions.test.mjs"
+      - "sql/membership-v2-per-user-course-permissions.sql"
+      - "docs/MEMBERSHIP-V2-THREE-ROLE-ACCESS.md"
       - ".github/workflows/student-invitations-tests.yml"
   push:
     branches:
       - "main"
       - "feature/student-invitations-and-login-2026-11-23"
       - "feature/student-invitations-live-deploy-2026-11-23"
+      - "feature/three-role-course-permissions"
     paths:
       - "supabase/functions/**"
       - "supabase/config.toml"
@@ -29,13 +35,16 @@ on:
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
       - "public-site/admin-subscriptions.html"
+      - "public-site/academy-access.html"
       - "public-site/student-*.html"
       - "public-site/assets/js/admin-students.js"
       - "public-site/assets/js/admin-subscriptions.js"
       - "public-site/assets/js/student-*.js"
+      - "public-site/assets/js/academy-access.js"
       - "public-site/assets/js/membership-config.js"
       - "tests/student-invites.test.mjs"
       - "tests/admin-subscriptions-ui.test.mjs"
+      - "tests/role-permissions.test.mjs"
       - ".github/workflows/student-invitations-tests.yml"
 
 permissions:
@@ -55,6 +64,7 @@ jobs:
         run: |
           node tests/student-invites.test.mjs
           node tests/admin-subscriptions-ui.test.mjs
+          node tests/role-permissions.test.mjs
       - name: Syntax-check browser scripts
         run: |
           node --check public-site/assets/js/membership-config.js
@@ -63,6 +73,7 @@ jobs:
           node --check public-site/assets/js/student-login.js
           node --check public-site/assets/js/student-set-password.js
           node --check public-site/assets/js/student-space.js
+          node --check public-site/assets/js/academy-access.js
 
   edge-function-type-check:
     runs-on: ubuntu-latest
