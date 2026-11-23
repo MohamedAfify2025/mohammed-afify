@@ -60,3 +60,20 @@ jobs:
           deno-version: v2.x
       - name: Type-check the admin invitation Edge Function
         run: deno check supabase/functions/admin-create-student-invitations/index.ts
+
+  powershell-script-parse:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Parse the TEST deployment script
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          $scriptPath = Join-Path $env:GITHUB_WORKSPACE "scripts/Deploy-StudentInvitations-TEST.ps1"
+          [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors) | Out-Null
+          if ($parseErrors.Count -gt 0) {
+            $parseErrors | Format-List | Out-String | Write-Error
+          }
+          Write-Host "PowerShell syntax check passed."
