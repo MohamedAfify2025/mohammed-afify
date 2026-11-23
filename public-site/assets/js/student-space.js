@@ -20,7 +20,7 @@
 
   async function boot() {
     if (!window.supabase?.createClient || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
-        !window.isMembershipPublicKey?.(key) === true) {
+        window.isMembershipPublicKey?.(key) !== true) {
       show("بوابة الطلاب لم تُربط بمشروع Supabase بعد.", true);
       return;
     }
@@ -71,7 +71,7 @@
 
   $("logoutButton").addEventListener("click", async () => {
     if (!window.supabase?.createClient || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
-        !(key.startsWith("sb_publishable_") || key.startsWith("eyJ"))) {
+        window.isMembershipPublicKey?.(key) !== true) {
       location.href = "student-login.html";
       return;
     }
