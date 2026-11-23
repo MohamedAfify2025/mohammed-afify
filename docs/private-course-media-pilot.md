@@ -46,15 +46,60 @@ Example manifest shape (replace the example UID with the real UID after the sour
 
 Do not set COURSE_MEDIA_MAP_JSON until the corresponding Stream videos exist, each paid video has requireSignedURLs = true, readyToStream = true, and allowedOrigins includes the exact website host. For a pilot, upload one rights-cleared video first. Never make an old unlisted YouTube link the fallback.
 
-## Deploy to TEST only
+## PowerShell end-to-end TEST run
 
-1. Confirm the Supabase project reference is the isolated TEST project and take a verified backup/export before any database work. This pilot currently includes no database migration.
-2. Confirm get_my_active_courses_v2() exists in that TEST project and returns course_slug, can_view_course_page, and can_watch_video as expected.
-3. Review ALLOWED_ORIGINS and list only the exact TEST website origin(s). Do not use *.
-4. Set the function secrets in Supabase TEST. Never use LIVE secrets for TEST. SUPABASE_URL and SUPABASE_PUBLISHABLE_KEYS are supplied by Supabase; do not try to create secrets with the reserved SUPABASE_ prefix.
-5. Deploy only the issue-course-playback-token function to TEST. Keep JWT verification enabled; do not set verify_jwt = false.
-6. Configure one Cloudflare Stream video as private / requiring signed URLs, and set the exact TEST host in that video's allowed origins.
-7. Add a single excel lesson mapping to the function secret, then call the function using the authenticated TEST student account.
+Run the automation from the Windows computer that has the source video. The script performs the upload through the Cloudflare API itself; no manual dashboard upload, curl, or Python upload client is needed.
+
+### One-time prerequisites
+
+- Install Git and Node.js 20 or later.
+- Have the isolated Supabase TEST project ready, with the current Membership V2 schema and the existing get_my_active_courses_v2() RPC.
+- Create a Cloudflare API token restricted to the relevant account with Stream Read and Stream Edit permissions.
+- Prepare one video that you own or are authorized to use. Cloudflare supports common formats such as MP4, MOV, WebM, MKV, and AVI; maximum file size is under 30 GB.
+- Have a dedicated TEST student with an active subscription that includes the exact course and can_watch_video = true if you want the final smoke test to succeed.
+
+### Run the script
+
+From PowerShell:
+
+~~~powershell
+git clone https://github.com/MohamedAfify2025/mohammed-afify.git
+cd mohammed-afify
+git checkout feature/private-course-media-pilot-2026-11-23
+
+node tests/course-playback.test.mjs
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\scripts\Deploy-PrivateCourseMediaPilot-TEST.ps1
+~~~
+
+The script asks for the TEST Project Ref, a local video path, course slug, lesson slug, website origin, Cloudflare Account ID, Cloudflare API token, and the Supabase TEST Publishable Key. Token/key/password inputs are hidden. It then:
+
+1. Refuses to run unless the repository branch is the dedicated TEST pilot branch and the project ref differs from the project currently configured by the website.
+2. Runs the Node helper tests and confirms the Edge Function has verify_jwt = true.
+3. Verifies the Cloudflare API token can access Stream.
+4. Uploads files under 200 MB using multipart upload; files 200 MB or larger use resumable TUS with 50 MB chunks and bounded retries.
+5. Sets requireSignedURLs = true and allowedOrigins to the exact host for the TEST website, then reads the video back to verify the settings.
+6. Waits for Cloudflare encoding, derives the Stream Customer Code from the playback manifest, and prepares the single course/lesson-to-video mapping.
+7. Authenticates the Supabase CLI, writes the Cloudflare settings to a temporary environment file, uploads those secrets only to the specified TEST project, then deletes the temporary file.
+8. Deploys only issue-course-playback-token to TEST using API deployment.
+9. Optionally signs in a dedicated TEST student and calls the Edge Function. The signed iframe URL is not printed to the console.
+
+The script does not run SQL, does not change the existing academy HTML pages, and does not deploy to LIVE. It includes a hard stop for the Supabase ref currently used by the site's browser config. Keep the video path, API token, student password, and signed playback URL out of GitHub and chat.
+
+If you use local Live Server on port 5500, enter exactly http://localhost:5500 when the script asks for the website origin. For another test domain, enter its exact origin instead; the Cloudflare allowed-origin entry is derived from that host.
+
+### What the script configures automatically
+
+- ALLOWED_ORIGINS
+- CF_ACCOUNT_ID
+- CF_STREAM_API_TOKEN
+- CF_STREAM_CUSTOMER_CODE
+- COURSE_MEDIA_MAP_JSON
+- STREAM_TOKEN_TTL_SECONDS = 3600
+
+Supabase injects SUPABASE_URL and SUPABASE_PUBLISHABLE_KEYS. The script does not try to add reserved SUPABASE_ secrets. It uses the Supabase CLI through an existing installation or npx.
+
 
 ## Browser invocation example
 
@@ -104,6 +149,6 @@ Also test that suspending/revoking the subscription prevents issuance of the nex
 - The current academy/excel.html page has many hard-coded iframe sources. None have been removed or replaced in this scaffold.
 - Source video ownership/usage rights and the full Excel lesson-to-video mapping still need to be confirmed.
 - Cloudflare Stream is not verified as available in the connected account; usage and billing must be checked by the account owner.
-- No TEST token request, real Cloudflare API call, Deno type check, Supabase RPC test, or end-to-end player test has been performed from this repository work.
+- No TEST token request, real Cloudflare API call, Deno type check, Supabase RPC test, PowerShell upload, or end-to-end player test has yet been performed from this repository work.
 - Add rate limiting and operational alerts before production rollout; the current scaffold doesn't throttle repeated token requests.
 - Do not merge this draft or open the paid Excel course to students until every TEST acceptance case passes and the page migration is reviewed.
