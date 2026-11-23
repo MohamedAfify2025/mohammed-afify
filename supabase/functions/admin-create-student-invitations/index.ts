@@ -90,12 +90,13 @@ Deno.serve(async (req: Request) => {
 
     const body = await req.json().catch(() => null);
     const batch = validateInvitationBatch(body?.students);
-    if (!batch.ok) {
+    if (!batch.ok || !Array.isArray(batch.students)) {
       return jsonResponse(400, {
         error: "راجع قائمة المتدربين قبل الإرسال.",
         details: batch.errors || batch.error,
       }, origin);
     }
+    const studentsToInvite = batch.students;
 
     const supabaseUrl = readRequiredEnv("SUPABASE_URL");
     const publishableKey =
@@ -161,7 +162,7 @@ Deno.serve(async (req: Request) => {
     });
 
     const results: Array<Record<string, unknown>> = [];
-    for (const student of batch.students) {
+    for (const student of studentsToInvite) {
       const { data, error } = await adminClient.auth.admin.inviteUserByEmail(
         student.email,
         {
