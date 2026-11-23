@@ -226,13 +226,6 @@ function Upload-CloudflareTus {
                 $read += $count
             }
 
-            $patch = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::new("PATCH"), $uploadUri)
-            $patch.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::new("Bearer", $ApiToken)
-            $patch.Headers.Add("Tus-Resumable", "1.0.0")
-            $patch.Headers.Add("Upload-Offset", [string]$offset)
-            $patch.Content = [System.Net.Http.ByteArrayContent]::new($buffer, 0, $read)
-            $patch.Content.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse("application/offset+octet-stream")
-
             $chunkAccepted = $false
             for ($retry = 1; $retry -le 5 -and -not $chunkAccepted; $retry++) {
                 $patchResponse = $null
