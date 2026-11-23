@@ -10,6 +10,17 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+# Windows PowerShell 5.1 does not always preload System.Net.Http.
+# Load and smoke-test the assembly before defining functions with HttpClient types.
+try {
+    Add-Type -AssemblyName System.Net.Http -ErrorAction Stop
+    $httpAssemblyProbe = [System.Net.Http.HttpClient]::new()
+    $httpAssemblyProbe.Dispose()
+}
+catch {
+    throw "Unable to load .NET System.Net.Http. Install/repair .NET Framework 4.7.2+ or run PowerShell 7, then retry. Details: $($_.Exception.Message)"
+}
+
 $KnownSiteProjectRef = "ybsjnubrswqksvktgmay"
 $ExpectedBranch = "feature/private-course-media-pilot-2026-11-23"
 $MaxStreamBytes = 30GB
