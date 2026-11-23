@@ -14,8 +14,8 @@ The current static academy pages embed public YouTube URLs directly in HTML. A b
 2. Supabase Edge Functions keep their default JWT verification enabled. The handler also calls Supabase Auth getUser(accessToken) to verify the session.
 3. The handler calls the existing public.get_my_active_courses_v2() RPC as the signed-in user. It issues a token only when the exact course row has can_view_course_page = true and can_watch_video = true.
 4. The server looks up the Cloudflare Stream UID in the server-side COURSE_MEDIA_MAP_JSON secret. The UID is never returned to the browser.
-5. Before token creation, the function retrieves Cloudflare video metadata and fails closed unless requireSignedURLs is true and allowedOrigins contains the exact requesting website host. Wildcard Stream origins are deliberately rejected.
-6. The function calls Cloudflare's POST /accounts/{account_id}/stream/{video_uid}/token endpoint with a short expiry and returns only the signed iframe URL.
+5. Before token creation, the function retrieves Cloudflare video metadata and fails closed unless readyToStream = true, requireSignedURLs = true, and allowedOrigins contains the exact requesting website host. Wildcard Stream origins are deliberately rejected.
+6. The function calls Cloudflare's POST /accounts/{account_id}/stream/{video_uid}/token endpoint with a one-hour default expiry (configurable from 5 to 60 minutes) and returns only the signed iframe URL.
 7. The browser renders the iframe only after receiving that URL. It must not retain a public YouTube fallback for paid lessons.
 
 ## Function secrets
@@ -31,7 +31,7 @@ Set these only in the Supabase Edge Function secret store for the isolated TEST 
 | CF_STREAM_API_TOKEN | Cloudflare API token with permissions to read Stream video metadata and create signed playback tokens |
 | CF_STREAM_CUSTOMER_CODE | The customer code from the Stream playback hostname |
 | COURSE_MEDIA_MAP_JSON | Server-side JSON object mapping course and lesson slugs to 32-character Stream video UIDs |
-| STREAM_TOKEN_TTL_SECONDS | Optional integer from 60 to 600; defaults to 300 seconds |
+| STREAM_TOKEN_TTL_SECONDS | Optional integer from 300 to 3600; defaults to 3600 seconds |
 
 Example manifest shape (replace the example UID with the real UID after the source video is uploaded and protected):
 
@@ -44,7 +44,7 @@ Example manifest shape (replace the example UID with the real UID after the sour
 }
 ~~~
 
-Do not set COURSE_MEDIA_MAP_JSON until the corresponding Stream videos exist, each paid video has requireSignedURLs = true, and allowedOrigins includes the exact website host. For a pilot, upload one rights-cleared video first. Never make an old unlisted YouTube link the fallback.
+Do not set COURSE_MEDIA_MAP_JSON until the corresponding Stream videos exist, each paid video has requireSignedURLs = true, readyToStream = true, and allowedOrigins includes the exact website host. For a pilot, upload one rights-cleared video first. Never make an old unlisted YouTube link the fallback.
 
 ## Deploy to TEST only
 
@@ -92,11 +92,12 @@ Do not put the Cloudflare API token, Stream UID, or an unsigned public video URL
 | Unknown lesson slug | 404; no iframe URL |
 | Unknown Stream video or Cloudflare metadata error | Fail closed; no iframe URL |
 | Stream video has requireSignedURLs = false | 409; no iframe URL |
+| Stream video is not ready yet | 409; no iframe URL |
 | Stream video allowedOrigins excludes the request host | 403; no iframe URL |
 | Function called from an origin outside the allowlist | 403 |
 | Token after its expiry | Cloudflare player refuses playback |
 
-Also test that suspending/revoking the subscription prevents issuance of the next token. A token already issued remains valid until its expiry; short TTL limits, but does not eliminate, that window.
+Also test that suspending/revoking the subscription prevents issuance of the next token. A token already issued remains valid until its expiry; short TTL limits, but does not eliminate, that window. With the one-hour default, the revocation test must include the remaining lifetime of an already-issued token.
 
 ## Rollout blockers
 
@@ -104,4 +105,5 @@ Also test that suspending/revoking the subscription prevents issuance of the nex
 - Source video ownership/usage rights and the full Excel lesson-to-video mapping still need to be confirmed.
 - Cloudflare Stream is not verified as available in the connected account; usage and billing must be checked by the account owner.
 - No TEST token request, real Cloudflare API call, Deno type check, Supabase RPC test, or end-to-end player test has been performed from this repository work.
+- Add rate limiting and operational alerts before production rollout; the current scaffold doesn't throttle repeated token requests.
 - Do not merge this draft or open the paid Excel course to students until every TEST acceptance case passes and the page migration is reviewed.
