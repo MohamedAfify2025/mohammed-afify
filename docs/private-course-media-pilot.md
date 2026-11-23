@@ -31,15 +31,14 @@ Set these only in the Supabase Edge Function secret store for the isolated TEST 
 | CF_STREAM_API_TOKEN | Cloudflare API token with permissions to read Stream video metadata and create signed playback tokens |
 | CF_STREAM_CUSTOMER_CODE | The customer code from the Stream playback hostname |
 | COURSE_MEDIA_MAP_JSON | Server-side JSON object mapping course and lesson slugs to 32-character Stream video UIDs |
-| STREAM_TOKEN_TTL_SECONDS | Optional integer from 300 to 3600; defaults to 3600 seconds |
+| STREAM_TOKEN_TTL_SECONDS | Optional integer from 300 to 3600; the PowerShell TEST pilot sets 600 seconds (10 minutes) |
 
 Example manifest shape (replace the example UID with the real UID after the source video is uploaded and protected):
 
 ~~~json
 {
-  "excel": {
-    "lesson-01": "0123456789abcdef0123456789abcdef",
-    "lesson-02": "abcdef0123456789abcdef0123456789"
+  "training-pilot": {
+    "lesson-01": "0123456789abcdef0123456789abcdef"
   }
 }
 ~~~
@@ -108,7 +107,7 @@ The call must use the existing signed-in Supabase client so the student's sessio
 ~~~js
 const { data, error } = await supabase.functions.invoke(
   "issue-course-playback-token",
-  { body: { course_slug: "excel", lesson_slug: "lesson-01" } }
+  { body: { course_slug: "training-pilot", lesson_slug: "lesson-01" } }
 );
 
 if (error) throw error;
@@ -142,13 +141,13 @@ Do not put the Cloudflare API token, Stream UID, or an unsigned public video URL
 | Function called from an origin outside the allowlist | 403 |
 | Token after its expiry | Cloudflare player refuses playback |
 
-Also test that suspending/revoking the subscription prevents issuance of the next token. A token already issued remains valid until its expiry; short TTL limits, but does not eliminate, that window. With the one-hour default, the revocation test must include the remaining lifetime of an already-issued token.
+Also test that suspending/revoking the subscription prevents issuance of the next token. A token already issued remains valid until its expiry; short TTL limits, but does not eliminate, that window. With the 10-minute TEST token, the revocation test must include the remaining lifetime of an already-issued token. Production TTL must be selected separately.
 
 ## Rollout blockers
 
-- The current academy/excel.html page has many hard-coded iframe sources. None have been removed or replaced in this scaffold.
-- Source video ownership/usage rights and the full Excel lesson-to-video mapping still need to be confirmed.
+- The existing academy course pages have hard-coded iframe sources. None have been removed or replaced in this scaffold.
+- Source video ownership/usage rights and the real training course slug/lesson mapping still need to be confirmed.
 - Cloudflare Stream is not verified as available in the connected account; usage and billing must be checked by the account owner.
 - No TEST token request, real Cloudflare API call, Deno type check, Supabase RPC test, PowerShell upload, or end-to-end player test has yet been performed from this repository work.
 - Add rate limiting and operational alerts before production rollout; the current scaffold doesn't throttle repeated token requests.
-- Do not merge this draft or open the paid Excel course to students until every TEST acceptance case passes and the page migration is reviewed.
+- Do not merge this draft or open paid course content to students until every TEST acceptance case passes and the relevant lesson page migration is reviewed.
