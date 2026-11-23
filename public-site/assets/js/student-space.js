@@ -116,11 +116,31 @@
 
     const { data: courses, error: coursesError } = await client.rpc("get_my_active_courses_v2");
     if (coursesError) throw coursesError;
-    const allowedCourses = Array.isArray(courses) ? courses : [];
+    const entitledCourses = Array.isArray(courses) ? courses : [];
+    let allowedCourses = entitledCourses;
+
+    // The permission grant is an additional gate; get_my_active_courses_v2
+    // remains the independent subscription/payment/capability gate.
+    if (!permissionError && permissionProfile?.mode === "custom") {
+      const checks = await Promise.all(entitledCourses.map((course) =>
+        client.rpc("has_platform_permission", {
+          p_permission_code: "course.lesson.view",
+          p_course_slug: course.course_slug
+        })
+      ));
+      const failedCheck = checks.find(result => result.error);
+      if (failedCheck) throw failedCheck.error;
+      allowedCourses = entitledCourses.filter((course, index) => checks[index].data === true);
+    }
+
     allowedCourses.forEach((course) => addCourse(course.course_slug || "دورة"));
 
-    if (!allowedCourses.length) {
+    if (!entitledCourses.length) {
       show("حسابك معتمد، لكن لم يتم إسناد اشتراك تدريبي نشط بعد. تواصل مع الإدارة لاستكمال التفعيل.");
+      return;
+    }
+    if (!allowedCourses.length) {
+      show("اشتراكك موجود، لكن لم تُمنح صلاحية مشاهدة الدروس لهذه الدورة بعد. تواصل مع إدارة المنصة.");
       return;
     }
 
