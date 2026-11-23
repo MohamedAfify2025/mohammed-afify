@@ -1,0 +1,81 @@
+name: Student invitation checks
+
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/**"
+      - "supabase/config.toml"
+      - "scripts/Deploy-StudentInvitations-TEST.ps1"
+      - "public-site/admin-students.html"
+      - "public-site/student-*.html"
+      - "public-site/assets/js/admin-students.js"
+      - "public-site/assets/js/student-*.js"
+      - "public-site/assets/js/membership-config.js"
+      - "tests/student-invites.test.mjs"
+      - ".github/workflows/student-invitations-tests.yml"
+  push:
+    branches:
+      - "feature/student-invitations-and-login-2026-11-23"
+    paths:
+      - "supabase/functions/**"
+      - "supabase/config.toml"
+      - "scripts/Deploy-StudentInvitations-TEST.ps1"
+      - "public-site/admin-students.html"
+      - "public-site/student-*.html"
+      - "public-site/assets/js/admin-students.js"
+      - "public-site/assets/js/student-*.js"
+      - "public-site/assets/js/membership-config.js"
+      - "tests/student-invites.test.mjs"
+      - ".github/workflows/student-invitations-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  node-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test invitation validation
+        run: node tests/student-invites.test.mjs
+      - name: Syntax-check browser scripts
+        run: |
+          node --check public-site/assets/js/membership-config.js
+          node --check public-site/assets/js/admin-students.js
+          node --check public-site/assets/js/student-login.js
+          node --check public-site/assets/js/student-set-password.js
+          node --check public-site/assets/js/student-space.js
+
+  edge-function-type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check the admin invitation Edge Function
+        run: deno check supabase/functions/admin-create-student-invitations/index.ts
+
+  powershell-script-parse:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Parse the TEST deployment script
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          $scriptPath = Join-Path $env:GITHUB_WORKSPACE "scripts/Deploy-StudentInvitations-TEST.ps1"
+          [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors) | Out-Null
+          if ($parseErrors.Count -gt 0) {
+            $parseErrors | Format-List | Out-String | Write-Error
+          }
+          Write-Host "PowerShell syntax check passed."

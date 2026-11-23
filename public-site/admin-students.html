@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>إنشاء حسابات المتدربين | Mohammed Afify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif}
+    main{max-width:1050px;margin:40px auto;padding:0 18px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+    .brand{font-weight:900}.muted{color:#68778e;font-size:13px;line-height:1.9}.card{background:#fff;border:1px solid #e3eaf2;border-radius:18px;padding:24px;margin:16px 0;box-shadow:0 8px 24px #17243b08}
+    h1{font-size:clamp(25px,4vw,34px);margin:8px 0}h2{font-size:19px;margin:0 0 12px}
+    label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}input,textarea{width:100%;font:inherit;border:1px solid #d9e2ed;border-radius:10px;padding:11px 12px;background:#fff;color:#17243b}
+    textarea{min-height:180px;resize:vertical;font-family:Consolas,monospace;font-size:13px;direction:ltr;text-align:left}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    button,a.btn{border:0;border-radius:11px;padding:11px 17px;background:#14233d;color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none}
+    button.secondary,a.secondary{background:#edf2f8;color:#243650}button.teal{background:#19b7a2;color:#062b2a}button:disabled{opacity:.55;cursor:not-allowed}
+    .notice{padding:12px 14px;border-radius:11px;margin:14px 0;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.8}
+    .notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
+    .warning{background:#fff7e5;color:#795400}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:640px}td,th{padding:10px;border-bottom:1px solid #e7edf4;text-align:right;font-size:12px}th{background:#f7f9fc;color:#596b84}
+    .pill{display:inline-block;background:#e8f7f1;color:#126447;border-radius:30px;padding:3px 9px;font-size:11px;font-weight:800}
+    @media(max-width:650px){main{margin:20px auto}.card{padding:17px}.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div class="brand">Mohammed Afify <span style="color:#19b7a2">.MA</span></div>
+    <a class="btn secondary" href="index.html">العودة للموقع</a>
+  </header>
+  <section>
+    <span class="pill">إدارة المنصة</span>
+    <h1>إنشاء حسابات المتدربين</h1>
+    <p class="muted">أدخل بيانات المتدربين أو ارفع ملف CSV. ستصل لكل متدرب دعوة على بريده الإلكتروني ليختار كلمة مروره بنفسه.</p>
+  </section>
+
+  <div id="configMessage" class="notice warning" hidden></div>
+  <div id="adminMessage" class="notice" hidden></div>
+
+  <section id="loginPanel" class="card">
+    <h2>دخول مدير المنصة</h2>
+    <p class="muted">هذه الصفحة عامة من حيث الرابط فقط؛ إنشاء الحسابات محمي بفحص صلاحية مدير المنصة داخل قاعدة البيانات وعلى الخادم.</p>
+    <form id="loginForm">
+      <div class="grid">
+        <div><label for="adminEmail">البريد الإلكتروني</label><input id="adminEmail" type="email" autocomplete="username" required></div>
+        <div><label for="adminPassword">كلمة المرور</label><input id="adminPassword" type="password" autocomplete="current-password" required></div>
+      </div>
+      <div class="actions"><button type="submit">تسجيل الدخول</button></div>
+    </form>
+  </section>
+
+  <section id="invitePanel" class="card" hidden>
+    <div class="top">
+      <div><h2>إرسال دعوات المتدربين</h2><p class="muted">الحساب يُنشأ بدور student فقط، ولا يُمنح الطالب اشتراكًا أو صلاحية مشاهدة تلقائيًا.</p></div>
+      <div><span id="adminIdentity" class="pill"></span> <button id="logoutButton" class="secondary" type="button">تسجيل الخروج</button></div>
+    </div>
+
+    <label for="csvFile">رفع ملف CSV (اختياري)</label>
+    <input id="csvFile" type="file" accept=".csv,text/csv">
+    <label for="studentsCsv">بيانات المتدربين — كل طالب في سطر</label>
+    <textarea id="studentsCsv" spellcheck="false" placeholder="full_name,email,phone,requested_course
+Ahmed Mohamed,ahmed@example.com,01000000000,Excel
+Mona Ali,mona@example.com,01000000001,Excel"></textarea>
+    <p class="muted">ترتيب الأعمدة: الاسم الكامل، البريد الإلكتروني، الهاتف، اسم الدورة. اترك الهاتف أو الدورة فارغًا عند عدم توفرهما. الحد الأقصى 40 طالبًا في الدفعة الواحدة.</p>
+
+    <div class="actions">
+      <button id="previewButton" class="secondary" type="button">معاينة القائمة</button>
+      <button id="sendInvitesButton" class="teal" type="button">إرسال دعوات إعداد الحساب</button>
+    </div>
+
+    <div id="previewPanel" hidden>
+      <h2 style="margin-top:24px">معاينة قبل الإرسال <span id="previewCount" class="pill"></span></h2>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>الهاتف</th><th>الدورة</th></tr></thead><tbody id="previewBody"></tbody></table></div>
+    </div>
+    <div id="resultsPanel" hidden>
+      <h2 style="margin-top:24px">نتائج إرسال الدعوات</h2>
+      <div class="table-wrap"><table><thead><tr><th>الاسم</th><th>البريد الإلكتروني</th><th>النتيجة</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>ماذا يحدث بعد إرسال الدعوة؟</h2>
+    <ol class="muted">
+      <li>يستلم المتدرب رسالة دعوة على بريده الإلكتروني.</li>
+      <li>يفتح الرابط ويضع كلمة مرور شخصية لا يعرفها مدير المنصة.</li>
+      <li>يستطيع تسجيل الدخول بالبريد الإلكتروني وكلمة المرور.</li>
+      <li>يبقى حسابه بانتظار اعتماد الإدارة وإسناد اشتراك الدورة قبل إتاحة المحتوى.</li>
+    </ol>
+    <p class="muted">لا تضع كلمات مرور في ملف CSV. ولا ترفع أي مفاتيح سرية إلى GitHub.</p>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.local.js"></script>
+<script src="assets/js/membership-config.js"></script>
+<script src="assets/js/admin-students.js" defer></script>
+</body>
+</html>
