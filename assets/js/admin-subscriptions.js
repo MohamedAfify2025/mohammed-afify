@@ -160,6 +160,11 @@ function updateAssignPricePreview() {
 function paymentRemaining(subscriptionId) {
   const sub = state.subscriptions.find(s => s.id === subscriptionId);
   if (!sub) return null;
+
+  // A fully waived subscription has no collectible balance, even when its
+  // original agreed_amount remains positive for historical reporting.
+  if (sub.payment_state === 'waived') return 0;
+
   const paid = state.payments
     .filter(p => p.subscription_id === subscriptionId && p.status === 'paid')
     .reduce((sum,p) => sum + Number(p.amount || 0), 0);
