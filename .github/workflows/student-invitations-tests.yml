@@ -75,12 +75,18 @@ jobs:
       - name: Parse deployment scripts
         shell: pwsh
         run: |
-          $tokens = $null
-          $parseErrors = $null
-          $scriptPath = Join-Path $env:GITHUB_WORKSPACE "scripts/Deploy-StudentInvitations-TEST.ps1"
-      - "scripts/Deploy-StudentInvitations-LIVE.ps1"
-          [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors) | Out-Null
-          if ($parseErrors.Count -gt 0) {
-            $parseErrors | Format-List | Out-String | Write-Error
+          $scripts = @(
+            "scripts/Deploy-StudentInvitations-TEST.ps1",
+            "scripts/Deploy-StudentInvitations-LIVE.ps1"
+          )
+          foreach ($relativePath in $scripts) {
+            $tokens = $null
+            $parseErrors = $null
+            $scriptPath = Join-Path $env:GITHUB_WORKSPACE $relativePath
+            [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors) | Out-Null
+            if ($parseErrors.Count -gt 0) {
+              $parseErrors | Format-List | Out-String | Write-Error
+              throw "PowerShell parse failed: $relativePath"
+            }
           }
-          Write-Host "PowerShell syntax check passed."
+          Write-Host "PowerShell syntax checks passed."
