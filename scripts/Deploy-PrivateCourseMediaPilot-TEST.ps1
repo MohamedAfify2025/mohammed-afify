@@ -365,9 +365,15 @@ try {
     if ($fileInfo.Length -le 0 -or $fileInfo.Length -ge $MaxStreamBytes) { Stop-With "Video size must be greater than zero and less than 30 GB." }
     $supported = @(".mp4", ".mov", ".m4v", ".webm", ".mkv", ".avi", ".flv", ".mpg", ".mpeg", ".3gp")
     if ($supported -notcontains $fileInfo.Extension.ToLowerInvariant()) { Stop-With "Unsupported video file extension." }
+    $sizeMb = [Math]::Round($fileInfo.Length / 1MB, 2)
+    Write-Host "Selected file: $($fileInfo.Name)"
+    Write-Host "File size: $sizeMb MB"
+    Write-Host "This is a PRIVATE TEST upload. It will not be committed to GitHub."
+    $uploadConfirmation = Read-Host "Type UPLOAD to confirm this exact file"
+    if ($uploadConfirmation -cne "UPLOAD") { Stop-With "Upload cancelled by operator." }
 
-    $courseSlug = (Read-Host "Course slug [excel]").Trim()
-    if (-not $courseSlug) { $courseSlug = "excel" }
+    $courseSlug = (Read-Host "Course slug [training-pilot]").Trim()
+    if (-not $courseSlug) { $courseSlug = "training-pilot" }
     $courseSlug = $courseSlug.ToLowerInvariant()
     if ($courseSlug -notmatch '^[a-z0-9][a-z0-9-]{0,79}$') { Stop-With "Invalid course slug." }
 
@@ -393,12 +399,9 @@ try {
     $cloudflareToken = Convert-SecureStringToPlainText $cloudflareSecure
     if (-not $cloudflareToken) { Stop-With "Cloudflare API token is required." }
 
-    $publishableSecure = Read-Host "Supabase TEST Publishable Key (hidden input; not a service-role key)" -AsSecureString
-    $publishableKey = (Convert-SecureStringToPlainText $publishableSecure).Trim().Trim([char]0xFEFF).Trim()
-    if (-not (Test-SupabasePublishableOrAnonKey $publishableKey)) {
-        $safeKeyDescription = Get-SupabaseKeySafeDescription $publishableKey
-        Stop-With "Key rejected ($safeKeyDescription). Enter the exact Publishable key beginning with sb_publishable_, or a legacy anon JWT with role=anon. Never enter a secret/service_role key."
-    }
+    # Supabase injects publishable/secret keys into Edge Functions automatically.
+    # A browser publishable key is needed only for the optional end-to-end student login test.
+    $publishableKey = $null
 
     Write-Step "Verify Cloudflare API access"
     $httpClient = New-CloudflareHttpClient
@@ -433,9 +436,11 @@ try {
     if (-not $ready) { Stop-With "Video is not ready after 10 minutes. Check Stream and rerun later." }
     if ($video.requireSignedURLs -ne $true -or @($video.allowedOrigins) -notcontains $allowedHost) { Stop-With "Final Cloudflare security verification failed." }
 
-    $playbackHls = [string]$video.playback.hls
-    if (-not $playbackHls -or $playbackHls -notmatch '^https://customer-([a-z0-9-]+)\.cloudflarestream\.com/') {
-        Stop-With "Could not derive Cloudflare Stream Customer Code from the video's HLS playback URL."
+    # API responses may expose the manifest under playback.hls or a preview URL.
+    $streamReferenceUrl = [string]$video.playback.hls
+    if (-not $streamReferenceUrl) { $streamReferenceUrl = [string]$video.preview }
+    if (-not $streamReferenceUrl -or $streamReferenceUrl -notmatch '^https://customer-([a-z0-9-]+)\.cloudflarestream\.com/') {
+        Stop-With "Could not derive Cloudflare Stream Customer Code from playback.hls or preview."
     }
     $customerCode = $Matches[1]
 
@@ -456,7 +461,7 @@ try {
         "CF_STREAM_API_TOKEN='$cloudflareToken'"
         "CF_STREAM_CUSTOMER_CODE='$customerCode'"
         "COURSE_MEDIA_MAP_JSON='$mediaMapJson'"
-        "STREAM_TOKEN_TTL_SECONDS='3600'"
+        "STREAM_TOKEN_TTL_SECONDS='600'"
     )
     [IO.File]::WriteAllLines($tempEnvFile, $envLines, [Text.UTF8Encoding]::new($false))
     try {
@@ -470,8 +475,65 @@ try {
     Invoke-SupabaseCli @("functions", "deploy", "issue-course-playback-token", "--project-ref", $testProjectRef, "--use-api")
 
     Write-Step "Optional end-to-end TEST student check"
-    $doSmokeTest = (Read-Host "Do you have a dedicated TEST student with active Excel video permission? (Y/N)").Trim()
-    if ($doSmokeTest -match '^(Y|YES)$') {
+    $doSmokeTest = (Read-Host "Do you already have a dedicated TEST student with an active course subscription and can_watch_video=true? (Y/N)").Trim()
+    if ($doSmokeTest -match '^(Y|YES) = (Read-Host "TEST student email").Trim()
+        $studentPasswordSecure = Read-Host "TEST student password (hidden input)" -AsSecureString
+        $studentPassword = Convert-SecureStringToPlainText $studentPasswordSecure
+        try {
+            $supabaseUrl = "https://$testProjectRef.supabase.co"
+            $authBody = @{ email = $studentEmail; password = $studentPassword } | ConvertTo-Json -Compress
+            $authResult = Invoke-RestMethod -Method POST -Uri "$supabaseUrl/auth/v1/token?grant_type=password" -Headers @{ apikey = $publishableKey } -ContentType "application/json" -Body $authBody -TimeoutSec 60
+            if (-not $authResult.access_token) { Stop-With "Supabase did not return a student session token." }
+
+            $functionBody = @{ course_slug = $courseSlug; lesson_slug = $lessonSlug } | ConvertTo-Json -Compress
+            $functionResult = Invoke-RestMethod -Method POST -Uri "$supabaseUrl/functions/v1/issue-course-playback-token" -Headers @{
+                Authorization = "Bearer $($authResult.access_token)"
+                apikey = $publishableKey
+                Origin = $testOrigin
+            } -ContentType "application/json" -Body $functionBody -TimeoutSec 60
+
+            if (-not $functionResult.iframeUrl -or $functionResult.expires_in_seconds -lt 300) {
+                Stop-With "Function response did not contain the expected signed playback URL."
+            }
+            Write-Host "TEST student authorization succeeded." -ForegroundColor Green
+            Write-Host "Course: $($functionResult.course_slug); Lesson: $($functionResult.lesson_slug)"
+            Write-Host "Signed token lifetime: $($functionResult.expires_in_seconds) seconds"
+            Write-Host "Signed iframe URL was intentionally not printed."
+        } finally {
+            $studentPassword = $null
+            $authBody = $null
+            $functionBody = $null
+        }
+    } else {
+        Write-Warning "Function deployed, but end-to-end student playback was not tested."
+    }
+
+    Write-Step "TEST pilot setup completed"
+    Write-Host "Cloudflare upload, signed-URL protection, origin restriction, Supabase secrets, and function deployment completed for TEST." -ForegroundColor Green
+    Write-Host "Course: $courseSlug | Lesson: $lessonSlug"
+    Write-Host "No SQL migrations or LIVE changes were made."
+    Write-Host "Next: verify a TEST student with an active matching subscription, then migrate the matching lesson player. Do not leave a public YouTube fallback."
+}
+catch {
+    Write-Error $_
+    Write-Host "STOPPED. Review the last successful step before rerunning." -ForegroundColor Red
+    throw
+}
+finally {
+    if ($tempEnvFile -and (Test-Path $tempEnvFile)) { Remove-Item -LiteralPath $tempEnvFile -Force -ErrorAction SilentlyContinue }
+    if ($httpClient) { $httpClient.Dispose() }
+    $cloudflareToken = $null
+    $publishableKey = $null
+    Pop-Location
+}
+) {
+        $publishableSecure = Read-Host "Supabase TEST Publishable Key for this optional student smoke test (hidden input)" -AsSecureString
+        $publishableKey = (Convert-SecureStringToPlainText $publishableSecure).Trim().Trim([char]0xFEFF).Trim()
+        if (-not (Test-SupabasePublishableOrAnonKey $publishableKey)) {
+            $safeKeyDescription = Get-SupabaseKeySafeDescription $publishableKey
+            Stop-With "Smoke-test key rejected ($safeKeyDescription). Use the exact Publishable key or legacy anon JWT only."
+        }
+
         $studentEmail = (Read-Host "TEST student email").Trim()
         $studentPasswordSecure = Read-Host "TEST student password (hidden input)" -AsSecureString
         $studentPassword = Convert-SecureStringToPlainText $studentPasswordSecure
