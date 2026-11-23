@@ -8,10 +8,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 const sourcePath = resolve(here, '../assets/js/admin-subscriptions.js');
 const source = readFileSync(sourcePath, 'utf8');
 
-const match = source.match(
-  /function paymentRemaining\\(subscriptionId\\)\\s*\\{[\\s\\S]*?\\n\\}/
-);
-assert.ok(match, 'paymentRemaining() must exist in admin-subscriptions.js');
+const start = source.indexOf('function paymentRemaining(subscriptionId) {');
+const end = source.indexOf('function updatePaymentBalance()', start);
+assert.ok(start >= 0 && end > start, 'paymentRemaining() must exist before updatePaymentBalance().');
+const helperSource = source.slice(start, end);
 
 const cases = [
   {
@@ -59,17 +59,14 @@ const cases = [
 ];
 
 for (const testCase of cases) {
-  const actual = runInNewContext(
-    `${match[0]}; paymentRemaining(${JSON.stringify(testCase.id)});`,
-    { state: testCase.state }
-  );
+  const snippet = helperSource + '; paymentRemaining(' + JSON.stringify(testCase.id) + ');';
+  const actual = runInNewContext(snippet, { state: testCase.state });
   assert.equal(actual, testCase.expected, testCase.name);
 }
 
-assert.match(
-  source,
-  /const payableSubs = usableSubs\\.filter\\(s => paymentRemaining\\(s\\.id\\) > 0\\);/,
+assert.ok(
+  source.includes('const payableSubs = usableSubs.filter(s => paymentRemaining(s.id) > 0);'),
   'The payment selector must exclude zero-balance (including waived) subscriptions.'
 );
 
-console.log(`PASS: ${cases.length} payment-balance cases and payable-selector integration.`);
+console.log('PASS: ' + cases.length + ' payment-balance cases and payable-selector integration.');
