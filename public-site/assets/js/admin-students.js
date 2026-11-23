@@ -18,8 +18,7 @@
 
   function isConfigured() {
     return /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(supabaseUrl) &&
-      (publishableKey.startsWith("sb_publishable_") || publishableKey.startsWith("eyJ")) &&
-      !publishableKey.startsWith("sb_secret_");
+      window.isMembershipPublicKey?.(publishableKey) === true;
   }
 
   function setVisible(id, visible) {
