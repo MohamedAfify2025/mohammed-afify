@@ -7,6 +7,7 @@ import {
   normalizeSlug,
   normalizeTokenTtl,
   parseCourseMediaManifest,
+  resolveSupabasePublishableKey,
 } from "../supabase/functions/_shared/course-playback.mjs";
 
 const uid1 = "0123456789abcdef0123456789abcdef";
@@ -48,6 +49,12 @@ assert.equal(isStreamVideoReadyAndPrivate({
 assert.equal(isStreamVideoReadyAndPrivate({
   readyToStream: true, requireSignedURLs: false, allowedOrigins: ["example.com"],
 }, "https://example.com"), false);
+
+assert.equal(resolveSupabasePublishableKey(JSON.stringify({ default: "sb_publishable_test" }), null), "sb_publishable_test");
+assert.equal(resolveSupabasePublishableKey(null, "legacy-anon-test"), "legacy-anon-test");
+assert.throws(() => resolveSupabasePublishableKey("{bad json", null), /valid JSON/);
+assert.throws(() => resolveSupabasePublishableKey("{}", null), /default key/);
+assert.throws(() => resolveSupabasePublishableKey(null, null), /No Supabase publishable or anon API key/);
 
 assert.equal(normalizeTokenTtl(undefined), 3600);
 assert.equal(normalizeTokenTtl("300"), 300);
