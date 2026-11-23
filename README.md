@@ -3,6 +3,8 @@
 A responsive, bilingual (Arabic/English) static website built with HTML, CSS and vanilla JavaScript for GitHub Pages.
 
 ## Current deployment and membership status
+Before opening paid lessons, review [the private course-content security audit](SECURITY-AUDIT-PRIVATE-COURSE-CONTENT-2026-11-23.md). JavaScript page gating does not protect static HTML or public video URLs.
+
 
 Read [MEMBERSHIP-V2-STATUS-2026-11-22.md](MEMBERSHIP-V2-STATUS-2026-11-22.md) before making membership or deployment changes.
 
