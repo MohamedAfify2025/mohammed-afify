@@ -212,8 +212,7 @@
       message("المعاينة جاهزة. راجع الأسماء والبريد الإلكتروني قبل إرسال الدعوات.");
     });
 
-    $("inviteForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
+    $("sendInvitesButton").addEventListener("click", async () => {
       message("");
       if (!adminReady) {
         message("سجّل الدخول بحساب الإدارة أولًا.", true);
