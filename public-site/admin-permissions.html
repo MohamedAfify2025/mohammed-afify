@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>إدارة الصلاحيات | Mohammed Afify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif;padding:20px}
+main{max-width:1120px;margin:24px auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:900;color:#0b8379}
+.card{background:#fff;border:1px solid #e3eaf2;border-radius:18px;padding:22px;margin:16px 0;box-shadow:0 10px 30px #17243b08}
+h1{font-size:clamp(25px,4vw,34px);margin:12px 0 5px}h2{font-size:19px;margin:0 0 12px}.muted{color:#68778e;font-size:13px;line-height:1.9}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{min-width:0}.field label{display:block;font-size:13px;font-weight:800;margin:10px 0 6px}
+input,select,textarea{width:100%;font:inherit;border:1px solid #d9e2ed;border-radius:10px;padding:10px 12px;background:#fff;color:#17243b}
+textarea{min-height:76px;resize:vertical}button,a.btn{display:inline-block;border:0;border-radius:10px;padding:10px 15px;background:#14233d;color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none}
+button.secondary,a.secondary{background:#edf2f8;color:#243650}button.teal{background:#0b8c80}button.danger{background:#fff0f0;color:#9b2632}button:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.notice{padding:12px 14px;border-radius:10px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.8;margin:12px 0}.notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
+.pill{display:inline-block;background:#edf2f8;border-radius:30px;padding:3px 9px;font-size:11px;font-weight:800}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{padding:10px;border-bottom:1px solid #e7edf4;text-align:right;font-size:12px}th{background:#f7f9fc;color:#596b84}
+.permission-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e9eef4}.permission-row:last-child{border-bottom:0}
+@media(max-width:680px){body{padding:10px}.card{padding:16px}.grid{grid-template-columns:1fr}}
+</style></head>
+<body><main>
+<header class="top"><div class="brand">MOHAMMED AFIFY · ADMINISTRATION</div><div class="actions"><a class="btn secondary" href="admin-students.html">إدارة المتدربين</a><a class="btn secondary" href="index.html">الموقع</a></div></header>
+<section><span class="pill">لوحة التحكم</span><h1>إدارة الصلاحيات</h1><p class="muted">أنشئ صلاحيات قابلة لإعادة الاستخدام، ثم خصّص الوصول لكل متدرب. وضع «موروث» يحافظ على قواعد Membership V2 الحالية، ووضع «مخصص» يسمح فقط بالمنح النشطة.</p></section>
+<div id="message" class="notice" hidden></div>
+<section id="loginPanel" class="card" hidden><h2>تسجيل دخول الأدمن</h2><p class="muted">استخدم حساب مدير المنصة المعتمد. ستتم إعادة التوجيه إلى صفحة تسجيل الدخول الرئيسية.</p><a class="btn" href="admin-students.html">الانتقال لتسجيل دخول الأدمن</a></section>
+<div id="workspace" hidden>
+<section class="card">
+<h2>1. اختيار المتدرب ووضع الصلاحيات</h2>
+<div class="grid">
+<div class="field"><label for="studentSelect">المتدرب</label><select id="studentSelect"><option value="">اختر متدربًا</option></select></div>
+<div class="field"><label for="permissionMode">وضع الصلاحيات</label><select id="permissionMode"><option value="inherit">موروث — قواعد النظام والاشتراك الحالي</option><option value="custom">مخصص — المنح المحددة فقط</option></select></div>
+</div>
+<div class="actions"><button id="saveMode" class="teal" type="button">حفظ وضع الصلاحيات</button><span id="selectedStudentState" class="pill">لم يتم اختيار متدرب</span></div>
+<p class="muted">تغيير الوضع إلى «مخصص» يقيّد الميزات التي تطبق فحص الصلاحية. لا يلغي ذلك شرط الاشتراك أو الدفع للدورات.</p>
+</section>
+<section class="card">
+<h2>2. منح صلاحية للمتدرب</h2>
+<div class="grid">
+<div class="field"><label for="permissionSelect">الصلاحية</label><select id="permissionSelect"><option value="">اختر صلاحية</option></select></div>
+<div class="field"><label for="courseScope">نطاق الدورة (اختياري)</label><select id="courseScope"><option value="">كل الدورات / صلاحية عامة</option></select></div>
+<div class="field"><label for="validUntil">تاريخ انتهاء الصلاحية (اختياري)</label><input id="validUntil" type="datetime-local"></div>
+</div>
+<div class="actions"><button id="grantButton" class="teal" type="button">منح الصلاحية</button></div>
+</section>
+<section class="card">
+<h2>3. الصلاحيات المسندة</h2><p class="muted">تعرض المنح الحالية للمتدرب المحدد، ويمكن إيقاف أي منحة دون حذف سجل التدقيق.</p>
+<div id="grantsList" class="muted">اختر متدربًا لعرض صلاحياته.</div>
+</section>
+<section class="card">
+<h2>4. إنشاء صلاحية جديدة</h2>
+<p class="muted">إنشاء تعريف جديد يضيفه إلى قائمة الصلاحيات. لكي يحمي وظيفة فعلية، يجب أن يستدعي كود الخادم أو سياسة RLS فحص has_platform_permission بالمفتاح نفسه.</p>
+<div class="grid">
+<div class="field"><label for="newCode">رمز الصلاحية (بالإنجليزية)</label><input id="newCode" maxlength="80" placeholder="reports.export"></div>
+<div class="field"><label for="newName">اسم الصلاحية</label><input id="newName" maxlength="120" placeholder="تصدير التقارير"></div>
+<div class="field"><label for="newCategory">التصنيف</label><input id="newCategory" maxlength="60" placeholder="التقارير"></div>
+<div class="field"><label for="newResource">المورد / القسم</label><input id="newResource" maxlength="80" placeholder="reports"></div>
+<div class="field"><label for="newAction">نوع الإجراء</label><input id="newAction" maxlength="80" placeholder="export"></div>
+<div class="field"><label for="newDescription">الوصف</label><textarea id="newDescription" maxlength="500" placeholder="ما الذي تسمح به هذه الصلاحية؟"></textarea></div>
+</div>
+<div class="actions"><button id="createPermission" type="button">حفظ الصلاحية الجديدة</button></div>
+</section>
+<section class="card"><h2>سجل تغييرات الصلاحيات</h2><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المتدرب</th><th>العملية</th><th>رمز الصلاحية</th></tr></thead><tbody id="auditBody"></tbody></table></div></section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.local.js"></script>
+<script src="assets/js/membership-config.js"></script>
+<script src="assets/js/admin-permissions.js" defer></script>
+</main></body></html>
