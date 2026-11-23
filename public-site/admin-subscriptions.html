@@ -332,6 +332,43 @@ td{color:#293954}
   <p class="notice">تظهر فقط الباقات النشطة التي تشمل الدورة المطلوبة في ملف الطالب. الباقة المجانية تُفعّل تلقائيًا، أما الباقة المدفوعة فتُنشأ Pending وتظل مغلقة حتى تسجيل الدفع وتفعيلها.</p>
 </section>
 
+<section class="panel" id="studentCoursePermissionsPanel">
+  <div class="panel-head">
+    <h2 class="section-title">الصلاحيات الفردية لكل طالب</h2>
+  </div>
+  <p class="help">حدد طالبًا لديه اشتراك نشط، ثم اختر دورة من اشتراكه واضبط صلاحياته الخاصة. هذا التعديل لا يغيّر صلاحيات باقي الطلاب في الباقة.</p>
+  <div id="individualPermissionsSetup" class="notice" hidden>
+    طبقة الصلاحيات الفردية لم تُفعّل في قاعدة البيانات بعد. يجب تطبيق ملف
+    <strong>membership-v2-per-user-course-permissions.sql</strong> في Supabase أولًا.
+  </div>
+  <form id="studentPermissionsForm" hidden>
+    <div class="form-grid">
+      <div class="field">
+        <label for="accessStudentSelect">الطالب المعتمد</label>
+        <select id="accessStudentSelect" required></select>
+      </div>
+      <div class="field">
+        <label for="accessCourseSelect">الدورة ضمن اشتراك نشط</label>
+        <select id="accessCourseSelect" required></select>
+      </div>
+    </div>
+    <div id="studentPermissionSource" class="notice">اختر طالبًا ودورة لعرض الصلاحيات الحالية.</div>
+    <div class="capabilities" aria-label="صلاحيات الطالب للدورة">
+      <label class="checkline"><input type="checkbox" id="permCanPage"> مشاهدة صفحة الدورة</label>
+      <label class="checkline"><input type="checkbox" id="permCanVideo"> مشاهدة الفيديوهات</label>
+      <label class="checkline"><input type="checkbox" id="permCanDownload"> تنزيل الملفات</label>
+      <label class="checkline"><input type="checkbox" id="permCanAssessment"> دخول الاختبارات</label>
+      <label class="checkline"><input type="checkbox" id="permCanCertificate"> الحصول على الشهادة</label>
+      <label class="checkline"><input type="checkbox" id="permCanProgress"> متابعة التقدم</label>
+    </div>
+    <div class="actions">
+      <button class="btn teal" type="submit" id="saveStudentPermissionsBtn">حفظ صلاحيات هذا الطالب</button>
+      <button class="btn light" type="button" id="resetStudentPermissionsBtn">إعادة إلى صلاحيات الباقة</button>
+    </div>
+    <p class="notice">يشترط وجود اشتراك نشط ومدفوع أو معفى للدورة. لا يمكن منح صلاحية دورة غير مسندة للطالب.</p>
+  </form>
+</section>
+
 <section class="panel">
   <div class="panel-head"><h2 class="section-title">تسجيل دفعة</h2></div>
   <form id="paymentForm" class="form-grid">
