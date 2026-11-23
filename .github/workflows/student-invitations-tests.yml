@@ -6,6 +6,7 @@ on:
       - "supabase/functions/**"
       - "supabase/config.toml"
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
+      - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
       - "public-site/student-*.html"
       - "public-site/assets/js/admin-students.js"
@@ -15,11 +16,14 @@ on:
       - ".github/workflows/student-invitations-tests.yml"
   push:
     branches:
+      - "main"
       - "feature/student-invitations-and-login-2026-11-23"
+      - "feature/student-invitations-live-deploy-2026-11-23"
     paths:
       - "supabase/functions/**"
       - "supabase/config.toml"
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
+      - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
       - "public-site/student-*.html"
       - "public-site/assets/js/admin-students.js"
@@ -68,12 +72,13 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
-      - name: Parse the TEST deployment script
+      - name: Parse deployment scripts
         shell: pwsh
         run: |
           $tokens = $null
           $parseErrors = $null
           $scriptPath = Join-Path $env:GITHUB_WORKSPACE "scripts/Deploy-StudentInvitations-TEST.ps1"
+      - "scripts/Deploy-StudentInvitations-LIVE.ps1"
           [System.Management.Automation.Language.Parser]::ParseFile($scriptPath, [ref]$tokens, [ref]$parseErrors) | Out-Null
           if ($parseErrors.Count -gt 0) {
             $parseErrors | Format-List | Out-String | Write-Error
