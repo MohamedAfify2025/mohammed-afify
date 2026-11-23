@@ -33,4 +33,6 @@ assert.match(traineeJs, /get_my_platform_permissions/);
 assert.match(traineeJs, /course\.lesson\.view/);
 assert.match(studentHtml, /permissionPanel/);
 
+assert.match(traineeJs, /has_platform_permission/);
+
 console.log("Dynamic permission checks passed.");
