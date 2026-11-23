@@ -1,0 +1,32 @@
+name: Private course playback helper tests
+
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/**"
+      - "tests/course-playback.test.mjs"
+      - ".github/workflows/private-course-playback-tests.yml"
+  push:
+    branches:
+      - main
+      - "feature/private-course-media-pilot-2026-11-23"
+    paths:
+      - "supabase/functions/**"
+      - "tests/course-playback.test.mjs"
+      - ".github/workflows/private-course-playback-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  node-helper-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run private playback helper tests
+        run: node tests/course-playback.test.mjs
