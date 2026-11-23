@@ -3,6 +3,39 @@
 
 BEGIN;
 
+DO $preflight$
+BEGIN
+  IF current_setting('server_version_num')::integer < 150000 THEN
+    RAISE EXCEPTION 'Dynamic permissions requires PostgreSQL 15 or later';
+  END IF;
+  IF to_regprocedure('membership_v2_private.is_admin()') IS NULL THEN
+    RAISE EXCEPTION 'Membership V2 administrator helper is missing; stop before applying this migration';
+  END IF;
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+     WHERE table_schema = 'public' AND table_name = 'profiles' AND column_name = 'user_id'
+  ) OR NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+     WHERE table_schema = 'public' AND table_name = 'profiles' AND column_name = 'role'
+  ) OR NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+     WHERE table_schema = 'public' AND table_name = 'profiles' AND column_name = 'status'
+  ) OR NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+     WHERE table_schema = 'public' AND table_name = 'profiles' AND column_name = 'account_state'
+  ) THEN
+    RAISE EXCEPTION 'Required Membership V2 profile columns are missing';
+  END IF;
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+     WHERE table_schema = 'public' AND table_name = 'course_catalog'
+       AND column_name = 'course_slug'
+  ) THEN
+    RAISE EXCEPTION 'Required course_catalog.course_slug column is missing';
+  END IF;
+END;
+$preflight$;
+
 CREATE TABLE IF NOT EXISTS public.platform_permission_definitions (
   permission_code text PRIMARY KEY,
   permission_name text NOT NULL,
