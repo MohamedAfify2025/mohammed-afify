@@ -157,6 +157,34 @@
 }
 .ma-global-header .ma-account,
 .ma-global-header .ma-join,
+
+.ma-global-header .ma-admin-link {
+  min-height: 39px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid #0b8f86;
+  border-radius: 10px;
+  color: #fff;
+  background: #0b8f86;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  box-shadow: 0 6px 15px rgba(11,143,134,.14);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.ma-global-header .ma-admin-link:hover {
+  transform: translateY(-1px);
+  background: #087b74;
+  box-shadow: 0 9px 20px rgba(11,143,134,.2);
+}
+.ma-global-header .ma-admin-link:focus-visible {
+  outline: 3px solid rgba(11,143,134,.28);
+  outline-offset: 2px;
+}
+.ma-global-header .ma-admin-short { display: none; }
+
 .ma-global-header .ma-language {
   min-height: 39px;
   display: inline-flex;
@@ -219,6 +247,7 @@
   .ma-primary-nav { gap: 13px; }
   .ma-primary-nav > a, .ma-dropdown-trigger { font-size: 11px; }
   .ma-global-header .ma-account { padding-inline: 9px; }
+  .ma-global-header .ma-admin-link { padding-inline: 9px; }
   .ma-global-header .ma-join { padding-inline: 11px; }
 }
 @media (max-width: 900px) {
@@ -283,8 +312,16 @@
   .ma-brand-copy small { font-size: 9px; }
   .ma-header-actions { gap: 6px; }
   .ma-global-header .ma-account { display: none; }
+  .ma-global-header .ma-admin-link { min-height: 36px; padding-inline: 8px; font-size: 10px; }
+  .ma-global-header .ma-admin-full { display: none; }
+  .ma-global-header .ma-admin-short { display: inline; }
   .ma-global-header .ma-join { min-height: 36px; padding-inline: 10px; font-size: 10px; }
   .ma-global-header .ma-language { min-width: 34px; min-height: 36px; }
+}
+@media (max-width: 360px) {
+  .ma-global-header .ma-language,
+  .ma-global-header .ma-join { display: none; }
+  .ma-global-header .ma-admin-link { min-height: 36px; padding-inline: 9px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ma-global-header *, .ma-global-header *::before, .ma-global-header *::after {
