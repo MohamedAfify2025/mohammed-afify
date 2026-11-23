@@ -27,6 +27,18 @@
 
 4. Added `tests/payment-remaining.test.mjs` and documented the command `node tests/payment-remaining.test.mjs` in the README. The five core balance cases and the payable-selector integration were executed against the actual helper extracted from this branch; all five cases passed.
 
+## Private lesson content security audit — 23 November 2026
+
+A separate source-level review found a **high-severity release blocker** in the root `academy/` package:
+
+- All 22 HTML pages inspected load the browser-side access controller, but 10 pages still contain hard-coded YouTube iframe sources in static HTML.
+- The inspected files contain 168 iframe elements in total and 167 YouTube video-ID occurrences counted page-by-page.
+- The unauthorized-course branch in the access controller replaces visible page content but does not clear existing iframe sources. The page gate is therefore not a server-side content boundary.
+- `accounting-lesson-u1-01.html` and `accounting-quiz-u1.html` also lack the early page-hide preload gate.
+- Full details and the recommended private media migration are in `SECURITY-AUDIT-PRIVATE-COURSE-CONTENT-2026-11-23.md`.
+
+**Release consequence:** keep paid lessons unavailable until lesson data, quiz answers, files, and video playback references are delivered from private storage or token-protected playback after a server-side subscription/capability check. The separated `public-site/` marketing package can remain public.
+
 ## Public-site isolation check — 23 November 2026
 
 - The current `public-site/index.html` does not load the Supabase browser SDK/configuration and contains no links to the private login, registration, student dashboard, or admin pages.
