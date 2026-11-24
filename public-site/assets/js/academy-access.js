@@ -197,6 +197,21 @@
       ? memberContext.coursePermissions
       : [];
 
+    const accountLink = $("academyAccountLink");
+    const subscribeLink = $("academySubscribeLink");
+    if (accountLink && isAdmin) {
+      accountLink.href = "admin-dashboard.html";
+      accountLink.textContent = "لوحة الإدارة الشاملة";
+      accountLink.className = "primary";
+      accountLink.setAttribute("aria-label", "فتح لوحة إدارة المنصة");
+    } else if (accountLink && isActiveStudent) {
+      accountLink.href = "student-space.html";
+      accountLink.textContent = "متابعة التعلّم";
+      accountLink.className = "primary";
+      accountLink.setAttribute("aria-label", "فتح مساحتك التعليمية");
+    }
+    if (subscribeLink && isAdmin) subscribeLink.hidden = true;
+
     let query = client
       .from("course_catalog")
       .select("course_slug,title,description")
