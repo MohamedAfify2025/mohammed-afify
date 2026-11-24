@@ -30,7 +30,7 @@
     .notice.warning{background:#fff7e5;color:#795400}
     .notice[hidden]{display:none}
     .student-list{display:grid;gap:10px;margin-top:18px}
-    .student-row{display:grid;grid-template-columns:1.05fr 1.15fr 1fr .82fr auto;gap:10px;align-items:end;padding:14px;background:#f8fafc;border:1px solid #e7edf4;border-radius:14px}
+    .student-row{display:grid;grid-template-columns:1fr 1.1fr 1fr 1fr .82fr auto;gap:10px;align-items:end;padding:14px;background:#f8fafc;border:1px solid #e7edf4;border-radius:14px}
     .student-row .field{min-width:0}
     .student-row input,.student-row select{background:#fff}
     .row-number{grid-column:1/-1;font-size:11px;font-weight:800;color:#718096;margin-bottom:-4px}
@@ -60,7 +60,7 @@
   <section>
     <span class="pill">إدارة المنصة</span>
     <h1>دعوة متدربين جدد</h1>
-    <p class="muted">أدخل بيانات كل متدرب، واختر طريقة الدعوة المناسبة له: البريد الإلكتروني أو WhatsApp.</p>
+    <p class="muted">أدخل بيانات المتدرب، وحدد الدورة المطلوبة ووسيلة الدعوة. هذا يسهّل على الإدارة اعتماد الطالب وإسناد الباقة المناسبة لاحقًا.</p>
   </section>
 
   <div id="configMessage" class="notice warning" hidden></div>
@@ -82,7 +82,7 @@
     <div class="top">
       <div>
         <h2>قائمة المدعوين</h2>
-        <p class="muted">أضف حتى 40 متدربًا، واختر لكل واحد وسيلة الدعوة بشكل مستقل.</p>
+        <p class="muted">أضف حتى 40 متدربًا. يجب تحديد الدورة المطلوبة لكل طالب حتى يظهر طلبه مع الباقات المطابقة في لوحة الإدارة.</p>
       </div>
       <div class="actions" style="margin-top:0">
         <span id="adminIdentity" class="pill"></span>
@@ -100,11 +100,11 @@
     </div>
 
     <div class="hint muted">
-      <strong>البريد الإلكتروني:</strong> يرسل النظام تلقائيًا رابط إنشاء الحساب الآمن إلى البريد الإلكتروني.
+      <strong>البريد الإلكتروني:</strong> يرسل النظام رابط إنشاء الحساب الآمن، وينشئ ملف الطالب بحالة قيد المراجعة والدورة المطلوبة.
       <br>
-      <strong>WhatsApp:</strong> يفتح محادثة برسالة جاهزة للرقم، وتضغط أنت على إرسال داخل WhatsApp.
+      <strong>WhatsApp:</strong> يفتح محادثة برسالة جاهزة تتضمن اسم الدورة، وتضغط أنت على إرسال. لا يُنشأ حساب تلقائيًا من رقم الهاتف وحده.
       <br>
-      عند اختيار WhatsApp، يمكن للمتدرب الرد ببريده الإلكتروني لاستكمال إنشاء حسابه، لأن تسجيل الدخول الحالي يعتمد على البريد.
+      بعد رد المتدرب ببريده الإلكتروني، أضفه كدعوة بريد إلكتروني حتى ينشأ حسابه ويظهر ضمن طلبات الاعتماد.
     </div>
 
     <div class="actions">
@@ -117,7 +117,7 @@
       <p class="muted">تظهر هنا وسيلة الدعوة التي اخترتها لكل متدرب. أرسل رسائل WhatsApp من الزر المقابل لكل متدرب.</p>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>الهاتف</th><th>طريقة الدعوة</th><th>إجراء الدعوة</th></tr></thead>
+          <thead><tr><th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>الهاتف</th><th>الدورة المطلوبة</th><th>طريقة الدعوة</th><th>إجراء الدعوة</th></tr></thead>
           <tbody id="previewBody"></tbody>
         </table>
       </div>
