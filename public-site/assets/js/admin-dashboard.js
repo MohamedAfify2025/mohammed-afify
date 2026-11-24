@@ -173,7 +173,9 @@
       } else {
         const empty=document.createElement("div");
         empty.className="no-lessons";
-        empty.textContent="لا توجد محاضرات أو مواد مسجلة لهذا المقرر حتى الآن.";
+        empty.textContent=course.course_slug === "business-administration"
+          ? "المنهج محفوظ كصفحة تعليمية مستقلة: 3 وحدات تفصيلية ووحدتان ملخصتان."
+          : "لا توجد محاضرات أو مواد مسجلة لهذا المقرر حتى الآن.";
         lessonPanel.appendChild(empty);
       }
 
@@ -187,6 +189,13 @@
       open.href="student-space.html?course="+encodeURIComponent(course.course_slug);
       open.textContent="فتح المحتوى للمدير";
       actions.append(manage,open);
+      if (course.course_slug === "business-administration") {
+        const curriculum=document.createElement("a");
+        curriculum.className="primary";
+        curriculum.href="academy/business-administration.html";
+        curriculum.textContent="فتح منهج الإدارة والأعمال";
+        actions.appendChild(curriculum);
+      }
 
       card.append(top,status,description,stats,lessonPanel,actions);
       host.appendChild(card);
