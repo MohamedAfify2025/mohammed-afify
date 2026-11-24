@@ -4,6 +4,8 @@
   const config = window.MEMBERSHIP_CONFIG || {};
   const url = String(config.supabaseUrl || "").trim();
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
+  let client = null;
+  let activeLessonUrl = "";
 
   function show(text, isError = false) {
     const el = $("pageMessage");
@@ -12,14 +14,49 @@
     el.hidden = !text;
   }
 
-  function addCourse(course) {
+  async function openLesson(lesson, button) {
+    if (button) button.disabled = true;
+    show("جارٍ تحميل المحاضرة والتحقق من صلاحية الوصول...");
+    try {
+      const { data, error } = await client.storage
+        .from(lesson.storage_bucket)
+        .download(lesson.storage_path);
+      if (error || !data) throw error || new Error("لم يتم العثور على ملف المحاضرة.");
+      if (data.size <= 0) throw new Error("ملف المحاضرة فارغ.");
+
+      const nextUrl = URL.createObjectURL(data);
+      const frame = $("lessonFrame");
+      frame.src = "about:blank";
+      if (activeLessonUrl) URL.revokeObjectURL(activeLessonUrl);
+      activeLessonUrl = nextUrl;
+
+      $("lessonTitle").textContent = lesson.title || "المحاضرة";
+      $("lessonViewer").hidden = false;
+      frame.src = nextUrl;
+      $("lessonViewer").scrollIntoView({ behavior: "smooth", block: "start" });
+      show("تم فتح المحاضرة داخل مساحتك التعليمية.");
+    } catch (error) {
+      show("تعذر فتح المحاضرة. تأكد من أن اشتراكك يتضمن صلاحية مشاهدة صفحة المقرر، ثم أعد المحاولة.", true);
+    } finally {
+      if (button) button.disabled = false;
+    }
+  }
+
+  function closeLesson() {
+    $("lessonViewer").hidden = true;
+    $("lessonFrame").src = "about:blank";
+    if (activeLessonUrl) URL.revokeObjectURL(activeLessonUrl);
+    activeLessonUrl = "";
+  }
+
+  function addCourse(course, lessons) {
     const li = document.createElement("li");
     li.className = "course-item";
 
     const details = document.createElement("div");
     const name = document.createElement("div");
     name.className = "course-name";
-    name.textContent = course.course_title || course.course_slug || "دورة";
+    name.textContent = course.course_title || course.title || course.course_slug || "دورة";
     const slug = document.createElement("small");
     slug.className = "course-slug";
     slug.textContent = course.course_slug || "";
@@ -42,18 +79,40 @@
       badge.textContent = label + (allowed ? " · متاح" : " · غير متاح");
       badges.appendChild(badge);
     }
+
     li.append(details, badges);
+
+    if (lessons.length) {
+      const lessonList = document.createElement("div");
+      lessonList.className = "lesson-list";
+      const lessonHeading = document.createElement("div");
+      lessonHeading.className = "lesson-heading";
+      lessonHeading.textContent = "المحاضرات المتاحة";
+      lessonList.appendChild(lessonHeading);
+
+      for (const lesson of lessons) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "lesson-open";
+        button.textContent = "فتح: " + (lesson.title || lesson.lesson_slug);
+        button.addEventListener("click", () => openLesson(lesson, button));
+        lessonList.appendChild(button);
+      }
+      li.appendChild(lessonList);
+    }
+
     $("courseList").appendChild(li);
   }
 
   async function boot() {
-    if (!window.supabase?.createClient || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
+    if (!window.supabase?.createClient ||
+        !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
         window.isMembershipPublicKey?.(key) !== true) {
       show("بوابة الطلاب لم تُربط بمشروع Supabase بعد.", true);
       return;
     }
 
-    const client = window.supabase.createClient(url, key, {
+    client = window.supabase.createClient(url, key, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
     const { data: sessionData, error: sessionError } = await client.auth.getSession();
@@ -99,7 +158,24 @@
       show("هذه هي الصلاحيات المفعّلة لحسابك في كل دورة. لا يمكن للحساب تعديلها بنفسه.");
     }
 
-    allowedCourses.forEach((course) => addCourse(course));
+    const { data: lessonRows, error: lessonError } = await client
+      .from("course_lessons")
+      .select("course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order")
+      .eq("is_published", true)
+      .order("sort_order", { ascending: true });
+    if (lessonError) throw lessonError;
+
+    const lessonsByCourse = new Map();
+    for (const lesson of (Array.isArray(lessonRows) ? lessonRows : [])) {
+      const list = lessonsByCourse.get(lesson.course_slug) || [];
+      list.push(lesson);
+      lessonsByCourse.set(lesson.course_slug, list);
+    }
+
+    allowedCourses.forEach((course) => {
+      addCourse(course, lessonsByCourse.get(course.course_slug) || []);
+    });
+
     if (!allowedCourses.length) {
       show("حسابك معتمد، لكن لا يوجد اشتراك تدريبي نشط مسند إلى حسابك حاليًا.");
       return;
@@ -109,15 +185,10 @@
   }
 
   $("logoutButton").addEventListener("click", async () => {
-    if (!window.supabase?.createClient || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
-        window.isMembershipPublicKey?.(key) !== true) {
-      location.href = "student-login.html";
-      return;
-    }
-    const client = window.supabase.createClient(url, key);
-    await client.auth.signOut();
+    if (client) await client.auth.signOut();
     location.href = "student-login.html";
   });
+  $("closeLesson").addEventListener("click", closeLesson);
 
   boot().catch((error) => show(error.message || "تعذر تحميل مساحتك التعليمية.", true));
 })();
