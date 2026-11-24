@@ -92,9 +92,18 @@
     li.className = "course-item";
 
     const details = document.createElement("div");
-    const name = document.createElement("div");
-    name.className = "course-name";
+    const name = document.createElement("button");
+    name.type = "button";
+    name.className = "course-name course-open";
     name.textContent = course.course_title || course.title || course.course_slug || "دورة";
+    name.title = lessons.length ? "اضغط لفتح أول محاضرة في هذا المقرر" : "لا توجد محاضرات مضافة لهذا المقرر بعد";
+    name.addEventListener("click", () => {
+      if (lessons.length) {
+        openLesson(lessons[0], name);
+      } else {
+        show("لا توجد محاضرات مسجلة لهذا المقرر حتى الآن.", true);
+      }
+    });
     const slug = document.createElement("small");
     slug.className = "course-slug";
     slug.textContent = course.course_slug || "";
