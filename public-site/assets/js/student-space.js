@@ -56,9 +56,9 @@
         '};' +
         'try{Object.defineProperty(window,"localStorage",{configurable:true,value:store});}' +
         'catch(e){window.localStorage=store;}' +
-      '})();<\\/script>';
+      '})();</' + 'script>';
 
-      const injected = source.replace(/<head\\b[^>]*>/i, (head) => head + bridge);
+      const injected = source.replace(/<head\b[^>]*>/i, (head) => head + bridge);
       if (injected === source) throw new Error("تعذر تهيئة صفحة المحاضرة.");
 
       const blob = new Blob([injected], { type: "text/html;charset=utf-8" });
