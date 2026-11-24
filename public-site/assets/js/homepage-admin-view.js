@@ -35,6 +35,35 @@
     }
   }
 
+  function enableStudentHome() {
+    const accountLink = document.getElementById("maAccountLink");
+    const joinLink = document.getElementById("maJoinLink");
+
+    if (accountLink) {
+      accountLink.href = "student-space.html";
+      accountLink.setAttribute("aria-label", "فتح مساحتي التعليمية");
+    }
+
+    if (joinLink) {
+      joinLink.href = "student-space.html";
+      joinLink.setAttribute("aria-label", "متابعة التعلّم في مساحتي التعليمية");
+    }
+  }
+
+  function resetGuestHome() {
+    document.body.classList.remove("ma-admin-session");
+    const accountLink = document.getElementById("maAccountLink");
+    const joinLink = document.getElementById("maJoinLink");
+    if (accountLink) {
+      accountLink.href = "student-login.html";
+      accountLink.setAttribute("aria-label", "تسجيل الدخول إلى حسابي");
+    }
+    if (joinLink) {
+      joinLink.href = "student-login.html";
+      joinLink.setAttribute("aria-label", "ابدأ التعلّم");
+    }
+  }
+
   async function refreshHomeAccess() {
     if (!client || checking) return;
     checking = true;
@@ -44,7 +73,7 @@
         await client.auth.getSession();
 
       if (sessionError || !sessionData?.session?.user?.id) {
-        document.body.classList.remove("ma-admin-session");
+        resetGuestHome();
         return;
       }
 
@@ -55,11 +84,20 @@
         .eq("user_id", userId)
         .maybeSingle();
 
-      if (profileError || !profile ||
-          profile.role !== "admin" ||
+      if (profileError || !profile) {
+        resetGuestHome();
+        return;
+      }
+
+      if (profile.role === "student") {
+        enableStudentHome();
+        return;
+      }
+
+      if (profile.role !== "admin" ||
           profile.status !== "approved" ||
           profile.account_state !== "active") {
-        document.body.classList.remove("ma-admin-session");
+        resetGuestHome();
         return;
       }
 
@@ -68,14 +106,14 @@
         await client.rpc("is_platform_admin");
 
       if (adminError || isAdmin !== true) {
-        document.body.classList.remove("ma-admin-session");
+        resetGuestHome();
         return;
       }
 
       enableAdminHome();
     } catch (_) {
       // Fail closed: visitors retain the normal public course-request notice.
-      document.body.classList.remove("ma-admin-session");
+      resetGuestHome();
     } finally {
       checking = false;
     }
