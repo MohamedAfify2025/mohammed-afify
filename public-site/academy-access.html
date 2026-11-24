@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/site-clickable-content.css">
+  <link rel="stylesheet" href="assets/css/platform-finish-v1.css">
   <style>
     *{box-sizing:border-box}
     body{margin:0;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif}
@@ -34,7 +35,7 @@
     @media(max-width:560px){main{margin:20px auto}.course-card{padding:16px}.course-card-actions a{flex:1;text-align:center}}
   </style>
 </head>
-<body>
+<body class="ma-platform-page ma-platform-library">
 <main>
   <header class="top">
     <div class="brand">MOHAMMED AFIFY · ACADEMY</div>
@@ -53,6 +54,24 @@
     <h2>جميع الدورات المتاحة</h2>
     <span class="muted"><strong id="courseCount">—</strong> دورة</span>
   </div>
+  <section class="catalog-controls" aria-label="البحث والتصفية في الدورات">
+    <label class="catalog-search" for="courseSearchInput">
+      <span aria-hidden="true">⌕</span>
+      <input id="courseSearchInput" type="search" placeholder="ابحث باسم الدورة أو الموضوع..." autocomplete="off">
+    </label>
+    <div class="catalog-filter-wrap">
+      <span class="catalog-filter-label">تصفية حسب المجال</span>
+      <div id="courseCategoryFilters" class="catalog-filters" role="group" aria-label="مجالات الدورات">
+        <button type="button" class="catalog-filter is-active" data-course-filter="all" aria-pressed="true">كل المجالات</button>
+        <button type="button" class="catalog-filter" data-course-filter="programming" aria-pressed="false">البرمجة</button>
+        <button type="button" class="catalog-filter" data-course-filter="data" aria-pressed="false">تحليل البيانات</button>
+        <button type="button" class="catalog-filter" data-course-filter="digital" aria-pressed="false">المهارات الرقمية</button>
+        <button type="button" class="catalog-filter" data-course-filter="business" aria-pressed="false">الإدارة والأعمال</button>
+        <button type="button" class="catalog-filter" data-course-filter="erp" aria-pressed="false">أنظمة ERP</button>
+      </div>
+    </div>
+  </section>
+  <p id="courseFilterSummary" class="catalog-filter-summary" aria-live="polite">تصفّح كل المسارات التعليمية المتاحة.</p>
   <div id="courseListMessage" class="notice">جارٍ تحميل الدورات...</div>
   <div id="courseList" class="course-grid" aria-live="polite"></div>
   <div class="actions" style="justify-content:center;margin-top:25px">
@@ -65,7 +84,7 @@
 <script src="assets/js/membership-config.local.js"></script>
 <script src="assets/js/membership-config.js"></script>
 <script src="assets/js/academy-member-access.js?v=20261124-1" defer></script>
-<script src="assets/js/academy-access.js?v=20261124-direct-learning-v2" defer></script>
+<script src="assets/js/academy-access.js?v=20261124-catalog-search-v1" defer></script>
 <script src="assets/js/site-universal-interactions.js" defer></script>
 </body>
 </html>
