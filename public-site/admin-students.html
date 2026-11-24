@@ -37,6 +37,12 @@
     .pill{display:inline-block;background:#e8f7f1;color:#126447;border-radius:30px;padding:3px 9px;font-size:11px;font-weight:800}
     .hint{padding:12px 14px;border:1px solid #d9eee9;background:#f2fbf8;border-radius:12px;margin-top:14px}
     .hint strong{color:#126447}
+    .admin-promotion{padding:18px;background:#f8fbff;border:1px solid #dce8f5;border-radius:14px;margin:20px 0}
+    .admin-promotion h3{margin:0 0 8px;font-size:17px}
+    .admin-promotion .promotion-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin-top:12px}
+    .admin-promotion .promotion-message{padding:11px 13px;border-radius:10px;background:#e8f7f1;color:#126447;font-size:12px;line-height:1.8;margin-top:12px}
+    .admin-promotion .promotion-message.error{background:#fff0f0;color:#9b2632}
+    .admin-promotion .promotion-message[hidden]{display:none}
     .file-input{display:none}
     .table-wrap{overflow:auto}
     table{width:100%;border-collapse:collapse;min-width:620px}
@@ -91,6 +97,24 @@
       </div>
     </div>
 
+    <section class="admin-promotion" aria-labelledby="adminPromotionTitle">
+      <h3 id="adminPromotionTitle">إنشاء مسؤول جديد أو ترقية حساب موثّق</h3>
+      <p class="muted">لإنشاء حساب مدير جديد: أنشئ الحساب أولًا من نموذج التسجيل العام، ثم أكّد البريد الإلكتروني من الرسالة التي تصلك. بعد ذلك أدخل البريد نفسه هنا لتنفيذ الترقية.</p>
+      <p class="muted">هذه العملية لا تعمل إلا لمدير حالي معتمد ونشط، وتسجل كل ترقية في سجل تدقيق المنصة. لا يمكن للزائر اختيار دور المدير بنفسه.</p>
+      <div class="actions" style="margin-top:8px">
+        <a class="btn secondary" href="student-subscribe.html" target="_blank" rel="noopener">فتح نموذج إنشاء الحساب</a>
+      </div>
+      <form id="adminPromotionForm">
+        <div class="promotion-actions">
+          <div>
+            <label for="promoteAdminEmail">البريد الإلكتروني للحساب الذي تريد ترقيته</label>
+            <input id="promoteAdminEmail" type="email" maxlength="254" autocomplete="off" placeholder="name@example.com" required>
+          </div>
+          <button id="promoteAdminButton" type="submit" class="teal">ترقية إلى مدير</button>
+        </div>
+      </form>
+      <div id="promotionMessage" class="promotion-message" role="status" hidden></div>
+    </section>
     <div id="studentRows" class="student-list" aria-live="polite"></div>
 
     <div class="actions">

@@ -417,6 +417,65 @@
       message("تم تسجيل الخروج.");
     });
 
+    $("adminPromotionForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = $("promoteAdminButton");
+      const host = $("promotionMessage");
+      const emailInput = $("promoteAdminEmail");
+      const email = emailInput.value.trim().toLowerCase();
+
+      const showPromotion = (text, isError = false) => {
+        host.textContent = text;
+        host.className = "promotion-message" + (isError ? " error" : "");
+        host.hidden = !text;
+      };
+
+      if (!adminReady) {
+        showPromotion("هذه العملية متاحة لمدير المنصة المعتمد فقط.", true);
+        return;
+      }
+      if (!email || email.length > 254 || !emailInput.checkValidity()) {
+        showPromotion("اكتب بريدًا إلكترونيًا صحيحًا.", true);
+        return;
+      }
+
+      const confirmation = "سيتم منح دور مدير المنصة للحساب: " + email +
+        ". يجب أن يكون البريد مؤكّدًا، وسيتم تسجيل الترقية في سجل التدقيق. هل تريد المتابعة؟";
+      if (!window.confirm(confirmation)) return;
+
+      button.disabled = true;
+      button.textContent = "جارٍ التحقق والترقية…";
+      showPromotion("جارٍ التحقق من الحساب وتأكيد البريد وصلاحية المدير الحالي…");
+      try {
+        const { data, error } = await client.rpc("promote_verified_user_to_admin", {
+          p_target_email: email
+        });
+        if (error) throw error;
+
+        const result = Array.isArray(data) ? data[0] : data;
+        if (!result) throw new Error("لم تُرجع قاعدة البيانات نتيجة واضحة للترقية.");
+
+        if (result.already_admin === true) {
+          showPromotion("هذا الحساب مدير معتمد ونشط بالفعل. لم يتم إجراء أي تغيير.");
+        } else {
+          showPromotion("تمت ترقية الحساب " + email + " إلى مدير منصة بنجاح. استخدم هذا البريد لتسجيل الدخول في تبويب جديد.");
+          $("adminPromotionForm").reset();
+        }
+      } catch (error) {
+        const raw = String(error?.message || "");
+        let safeMessage = "تعذر ترقية الحساب. تحقق من البريد وحالة الحساب ثم أعد المحاولة.";
+        if (/not found/i.test(raw)) safeMessage = "لم يتم العثور على حساب بهذا البريد. أنشئ الحساب أولًا من نموذج التسجيل ثم أكّد بريده الإلكتروني.";
+        else if (/not verified|not confirmed|email is not verified/i.test(raw)) safeMessage = "البريد الإلكتروني غير مؤكد بعد. افتح رسالة التأكيد أولًا، ثم أعد الترقية.";
+        else if (/Only an active platform administrator/i.test(raw)) safeMessage = "يلزم أن تكون داخلًا بحساب مدير معتمد ونشط لتنفيذ هذه العملية.";
+        else if (/suspended/i.test(raw)) safeMessage = "الحساب المستهدف موقوف. أعد تفعيله ومراجعة حالته قبل الترقية.";
+        else if (/rejected/i.test(raw)) safeMessage = "هذا الحساب لديه طلب مرفوض. راجع حالة الطلب قبل ترقيته.";
+        showPromotion(safeMessage, true);
+      } finally {
+        button.disabled = false;
+        button.textContent = "ترقية إلى مدير";
+      }
+    });
+
     $("addStudentButton").addEventListener("click", () => {
       const row = addStudentRow();
       invalidatePreview();
