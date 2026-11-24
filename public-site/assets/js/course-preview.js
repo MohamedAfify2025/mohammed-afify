@@ -34,7 +34,7 @@
       if (adminError) throw adminError;
       if (allowed !== true) return false;
       // Keep the Odoo introduction visible; open the full business curriculum directly.
-      if (slug === "odoo-training") return false;
+      if (slug === "odoo-training") { window.location.replace("academy/odoo-training.html"); return true; }
       if (slug === "business-administration") {
         window.location.replace("academy/business-administration.html");
         return true;
