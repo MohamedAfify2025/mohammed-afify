@@ -53,6 +53,19 @@
         initialProgress = null;
       }
 
+      const navigationBridge = '<script>(function(){' +
+        'var prefix="/MohamedAfify2025/mohammed-afify/main/";' +
+        'document.addEventListener("click",function(event){' +
+          'var link=event.target&&event.target.closest?event.target.closest("a[href]"):null;' +
+          'if(!link)return;' +
+          'var target;try{target=new URL(link.href,document.baseURI);}catch(e){return;}' +
+          'if(target.origin!=="https://raw.githubusercontent.com"||target.pathname.indexOf(prefix)!==0||!target.pathname.toLowerCase().endsWith(".html"))return;' +
+          'var sourcePath=target.pathname.slice(prefix.length);' +
+          'if(sourcePath.indexOf("academy/")!==0)return;' +
+          'event.preventDefault();event.stopPropagation();' +
+          'parent.postMessage({type:"ma-open-private-academy-page",source_path:sourcePath},"*");' +
+        '},true);' +
+      '})();</' + 'script>';
       const bridge = '<script>(function(){' +
         'var key="ma_lecture1_visited";' +
         'var initial=' + JSON.stringify(initialProgress) + ';' +
@@ -67,7 +80,7 @@
         'catch(e){window.localStorage=store;}' +
       '})();</' + 'script>';
 
-      let frameHead = bridge;
+      let frameHead = bridge + navigationBridge;
       const baseUrl = String(lesson.source_base_url || "").trim();
       if (baseUrl) {
         let parsedBase;
@@ -700,6 +713,18 @@
         }
       } catch (_) {
         // Ignore malformed progress messages from the sandboxed frame.
+      }
+    } else if (message?.type === "ma-open-private-academy-page" &&
+        typeof message.source_path === "string" &&
+        /^academy\/[a-z0-9-]+\.html$/i.test(message.source_path)) {
+      const currentCourseLessons = currentLesson
+        ? (lessonsByCourse.get(currentLesson.course_slug) || [])
+        : [];
+      const targetLesson = currentCourseLessons.find(lesson => lesson.source_path === message.source_path);
+      if (targetLesson) {
+        openLesson(targetLesson, null);
+      } else {
+        show("هذه الصفحة المرتبطة لم تُستورد إلى المكتبة الخاصة بعد، لذلك لم نفتح الرابط العام.", true);
       }
     } else if (message?.type === "ma-lecture1-storage-remove" && message.key === keyName) {
       localStorage.removeItem(keyName);
