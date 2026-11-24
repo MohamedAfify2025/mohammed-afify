@@ -79,7 +79,10 @@
     return dataRows.map((cells) => ({
       full_name: cells[0] || "",
       email: cells[1] || "",
-      phone: cells[2] || ""
+      phone: cells[2] || "",
+      delivery_method: ["whatsapp", "واتساب"].includes(String(cells[3] || "").trim().toLowerCase())
+        ? "whatsapp"
+        : ((cells[1] || "").trim() ? "email" : "whatsapp")
     }));
   }
 
@@ -114,6 +117,26 @@
       row.appendChild(wrap);
     });
 
+    const methodWrap = document.createElement("div");
+    methodWrap.className = "field";
+    const methodLabel = document.createElement("label");
+    methodLabel.textContent = "طريقة الدعوة";
+    const methodSelect = document.createElement("select");
+    methodSelect.className = "student-delivery_method";
+    [
+      { value: "email", label: "البريد الإلكتروني" },
+      { value: "whatsapp", label: "WhatsApp" }
+    ].forEach((optionData) => {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.label;
+      methodSelect.appendChild(option);
+    });
+    methodSelect.value = student.delivery_method ||
+      (student.email ? "email" : (student.phone ? "whatsapp" : "email"));
+    methodWrap.append(methodLabel, methodSelect);
+    row.appendChild(methodWrap);
+
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "remove";
@@ -130,6 +153,7 @@
     row.querySelectorAll("input").forEach((input) => {
       input.addEventListener("input", invalidatePreview);
     });
+    methodSelect.addEventListener("change", invalidatePreview);
     $("studentRows").appendChild(row);
     return row;
   }
@@ -145,7 +169,8 @@
     return [...$("studentRows").querySelectorAll(".student-row")].map((row) => ({
       full_name: row.querySelector(".student-full_name").value.trim(),
       email: row.querySelector(".student-email").value.trim().toLowerCase(),
-      phone: row.querySelector(".student-phone").value.trim()
+      phone: row.querySelector(".student-phone").value.trim(),
+      delivery_method: row.querySelector(".student-delivery_method").value
     })).filter((row) => row.full_name || row.email || row.phone);
   }
 
@@ -174,8 +199,14 @@
       if (name.length < 2 || name.length > 120) {
         errors.push("المتدرب " + line + ": اكتب الاسم من حرفين إلى 120 حرفًا.");
       }
-      if (!email && !phone) {
-        errors.push("المتدرب " + line + ": أدخل البريد الإلكتروني أو رقم WhatsApp.");
+      if (row.delivery_method === "email" && !email) {
+        errors.push("المتدرب " + line + ": اخترت البريد الإلكتروني؛ أدخل عنوان البريد.");
+      }
+      if (row.delivery_method === "whatsapp" && !phone) {
+        errors.push("المتدرب " + line + ": اخترت WhatsApp؛ أدخل رقم الهاتف مع كود الدولة.");
+      }
+      if (!["email", "whatsapp"].includes(row.delivery_method)) {
+        errors.push("المتدرب " + line + ": اختر طريقة دعوة صحيحة.");
       }
       if (email && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254)) {
         errors.push("المتدرب " + line + ": البريد الإلكتروني غير صالح.");
@@ -214,8 +245,7 @@
 
     rows.forEach((student, index) => {
       const tr = document.createElement("tr");
-      const method = student.email && student.phone ? "البريد + WhatsApp" :
-        (student.email ? "البريد الإلكتروني" : "WhatsApp");
+      const method = student.delivery_method === "whatsapp" ? "WhatsApp" : "البريد الإلكتروني";
 
       [index + 1, student.full_name, student.email || "—", student.phone || "—", method].forEach((value) => {
         const td = document.createElement("td");
@@ -224,7 +254,7 @@
       });
 
       const actionCell = document.createElement("td");
-      if (student.phone) {
+      if (student.delivery_method === "whatsapp" && student.phone) {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "secondary";
@@ -232,7 +262,7 @@
         button.dataset.whatsappIndex = String(index);
         actionCell.appendChild(button);
       } else {
-        actionCell.textContent = "—";
+        actionCell.textContent = "يُرسل تلقائيًا عند تنفيذ دعوات البريد";
       }
       tr.appendChild(actionCell);
       host.appendChild(tr);
@@ -361,10 +391,10 @@
       previewRows = rows;
       renderPreview(rows);
       previewFingerprint = JSON.stringify(rows);
-      const emailCount = rows.filter((row) => row.email).length;
-      const phoneCount = rows.filter((row) => row.phone).length;
+      const emailCount = rows.filter((row) => row.delivery_method === "email").length;
+      const whatsappCount = rows.filter((row) => row.delivery_method === "whatsapp").length;
       message("القائمة جاهزة: " + rows.length + " متدربًا؛ " +
-        emailCount + " دعوة بريد إلكتروني و" + phoneCount + " رسالة WhatsApp يمكن فتحها يدويًا.");
+        emailCount + " دعوة بريد إلكتروني و" + whatsappCount + " دعوة WhatsApp.");
     });
 
     $("previewBody").addEventListener("click", (event) => {
@@ -372,7 +402,7 @@
       if (!button) return;
       const index = Number(button.dataset.whatsappIndex);
       const student = previewRows[index];
-      if (!student?.phone) return;
+      if (!student?.phone || student.delivery_method !== "whatsapp") return;
       const opened = window.open(whatsappUrl(student), "_blank");
       if (opened) opened.opener = null;
       else message("المتصفح منع فتح WhatsApp. اسمح بالنوافذ المنبثقة لهذا الموقع ثم أعد المحاولة.", true);
@@ -396,9 +426,16 @@
         return;
       }
 
-      const emailStudents = rows.filter((row) => row.email);
+      const emailStudents = rows
+        .filter((row) => row.delivery_method === "email")
+        .map(({ full_name, email, phone }) => ({ full_name, email, phone }));
+      const whatsappCount = rows.filter((row) => row.delivery_method === "whatsapp").length;
       if (!emailStudents.length) {
-        message("لا توجد عناوين بريد إلكتروني في القائمة. استخدم زر «فتح WhatsApp» بجوار كل رقم؛ رسالة WhatsApp لا تُرسل تلقائيًا.", true);
+        if (whatsappCount) {
+          message("جميع المتدربين محدد لهم WhatsApp. استخدم زر «فتح WhatsApp» بجوار كل متدرب، ثم اضغط إرسال داخل المحادثة. لا يوجد إرسال تلقائي دون WhatsApp Business API.");
+        } else {
+          message("لا توجد دعوات جاهزة للإرسال.", true);
+        }
         return;
       }
 
@@ -420,7 +457,8 @@
         message(
           "تم إرسال " + Number(data?.invited_count || 0) +
           " دعوة عبر البريد، وتعذر إرسال " + Number(data?.failed_count || 0) +
-          ". أرقام WhatsApp ظلت جاهزة للإرسال اليدوي من جدول المراجعة."
+          ". يوجد " + whatsappCount +
+          " متدربًا محددًا لهم WhatsApp؛ افتح محادثة كل متدرب من جدول المراجعة واضغط إرسال."
         );
       } catch (error) {
         message(error.message || "تعذر إرسال الدعوات. راجع إعداد Edge Function.", true);

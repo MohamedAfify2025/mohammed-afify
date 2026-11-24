@@ -16,7 +16,7 @@
     .card{background:#fff;border:1px solid #e3eaf2;border-radius:18px;padding:24px;margin:16px 0;box-shadow:0 8px 24px #17243b08}
     h1{font-size:clamp(25px,4vw,34px);margin:8px 0}h2{font-size:19px;margin:0 0 12px}
     label{display:block;font-size:13px;font-weight:800;margin:0 0 6px}
-    input{width:100%;font:inherit;border:1px solid #d9e2ed;border-radius:10px;padding:11px 12px;background:#fff;color:#17243b;min-height:44px}
+    input,select{width:100%;font:inherit;border:1px solid #d9e2ed;border-radius:10px;padding:11px 12px;background:#fff;color:#17243b;min-height:44px}
     input:focus{outline:2px solid #19b7a233;border-color:#19a997}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
@@ -30,9 +30,9 @@
     .notice.warning{background:#fff7e5;color:#795400}
     .notice[hidden]{display:none}
     .student-list{display:grid;gap:10px;margin-top:18px}
-    .student-row{display:grid;grid-template-columns:1.1fr 1.15fr 1fr auto;gap:10px;align-items:end;padding:14px;background:#f8fafc;border:1px solid #e7edf4;border-radius:14px}
+    .student-row{display:grid;grid-template-columns:1.05fr 1.15fr 1fr .82fr auto;gap:10px;align-items:end;padding:14px;background:#f8fafc;border:1px solid #e7edf4;border-radius:14px}
     .student-row .field{min-width:0}
-    .student-row input{background:#fff}
+    .student-row input,.student-row select{background:#fff}
     .row-number{grid-column:1/-1;font-size:11px;font-weight:800;color:#718096;margin-bottom:-4px}
     .pill{display:inline-block;background:#e8f7f1;color:#126447;border-radius:30px;padding:3px 9px;font-size:11px;font-weight:800}
     .hint{padding:12px 14px;border:1px solid #d9eee9;background:#f2fbf8;border-radius:12px;margin-top:14px}
@@ -60,7 +60,7 @@
   <section>
     <span class="pill">إدارة المنصة</span>
     <h1>دعوة متدربين جدد</h1>
-    <p class="muted">أضف اسم كل متدرب وبريده الإلكتروني أو رقم WhatsApp، ثم راجع القائمة واختر إرسال الدعوات.</p>
+    <p class="muted">أدخل بيانات كل متدرب، واختر طريقة الدعوة المناسبة له: البريد الإلكتروني أو WhatsApp.</p>
   </section>
 
   <div id="configMessage" class="notice warning" hidden></div>
@@ -82,7 +82,7 @@
     <div class="top">
       <div>
         <h2>قائمة المدعوين</h2>
-        <p class="muted">يمكنك إضافة طالب واحد أو مجموعة حتى 40 طالبًا في الدفعة الواحدة.</p>
+        <p class="muted">أضف حتى 40 متدربًا، واختر لكل واحد وسيلة الدعوة بشكل مستقل.</p>
       </div>
       <div class="actions" style="margin-top:0">
         <span id="adminIdentity" class="pill"></span>
@@ -100,24 +100,24 @@
     </div>
 
     <div class="hint muted">
-      <strong>الدعوة بالبريد:</strong> يرسل النظام تلقائيًا رابط إنشاء الحساب الآمن إلى البريد الإلكتروني.
+      <strong>البريد الإلكتروني:</strong> يرسل النظام تلقائيًا رابط إنشاء الحساب الآمن إلى البريد الإلكتروني.
       <br>
-      <strong>الدعوة عبر WhatsApp:</strong> يفتح محادثة برسالة جاهزة للرقم، وتضغط أنت على إرسال داخل WhatsApp.
+      <strong>WhatsApp:</strong> يفتح محادثة برسالة جاهزة للرقم، وتضغط أنت على إرسال داخل WhatsApp.
       <br>
-      عند إدخال رقم الهاتف فقط، ستطلب الرسالة من المتدرب إرسال بريده الإلكتروني لاستكمال إنشاء حسابه؛ تسجيل الدخول الحالي يعتمد على البريد الإلكتروني.
+      عند اختيار WhatsApp، يمكن للمتدرب الرد ببريده الإلكتروني لاستكمال إنشاء حسابه، لأن تسجيل الدخول الحالي يعتمد على البريد.
     </div>
 
     <div class="actions">
       <button id="previewButton" class="secondary" type="button">مراجعة قائمة الدعوات</button>
-      <button id="sendInvitesButton" class="teal" type="button">إرسال دعوات البريد الإلكتروني</button>
+      <button id="sendInvitesButton" class="teal" type="button">إرسال دعوات البريد المختارة</button>
     </div>
 
     <div id="previewPanel" hidden>
       <h2>مراجعة قبل الإرسال <span id="previewCount" class="pill"></span></h2>
-      <p class="muted">اضغط «فتح WhatsApp» بجوار أي رقم لإرسال رسالة الدعوة يدويًا.</p>
+      <p class="muted">تظهر هنا وسيلة الدعوة التي اخترتها لكل متدرب. أرسل رسائل WhatsApp من الزر المقابل لكل متدرب.</p>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>الهاتف</th><th>طريقة الدعوة</th><th>WhatsApp</th></tr></thead>
+          <thead><tr><th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>الهاتف</th><th>طريقة الدعوة</th><th>إجراء الدعوة</th></tr></thead>
           <tbody id="previewBody"></tbody>
         </table>
       </div>
