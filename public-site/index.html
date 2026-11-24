@@ -83,12 +83,12 @@
 
     <div class="ma-header-actions">
       <button id="languageToggle" class="ma-language" type="button" aria-label="Switch language">EN</button>
-      <a class="ma-account" href="student-login.html" data-i18n="navAccount">حسابي</a>
+      <a class="ma-account" id="maAccountLink" href="student-login.html" data-i18n="navAccount">حسابي</a>
       <a class="ma-admin-link" href="admin-students.html" aria-label="إدارة المنصة">
         <span class="ma-admin-full" data-i18n="navAdmin">إدارة المنصة</span>
         <span class="ma-admin-short" data-i18n="navAdminShort">الإدارة</span>
       </a>
-      <a class="ma-join" href="student-login.html" data-i18n="navJoin">ابدأ التعلّم</a>
+      <a class="ma-join" id="maJoinLink" href="student-login.html" data-i18n="navJoin">ابدأ التعلّم</a>
     </div>
   </div>
 </header>
@@ -135,7 +135,25 @@
       </div>
     </section>
 
-<section class="section" aria-label="Course access notice"><div class="container" style="padding:22px 24px;border:1px solid #dce7ef;border-radius:18px;background:#f7fbff;text-align:center"><strong>محتوى الدروس الكاملة متاح بعد تفعيل الاشتراك</strong><p style="margin:8px 0 0;color:#5c6b80">يمكنك استعراض المجالات والدورات هنا، والتواصل معنا لمعرفة تفاصيل التسجيل والوصول إلى المحتوى التعليمي.</p><a class="button button-primary" href="academy-access.html" style="margin-top:14px">اطلب تفاصيل الدورات</a></div></section>
+<section class="section guest-course-access" id="courseAccessNotice" aria-label="Course access notice"><div class="container" style="padding:22px 24px;border:1px solid #dce7ef;border-radius:18px;background:#f7fbff;text-align:center"><strong>محتوى الدروس الكاملة متاح بعد تفعيل الاشتراك</strong><p style="margin:8px 0 0;color:#5c6b80">يمكنك استعراض المجالات والدورات هنا، والتواصل معنا لمعرفة تفاصيل التسجيل والوصول إلى المحتوى التعليمي.</p><a class="button button-primary" href="academy-access.html" style="margin-top:14px">اطلب تفاصيل الدورات</a></div></section>
+<style>
+  #adminCourseAccessPanel { display:none; }
+  body.ma-admin-session #courseAccessNotice { display:none !important; }
+  body.ma-admin-session #adminCourseAccessPanel { display:block !important; }
+</style>
+<section class="section admin-home-panel" id="adminCourseAccessPanel" aria-label="Admin content access">
+  <div class="container" style="padding:24px;border:1px solid #cfe8e2;border-radius:18px;background:linear-gradient(135deg,#f1fbf8,#f7fbff);text-align:center">
+    <span style="display:inline-block;padding:5px 12px;border-radius:30px;background:#e2f5ef;color:#11694f;font-size:12px;font-weight:800">مدير المنصة · وصول إداري شامل</span>
+    <h2 style="margin:12px 0 8px;color:#14233d">مرحبًا بك في لوحة إدارة المحتوى</h2>
+    <p style="margin:0 auto;color:#5c6b80;max-width:760px;line-height:1.9">حسابك معتمد كمدير. يمكنك فتح المقررات والمحاضرات، ومراجعة الطلاب والاشتراكات وإدارة المحتوى دون طلب اشتراك أو إسناد صلاحيات طالب لحسابك.</p>
+    <div class="admin-home-actions" style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="button button-primary" href="student-space.html">افتح كل المحتوى التعليمي</a>
+      <a class="button button-ghost" href="admin-students.html">إدارة الطلاب</a>
+      <a class="button button-ghost" href="admin-subscriptions.html">الاشتراكات والمدفوعات</a>
+      <a class="button button-ghost" href="lesson-admin-upload.html">إدارة المحاضرات</a>
+    </div>
+  </div>
+</section>
 <section class="section learning-section ma-exact-image-section" id="learning">
 <!-- MA-EXACT-LEARNING-PATHS-V1 -->
 <div class="ma-exact-image-frame" data-ma-exact-learning-paths>
@@ -398,6 +416,10 @@
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/membership-config.local.js"></script>
+  <script src="assets/js/membership-config.js"></script>
+  <script src="assets/js/homepage-admin-view.js" defer></script>
 <script src="assets/js/odoo-contact-flow.js"></script>
 <a class="whatsapp-float" href="https://wa.me/201092452759?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D9%85%D9%86%20%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D9%84%D8%AA%D8%B9%D9%84%D9%8A%D9%85%D9%8A%20Mohammed%20Afify" target="_blank" rel="noopener noreferrer" aria-label="تواصل معنا عبر واتساب">
   <span aria-hidden="true">●</span> تواصل معنا عبر واتساب
