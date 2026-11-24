@@ -5,6 +5,52 @@
   const url = String(config.supabaseUrl || "").trim();
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
   const BUCKET = "private-course-lessons";
+  const SOURCE_BASE_URL = "https://raw.githubusercontent.com/MohamedAfify2025/mohammed-afify/main/academy/";
+  const SOURCE_IMPORTS = {
+    accounting: [
+      { source: "academy/accounting.html", slug: "course-outline", title: "خريطة منهج المحاسبة", type: "overview", order: 1 },
+      { source: "academy/accounting-unit-1.html", slug: "unit-01-overview", unit: "unit-01", title: "الوحدة الأولى: لماذا نتعلم المحاسبة؟", type: "overview", order: 1 },
+      { source: "academy/accounting-lesson-u1-01.html", slug: "unit-01-lesson-01", unit: "unit-01", title: "مدخل إلى عالم المحاسبة وأهميتها", type: "lesson", order: 2 },
+      { source: "academy/accounting-quiz-u1.html", slug: "unit-01-quiz", unit: "unit-01", title: "اختبار الوحدة الأولى", type: "assessment", order: 3 },
+      { source: "academy/accounting-unit-2.html", slug: "unit-02-overview", unit: "unit-02", title: "الوحدة الثانية: قاعدة القيد المزدوج وحسابات دفاتر الأستاذ", type: "overview", order: 1 },
+      { source: "academy/accounting-unit-3.html", slug: "unit-03-overview", unit: "unit-03", title: "الوحدة الثالثة: دفاتر اليومية المساعدة", type: "overview", order: 1 },
+      { source: "academy/accounting-unit-4.html", slug: "unit-04-overview", unit: "unit-04", title: "الوحدة الرابعة: ميزان المراجعة وتصحيح الأخطاء", type: "overview", order: 1 },
+      { source: "academy/accounting-unit-5.html", slug: "unit-05-overview", unit: "unit-05", title: "الوحدة الخامسة: القوائم المالية – المنشأة الفردية", type: "overview", order: 1 }
+    ],
+    "business-administration": [
+      { source: "academy/business-administration.html", slug: "course-outline", title: "منهج الإدارة والأعمال الكامل", type: "overview", order: 1 }
+    ],
+    "data-analysis": [
+      { source: "academy/data-analysis.html", slug: "course-outline", title: "منهج تحليل البيانات", type: "overview", order: 1 }
+    ],
+    programming: [
+      { source: "academy/programming.html", slug: "course-outline", title: "منهج البرمجة", type: "overview", order: 1 }
+    ],
+    python: [
+      { source: "academy/python.html", slug: "course-outline", title: "منهج Python", type: "overview", order: 1 }
+    ],
+    excel: [
+      { source: "academy/excel.html", slug: "course-outline", title: "منهج Microsoft Excel", type: "overview", order: 1 }
+    ],
+    icdl: [
+      { source: "academy/icdl.html", slug: "course-outline", title: "منهج ICDL ومهارات الكمبيوتر", type: "overview", order: 1 }
+    ],
+    powerpoint: [
+      { source: "academy/powerpoint.html", slug: "course-outline", title: "منهج Microsoft PowerPoint", type: "overview", order: 1 }
+    ],
+    word: [
+      { source: "academy/word.html", slug: "course-outline", title: "منهج Microsoft Word", type: "overview", order: 1 }
+    ],
+    windows: [
+      { source: "academy/windows.html", slug: "course-outline", title: "منهج Windows والإنترنت", type: "overview", order: 1 }
+    ],
+    scratch: [
+      { source: "academy/scratch.html", slug: "course-outline", title: "منهج Scratch والبرمجة للأطفال", type: "overview", order: 1 }
+    ],
+    projects: [
+      { source: "academy/projects.html", slug: "course-outline", title: "دليل المشروعات التعليمية", type: "overview", order: 1 }
+    ]
+  };
   let client = null;
   let courses = [];
   let lessons = [];
@@ -127,6 +173,18 @@
     $("openCourseContent").textContent = selectedSlug === "business-administration"
       ? "فتح منهج الإدارة والأعمال"
       : "فتح المحتوى في مساحة المدير";
+    const importButton = $("importAcademyButton");
+    if (importButton) {
+      const importItems = SOURCE_IMPORTS[selectedSlug] || [];
+      importButton.hidden = importItems.length === 0;
+      importButton.textContent = importItems.length
+        ? "استيراد " + importItems.length + " صفحة من الأكاديمية إلى التخزين الخاص"
+        : "لا يوجد مصدر أكاديمية مهيأ لهذا المقرر";
+      importButton.disabled = importItems.length === 0;
+    }
+    const importProgress = $("importProgress");
+    if (importProgress) importProgress.hidden = true;
+
     await loadUnits();
     await loadLessons();
   }
@@ -371,6 +429,112 @@
     if (selectedSlug) $("lessonCourse").value = selectedSlug;
   }
 
+  async function importAcademyContent() {
+    const items = SOURCE_IMPORTS[selectedSlug] || [];
+    if (!items.length) return message("لا يوجد مصدر أكاديمية محدد لهذا المقرر.", true);
+    const button = $("importAcademyButton");
+    const progress = $("importProgress");
+    if (!window.confirm("سيتم نسخ " + items.length + " صفحة أصلية من الأكاديمية إلى التخزين الخاص لهذا المقرر. ستُضاف كمسودات ولن تظهر للطلاب قبل نشرها. هل تريد المتابعة؟")) return;
+
+    setBusy(button, true, "جارٍ استيراد صفحات الأكاديمية...");
+    progress.hidden = false;
+    let completed = 0;
+    const failures = [];
+    try {
+      const { data: userData, error: userError } = await client.auth.getUser();
+      if (userError || !userData?.user) throw userError || new Error("انتهت جلسة المدير.");
+      const { data: unitRows, error: unitError } = await client
+        .from("course_units")
+        .select("id,unit_slug")
+        .eq("course_slug", selectedSlug);
+      if (unitError) throw unitError;
+      const unitIds = new Map((Array.isArray(unitRows) ? unitRows : []).map(unit => [unit.unit_slug, unit.id]));
+      const { data: existingRows, error: existingError } = await client
+        .from("course_lessons")
+        .select("id,lesson_slug,is_published,created_by")
+        .eq("course_slug", selectedSlug);
+      if (existingError) throw existingError;
+      const existing = new Map((Array.isArray(existingRows) ? existingRows : []).map(row => [row.lesson_slug, row]));
+
+      for (const item of items) {
+        try {
+          if (item.unit && !unitIds.has(item.unit)) throw new Error("الوحدة غير موجودة: " + item.unit);
+          const response = await fetch(SOURCE_BASE_URL.replace(/academy\/$/, "") + item.source, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+            cache: "no-store"
+          });
+          if (!response.ok) throw new Error("تعذر تنزيل المصدر (" + response.status + ").");
+          const source = await response.text();
+          if (!/<html[\s>]/i.test(source) || !/<head[\s>]/i.test(source)) {
+            throw new Error("ملف المصدر ليس صفحة HTML صالحة.");
+          }
+          const blob = new Blob([source], { type: "text/html;charset=UTF-8" });
+          if (!blob.size || blob.size > 10 * 1024 * 1024) throw new Error("حجم الملف يتجاوز حد التخزين البالغ 10 ميجابايت.");
+          const storagePath = selectedSlug + "/" + item.slug + ".html";
+          const { error: uploadError } = await client.storage.from(BUCKET).upload(storagePath, blob, {
+            upsert: true,
+            contentType: "text/html",
+            cacheControl: "no-store"
+          });
+          if (uploadError) throw uploadError;
+
+          const previous = existing.get(item.slug);
+          const values = {
+            course_slug: selectedSlug,
+            lesson_slug: item.slug,
+            title: item.title,
+            description: "نسخة خاصة مستوردة من " + item.source + ". راجعها قبل النشر.",
+            storage_bucket: BUCKET,
+            storage_path: storagePath,
+            content_type: "text/html",
+            file_size_bytes: blob.size,
+            is_published: previous?.is_published === true,
+            sort_order: item.order,
+            unit_id: item.unit ? unitIds.get(item.unit) : null,
+            lesson_type: item.type,
+            source_path: item.source,
+            source_base_url: SOURCE_BASE_URL,
+            updated_at: new Date().toISOString()
+          };
+          let saved;
+          if (previous?.id) {
+            saved = await client.from("course_lessons").update(values).eq("id", previous.id);
+          } else {
+            saved = await client.from("course_lessons").insert({
+              ...values,
+              created_by: userData.user.id
+            });
+          }
+          if (saved.error) throw saved.error;
+          completed += 1;
+          progress.textContent = "تم استيراد " + completed + " من " + items.length + " صفحات: " + item.title;
+        } catch (error) {
+          failures.push(item.source + ": " + (error?.message || "خطأ غير معروف"));
+        }
+      }
+
+      await loadSelectedCourse();
+      progress.hidden = false;
+      progress.textContent = "اكتمل الاستيراد: " + completed + " من " + items.length +
+        " صفحة. " + (failures.length ? "تعذر استيراد " + failures.length + " صفحات." : "كل الصفحات أصبحت مسودات خاصة للمراجعة.");
+      if (failures.length) {
+        console.warn("Academy import failures:", failures);
+        message("اكتمل الاستيراد جزئيًا. راجع تفاصيل الأخطاء في سجل المتصفح.", true);
+      } else {
+        message("تم نسخ صفحات الأكاديمية إلى التخزين الخاص كمسودات. لم يتم نشر أي صفحة تلقائيًا.");
+      }
+    } catch (error) {
+      progress.hidden = false;
+      progress.textContent = "تعذر إتمام الاستيراد.";
+      message(error.message || "تعذر استيراد محتوى الأكاديمية.", true);
+    } finally {
+      setBusy(button, false);
+      button.textContent = "استيراد " + items.length + " صفحة من الأكاديمية إلى التخزين الخاص";
+    }
+  }
+
   async function saveCourse(event) {
     event.preventDefault();
     const slug = $("courseSlug").value.trim().toLowerCase();
@@ -560,6 +724,7 @@
   });
   $("courseForm").addEventListener("submit", saveCourse);
   $("unitForm").addEventListener("submit", saveUnit);
+  $("importAcademyButton").addEventListener("click", () => importAcademyContent());
   $("newUnitButton").addEventListener("click", resetUnitForm);
   $("lessonForm").addEventListener("submit", saveLesson);
   $("newCourseButton").addEventListener("click", () => {
