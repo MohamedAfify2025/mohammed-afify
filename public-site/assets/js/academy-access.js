@@ -43,7 +43,7 @@
       const slugValue = String(row.course_slug || "");
       const courseQuery = "?course=" + encodeURIComponent(slugValue);
       const previewHref = "course-preview.html" + courseQuery;
-      const adminHref = "student-space.html" + courseQuery;
+      const adminHref = "admin-course-manager.html" + courseQuery;
       const subscribeHref = "student-subscribe.html" + courseQuery;
       const openHref = isAdmin ? adminHref : previewHref;
 
@@ -57,9 +57,6 @@
 
       const title = document.createElement("h2");
       title.textContent = row.title || slugValue || "دورة تعليمية";
-
-      const description = document.createElement("p");
-      description.textContent = row.description || "تفاصيل الدورة قيد الإضافة.";
 
       const slug = document.createElement("small");
       slug.textContent = slugValue;
@@ -89,13 +86,14 @@
         actions.appendChild(subscribe);
       }
 
-      card.append(title, description, slug, actions);
+      if (isAdmin) card.append(title, slug, actions);
+      else card.append(title, Object.assign(document.createElement("p"), { textContent: row.description || "تفاصيل الدورة قيد الإضافة." }), slug, actions);
       list.appendChild(card);
     }
 
     $("courseCount").textContent = String(rows.length);
     show(isAdmin
-      ? "تم التحقق من صلاحية المدير. الضغط على أي مقرر يفتح محتواه داخل المساحة الإدارية، بما في ذلك المحاضرات غير المنشورة."
+      ? "تم التحقق من صلاحية المدير. الضغط على أي مقرر يفتح لوحة إدارته الكاملة دون صفحة الوصف العامة."
       : (rows.length
           ? "يمكنك تصفح تفاصيل كل دورة أولًا، ثم اختيار طلب الاشتراك عند رغبتك. الدروس الخاصة متاحة وفق صلاحيات حساب المتدرب."
           : "لا توجد دورات منشورة حاليًا."));
