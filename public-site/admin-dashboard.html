@@ -45,7 +45,15 @@ main{max-width:1480px;margin:0 auto;padding:24px clamp(12px,2.5vw,32px) 60px}
 .section-card em{font-style:normal;font-size:11px;color:var(--teal);font-weight:900}
 .course-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .search{width:min(100%,360px);border:1px solid #dce4ee;border-radius:10px;background:#fff;padding:10px 12px;font-size:12px}
+.course-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 16px;padding:4px 0}
+.course-tab{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;border:1px solid #dce5ef;border-radius:11px;padding:9px 13px;background:#fff;color:#40516b;font-size:12px;font-weight:800;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.course-tab span{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 5px;border-radius:7px;background:#eef2f7;color:#6a7789;font-size:10px}
+.course-tab[aria-selected="true"]{border-color:#0b8379;background:#e8f7f4;color:#086f67;box-shadow:0 4px 14px #0b837915}
+.course-tab[aria-selected="true"] span{background:#0b8379;color:#fff}
+.course-tabs-empty{padding:10px 13px;color:#758399;font-size:12px}
 .course-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.course-grid.single-course{grid-template-columns:minmax(0,1fr);max-width:960px}
+.course-grid.single-course .course-card{width:100%}
 .course-card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:0 7px 22px #14233d07;display:flex;flex-direction:column;min-width:0}
 .course-top{display:flex;justify-content:space-between;align-items:start;gap:8px}
 .course-card h3{font-size:16px;line-height:1.6;margin:0}
@@ -124,9 +132,10 @@ footer{margin-top:28px;border-top:1px solid var(--line);padding-top:15px;font-si
   <div class="admin-grid" id="sectionsGrid"></div>
 
   <div class="section-head">
-    <div><h2>جميع المقررات والمحتوى</h2><p>قائمة كاملة تشمل المقررات النشطة وغير النشطة، وكل المحاضرات المنشورة والمسودات.</p></div>
+    <div><h2 id="courseViewTitle">جميع المقررات والمحتوى</h2><p id="courseViewDescription">اختر تبويب المقرر لعرض بياناته ومحاضراته وموادّه بصورة مستقلة.</p></div>
     <div class="course-toolbar"><input id="courseSearch" class="search" type="search" placeholder="ابحث باسم المقرر أو الرمز أو المحاضرة..."></div>
   </div>
+  <div id="courseTabs" class="course-tabs" role="tablist" aria-label="تبويبات المقررات"></div>
   <div id="courseGrid" class="course-grid" aria-live="polite"></div>
   <div id="noCourses" class="empty" hidden>لا توجد مقررات في فهرس المنصة حاليًا.</div>
 </section>
