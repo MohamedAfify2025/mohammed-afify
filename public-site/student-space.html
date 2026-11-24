@@ -15,13 +15,28 @@ li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-righ
 .permission-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .permission-badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:4px 8px;background:#eef1f5;color:#69778b;font-size:11px;font-weight:700}
 .permission-badge.yes{background:#e5f7ef;color:#14704c}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.admin-link{background:#0b8379}
+.lesson-list{width:100%;padding:12px;background:#f7f9fc;border:1px solid #e8edf3;border-radius:12px;margin-top:8px}
+.lesson-heading{font-size:12px;font-weight:800;color:#42516a;margin-bottom:8px}
+.lesson-open{background:#0b8379;color:#fff;margin:4px 0}.lesson-open:disabled{opacity:.6;cursor:wait}
+.lesson-viewer{background:#fff;border:1px solid #dfe7f0;border-radius:18px;overflow:hidden;margin-top:18px}
+.lesson-viewer[hidden]{display:none}
+.lesson-viewer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#14233d;color:#fff}
+.lesson-viewer-head strong{font-size:14px}
+#closeLesson{background:#fff;color:#14233d;padding:7px 12px}
+#lessonFrame{display:block;width:100%;height:min(78vh,900px);border:0;background:#fff}
 </style></head>
 <body><main>
-<header class="top"><div class="brand">MOHAMMED AFIFY · LEARNING SPACE</div><button id="logoutButton" type="button">تسجيل الخروج</button></header>
+<header class="top"><div class="brand">MOHAMMED AFIFY · LEARNING SPACE</div><div class="top-actions"><a id="adminUploadLink" class="admin-link" href="lesson-admin-upload.html" hidden>إدارة المحاضرات</a><button id="logoutButton" type="button">تسجيل الخروج</button></div></header>
 <section class="card">
 <p class="muted">مساحتك التعليمية الشخصية</p><h1>أهلًا <span id="studentName">بك</span></h1><p class="muted" id="studentEmail"></p>
 <div id="pageMessage" class="notice" hidden></div>
 <div id="coursePanel" hidden><h2>الدورات وصلاحيات حسابك</h2><ul id="courseList"></ul><p class="muted">تعرض هذه القائمة صلاحياتك لكل دورة. لن تتمكن من فتح أي درس أو ملف إلا إذا كانت صلاحيته مفعّلة.</p></div>
+</section>
+<section id="lessonViewer" class="lesson-viewer" hidden>
+  <div class="lesson-viewer-head"><strong id="lessonTitle">المحاضرة</strong><button id="closeLesson" type="button">إغلاق المحاضرة</button></div>
+  <iframe id="lessonFrame" title="المحاضرة التعليمية" sandbox="allow-scripts allow-forms allow-downloads" referrerpolicy="no-referrer"></iframe>
 </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
