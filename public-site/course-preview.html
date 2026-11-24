@@ -43,10 +43,16 @@
   </header>
   <section class="card" aria-labelledby="courseTitle">
     <span class="eyebrow">معاينة عامة للدورة</span>
+      <span id="courseCategory" class="preview-category" hidden></span>
     <div id="courseMessage" class="notice" role="status">جارٍ تحميل معلومات الدورة...</div>
     <div id="courseDetails" hidden>
       <h1 id="courseTitle"></h1>
       <p id="courseDescription" class="description"></p>
+      <div class="preview-highlights" aria-label="طريقة الوصول إلى محتوى الدورة">
+        <article><span class="preview-highlight-icon">01</span><strong>محتوى منظم</strong><small>تُعرض الدروس والمواد داخل مساحتك التعليمية.</small></article>
+        <article><span class="preview-highlight-icon">02</span><strong>صلاحيات واضحة</strong><small>تختلف إتاحة الملفات والاختبارات حسب اشتراكك.</small></article>
+        <article><span class="preview-highlight-icon">03</span><strong>متابعة التعلّم</strong><small>يُحفظ تقدمك عند تفعيل صلاحية متابعة التقدم.</small></article>
+      </div>
       <div class="notice">يمكنك استعراض معلومات الدورة الآن. الوصول إلى الدروس والملفات والاختبارات يتطلب تسجيل الدخول وتفعيل الصلاحية المناسبة من الإدارة.</div>
       <div class="actions">
         <a id="subscribeLink" class="primary" href="student-subscribe.html">طلب الاشتراك في هذه الدورة</a>
@@ -81,6 +87,6 @@
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/membership-config.js"></script>
-<script src="assets/js/course-preview.js?v=20261124-entitled-route" defer></script>
+<script src="assets/js/course-preview.js?v=20261124-preview-finish-v1" defer></script>
 </body>
 </html>
