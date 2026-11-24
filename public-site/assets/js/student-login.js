@@ -68,8 +68,9 @@
           if (adminError) throw adminError;
           if (isAdmin === true) {
             let adminTarget = destination || "admin-dashboard.html";
-            if (adminTarget.endsWith("/admin-course-manager.html") || adminTarget.startsWith("admin-course-manager.html")) {
-              const course = new URL(adminTarget, window.location.href).searchParams.get("course");
+            const targetUrl = new URL(adminTarget, window.location.href);
+            if (targetUrl.pathname.endsWith("/admin-course-manager.html")) {
+              const course = targetUrl.searchParams.get("course");
               adminTarget = "admin-dashboard.html" + (course ? "?course=" + encodeURIComponent(course) : "");
             }
             window.location.replace(adminTarget);
