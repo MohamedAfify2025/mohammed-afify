@@ -24,7 +24,19 @@
       description.textContent = row.description || "تفاصيل الدورة قيد الإضافة.";
       const slug = document.createElement("small");
       slug.textContent = row.course_slug || "";
-      card.append(title, description, slug);
+
+      const action = document.createElement("a");
+      action.className = "course-card-action";
+      action.href = "student-subscribe.html?course=" + encodeURIComponent(row.course_slug || "");
+      action.textContent = "طلب الاشتراك في هذه الدورة";
+
+      card.classList.add("site-clickable-surface");
+      card.dataset.siteClickAction = "href";
+      card.dataset.siteClickHref = action.getAttribute("href");
+      card.tabIndex = 0;
+      card.setAttribute("role", "group");
+      card.setAttribute("aria-label", "فتح " + (row.title || row.course_slug || "الدورة"));
+      card.append(title, description, slug, action);
       list.appendChild(card);
     }
     $("courseCount").textContent = String(rows.length);

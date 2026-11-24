@@ -1,0 +1,82 @@
+/* Shared click-through behavior for content cards */
+.site-clickable-surface {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.site-clickable-surface:focus-visible {
+  outline: 3px solid rgba(25,183,162,.42);
+  outline-offset: 4px;
+}
+.course-card.site-clickable-surface,
+.file-card.site-clickable-surface,
+.platform-video-card.site-clickable-surface,
+.odoo-detail-card.site-clickable-surface,
+.flow-item.site-clickable-surface {
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.course-card.site-clickable-surface:hover,
+.file-card.site-clickable-surface:hover,
+.platform-video-card.site-clickable-surface:hover,
+.odoo-detail-card.site-clickable-surface:hover,
+.flow-item.site-clickable-surface:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 34px rgba(16,26,50,.11);
+  border-color: rgba(25,183,162,.38);
+}
+.service-item.site-clickable-surface {
+  transition: background .18s ease, padding .18s ease;
+  border-radius: 12px;
+  padding-inline: 12px;
+}
+.service-item.site-clickable-surface:hover {
+  background: rgba(255,255,255,.055);
+}
+.float-card.site-clickable-surface {
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.float-card.site-clickable-surface:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(16,26,50,.16);
+}
+.course-card-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  padding: 9px 13px;
+  border-radius: 9px;
+  background: #e5f6f1;
+  color: #087b70;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.course-card-action:hover {
+  background: #d5f0e8;
+}
+.course-open {
+  display: inline-block;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+  text-align: right;
+  cursor: pointer;
+}
+.course-open:hover {
+  color: #0b8379;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.site-faq-item {
+  cursor: pointer;
+}
+.site-faq-item .faq-answer {
+  margin-top: 12px;
+}
+.site-faq-item.is-open {
+  border-color: rgba(25,183,162,.42);
+  box-shadow: 0 12px 28px rgba(16,26,50,.08);
+}
