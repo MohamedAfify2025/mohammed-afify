@@ -6,7 +6,8 @@ const state = {
   client:null, user:null, profiles:[], courses:[],
   plans:[], planCourses:[], subscriptions:[],
   payments:[], assignments:[], permissions:[],
-  accessPermissions:[], permissionsReady:false
+  accessPermissions:[], permissionsReady:false,
+  reviewPlans:[], reviewPlansError:""
 };
 
 function esc(value) {
@@ -400,7 +401,7 @@ async function loadAll() {
 
   const queries = await Promise.all([
     db.from('profiles')
-      .select('user_id,full_name,email,phone,role,status,account_state,requested_course')
+      .select('user_id,full_name,email,phone,role,status,account_state,requested_course,requested_role,created_at')
       .order('full_name'),
     db.from('course_catalog')
       .select('course_slug,title,is_active')
@@ -454,6 +455,20 @@ async function loadAll() {
   } else {
     state.accessPermissions = accessResult.data || [];
     state.permissionsReady = true;
+  }
+
+  const hasPendingStudents = state.profiles.some(p =>
+    p.role === 'student' && p.status === 'pending' && p.requested_role !== 'teacher'
+  );
+  state.reviewPlans = [];
+  state.reviewPlansError = "";
+  if(hasPendingStudents) {
+    const reviewPlansResult = await db.rpc('get_admin_review_plans_v2');
+    if(reviewPlansResult.error) {
+      state.reviewPlansError = reviewPlansResult.error.message || 'تعذر تحميل الباقات المتاحة للمراجعة.';
+    } else {
+      state.reviewPlans = Array.isArray(reviewPlansResult.data) ? reviewPlansResult.data : [];
+    }
   }
 
   renderAll();
@@ -523,6 +538,7 @@ function renderAll() {
     'اختر الطالب المعتمد');
 
   renderStudentCoursePermissions();
+  renderPendingStudentRequests();
   renderCourseChoices();
   renderPlans();
   renderSubscriptions();
@@ -531,6 +547,89 @@ function renderAll() {
   renderPermissions();
   updateAssignPricePreview();
   updatePaymentBalance();
+}
+
+function renderPendingStudentRequests() {
+  const host = $('pendingStudentsBody');
+  const count = $('pendingStudentsLabel');
+  if(!host || !count) return;
+
+  const requests = state.profiles.filter(p =>
+    p.role === 'student' &&
+    p.status === 'pending' &&
+    p.requested_role !== 'teacher'
+  );
+
+  count.textContent = requests.length + ' طلب';
+  if(!requests.length) {
+    host.innerHTML = '<tr><td colspan="6" class="empty">لا توجد طلبات طلاب معلقة حاليًا.</td></tr>';
+    return;
+  }
+
+  host.innerHTML = requests.map(student => {
+    const requested = normalizeCourseLabel(student.requested_course);
+    const matchingPlans = state.reviewPlans.filter(item =>
+      normalizeCourseLabel(item.course_slug) === requested ||
+      normalizeCourseLabel(item.course_title) === requested
+    );
+    const selectedOptions = matchingPlans.map(item => {
+      const price = Number(item.price || 0);
+      return `<option value="${esc(item.plan_id)}" data-base-price="${esc(price)}" data-currency="${esc(item.currency || 'EGP')}">${esc(item.plan_name || 'باقة')} — ${esc(money(price,item.currency || 'EGP'))}</option>`;
+    }).join('');
+    const noPlan = state.reviewPlansError
+      ? 'تعذر تحميل الباقات للمراجعة'
+      : 'لا توجد باقة نشطة مطابقة للدورة المطلوبة';
+    const courseName = courseTitle(student.requested_course);
+    const approveDisabled = !matchingPlans.length || Boolean(state.reviewPlansError);
+
+    return `<tr data-pending-student="${esc(student.user_id)}">
+      <td><strong>${esc(student.full_name || '—')}</strong><br><small class="muted">${esc(student.email || '')}</small><br><small class="muted">${esc(student.phone || '')}</small></td>
+      <td>${esc(courseName || 'لم تحدد')}<br><small class="muted">${esc(student.requested_course || '—')}</small></td>
+      <td>
+        <select data-request-plan style="min-width:210px;width:100%;padding:8px;border:1px solid #dce3ed;border-radius:8px;background:#fff" ${approveDisabled ? 'disabled' : ''}>
+          <option value="">${matchingPlans.length ? 'اختر الباقة' : esc(noPlan)}</option>
+          ${selectedOptions}
+        </select>
+        ${state.reviewPlansError ? `<small class="muted">${esc(state.reviewPlansError)}</small>` : ''}
+      </td>
+      <td>
+        <select data-request-discount-type style="min-width:120px;width:100%;padding:7px;border:1px solid #dce3ed;border-radius:8px">
+          <option value="none">بدون خصم</option>
+          <option value="percent">نسبة %</option>
+          <option value="fixed">مبلغ ثابت</option>
+          <option value="waive">إعفاء كامل</option>
+        </select>
+        <input data-request-discount-value type="number" min="0" step="0.01" value="0" aria-label="قيمة الخصم" style="width:100%;margin-top:6px;padding:7px;border:1px solid #dce3ed;border-radius:8px">
+        <input data-request-discount-reason type="text" maxlength="240" placeholder="سبب الخصم (اختياري)" style="width:100%;margin-top:6px;padding:7px;border:1px solid #dce3ed;border-radius:8px">
+      </td>
+      <td><small data-request-price-preview class="muted">اختر الباقة لحساب المستحق.</small></td>
+      <td><div class="action-cell">
+        <button type="button" class="btn small teal" data-request-action="approve" ${approveDisabled ? 'disabled title="لا توجد باقة مطابقة"' : ''}>اعتماد وإسناد</button>
+        <button type="button" class="btn small red" data-request-action="reject">رفض</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+
+  host.querySelectorAll('tr[data-pending-student]').forEach(row => updatePendingStudentPrice(row));
+}
+
+function updatePendingStudentPrice(row) {
+  const select = row?.querySelector('[data-request-plan]');
+  const type = row?.querySelector('[data-request-discount-type]');
+  const value = row?.querySelector('[data-request-discount-value]');
+  const preview = row?.querySelector('[data-request-price-preview]');
+  if(!select || !type || !value || !preview) return;
+
+  const option = select.selectedOptions?.[0];
+  if(!option?.value) {
+    preview.textContent = 'اختر الباقة لحساب المستحق.';
+    return;
+  }
+
+  const base = Number(option.dataset.basePrice || 0);
+  const calc = calculateDiscount(base,type.value,value.value);
+  const currency = option.dataset.currency || 'EGP';
+  preview.textContent = `الأساسي: ${money(base,currency)} — الخصم: ${money(calc.discount,currency)} — الصافي: ${money(calc.net,currency)}`;
 }
 
 function renderCourseChoices() {
@@ -680,6 +779,80 @@ async function rpc(name,args) {
   if(error) throw error;
   return data;
 }
+
+$('pendingStudentsBody').addEventListener('input', event => {
+  const row = event.target.closest('tr[data-pending-student]');
+  if(row) updatePendingStudentPrice(row);
+});
+$('pendingStudentsBody').addEventListener('change', event => {
+  const row = event.target.closest('tr[data-pending-student]');
+  if(row) updatePendingStudentPrice(row);
+});
+$('pendingStudentsBody').addEventListener('click', async event => {
+  const button = event.target.closest('[data-request-action]');
+  if(!button) return;
+
+  const row = button.closest('tr[data-pending-student]');
+  const targetUser = row?.dataset.pendingStudent;
+  const action = button.dataset.requestAction;
+  if(!targetUser || !['approve','reject'].includes(action)) return;
+
+  const planSelect = row.querySelector('[data-request-plan]');
+  const discountType = row.querySelector('[data-request-discount-type]')?.value || 'none';
+  const discountValue = discountType === 'waive'
+    ? 0
+    : Number(row.querySelector('[data-request-discount-value]')?.value || 0);
+  const discountReason = row.querySelector('[data-request-discount-reason]')?.value || '';
+
+  if(action === 'approve') {
+    if(!planSelect?.value) {
+      msg('اختر باقة نشطة مطابقة للدورة المطلوبة قبل اعتماد الطالب.',true);
+      return;
+    }
+    const selectedOption = planSelect.selectedOptions[0];
+    const base = Number(selectedOption.dataset.basePrice || 0);
+    if(!Number.isFinite(discountValue) || discountValue < 0 ||
+       (discountType === 'percent' && discountValue > 100) ||
+       (discountType === 'fixed' && discountValue > base)) {
+      msg('قيمة الخصم غير صحيحة أو أكبر من السعر الأساسي.',true);
+      return;
+    }
+    const calc = calculateDiscount(base,discountType,discountValue);
+    const planName = selectedOption.textContent.split(' — ')[0];
+    const studentName = row.querySelector('td strong')?.textContent || 'الطالب';
+    if(!confirm(calc.net === 0
+      ? `سيتم اعتماد ${studentName} وإسناد ${planName} مع إعفاء كامل من الرسوم. هل تتابع؟`
+      : `سيتم اعتماد ${studentName} وإسناد ${planName} بصافي مستحق ${money(calc.net,selectedOption.dataset.currency || 'EGP')}. سيظل الاشتراك مغلقًا حتى اكتمال السداد. هل تتابع؟`)) return;
+  } else if(!confirm('هل تريد رفض طلب هذا الطالب؟')) {
+    return;
+  }
+
+  const siblingButtons = row.querySelectorAll('button[data-request-action]');
+  siblingButtons.forEach(item => { item.disabled = true; });
+  try {
+    if(action === 'approve') {
+      await rpc('approve_student_application_with_discount_v1',{
+        p_target_user:targetUser,
+        p_plan_id:planSelect.value,
+        p_discount_type:discountType,
+        p_discount_value:discountValue,
+        p_discount_reason:discountReason,
+        p_admin_note:'اعتماد من لوحة إدارة العضويات'
+      });
+      msg('تم اعتماد الطالب وإنشاء الاشتراك. راجع حالة الدفع قبل إتاحة الدورة.');
+    } else {
+      await rpc('review_membership_request_v2',{
+        p_target_user:targetUser,
+        p_decision:'rejected'
+      });
+      msg('تم رفض طلب الطالب.');
+    }
+    await loadAll();
+  } catch(error) {
+    msg('تعذر معالجة طلب الطالب: ' + error.message,true);
+    siblingButtons.forEach(item => { item.disabled = false; });
+  }
+});
 
 $('planForm').addEventListener('submit',async event => {
   event.preventDefault();
