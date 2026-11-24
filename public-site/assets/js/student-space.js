@@ -470,7 +470,14 @@
       .select("full_name,role,status,account_state")
       .eq("user_id", sessionData.session.user.id)
       .maybeSingle();
-    if (profileError || !profile || !["student", "admin"].includes(profile.role)) {
+    if (profileError || !profile) {
+      throw new Error("لم يتم العثور على ملف الحساب.");
+    }
+    if (profile.role === "teacher" && profile.status === "approved" && profile.account_state === "active") {
+      location.replace("teacher-space.html" + window.location.search);
+      return;
+    }
+    if (!["student", "admin"].includes(profile.role)) {
       throw new Error("هذا الحساب غير مخصص لمساحة الطلاب أو إدارة المحاضرات.");
     }
     let isAdmin = false;
