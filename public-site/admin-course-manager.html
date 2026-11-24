@@ -141,8 +141,12 @@
     <section class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
         <div><h2 style="margin-bottom:5px">محاضرات ومواد المقرر</h2><p id="lessonListCaption" class="muted">كل المحاضرات، بما فيها المسودات وغير المنشورة.</p></div>
-        <a id="openCourseContent" class="dark" href="student-space.html">فتح المحتوى في مساحة المدير</a>
+        <div class="form-actions">
+          <button id="importAcademyButton" class="primary" type="button" hidden>استيراد محتوى الأكاديمية</button>
+          <a id="openCourseContent" class="dark" href="student-space.html">فتح المحتوى في مساحة المدير</a>
+        </div>
       </div>
+      <p id="importProgress" class="notice" role="status" hidden></p>
       <div id="lessonList" class="lesson-list" aria-live="polite"></div>
     </section>
   </section>
