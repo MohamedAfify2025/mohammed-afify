@@ -689,6 +689,31 @@
     }
   }
 
+  function prepareRequestedLesson() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("prepare") !== "odoo-business-flow-01" || selectedSlug !== "odoo-training") return;
+
+    const existing = lessons.find((item) => item.lesson_slug === "lesson-01-business-flow");
+    if (existing) {
+      fillLessonForm(existing);
+      message("المحاضرة مسجلة بالفعل. اختر ملف HTML الجديد فقط إذا كنت تريد استبدال النسخة الحالية، ثم احفظ التعديل.");
+      return;
+    }
+
+    $("lessonCourse").value = "odoo-training";
+    $("lessonSlug").value = "lesson-01-business-flow";
+    $("lessonTitle").value = "المحاضرة الأولى: فهم دورة العمل في الشركات وأثرها على المحاسبة";
+    $("lessonDescription").value = "محاضرة تفاعلية عن ترابط الإدارات التشغيلية وأثرها المحاسبي في Odoo 19، تتضمن مثال مقاولات تفاعليًا وقائمة مراجعة واختبارًا من 10 أسئلة.";
+    $("lessonSort").value = "1";
+    $("lessonUnit").value = "";
+    $("lessonType").value = "lesson";
+    $("lessonSourcePath").value = "";
+    $("lessonBaseUrl").value = "";
+    $("lessonPublish").checked = true;
+    $("lessonForm").scrollIntoView({ behavior: "smooth", block: "center" });
+    message("تم تجهيز بيانات المحاضرة الأولى. اختر ملف HTML المحسّن من جهازك، ثم اضغط «حفظ المحاضرة» لرفعه إلى التخزين الخاص وإتاحته للمتدربين المصرح لهم.");
+  }
+
   async function boot() {
     if (!window.supabase?.createClient ||
         !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
@@ -707,6 +732,7 @@
     resetUnitForm();
     resetLessonForm();
     $("managerContent").hidden = false;
+    prepareRequestedLesson();
     if (!courses.length) message("تم التحقق من المدير. ابدأ بإضافة أول مقرر ثم أضف المحاضرات.");
     else message("تم التحقق من صلاحية المدير. لديك تحكم كامل في جميع المقررات والمحاضرات والملفات المنشورة والمسودات.");
   }
