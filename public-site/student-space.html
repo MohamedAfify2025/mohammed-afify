@@ -50,7 +50,13 @@ li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-righ
 #completeLessonButton:disabled{background:#e5f7ef;color:#14704c;cursor:default}
 #closeLesson{background:#fff;color:#14233d;padding:7px 12px}
 #lessonFrame{display:block;width:100%;height:min(78vh,900px);border:0;background:#fff}
-</style></head>
+</style><style>
+.lesson-unit{border:1px solid #e3eaf2;border-radius:13px;padding:13px;margin:10px 0;background:#fbfcfe}
+.lesson-unit-title{margin:0 0 8px;color:#18304a;font-size:14px;font-weight:800}
+.lesson-unit-description{margin:0 0 10px;color:#718098;font-size:12px;line-height:1.8}
+.lesson-unit .muted{font-size:12px;margin:8px 0}
+</style>
+</head>
 <body><main>
 <header class="top"><div class="brand">MOHAMMED AFIFY · LEARNING SPACE</div><div class="top-actions">
 <a class="nav-link" href="admin-dashboard.html" id="adminDashboardLink" hidden>لوحة المدير الشاملة</a>
@@ -81,5 +87,5 @@ li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-righ
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/membership-config.local.js"></script>
 <script src="assets/js/membership-config.js"></script>
-<script src="assets/js/student-space.js?v=20261124-account-status-v7" defer></script>
+<script src="assets/js/student-space.js?v=20261124-unit-hierarchy-v1" defer></script>
 </body></html>
