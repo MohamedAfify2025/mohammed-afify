@@ -25,13 +25,13 @@
     const joinLink = document.getElementById("maJoinLink");
 
     if (accountLink) {
-      accountLink.href = "student-space.html";
-      accountLink.setAttribute("aria-label", "فتح المساحة التعليمية للمدير");
+      accountLink.href = "admin-dashboard.html";
+      accountLink.setAttribute("aria-label", "فتح لوحة إدارة المنصة الشاملة");
     }
 
     if (joinLink) {
-      joinLink.href = "student-space.html";
-      joinLink.setAttribute("aria-label", "فتح كل المحتوى التعليمي");
+      joinLink.href = "admin-dashboard.html";
+      joinLink.setAttribute("aria-label", "فتح لوحة إدارة المنصة الشاملة");
     }
   }
 

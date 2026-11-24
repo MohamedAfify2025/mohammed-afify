@@ -33,7 +33,7 @@
     const { data: userData, error: userError } = await client.auth.getUser();
     if (userError) throw userError;
     if (!userData?.user) {
-      const next = "admin-course-manager.html" + window.location.search;
+      const next = "admin-dashboard.html" + window.location.search;
       window.location.replace("student-login.html?next=" + encodeURIComponent(next));
       return false;
     }

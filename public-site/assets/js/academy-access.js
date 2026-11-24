@@ -29,7 +29,7 @@
       const slugValue = String(row.course_slug || "");
       const courseQuery = "?course=" + encodeURIComponent(slugValue);
       const previewHref = "course-preview.html" + courseQuery;
-      const adminHref = "admin-course-manager.html" + courseQuery;
+      const adminHref = "admin-dashboard.html" + courseQuery;
       const subscribeHref = "student-subscribe.html" + courseQuery;
       const openHref = isAdmin ? adminHref : previewHref;
 

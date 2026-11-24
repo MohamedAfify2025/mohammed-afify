@@ -214,6 +214,7 @@
     }
 
     if (isAdmin) {
+      $("adminDashboardLink").hidden = false;
       $("adminCourseManagerLink").hidden = false;
       $("adminStudentsLink").hidden = false;
       $("adminSubscriptionsLink").hidden = false;
