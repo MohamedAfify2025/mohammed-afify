@@ -5,7 +5,6 @@
   const url = String(config.supabaseUrl || "").trim();
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
   let client = null;
-  let activeLessonUrl = "";
 
   function show(text, isError = false) {
     const el = $("pageMessage");
@@ -16,25 +15,28 @@
 
   async function openLesson(lesson, button) {
     if (button) button.disabled = true;
-    show("جارٍ تحميل المحاضرة والتحقق من صلاحية الوصول...");
+    show("جارٍ التحقق من صلاحية المحاضرة وتجهيز رابط آمن...");
     try {
+      // Supabase checks the current user's JWT against Storage RLS before issuing this short-lived URL.
       const { data, error } = await client.storage
         .from(lesson.storage_bucket)
-        .download(lesson.storage_path);
-      if (error || !data) throw error || new Error("لم يتم العثور على ملف المحاضرة.");
-      if (data.size <= 0) throw new Error("ملف المحاضرة فارغ.");
+        .createSignedUrl(lesson.storage_path, 900);
+      if (error || !data?.signedUrl) throw error || new Error("تعذر إنشاء رابط آمن للمحاضرة.");
 
-      const nextUrl = URL.createObjectURL(data);
+      // Accept signed URLs only from this configured Supabase project.
+      const signed = new URL(data.signedUrl, url);
+      const projectOrigin = new URL(url).origin;
+      if (signed.origin !== projectOrigin || !signed.pathname.includes("/storage/v1/object/sign/")) {
+        throw new Error("رابط المحاضرة غير مطابق لمشروع التخزين.");
+      }
+
       const frame = $("lessonFrame");
       frame.src = "about:blank";
-      if (activeLessonUrl) URL.revokeObjectURL(activeLessonUrl);
-      activeLessonUrl = nextUrl;
-
       $("lessonTitle").textContent = lesson.title || "المحاضرة";
       $("lessonViewer").hidden = false;
-      frame.src = nextUrl;
+      frame.src = signed.toString();
       $("lessonViewer").scrollIntoView({ behavior: "smooth", block: "start" });
-      show("تم فتح المحاضرة داخل مساحتك التعليمية.");
+      show("تم فتح المحاضرة. رابط العرض مؤقت وصالح لمدة 15 دقيقة.");
     } catch (error) {
       show("تعذر فتح المحاضرة. تأكد من أن اشتراكك يتضمن صلاحية مشاهدة صفحة المقرر، ثم أعد المحاولة.", true);
     } finally {
@@ -45,8 +47,6 @@
   function closeLesson() {
     $("lessonViewer").hidden = true;
     $("lessonFrame").src = "about:blank";
-    if (activeLessonUrl) URL.revokeObjectURL(activeLessonUrl);
-    activeLessonUrl = "";
   }
 
   function addCourse(course, lessons) {
