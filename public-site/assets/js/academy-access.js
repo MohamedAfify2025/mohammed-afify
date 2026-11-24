@@ -15,23 +15,9 @@
   }
 
   async function checkAdmin() {
-    const { data: userData, error: userError } = await client.auth.getUser();
-    if (userError) throw userError;
-    const user = userData?.user;
-    if (!user) return false;
-
-    const { data: profile, error: profileError } = await client
-      .from("profiles")
-      .select("role,status,account_state")
-      .eq("user_id", user.id)
-      .maybeSingle();
-    if (profileError) throw profileError;
-    if (profile?.role !== "admin" || profile.status !== "approved" || profile.account_state !== "active") {
-      return false;
-    }
-
-    const { data: allowed, error: adminError } = await client.rpc("is_platform_admin");
-    if (adminError) throw adminError;
+    // This boolean RPC does not expose profile or subscription records to visitors.
+    const { data: allowed, error } = await client.rpc("is_platform_admin");
+    if (error) return false;
     return allowed === true;
   }
 
@@ -75,7 +61,7 @@
       if (isAdmin) {
         const status = document.createElement("small");
         status.className = "course-admin-status";
-        status.textContent = row.is_active === true ? "مقرر نشط" : "مقرر غير نشط";
+        status.textContent = "وصول إداري شامل";
         actions.appendChild(status);
       } else {
         const subscribe = document.createElement("a");
@@ -114,7 +100,7 @@
 
     let query = client
       .from("course_catalog")
-      .select("course_slug,title,description,is_active")
+      .select("course_slug,title,description")
       .order("title");
     if (!isAdmin) query = query.eq("is_active", true);
 
