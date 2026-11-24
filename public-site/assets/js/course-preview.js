@@ -13,6 +13,30 @@
     host.hidden = !message;
   }
 
+  async function redirectAdministrator(client) {
+    const { data: userData, error: userError } = await client.auth.getUser();
+    if (userError) throw userError;
+    const user = userData?.user;
+    if (!user) return false;
+
+    const { data: profile, error: profileError } = await client
+      .from("profiles")
+      .select("role,status,account_state")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (profileError) throw profileError;
+    if (profile?.role !== "admin" || profile.status !== "approved" || profile.account_state !== "active") {
+      return false;
+    }
+
+    const { data: allowed, error: adminError } = await client.rpc("is_platform_admin");
+    if (adminError) throw adminError;
+    if (allowed !== true) return false;
+
+    window.location.replace("student-space.html?course=" + encodeURIComponent(slug));
+    return true;
+  }
+
   async function loadCourse() {
     if (!slug || slug.length > 120) {
       showMessage("رابط الدورة غير مكتمل. ارجع إلى مكتبة الدورات لاختيار دورة.", true);
@@ -27,8 +51,14 @@
     }
 
     const client = window.supabase.createClient(url, key, {
-      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
+
+    // A verified active administrator goes straight to the full course workspace,
+    // not the visitor-facing description page.
+    const redirected = await redirectAdministrator(client);
+    if (redirected) return;
+
     const { data, error } = await client
       .from("course_catalog")
       .select("course_slug,title,description")
@@ -52,7 +82,7 @@
     showMessage("تم تحميل معلومات الدورة بنجاح.");
   }
 
-  loadCourse().catch(() => {
-    showMessage("تعذر تحميل معلومات الدورة الآن. أعد المحاولة أو ارجع إلى مكتبة الدورات.", true);
+  loadCourse().catch((error) => {
+    showMessage(error?.message || "تعذر تحميل معلومات الدورة الآن. أعد المحاولة أو ارجع إلى مكتبة الدورات.", true);
   });
 })();
