@@ -33,8 +33,12 @@
       const { data: allowed, error: adminError } = await client.rpc("is_platform_admin");
       if (adminError) throw adminError;
       if (allowed !== true) return false;
-      // Odoo has a self-contained introductory presentation; keep it visible.
+      // Keep the Odoo introduction visible; open the full business curriculum directly.
       if (slug === "odoo-training") return false;
+      if (slug === "business-administration") {
+        window.location.replace("academy/business-administration.html");
+        return true;
+      }
       window.location.replace("student-space.html?course=" + encodeURIComponent(slug));
       return true;
     }
