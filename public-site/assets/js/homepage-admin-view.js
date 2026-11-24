@@ -50,6 +50,19 @@
     }
   }
 
+  function enableTeacherHome() {
+    const accountLink = document.getElementById("maAccountLink");
+    const joinLink = document.getElementById("maJoinLink");
+    if (accountLink) {
+      accountLink.href = "teacher-space.html";
+      accountLink.setAttribute("aria-label", "فتح مساحة المدرس");
+    }
+    if (joinLink) {
+      joinLink.href = "teacher-space.html";
+      joinLink.setAttribute("aria-label", "فتح مساحة المدرس");
+    }
+  }
+
   function resetGuestHome() {
     document.body.classList.remove("ma-admin-session");
     const accountLink = document.getElementById("maAccountLink");
@@ -91,6 +104,10 @@
 
       if (profile.role === "student") {
         enableStudentHome();
+        return;
+      }
+      if (profile.role === "teacher") {
+        enableTeacherHome();
         return;
       }
 
