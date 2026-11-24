@@ -58,7 +58,10 @@
         'document.addEventListener("click",function(event){' +
           'var link=event.target&&event.target.closest?event.target.closest("a[href]"):null;' +
           'if(!link)return;' +
+          'var rawHref=link.getAttribute("href")||"";' +
+          'if(rawHref.charAt(0)==="#")return;' +
           'var target;try{target=new URL(link.href,document.baseURI);}catch(e){return;}' +
+          'if(target.pathname===location.pathname&&target.hash)return;' +
           'if(target.origin!=="https://raw.githubusercontent.com"||target.pathname.indexOf(prefix)!==0||!target.pathname.toLowerCase().endsWith(".html"))return;' +
           'var sourcePath=target.pathname.slice(prefix.length);' +
           'if(sourcePath.indexOf("academy/")!==0)return;' +
