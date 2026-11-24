@@ -271,8 +271,21 @@
         const link = host.querySelector('a[href="academy/business-administration.html"]');
         link?.focus();
       } else {
+        const courseLessons = lessonsByCourse.get(selected.course_slug) || [];
+        const recentLesson = courseLessons
+          .map(lesson => ({
+            lesson,
+            progress: progressByLesson.get(progressKey(lesson.course_slug, lesson.lesson_slug))
+          }))
+          .filter(item => item.progress?.updated_at)
+          .sort((a, b) => new Date(b.progress.updated_at).getTime() - new Date(a.progress.updated_at).getTime())[0]?.lesson;
+        const targetSlug = recentLesson?.lesson_slug;
+        const targetButton = targetSlug
+          ? [...host.querySelectorAll("[data-lesson-slug]")].find(button => button.dataset.lessonSlug === targetSlug)
+          : null;
         const firstLesson = host.querySelector('[data-first-lesson="true"]');
-        if (firstLesson) firstLesson.click();
+        if (targetButton) targetButton.click();
+        else if (firstLesson) firstLesson.click();
         else if (selected.course_slug === "odoo-training") {
           const intro = host.querySelector(".odoo-intro-link");
           intro?.focus();
@@ -406,6 +419,7 @@
         const draftLabel = isAdmin && lesson.is_published !== true ? " · مسودة / غير منشورة" : "";
         const lessonProgress = progressByLesson.get(progressKey(lesson.course_slug, lesson.lesson_slug));
         button.textContent = (lessonProgress?.completed === true ? "✓ " : "") + "فتح: " + (lesson.title || lesson.lesson_slug) + draftLabel;
+        button.dataset.lessonSlug = lesson.lesson_slug;
         if (lessonProgress?.completed === true) button.classList.add("completed");
         if (index === 0) button.dataset.firstLesson = "true";
         button.addEventListener("click", () => openLesson(lesson, button));
