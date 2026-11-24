@@ -119,7 +119,12 @@
     $("courseDescription").value = course.description || "";
     $("courseActive").checked = course.is_active === true;
     $("saveCourseButton").textContent = "حفظ بيانات المقرر";
-    $("openCourseContent").href = "student-space.html?course=" + encodeURIComponent(selectedSlug);
+    $("openCourseContent").href = selectedSlug === "business-administration"
+      ? "academy/business-administration.html"
+      : "student-space.html?course=" + encodeURIComponent(selectedSlug);
+    $("openCourseContent").textContent = selectedSlug === "business-administration"
+      ? "فتح منهج الإدارة والأعمال"
+      : "فتح المحتوى في مساحة المدير";
     await loadLessons();
   }
 

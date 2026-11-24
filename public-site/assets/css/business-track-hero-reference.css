@@ -1,0 +1,69 @@
+﻿/* BUSINESS TRACK HERO REFERENCE IMAGE V1 START */
+/* Replaces only the decorative B artwork panel; the hero background, copy and buttons remain unchanged. */
+body .ba-hero[data-cinematic-bg="education"] .ba-hero-art {
+    position: relative !important;
+    display: block !important;
+    flex: 0 1 560px !important;
+    width: min(100%, 560px) !important;
+    max-width: 560px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 2.48 / 1 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255,255,255,.88) !important;
+    border-radius: 23px !important;
+    background: #e9f1fb !important;
+    box-shadow: 0 20px 46px rgba(13,30,55,.20) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body .ba-hero[data-cinematic-bg="education"] .ba-hero-art::before,
+body .ba-hero[data-cinematic-bg="education"] .ba-hero-art::after {
+    content: none !important;
+    display: none !important;
+}
+
+body .ba-hero[data-cinematic-bg="education"] .ba-hero-art > :not(.ba-business-reference-image) {
+    display: none !important;
+}
+
+body .ba-hero[data-cinematic-bg="education"] .ba-hero-art .ba-business-reference-image {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+}
+
+@media (max-width: 900px) {
+    body .ba-hero[data-cinematic-bg="education"] .ba-hero-art {
+        flex-basis: 100% !important;
+        width: 100% !important;
+        max-width: 680px !important;
+        aspect-ratio: 2.35 / 1 !important;
+    }
+}
+
+@media (max-width: 560px) {
+    body .ba-hero[data-cinematic-bg="education"] .ba-hero-art {
+        aspect-ratio: 1.9 / 1 !important;
+        border-radius: 17px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body .ba-hero[data-cinematic-bg="education"] .ba-hero-art {
+        scroll-behavior: auto !important;
+    }
+}
+/* BUSINESS TRACK HERO REFERENCE IMAGE V1 END */

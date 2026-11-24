@@ -1,0 +1,61 @@
+/* Mohammed Afify Academy — Unified Breadcrumb Navigation V1
+   A lightweight navigation layer. It does not alter course content or page-specific themes. */
+
+.ma-academy-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+  padding: 11px 15px;
+  border: 1px solid #e2eaf3;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .84);
+  color: #73839a;
+  font-family: "Cairo", Tahoma, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.ma-academy-breadcrumb a {
+  color: #315477;
+  font-weight: 750;
+  text-decoration: none;
+  text-underline-offset: 3px;
+  transition: color .18s ease;
+}
+
+.ma-academy-breadcrumb a:hover {
+  color: #087f78;
+  text-decoration: underline;
+}
+
+.ma-academy-breadcrumb a:focus-visible {
+  outline: 2px solid #20b7a7;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.ma-academy-breadcrumb__separator {
+  color: #a7b4c4;
+  user-select: none;
+}
+
+.ma-academy-breadcrumb [aria-current="page"] {
+  color: #172f51;
+  font-weight: 850;
+}
+
+@media (max-width: 640px) {
+  .ma-academy-breadcrumb {
+    gap: 6px;
+    margin-bottom: 13px;
+    padding: 9px 11px;
+    border-radius: 11px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ma-academy-breadcrumb a { transition: none; }
+}

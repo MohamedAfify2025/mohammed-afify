@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="مسار الإدارة والأعمال للبكالوريا المصرية - الصف الثاني، مع دروس تطبيقية وأنشطة وتقييمات.">
+  <meta name="robots" content="noindex,nofollow">
+  <title>الإدارة والأعمال | Mohammed Afify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="academy.css">
+
+
+
+  <style>
+    :root{--ba-ink:#101b35;--ba-muted:#66738a;--ba-line:#e4e9f3;--ba-soft:#f4f6fc;--ba-violet:#8067ec;--ba-green:#0f8b60;--ba-gold:#b56d00}
+    html{scroll-behavior:smooth} body{background:#f6f7fb;color:var(--ba-ink)}
+    .ba-main{max-width:1220px;margin:0 auto;padding:34px 24px 76px}
+    .ba-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1.4fr .8fr;gap:28px;align-items:center;padding:clamp(28px,5vw,62px);border-radius:30px;background:linear-gradient(135deg,#101b35,#1b2f58 65%,#493c8c);color:#fff;box-shadow:0 20px 60px rgba(17,32,61,.16)}
+    .ba-kicker{display:inline-flex;align-items:center;gap:8px;color:#c5b8ff;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:800}
+    .ba-hero h1{font-size:clamp(32px,5vw,54px);line-height:1.25;margin:16px 0 14px;color:#fff}
+    .ba-hero p{font-size:17px;line-height:2;max-width:760px;color:#e0e7fa;margin:0}
+    .ba-hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+    .ba-button{display:inline-flex;justify-content:center;align-items:center;gap:8px;text-decoration:none;border:0;border-radius:13px;padding:13px 19px;font:inherit;font-weight:800;cursor:pointer;transition:transform .2s,opacity .2s}
+    .ba-button:hover{transform:translateY(-2px)} .ba-button.primary{background:#fff;color:#101b35}.ba-button.secondary{border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.08);color:#fff}
+    .ba-hero-art{min-height:245px;border:1px solid rgba(255,255,255,.2);border-radius:24px;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.03));padding:24px;display:flex;flex-direction:column;justify-content:space-between}
+    .ba-art-label{font-size:12px;color:#cbc0ff;font-weight:800;letter-spacing:.15em}
+    .ba-art-symbol{font-size:90px;line-height:1;font-weight:800;letter-spacing:-.08em;color:#fff}
+    .ba-art-line{height:7px;width:100%;background:rgba(255,255,255,.13);border-radius:10px;overflow:hidden}.ba-art-line span{display:block;width:20%;height:100%;background:#b5a6ff;border-radius:10px}
+    .ba-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 42px}
+    .ba-stat{padding:20px;border:1px solid var(--ba-line);border-radius:18px;background:#fff}.ba-stat strong{display:block;font-size:26px;margin-bottom:4px}.ba-stat span{color:var(--ba-muted);font-size:13px}
+    .ba-section{margin-top:36px}.ba-section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:18px}.ba-section-head h2{margin:7px 0 0;font-size:clamp(24px,3vw,34px)}.ba-section-head p{color:var(--ba-muted);line-height:1.8;margin:0;max-width:650px}
+    .ba-units{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+    .ba-unit-card{display:flex;flex-direction:column;gap:10px;min-height:178px;padding:18px;border:1px solid var(--ba-line);border-radius:18px;background:#fff;color:inherit;text-decoration:none;box-shadow:0 6px 24px rgba(17,32,61,.03)}
+    .ba-unit-card.active{border-color:#c7baff;box-shadow:0 10px 30px rgba(128,103,236,.11)}.ba-unit-number{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;background:#eeeaff;color:#5c48c9;font-weight:800}
+    .ba-unit-card h3{font-size:15px;line-height:1.7;margin:0}.ba-unit-card p{font-size:12px;color:var(--ba-muted);line-height:1.7;margin:0}.ba-unit-status{margin-top:auto;font-size:11px;font-weight:800;color:var(--ba-green)}
+    .ba-panel{padding:clamp(20px,4vw,34px);border:1px solid var(--ba-line);border-radius:24px;background:#fff;margin-top:18px;box-shadow:0 10px 34px rgba(17,32,61,.035)}
+    .ba-panel h2{font-size:clamp(24px,3vw,32px);margin:8px 0 14px}.ba-panel h3{font-size:20px;margin:25px 0 10px}.ba-panel p{color:#53647f;line-height:2;margin:10px 0}.ba-highlight{border-inline-start:4px solid var(--ba-violet);padding:16px 18px;border-radius:12px;background:#f4f1ff;color:#2c2750;line-height:2;margin:18px 0}
+    .ba-video-placeholder{display:flex;gap:18px;align-items:center;padding:20px;border:1px dashed #b6c1d8;border-radius:18px;background:linear-gradient(135deg,#f7f9ff,#fff);margin:18px 0}.ba-video-icon{flex:0 0 56px;width:56px;height:56px;display:grid;place-items:center;border-radius:18px;background:#e9edfa;color:#475a89;font-size:22px}.ba-video-placeholder strong{display:block;margin-bottom:5px}.ba-video-placeholder p{margin:0;font-size:13px}
+    .ba-lead-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.ba-lesson{border:1px solid var(--ba-line);border-radius:17px;padding:20px;background:#fff}.ba-lesson h3{margin:0 0 8px}.ba-lesson p{margin:0}.ba-bullets{padding-inline-start:22px;color:#53647f;line-height:2.05;margin:12px 0}.ba-pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.ba-pill{padding:7px 11px;border-radius:99px;background:#f0edff;color:#5342b4;font-size:12px;font-weight:700}
+    .ba-activity{background:#f7f9fe;border:1px solid #e2e8f5;border-radius:18px;padding:22px;margin-top:18px}.ba-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.ba-field{display:flex;flex-direction:column;gap:7px}.ba-field.full{grid-column:1/-1}.ba-field label{font-size:13px;font-weight:800}.ba-field textarea,.ba-field input,.ba-field select{width:100%;box-sizing:border-box;border:1px solid #d9e1ee;border-radius:12px;background:#fff;padding:12px 14px;font:inherit;color:var(--ba-ink);min-height:46px}.ba-field textarea{min-height:100px;resize:vertical}.ba-helper{font-size:12px;color:var(--ba-muted);line-height:1.8}
+    .ba-quiz{border:1px solid var(--ba-line);border-radius:20px;padding:22px;margin-top:20px}.ba-question{padding:16px 0;border-bottom:1px solid #edf0f6}.ba-question:last-of-type{border-bottom:0}.ba-question legend{font-weight:800;line-height:1.8;padding:0 0 8px}.ba-option{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;border-radius:10px;line-height:1.8;cursor:pointer}.ba-option:hover{background:#f6f7fd}.ba-option input{margin-top:6px;accent-color:var(--ba-violet)}.ba-result{display:none;margin-top:15px;padding:16px;border-radius:13px;line-height:1.9}.ba-result.show{display:block}.ba-result.success{background:#e8f8f0;color:#086443}.ba-result.error{background:#fff0f0;color:#9b2525}.ba-submit{margin-top:16px;background:var(--ba-ink);color:#fff}
+    .ba-details{border:1px solid var(--ba-line);border-radius:18px;background:#fff;margin:12px 0;overflow:hidden}.ba-details summary{display:flex;align-items:center;gap:12px;list-style:none;cursor:pointer;padding:19px 20px;font-weight:800}.ba-details summary::-webkit-details-marker{display:none}.ba-details summary:after{content:'+';margin-inline-start:auto;font-size:22px;color:var(--ba-violet)}.ba-details[open] summary:after{content:'−'}.ba-detail-content{padding:0 22px 22px;border-top:1px solid #edf0f6}.ba-detail-content .ba-pill{display:inline-block}.ba-footnote{font-size:12px!important;color:#7b8698!important}.ba-alert{padding:14px 16px;border:1px solid #f0dfb7;border-radius:14px;background:#fff8e9;color:#855300;line-height:1.9;margin:16px 0}
+    @media(max-width:900px){.ba-hero{grid-template-columns:1fr}.ba-hero-art{min-height:180px}.ba-art-symbol{font-size:64px}.ba-units{grid-template-columns:repeat(2,minmax(0,1fr))}.ba-stats{grid-template-columns:1fr}}
+    @media(max-width:600px){.ba-main{padding:20px 14px 48px}.ba-lead-grid,.ba-form-grid{grid-template-columns:1fr}.ba-unit-card{min-height:150px;padding:14px}.ba-video-placeholder{align-items:flex-start}.ba-hero{padding:25px 20px}.ba-panel{padding:19px}.ba-section-head{align-items:flex-start;flex-direction:column}}
+  </style>
+  <!-- MEMBERSHIP ACCESS PRELOAD -->
+  <style>html.ba-access-checking body main{visibility:hidden!important}.ba-access-status{margin:0 0 18px;padding:12px 15px;border-radius:12px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.8}.ba-access-status.admin{background:#e6f1ff;color:#23456f}.ba-access-status[hidden]{display:none!important}</style>
+  <script>document.documentElement.classList.add('ba-access-checking');</script>
+  <!-- /MEMBERSHIP ACCESS PRELOAD -->
+<style id="ba-contrast-fix">
+/* Restore the actual education photo and keep the hero text legible. */
+:root {
+  --ba-ink: #101b35;
+  --ba-muted: #43516a;
+  --ba-violet: #5940be;
+  --ba-green: #087a50;
+  --ba-gold: #825000;
+}
+body { color: #101b35 !important; }
+.ba-hero[data-cinematic-bg="education"] {
+  background-color: #091326 !important;
+  background-image:
+    linear-gradient(105deg,
+      rgba(7,15,31,.32) 0%,
+      rgba(7,15,31,.48) 52%,
+      rgba(20,18,55,.58) 100%),
+    linear-gradient(135deg,#101b35,#1b2f58 65%,#493c8c) !important;
+  background-size: cover, cover !important;
+  background-position: center, 46% 48% !important;
+  background-repeat: no-repeat, no-repeat !important;
+  animation: ba-hero-background-drift 32s ease-in-out infinite alternate !important;
+  color: #ffffff !important;
+}
+.ba-hero[data-cinematic-bg="education"] .ba-kicker,
+.ba-hero[data-cinematic-bg="education"] .ba-art-label {
+  color: #f0eaff !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,.72) !important;
+}
+.ba-hero[data-cinematic-bg="education"] h1,
+.ba-hero[data-cinematic-bg="education"] .ba-art-symbol {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,.72) !important;
+}
+.ba-hero[data-cinematic-bg="education"] p {
+  color: #fbfcff !important;
+  text-shadow: 0 1px 5px rgba(0,0,0,.8) !important;
+}
+.ba-hero[data-cinematic-bg="education"] .ba-hero-art {
+  background: rgba(5,12,27,.68) !important;
+  border-color: rgba(255,255,255,.62) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(3px);
+}
+.ba-hero[data-cinematic-bg="education"] .ba-button.secondary {
+  color: #ffffff !important;
+  background: rgba(8,17,34,.74) !important;
+  border: 1px solid rgba(255,255,255,.82) !important;
+}
+.ba-hero[data-cinematic-bg="education"] .ba-button.primary {
+  background: #ffffff !important;
+  color: #101b35 !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* Readability for unit cards, lessons, activities and quiz controls. */
+.ba-section-head p,
+.ba-unit-card p,
+.ba-stat span,
+.ba-panel p,
+.ba-bullets,
+.ba-helper,
+.ba-video-placeholder p,
+.ba-lesson p,
+.ba-footnote {
+  color: #43516a !important;
+}
+.ba-section .ba-kicker,
+.ba-panel > .ba-kicker { color: #4932a8 !important; }
+.ba-unit-card h3,
+.ba-stat strong,
+.ba-panel h2,
+.ba-panel h3,
+.ba-lesson h3,
+.ba-question legend,
+.ba-field label { color: #101b35 !important; }
+.ba-unit-number,
+.ba-pill { color: #38258d !important; background-color: #eeeaff !important; }
+.ba-unit-status { color: #087a50 !important; }
+.ba-unit-status[style*="ba-gold"] { color: #825000 !important; }
+.ba-option { color: #172642 !important; }
+.ba-option:hover { background: #eceffd !important; }
+.ba-field input,
+.ba-field select,
+.ba-field textarea {
+  color: #101b35 !important;
+  background: #ffffff !important;
+  border-color: #aebbd1 !important;
+}
+.ba-field input::placeholder,
+.ba-field textarea::placeholder { color: #596780 !important; opacity: 1 !important; }
+.ba-button:focus-visible,
+.ba-option:focus-within,
+.ba-field input:focus-visible,
+.ba-field select:focus-visible,
+.ba-field textarea:focus-visible {
+  outline: 3px solid #5c46d6 !important;
+  outline-offset: 3px !important;
+}
+@keyframes ba-hero-background-drift {
+  from { background-position: center, 43% 46%; }
+  to   { background-position: center, 57% 54%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ba-hero[data-cinematic-bg="education"] { animation: none !important; }
+}
+</style>
+<link rel="stylesheet" href="../assets/css/business-track-hero-reference.css">
+<link rel="stylesheet" href="../assets/css/business-administration-unit2.css">
+<link rel="stylesheet" href="../assets/css/business-administration-unit3.css">
+<link rel="stylesheet" href="../assets/css/business-administration-professional-layout.css">
+
+  <link rel="stylesheet" href="../assets/css/ma-global-navigation-v1.css">
+  <link rel="stylesheet" href="../assets/css/ma-academy-breadcrumbs-v1.css?v=1">
+</head>
+<body>
+<header class="ma-global-header" data-ma-global-header>
+  <div class="ma-header-shell">
+    <a class="ma-brand" href="../index.html#home" aria-label="Mohammed Afify home">
+      <span class="ma-brand-symbol">MA<span>.</span></span>
+      <span class="ma-brand-copy"><strong>Mohammed Afify</strong><small data-i18n="brandSub">التعليم والتقنية والأعمال</small></span>
+    </a>
+
+    <button class="ma-menu-toggle" id="menuToggle" type="button" aria-label="فتح القائمة" aria-controls="mainNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="ma-primary-nav" id="mainNav" aria-label="التنقل الرئيسي">
+      <a href="../index.html#home" data-i18n="navHome">الرئيسية</a>
+
+      <div class="ma-nav-dropdown">
+        <button class="ma-dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true">
+          <span data-i18n="navAcademy">الأكاديمية</span>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="ma-dropdown-menu">
+          <a href="../academy-access.html" data-i18n="navAcademyLibrary">مكتبة الدورات</a>
+          <a href="../index.html#learning" data-i18n="navLearningPaths">مسارات التعلّم</a>
+          <a href="../academy-access.html" data-i18n="navProjects">المشروعات التطبيقية</a>
+          <a href="../academy-access.html" data-i18n="navCertificates">الشهادات</a>
+        </div>
+      </div>
+
+      <div class="ma-nav-dropdown">
+        <button class="ma-dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true">
+          <span data-i18n="navBusiness">خدمات الأعمال</span>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="ma-dropdown-menu">
+          <a href="../odoo-solutions.html" data-i18n="navOdoo">حلول Odoo</a>
+          <a href="../index.html#services" data-i18n="navConsulting">التدريب والاستشارات</a>
+          <a href="../index.html#contact" data-i18n="navContact">تواصل معنا</a>
+        </div>
+      </div>
+
+      <a href="../index.html#about" data-i18n="navAbout">عن المنصة</a>
+      <a href="../index.html#contact" data-i18n="navContact">تواصل</a>
+    </nav>
+
+    <div class="ma-header-actions">
+      
+      <a class="ma-account" id="baAdminDashboardLink" href="../admin-dashboard.html" hidden>لوحة المدير</a>
+      <a class="ma-account" href="../student-login.html" data-i18n="navAccount">حسابي</a>
+      <a class="ma-join" href="../student-subscribe.html" data-i18n="navJoin">ابدأ التعلّم</a>
+    </div>
+  </div>
+</header>
+<main class="ba-main">
+  <div id="baAccessStatus" class="ba-access-status" role="status" hidden></div>
+  <nav class="ma-academy-breadcrumb" aria-label="مسار التنقل">
+    <a href="../index.html">الرئيسية</a>
+    <span class="ma-academy-breadcrumb__separator" aria-hidden="true">/</span>
+    <a href="../academy-access.html">مكتبة الدورات</a>
+    <span class="ma-academy-breadcrumb__separator" aria-hidden="true">/</span>
+    <span aria-current="page">الإدارة والأعمال</span>
+  </nav>
+  <section class="ba-hero" data-cinematic-bg="education">
+    <div>
+      <span class="ba-kicker">MOHAMMED AFIFY · BUSINESS LEARNING</span>
+      <h1>مسار الإدارة والأعمال</h1>
+      <p>البكالوريا المصرية — الصف الثاني. تعلّم كيف تفكر من منظور صاحب العمل والمدير، وتحلّل القرارات من خلال حالات عملية وأنشطة وتقييمات قصيرة، وليس بالحفظ وحده.</p>
+      <div class="ba-hero-actions">
+        <a class="ba-button primary" href="#unit-1">ابدأ الوحدة الأولى ↓</a>
+        <a class="ba-button secondary" href="#unit-map">خريطة الوحدات</a>
+      </div>
+    </div>
+    <div class="ba-hero-art" aria-label="Business and management learning path" role="img"><img class="ba-business-reference-image" src="../assets/images/business-administration-grade2-reference-cover.webp" alt="طلاب يعملون معًا على مشروع للإدارة والأعمال مع مؤشرات تحليلية" loading="eager" decoding="async"></div>
+  </section>
+
+  <div class="ba-stats" aria-label="ملخص المسار">
+    <div class="ba-stat"><strong>5 وحدات</strong><span>خريطة المنهج كاملة</span></div>
+    <div class="ba-stat"><strong>حالات عملية</strong><span>تطبيق المفاهيم على قرارات واقعية</span></div>
+    <div class="ba-stat"><strong>تقييم تفاعلي</strong><span>نتيجة الوحدة الأولى تُحفظ بعد تفعيل ملف SQL المرفق</span></div>
+  </div>
+
+  <section class="ba-section" id="unit-map">
+    <div class="ba-section-head"><div><span class="ba-kicker" style="color:var(--ba-violet)">COURSE ROADMAP</span><h2>خريطة الوحدات</h2></div><p>الموضوعات الخمسة مرتبة وفق كتاب إدارة الأعمال للبكالوريا المصرية، الجزء الأول. محتوى الوحدة الأولى متاح للتجربة الآن، مع خريطة واضحة لبقية الوحدات.</p></div>
+    <div class="ba-units">
+      <a class="ba-unit-card active" href="#unit-1"><span class="ba-unit-number">01</span><h3>مدخل إلى الأعمال وغايتها</h3><p>القيمة، الاحتياجات والرغبات، أصحاب المصلحة والقطاعات.</p><span class="ba-unit-status">متاح الآن ↓</span></a>
+      <a class="ba-unit-card active" href="#unit-2"><span class="ba-unit-number">02</span><h3>أنواع منظمات الأعمال</h3><p>الملكية والسيطرة والمسؤولية والمخاطر.</p><span class="ba-unit-status" style="color:var(--ba-gold)">متاح الآن</span></a>
+      <a class="ba-unit-card active" href="#unit-3"><span class="ba-unit-number">03</span><h3>أهداف منظمات الأعمال وأصحاب المصلحة</h3><p>الربح والنمو والبقاء وإدارة تعارض المصالح.</p><span class="ba-unit-status" style="color:var(--ba-gold)">متاح الآن ↓</span></a>
+      <a class="ba-unit-card" href="#unit-4"><span class="ba-unit-number">04</span><h3>البيئة الداخلية والخارجية</h3><p>العوامل المؤثرة والفرص والتهديدات والتكيّف.</p><span class="ba-unit-status" style="color:var(--ba-gold)">ملخص الوحدة</span></a>
+      <a class="ba-unit-card" href="#unit-5"><span class="ba-unit-number">05</span><h3>الإدارة والقيادة</h3><p>وظائف الإدارة وأساليب القيادة وصنع القرار.</p><span class="ba-unit-status" style="color:var(--ba-gold)">ملخص الوحدة</span></a>
+    </div>
+  </section>
+
+  <section class="ba-panel" id="unit-1">
+    <span class="ba-kicker" style="color:var(--ba-violet)">UNIT 01 · AVAILABLE</span>
+    <h2>الوحدة الأولى: مدخل إلى الأعمال وغايتها</h2>
+    <div class="ba-highlight"><strong>الفكرة المحورية:</strong> توجد منظمات الأعمال لخلق قيمة من خلال تلبية الاحتياجات وتحقيق الرغبات، لكن طريقة تحقيق هذه القيمة تتضمن اختيارات وأولويات ومسؤوليات.</div>
+    <div class="ba-video-placeholder ba-video-embed" data-ba-video-id="eZhcNWVPMQE" style="display:block; padding:clamp(16px,2.5vw,26px); border:1px solid #dce6f0; border-radius:22px; background:linear-gradient(135deg,#ffffff 0%,#f3f8fc 100%); box-shadow:0 14px 36px rgba(16,35,60,.08);">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+        <div style="text-align:right;">
+          <span style="display:inline-block; color:#078b82; font-size:11px; font-weight:800; letter-spacing:.08em;">BUSINESS ADMINISTRATION · UNIT 01</span>
+          <h3 style="margin:6px 0 4px; color:#101b35; font-size:clamp(18px,2.2vw,23px); line-height:1.6;">شرح الوحدة الأولى: مدخل إلى إدارة الأعمال</h3>
+          <p style="margin:0; color:#50627a; font-size:14px; line-height:1.8;">شاهد شرح الوحدة وتعرّف على المفاهيم الأساسية وأهمية الإدارة ومجالات التطبيق.</p>
+        </div>
+        <span style="display:inline-flex; align-items:center; gap:7px; padding:8px 12px; border-radius:999px; color:#087f73; background:#e5f7f3; font-size:12px; font-weight:800; white-space:nowrap;">▶ فيديو الوحدة الأولى</span>
+      </div>
+      <div style="position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border-radius:16px; background:#08172c; box-shadow:0 12px 28px rgba(10,25,48,.18);">
+        <iframe src="https://www.youtube-nocookie.com/embed/eZhcNWVPMQE?rel=0" title="شرح إدارة الأعمال - الوحدة الأولى: مدخل إلى إدارة الأعمال" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:14px;">
+        <span style="color:#64748b; font-size:12px; line-height:1.7;">يمكنك مشاهدة الفيديو داخل الصفحة أو فتحه مباشرة على YouTube.</span>
+        <a href="https://youtu.be/eZhcNWVPMQE" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 15px; border-radius:11px; color:#ffffff; background:#10213d; text-decoration:none; font-size:13px; font-weight:800;">مشاهدة على YouTube ↗</a>
+      </div>
+    </div>
+    <h3>نواتج التعلّم</h3>
+    <ul class="ba-bullets">
+      <li>شرح المقصود بمنظمة الأعمال وسبب وجودها.</li>
+      <li>التمييز بين الاحتياجات والرغبات، وبين السلع والخدمات.</li>
+      <li>تحديد أصحاب المصلحة وتحليل كيفية تأثرهم بقرارات المشروع.</li>
+      <li>تصنيف الأنشطة الاقتصادية وتوضيح كيفية انتقال القيمة خلال سلسلة العمل.</li>
+      <li>تقديم حكم مبرر باستخدام الفكرة والدليل والاستنتاج.</li>
+    </ul>
+    <div class="ba-lead-grid">
+      <article class="ba-lesson"><h3>1. متى تصبح الهواية منظمة أعمال؟</h3><p>تأمل حالة مريم التي بدأت بإعداد المخبوزات كهواية. عندما أصبحت تستقبل طلبات متكررة وتخطط للمكونات والأسعار والتسليم، ظهرت مسؤوليات مستمرة وقرارات ومخاطر؛ وهنا يتحول النشاط إلى عمل منظم يقدم قيمة للآخرين.</p><div class="ba-pill-row"><span class="ba-pill">قيمة للآخرين</span><span class="ba-pill">استمرارية</span><span class="ba-pill">مسؤولية</span></div></article>
+      <article class="ba-lesson"><h3>2. الاحتياجات والرغبات والسلع والخدمات</h3><p>الحاجة ترتبط بما يحتاج إليه الفرد، أما الرغبة فتصف الطريقة المفضلة لتلبية احتياج أو تحقيق تجربة معينة. السلعة شيء مادي، بينما الخدمة نشاط أو منفعة؛ وقد تجمع منظمة الأعمال بينهما لزيادة القيمة.</p><div class="ba-pill-row"><span class="ba-pill">احتياج</span><span class="ba-pill">رغبة</span><span class="ba-pill">سلعة</span><span class="ba-pill">خدمة</span></div></article>
+      <article class="ba-lesson"><h3>3. أصحاب المصلحة وقرارات الأعمال</h3><p>قد يتأثر القرار بمريم نفسها، والعملاء، والأسرة، والعاملين والموردين أو المقهى الشريك. لا تتطابق مصالح كل الأطراف دائمًا؛ فالعميل قد يريد سرعة وسعرًا أقل، بينما تحتاج المنظمة إلى وقت وتكلفة يمكن تحملهما.</p></article>
+      <article class="ba-lesson"><h3>4. القطاعات وخلق القيمة</h3><p>يمكن تحليل النشاط عبر مراحل مثل استخراج المواد الخام، وتحويلها إلى منتج، ثم توزيع المنتج وبيعه وتقديم الخدمات المرتبطة به. يساعد تتبع المراحل على معرفة أين تُضاف القيمة وأين تظهر التكلفة أو المخاطر.</p></article>
+    </div>
+
+    <div class="ba-activity">
+      <span class="ba-kicker" style="color:var(--ba-violet)">PRACTICAL ACTIVITY</span>
+      <h3>نشاط تطبيقي: قرار مريم</h3>
+      <p>تخيّل أن مقهى قريبًا طلب من مريم تزويده بالمخبوزات بانتظام. اكتب إجاباتك، ثم نزّلها كملف حتى تحتفظ بعملك.</p>
+      <form id="baProjectForm" class="ba-form-grid">
+        <div class="ba-field full"><label for="baOpportunity">1. ما الفرصة التي أمام مريم؟</label><textarea id="baOpportunity" name="opportunity" required placeholder="صف العميل أو الحاجة التي يمكن أن تلبيها مريم..."></textarea></div>
+        <div class="ba-field"><label for="baValue">2. ما القيمة التي ستقدمها للعميل؟</label><textarea id="baValue" name="value" required placeholder="منتج، جودة، تخصيص، التزام بالمواعيد..."></textarea></div>
+        <div class="ba-field"><label for="baStakeholders">3. من أصحاب المصلحة المتأثرون؟</label><textarea id="baStakeholders" name="stakeholders" required placeholder="العملاء، مريم، الأسرة، المقهى، العاملون..."></textarea></div>
+        <div class="ba-field full"><label for="baDecision">4. هل تنصح مريم بقبول الطلب؟ برّر رأيك بمخاطرة واحدة وطريقة لتقليلها.</label><textarea id="baDecision" name="decision" required placeholder="حكمي هو... لأن... والدليل... ولذلك أوصي بـ..."></textarea></div>
+        <div class="ba-field full"><button class="ba-button ba-submit" type="submit">تنزيل إجاباتي كملف ←</button><span class="ba-helper">يتم إنشاء الملف على جهازك فقط، ولا تُرسل إجابات النشاط إلى الخادم.</span></div>
+      </form>
+      <div id="baProjectNotice" class="ba-result" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="ba-quiz">
+      <span class="ba-kicker" style="color:var(--ba-violet)">UNIT 01 CHECKPOINT</span>
+      <h3>تقييم تفاعلي قصير</h3>
+      <p>أجب عن الأسئلة الخمسة. عند تفعيل ملف SQL المرفق، سيحسب الخادم الدرجة ويحفظها في نتائج لوحة الطالب؛ لا تُرسل الصفحة درجة من اختيار الطالب.</p>
+      <form id="baQuizForm">
+        <fieldset class="ba-question"><legend>1. ما المؤشر الأقوى على تحول الهواية إلى منظمة أعمال؟</legend>
+          <label class="ba-option"><input type="radio" name="q1" value="a" required> إنتاج شيء للاستخدام الشخصي فقط.</label>
+          <label class="ba-option"><input type="radio" name="q1" value="b"> نشاط منظم ومستمر يقدم قيمة للآخرين ويتحمل مسؤوليات.</label>
+          <label class="ba-option"><input type="radio" name="q1" value="c"> ممارسة النشاط مرة واحدة دون تخطيط.</label>
+          <label class="ba-option"><input type="radio" name="q1" value="d"> امتلاك مكان كبير حتى دون عملاء.</label>
+        </fieldset>
+        <fieldset class="ba-question"><legend>2. أي خيار أقرب إلى مثال على خدمة مضافة لمخبوزات مريم؟</legend>
+          <label class="ba-option"><input type="radio" name="q2" value="a" required> كمية الدقيق الخام.</label>
+          <label class="ba-option"><input type="radio" name="q2" value="b"> السكر المستخدم في الوصفة.</label>
+          <label class="ba-option"><input type="radio" name="q2" value="c"> توصيل الطلب في الموعد مع تخصيصه حسب طلب العميل.</label>
+          <label class="ba-option"><input type="radio" name="q2" value="d"> وزن المكونات فقط.</label>
+        </fieldset>
+        <fieldset class="ba-question"><legend>3. من الأمثلة التالية، من صاحب المصلحة الخارجي؟</legend>
+          <label class="ba-option"><input type="radio" name="q3" value="a" required> موظف داخل المشروع.</label>
+          <label class="ba-option"><input type="radio" name="q3" value="b"> مريم صاحبة المشروع.</label>
+          <label class="ba-option"><input type="radio" name="q3" value="c"> العميل الذي يشتري المنتج.</label>
+          <label class="ba-option"><input type="radio" name="q3" value="d"> المدير المسؤول عن التشغيل.</label>
+        </fieldset>
+        <fieldset class="ba-question"><legend>4. أي عبارة أدق بشأن الربح وتعريف منظمة الأعمال؟</legend>
+          <label class="ba-option"><input type="radio" name="q4" value="a" required> الربح هو المعيار الوحيد لتعريف كل نشاط.</label>
+          <label class="ba-option"><input type="radio" name="q4" value="b"> لا تؤثر الالتزامات أو الاستمرارية في تعريف النشاط.</label>
+          <label class="ba-option"><input type="radio" name="q4" value="c"> تحقيق الربح ليس الشرط الوحيد؛ فالغرض والتنظيم والقيمة والمسؤولية مهمة أيضًا.</label>
+          <label class="ba-option"><input type="radio" name="q4" value="d"> كل هواية هي منظمة أعمال بالضرورة.</label>
+        </fieldset>
+        <fieldset class="ba-question"><legend>5. تحويل القمح إلى دقيق يُعدّ مثالًا على أي قطاع اقتصادي؟</legend>
+          <label class="ba-option"><input type="radio" name="q5" value="a" required> القطاع الأولي، لأنه استخراج مورد طبيعي.</label>
+          <label class="ba-option"><input type="radio" name="q5" value="b"> القطاع الثانوي، لأنه يحوّل المواد الخام إلى منتج.</label>
+          <label class="ba-option"><input type="radio" name="q5" value="c"> القطاع الخدمي فقط.</label>
+          <label class="ba-option"><input type="radio" name="q5" value="d"> ليس نشاطًا اقتصاديًا.</label>
+        </fieldset>
+        <button class="ba-button ba-submit" type="submit">إرسال التقييم وحفظ النتيجة ←</button>
+      </form>
+      <div id="baQuizResult" class="ba-result" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="ba-panel ba-unit-two" id="unit-2">
+  <!-- BUSINESS ADMINISTRATION UNIT 02 START -->
+  <span class="ba-kicker" style="color:var(--ba-violet)">UNIT 02 · AVAILABLE</span>
+  <h2>الوحدة الثانية: أنواع منظمات الأعمال</h2>
+  <div class="ba-highlight"><strong>الفكرة المحورية:</strong> يوضح هيكل الملكية من يشارك في القرار، وكيف تتوزع المسؤولية والمخاطر، وما مساحة التمويل والنمو المتاحة للمنظمة.</div>
+
+  <div class="ba-video-placeholder" style="display:block;padding:0;overflow:hidden;aspect-ratio:16/9;position:relative;width:100%;max-width:900px;margin:24px auto;background:#000;border-radius:14px;">
+    <iframe
+        src="https://www.youtube-nocookie.com/embed/oYwf3KJoDeI"
+        title="الوحدة الثانية: أنواع منظمات الأعمال"
+        style="position:absolute;inset:0;width:100%;height:100%;border:0;"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+        loading="lazy">
+    </iframe>
+</div>
+
+  <h3>نواتج التعلّم</h3>
+  <ul class="ba-bullets">
+    <li>التعرّف على ثلاثة هياكل أساسية: المنظمة الفردية، وشركة الأشخاص، وشركة الأموال.</li>
+    <li>التمييز بين المسؤولية المحدودة وغير المحدودة.</li>
+    <li>مقارنة أثر الملكية في السيطرة والقرار والتمويل والمخاطر.</li>
+    <li>اختيار هيكل مناسب لموقف عملي مع تبرير الاختيار.</li>
+  </ul>
+
+  <div class="ba-u2-section-head">
+    <div><span class="ba-u2-kicker">THE THREE STRUCTURES</span><h3>أولًا: تعرّف على أنواع منظمات الأعمال</h3></div>
+    <p>ثلاثة هياكل — ومفاضلات مختلفة</p>
+  </div>
+
+  <div class="ba-u2-type-grid">
+    <article class="ba-u2-type-card individual">
+      <div class="ba-u2-type-top"><span class="ba-u2-type-icon" aria-hidden="true">♙</span><span class="ba-u2-type-index">01 / SOLE OWNER</span></div>
+      <h4>المنظمة الفردية</h4>
+      <p>يمتلكها ويديرها شخص واحد؛ يحتفظ بالقرار والربح، لكنه يتحمل التزامات النشاط ومخاطره بنفسه، وقد يظل التمويل مرتبطًا بموارده الشخصية.</p>
+      <div class="ba-u2-tags"><span>مالك واحد</span><span>سيطرة مباشرة</span><span>مسؤولية غير محدودة</span></div>
+    </article>
+    <article class="ba-u2-type-card partnership">
+      <div class="ba-u2-type-top"><span class="ba-u2-type-icon" aria-hidden="true">♧</span><span class="ba-u2-type-index">02 / PARTNERSHIP</span></div>
+      <h4>شركة الأشخاص (الشراكة)</h4>
+      <p>يشترك شخصان أو أكثر في الملكية والعمل والقرارات، ويتقاسمون الأرباح والخسائر. تحتاج الشراكة إلى اتفاق واضح يحدّد الأدوار والتوقعات.</p>
+      <div class="ba-u2-tags"><span>شريكان أو أكثر</span><span>قرار مشترك</span><span>تقاسم النتائج</span></div>
+    </article>
+    <article class="ba-u2-type-card company">
+      <div class="ba-u2-type-top"><span class="ba-u2-type-icon" aria-hidden="true">▦</span><span class="ba-u2-type-index">03 / COMPANY</span></div>
+      <h4>شركة الأموال</h4>
+      <p>كيان قانوني مستقل يملكه مساهمون ويديره مديرون أو مجلس. تتيح جمع رأس مال أكبر، وتحدّ المسؤولية عادةً من تعرض أموال المساهم الشخصية للخطر.</p>
+      <div class="ba-u2-tags"><span>مساهمون</span><span>مسؤولية محدودة</span><span>تنظيم وإفصاح</span></div>
+    </article>
+  </div>
+
+  <div class="ba-u2-section-head">
+    <div><span class="ba-u2-kicker">STRUCTURE COMPARISON</span><h3>ثانيًا: قارن بين الهياكل الثلاثة</h3></div>
+    <p>استخدم الجدول قبل اتخاذ القرار</p>
+  </div>
+  <div class="ba-u2-table-wrap" role="region" aria-label="مقارنة هياكل منظمات الأعمال" tabindex="0">
+    <table class="ba-u2-table">
+      <thead><tr><th>وجه المقارنة</th><th>المنظمة الفردية</th><th>شركة الأشخاص</th><th>شركة الأموال</th></tr></thead>
+      <tbody>
+        <tr><td>الملكية</td><td>فرد واحد</td><td>شخصان أو أكثر</td><td>مساهم واحد أو أكثر</td></tr>
+        <tr><td>المسؤولية</td><td>غير محدودة</td><td>غالبًا غير محدودة</td><td>محدودة عادةً</td></tr>
+        <tr><td>السيطرة والقرار</td><td>للمالك</td><td>مشتركة بين الشركاء</td><td>للمديرين أو مجلس الإدارة</td></tr>
+        <tr><td>الوصول إلى رأس المال</td><td>يرتبط بموارد المالك</td><td>تتسع بمشاركة الشركاء</td><td>يمكن أن يتسع عبر المساهمين والأسهم</td></tr>
+        <tr><td>الإجراءات الرسمية</td><td>أقل</td><td>متوسطة</td><td>أكثر تنظيمًا وإفصاحًا</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="ba-u2-table-note">ملاحظة دراسية: كلمة «غالبًا» مهمة عند وصف مسؤولية شركة الأشخاص؛ فقد تختلف التفاصيل بحسب الشكل القانوني والقواعد المعمول بها.</p>
+
+  <div class="ba-u2-section-head">
+    <div><span class="ba-u2-kicker">THE TRADE-OFF</span><h3>ثالثًا: ما الذي تكسبه وما الذي تتنازل عنه؟</h3></div>
+  </div>
+  <div class="ba-u2-tradeoff">
+    <article><h4>الاستقلال والسيطرة</h4><p>العمل منفردًا يمنح المالك سرعة القرار وحرية أكبر، لكنه يترك عبء التشغيل والمخاطر عليه.</p></article>
+    <article><h4>المشاركة والدعم</h4><p>الشراكة توزّع العمل وتجمع خبرات وموارد، لكنها تتطلب توافقًا واتفاقًا واضحًا على القرارات والنتائج.</p></article>
+    <article><h4>رأس المال والحماية</h4><p>شركة الأموال قد تفتح مجالًا أوسع للتمويل وتحدّ من المخاطر الشخصية، مقابل إجراءات أكثر وتقاسم بعض السيطرة.</p></article>
+  </div>
+
+  <div class="ba-activity">
+    <span class="ba-u2-kicker">CASE STUDY · MARYAM</span>
+    <h3>حالة تطبيقية: مشروع مريم أمام قرار التوسع</h3>
+    <p>يزداد الطلب على مشروع مريم ولم تعد قادرة على إدارة كل المهام وحدها. تعرض لينا المشاركة معها، ويقترح مستثمر تمويل التوسع مقابل حصة في الملكية. أمام مريم ثلاثة بدائل: الاستمرار منفردة، أو الدخول في شراكة، أو تأسيس شركة تستقبل الاستثمار.</p>
+    <div class="ba-u2-decision">
+      <label><input type="radio" name="baMaryamChoice" value="individual"> <span><strong>البقاء منظمة فردية</strong><br>الاحتفاظ بالقرار مع استمرار تحمل العبء والمخاطر.</span></label>
+      <label><input type="radio" name="baMaryamChoice" value="partnership"> <span><strong>الشراكة مع لينا</strong><br>تقاسم العمل والقرار والنتائج وفق اتفاق.</span></label>
+      <label><input type="radio" name="baMaryamChoice" value="company"> <span><strong>قبول الاستثمار</strong><br>الحصول على تمويل مقابل مشاركة الملكية وبعض السيطرة.</span></label>
+    </div>
+    <p class="ba-helper">اختر البديل الأقرب لرأيك، ثم اكتب مبرراتك في ورقة العمل أدناه. لا يوجد اختيار صحيح لكل الحالات؛ يعتمد القرار على حجم النشاط ومخاطره واحتياجه إلى التمويل.</p>
+  </div>
+
+  <div class="ba-u2-section-head">
+    <div><span class="ba-u2-kicker">PRACTICAL WORKSHEET</span><h3>رابعًا: ابنِ توصيتك بنفسك</h3></div>
+    <p>نزّل إجابتك واحتفظ بها للمراجعة</p>
+  </div>
+  <form id="baUnit2DecisionForm" class="ba-u2-form">
+    <div class="ba-u2-field"><label for="baU2ProjectName">اسم المشروع أو النشاط</label><input id="baU2ProjectName" name="projectName" required placeholder="مثال: متجر، مكتب، مصنع..."></div>
+    <div class="ba-u2-field"><label for="baU2Current">الهيكل الحالي</label><select id="baU2Current" name="currentStructure" required><option value="">اختر الهيكل</option><option>منظمة فردية</option><option>شركة أشخاص</option><option>شركة أموال</option></select></div>
+    <div class="ba-u2-field"><label for="baU2Target">الهيكل الذي تقترحه</label><select id="baU2Target" name="targetStructure" required><option value="">اختر توصيتك</option><option>منظمة فردية</option><option>شركة أشخاص</option><option>شركة أموال</option></select></div>
+    <div class="ba-u2-field"><label for="baU2Reason">لماذا اخترت هذا الهيكل؟</label><textarea id="baU2Reason" name="reason" required placeholder="اربط اختيارك بالملكية والسيطرة وحاجة النشاط..."></textarea></div>
+    <div class="ba-u2-field"><label for="baU2Risk">ما أهم مخاطرة يجب إدارتها؟</label><textarea id="baU2Risk" name="risk" required placeholder="وضّح نوع المخاطرة ومن يتحملها..."></textarea></div>
+    <div class="ba-u2-field"><label for="baU2Tradeoff">ما المقابل أو التنازل المحتمل؟</label><textarea id="baU2Tradeoff" name="tradeoff" required placeholder="هل يتنازل المالك عن جزء من السيطرة؟ هل يحتاج إلى اتفاق؟..."></textarea></div>
+    <div class="ba-u2-field full"><button class="ba-u2-submit" type="submit">تنزيل ورقة العمل كملف ←</button></div>
+  </form>
+  <div id="baUnit2DecisionFeedback" class="ba-u2-feedback" role="status" aria-live="polite"></div>
+
+  <div class="ba-u2-section-head">
+    <div><span class="ba-u2-kicker">UNIT 02 CHECKPOINT</span><h3>خامسًا: اختبر فهمك</h3></div>
+    <p>تقييم ذاتي قصير</p>
+  </div>
+  <form id="baUnit2QuizForm" class="ba-u2-quiz">
+    <fieldset class="ba-u2-question"><legend>1. ما السمة الأقرب إلى المنظمة الفردية؟</legend>
+      <label class="ba-u2-option"><input type="radio" name="q1" value="a" required> ملكية موزعة على مساهمين.</label>
+      <label class="ba-u2-option"><input type="radio" name="q1" value="b"> مالك واحد يتولى السيطرة والقرار.</label>
+      <label class="ba-u2-option"><input type="radio" name="q1" value="c"> مجلس إدارة يتخذ القرارات نيابة عن المساهمين.</label>
+    </fieldset>
+    <fieldset class="ba-u2-question"><legend>2. ما الذي يميز شركة الأشخاص؟</legend>
+      <label class="ba-u2-option"><input type="radio" name="q2" value="a" required> انفصالها القانوني الكامل عن المالكين دائمًا.</label>
+      <label class="ba-u2-option"><input type="radio" name="q2" value="b"> امتلاكها من مساهم واحد فقط.</label>
+      <label class="ba-u2-option"><input type="radio" name="q2" value="c"> اشتراك شخصين أو أكثر في الملكية والنتائج.</label>
+    </fieldset>
+    <fieldset class="ba-u2-question"><legend>3. ما المقصود بالمسؤولية المحدودة؟</legend>
+      <label class="ba-u2-option"><input type="radio" name="q3" value="a" required> حماية أموال المساهم الشخصية عادةً، بحيث ترتبط خسارته بما استثمره.</label>
+      <label class="ba-u2-option"><input type="radio" name="q3" value="b"> تحمّل المالك جميع ديون النشاط من أمواله الشخصية.</label>
+      <label class="ba-u2-option"><input type="radio" name="q3" value="c"> عدم وجود أي التزامات على الشركة.</label>
+    </fieldset>
+    <fieldset class="ba-u2-question"><legend>4. ما الذي قد يميز شركة الأموال عند الحاجة إلى تمويل توسع كبير؟</legend>
+      <label class="ba-u2-option"><input type="radio" name="q4" value="a" required> عدم الحاجة إلى إجراءات أو إفصاح.</label>
+      <label class="ba-u2-option"><input type="radio" name="q4" value="b"> إمكانية جمع رأس المال من المساهمين.</label>
+      <label class="ba-u2-option"><input type="radio" name="q4" value="c"> احتفاظ مالك واحد بكل القرارات بالضرورة.</label>
+    </fieldset>
+    <fieldset class="ba-u2-question"><legend>5. كيف تختار الهيكل الأنسب لمشروع نامٍ؟</legend>
+      <label class="ba-u2-option"><input type="radio" name="q5" value="a" required> اعتماد الهيكل الأكثر شيوعًا فقط.</label>
+      <label class="ba-u2-option"><input type="radio" name="q5" value="b"> اختيار الهيكل الأقل إجراءات دائمًا.</label>
+      <label class="ba-u2-option"><input type="radio" name="q5" value="c"> موازنة السيطرة والمخاطرة والتمويل واحتياجات النمو.</label>
+    </fieldset>
+    <button class="ba-u2-submit" type="submit">اعرض نتيجة التقييم ←</button>
+    <div id="baUnit2QuizFeedback" class="ba-u2-feedback" role="status" aria-live="polite"></div>
+    <p class="ba-u2-footnote">هذا تقييم تكويني للتدريب الفوري داخل المتصفح؛ لا تُرسل الإجابات أو الدرجة إلى الخادم ولا تُحفظ في ملف الطالب.</p>
+  </form>
+
+  <div class="ba-u2-endcap">
+    <div><strong>الخطوة التالية: اتخذ قرارًا مبررًا</strong><p>لا يوجد هيكل واحد يناسب كل مشروع. اربط اختيارك بحجم النشاط، والسيطرة، والمخاطر، والحاجة إلى رأس المال.</p></div>
+    <a href="#unit-3">انتقل إلى الوحدة الثالثة ↙</a>
+  </div>
+  <!-- BUSINESS ADMINISTRATION UNIT 02 END -->
+</section>
+
+  <section class="ba-panel ba-unit-three" id="unit-3">
+  <!-- BUSINESS ADMINISTRATION UNIT 03 START -->
+  <span class="ba-kicker" style="color:var(--ba-violet)">UNIT 03 · AVAILABLE</span>
+  <h2>الوحدة الثالثة: أهداف منظمات الأعمال وأصحاب المصلحة</h2>
+  <div class="ba-u3-intro"><strong>الفكرة المحورية:</strong> توجه الأهداف قرارات المنظمة، لكن أصحاب المصلحة يختلفون في تعريف النجاح؛ لذلك يجب فهم التعارض بين المصالح وإدارته بطريقة مسؤولة.</div>
+
+  <div class="ba-u3-video-card" style="margin:22px 0 26px;">
+    <div style="margin-bottom:12px;">
+      <strong style="display:block;color:#101b35;font-size:20px;line-height:1.7;">فيديو شرح الوحدة الثالثة</strong>
+      <p style="margin:4px 0 0;color:#53647f;font-size:14px;line-height:1.8;">شاهد شرح أهداف منظمات الأعمال وأصحاب المصلحة من داخل المنصة.</p>
+    </div>
+    <div class="ba-video-placeholder" style="display:block;padding:0;overflow:hidden;aspect-ratio:16/9;position:relative;width:100%;max-width:100%;margin:0;background:#000;border:1px solid #dce6f0;border-radius:16px;box-shadow:0 14px 36px rgba(16,35,60,.08);">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/gOoL44RaPDo?start=3"
+        title="شرح الوحدة الثالثة: أهداف منظمات الأعمال وأصحاب المصلحة"
+        style="position:absolute;inset:0;width:100%;height:100%;border:0;"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>  <h3>نواتج التعلّم</h3>
+  <div class="ba-u3-outcomes">
+    <div class="ba-u3-outcome"><b>01</b><span>تحديد الأهداف الشائعة لمنظمات الأعمال: البقاء والربح والنمو والحصة السوقية والأهداف الاجتماعية والأخلاقية.</span></div>
+    <div class="ba-u3-outcome"><b>02</b><span>شرح كيف تتعارض الأهداف مع بعضها، ولماذا تتغير الأولويات مع مرحلة المنظمة.</span></div>
+    <div class="ba-u3-outcome"><b>03</b><span>التمييز بين أصحاب المصلحة الأساسيين والثانويين وتحديد مصالح كل طرف.</span></div>
+    <div class="ba-u3-outcome"><b>04</b><span>تحليل تعارض أصحاب المصلحة باستخدام مواقف واقعية وقرارات عملية.</span></div>
+    <div class="ba-u3-outcome"><b>05</b><span>تقييم دور أخلاقيات الأعمال والمسؤولية الاجتماعية في وضع الأهداف.</span></div>
+    <div class="ba-u3-outcome"><b>06</b><span>تقديم توصية مبررة توازن بين الأهداف والمصالح المختلفة.</span></div>
+  </div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">SECTION 01 · BUSINESS OBJECTIVES</span><h3>أولًا: ما الأهداف التي تسعى إليها منظمات الأعمال؟</h3></div>
+    <p>الأهداف هي الغايات التي توجه قرارات المنظمة</p>
+  </div>
+  <p>قد تختار المنظمة أكثر من هدف، لكن الهدف الذي يتقدم على غيره يتأثر بمرحلتها وظروفها ومواردها. ومن الأهداف الشائعة:</p>
+  <div class="ba-u3-goals">
+    <article class="ba-u3-goal"><div class="ba-u3-goal-icon">↗</div><h4>البقاء</h4><p>استمرار التشغيل وتجاوز الظروف الصعبة، خاصة للمنظمات الجديدة أو المتعثرة.</p></article>
+    <article class="ba-u3-goal"><div class="ba-u3-goal-icon">∑</div><h4>تعظيم الربح</h4><p>تحقيق أكبر عائد مالي ممكن بعد مراعاة التكاليف والموارد والالتزامات.</p></article>
+    <article class="ba-u3-goal"><div class="ba-u3-goal-icon">⌁</div><h4>النمو</h4><p>زيادة المبيعات أو العاملين أو عدد المواقع أو حجم النشاط.</p></article>
+    <article class="ba-u3-goal"><div class="ba-u3-goal-icon">◉</div><h4>زيادة الحصة السوقية</h4><p>زيادة نسبة مبيعات المنظمة من إجمالي مبيعات السوق.</p></article>
+    <article class="ba-u3-goal"><div class="ba-u3-goal-icon">✳</div><h4>الأهداف الاجتماعية والأخلاقية</h4><p>التصرف بمسؤولية تجاه الناس والبيئة والمجتمع ككل.</p></article>
+  </div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">OBJECTIVES CHANGE OVER TIME</span><h3>ثانيًا: كيف تتغير الأولويات مع مرحلة المنظمة؟</h3></div>
+  </div>
+  <div class="ba-u3-table-wrap" role="region" aria-label="تغيّر الأهداف بحسب مرحلة المنظمة" tabindex="0">
+    <table class="ba-u3-table">
+      <thead><tr><th>مرحلة المنظمة</th><th>الهدف الرئيسي المرجح</th><th>ما الذي يفسر الأولوية؟</th></tr></thead>
+      <tbody>
+        <tr><td>منظمة جديدة — السنة الأولى</td><td>البقاء</td><td>استمرار التشغيل وتغطية الاحتياجات الأساسية وتجاوز مرحلة البداية.</td></tr>
+        <tr><td>منظمة مستقرة وراسخة</td><td>الربح أو النمو المنتظم</td><td>تعزيز الاستقرار وتحسين النتائج مع المحافظة على انتظام العمل.</td></tr>
+        <tr><td>منظمة ذات استثمار قوي</td><td>النمو أو زيادة الحصة السوقية</td><td>استخدام الموارد والاستثمار للتوسع والوصول إلى عملاء وأسواق أكثر.</td></tr>
+        <tr><td>منظمة ناضجة ومعروفة</td><td>سمعة العلامة أو المسؤولية الاجتماعية</td><td>حماية الثقة والسمعة والاستدامة على المدى الطويل.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ba-u3-callout"><strong>تذكّر:</strong> نادرًا ما يظل هدف المنظمة ثابتًا إلى الأبد. يتغير الهدف الرئيسي غالبًا مع نمو المنظمة وظروفها، كما يمكن أن تتعارض الأهداف مع بعضها.</div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">OBJECTIVE CONFLICTS</span><h3>ثالثًا: لماذا قد تتعارض الأهداف؟</h3></div>
+  </div>
+  <div class="ba-u3-conflicts">
+    <article class="ba-u3-conflict"><h4>البقاء مقابل تعظيم الربح</h4><p>قد تحتاج منظمة جديدة إلى الاحتفاظ بالنقد وتغطية تكاليفها قبل السعي إلى تحقيق أعلى ربح ممكن.</p></article>
+    <article class="ba-u3-conflict"><h4>النمو السريع مقابل الجودة</h4><p>زيادة الطلب والفروع بسرعة قد تضغط على قدرة المنظمة على المحافظة على مستوى الجودة نفسه.</p></article>
+    <article class="ba-u3-conflict"><h4>خفض التكلفة مقابل رفاهية العاملين</h4><p>قد يؤدي خفض ساعات العمل أو الأجور الإضافية إلى توفير قصير الأجل، لكنه قد يضر الروح المعنوية والاستقرار.</p></article>
+    <article class="ba-u3-conflict"><h4>زيادة المبيعات مقابل الالتزام الأخلاقي</h4><p>استخدام مكونات أرخص أو تغيير وعد المنتج قد يحسن الربح مؤقتًا لكنه يهدد ثقة العملاء والسمعة.</p></article>
+  </div>
+
+  <div class="ba-activity">
+    <span class="ba-u3-kicker">OPENING CASE · YOUSSEF'S OFFER</span>
+    <h3>حالة افتتاحية: عرض يوسف على مطبخ مريم</h3>
+    <p>لفت «مطبخ مريم» الذي تديره مريم ولينا انتباه يوسف، صاحب مقهى مستعد للاستثمار. يريد يوسف نموًا سريعًا: فروعًا أكثر وسلعًا أكثر وعائدًا أعلى خلال عام واحد. تتردد لينا لأنها تخشى أن يضر التوسع السريع بالجودة، وأن يفرض على دينا، المساعدة بدوام جزئي، عبئًا لا يمكن تحمله.</p>
+    <p><strong>فكّر قبل المتابعة:</strong> ما الأهداف المختلفة التي يقترحها يوسف ولينا ومريم؟ ولماذا يصعب إرضاء وجهات النظر الثلاث في الوقت نفسه؟</p>
+  </div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">SECTION 02 · STAKEHOLDERS</span><h3>رابعًا: من هم أصحاب المصلحة؟</h3></div>
+    <p>كل من يتأثر بقرارات المنظمة أو يؤثر فيها</p>
+  </div>
+  <div class="ba-u3-stakeholder-grid">
+    <article class="ba-u3-stakeholder-box primary"><h4>أصحاب المصلحة الأساسيون</h4><p>يشاركون مباشرة في التشغيل اليومي أو يعتمدون على المنظمة بصورة مباشرة.</p><div class="ba-u3-pills"><span>الإدارة والملاك</span><span>العاملون</span><span>العملاء</span><span>الموردون</span><span>شركاء الأعمال</span></div></article>
+    <article class="ba-u3-stakeholder-box secondary"><h4>أصحاب المصلحة الثانويون</h4><p>يتأثرون بالمنظمة دون مشاركة مباشرة في تشغيلها اليومي.</p><div class="ba-u3-pills"><span>المجتمع المحلي</span><span>الحكومة</span><span>الجمهور</span></div></article>
+  </div>
+  <div class="ba-u3-table-wrap" role="region" aria-label="أصحاب المصلحة في مطبخ مريم ومصالحهم" tabindex="0">
+    <table class="ba-u3-table">
+      <thead><tr><th>صاحب المصلحة</th><th>التصنيف</th><th>المصلحة الرئيسية</th></tr></thead>
+      <tbody>
+        <tr><td>مريم ولينا — المالكتان والإدارة</td><td>أساسي</td><td>السيطرة والربح والاستدامة.</td></tr>
+        <tr><td>دينا — المساعدة</td><td>أساسي</td><td>أجر عادل وعبء عمل يمكن تحمله.</td></tr>
+        <tr><td>يوسف — المستثمر</td><td>أساسي</td><td>عائد الاستثمار والنمو.</td></tr>
+        <tr><td>العملاء</td><td>أساسي</td><td>الجودة والسعر والموثوقية.</td></tr>
+        <tr><td>الموردون</td><td>أساسي</td><td>طلبات منتظمة والسداد في موعده.</td></tr>
+        <tr><td>المجتمع المحلي</td><td>ثانوي</td><td>وظائف محلية وممارسات عادلة.</td></tr>
+        <tr><td>الحكومة</td><td>ثانوي</td><td>الالتزامات الضريبية والالتزام بالقوانين واللوائح.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ba-u3-callout"><strong>رؤية أساسية:</strong> تعارض المصالح ليس دليلًا على وقوع خطأ؛ فقد تكون لدى أصحاب المصلحة أولويات مشروعة لكنها مختلفة. المطلوب هو فهمها وإدارة المفاضلة بينها.</div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">STAKEHOLDER TRADE-OFFS</span><h3>خامسًا: كيف نحلل تعارض المصالح؟</h3></div>
+  </div>
+  <div class="ba-u3-case">
+    <div class="ba-u3-case-head"><span class="ba-u3-case-num">01</span><h4>قبول استثمار يوسف كاملًا</h4></div>
+    <p>قد يستفيد المستثمر من فرصة النمو والعائد، وقد تستفيد المنظمة من التمويل والتوسع. في المقابل قد تتحمل دينا عبئًا أكبر، وقد يتأثر العملاء إذا تراجعت الجودة.</p>
+    <p class="ba-u3-task">حلّل: من المستفيد؟ ومن قد يتحمل التكلفة؟ وما الشروط التي يمكن أن تقلل الضرر؟</p>
+  </div>
+  <div class="ba-u3-case">
+    <div class="ba-u3-case-head"><span class="ba-u3-case-num">02</span><h4>رفض الاستثمار والنمو ببطء</h4></div>
+    <p>قد تحتفظ مريم ولينا بقدر أكبر من السيطرة وتخففان ضغط التوسع، لكنهما قد تتنازلان عن فرصة تمويل أو نمو أسرع.</p>
+    <p class="ba-u3-task">حلّل: أي مصالح تحظى بالحماية؟ وما الفرصة التي قد تضيع؟</p>
+  </div>
+  <div class="ba-u3-case">
+    <div class="ba-u3-case-head"><span class="ba-u3-case-num">03</span><h4>قبول استثمار جزئي بشروط</h4></div>
+    <p>يمكن التفاوض على توسع مرحلي، ومؤشرات جودة، وحدود لعبء العمل، ومراجعة النتائج قبل الانتقال إلى مرحلة جديدة.</p>
+    <p class="ba-u3-task">حلّل: كيف يمكن أن يحقق هذا البديل جزءًا من مطالب أكثر من طرف؟</p>
+  </div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">SECTION 03 · ETHICS & CSR</span><h3>سادسًا: أخلاقيات الأعمال والمسؤولية الاجتماعية</h3></div>
+  </div>
+  <div class="ba-u3-intro"><strong>أخلاقيات الأعمال:</strong> المبادئ الأخلاقية التي توجه سلوك المنظمة، مثل الصدق والعدل ومعاملة الناس. <br><strong>المسؤولية الاجتماعية للشركات (CSR):</strong> التزام طوعي بالتصرف بما يفيد المجتمع والبيئة، بما يتجاوز الحد الأدنى الذي يفرضه القانون.</div>
+  <div class="ba-u3-ethics">
+    <article><b>01 · العاملون</b><span>معاملة عادلة من حيث الأجر وساعات العمل والسلامة.</span></article>
+    <article><b>02 · العملاء</b><span>الصدق بشأن المكونات والأسعار والجودة.</span></article>
+    <article><b>03 · الموردون</b><span>التعامل بمسؤولية والالتزام بشروط السداد.</span></article>
+    <article><b>04 · المجتمع والبيئة</b><span>مراعاة الأثر البيئي والإسهام في المجتمع المحلي.</span></article>
+  </div>
+  <div class="ba-u3-callout"><strong>رؤية أساسية:</strong> لا يتعارض السلوك الأخلاقي والربح تلقائيًا. لكن السعي إلى الربح دون أخلاق قد يخلق تعارضًا طويل الأجل ومخاطر على السمعة والثقة.</div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">PRACTICAL CASES</span><h3>سابعًا: دراسات حالة من بيئة الأعمال المصرية</h3></div>
+    <p>طبّق المفاهيم على مواقف مختلفة</p>
+  </div>
+  <div class="ba-u3-case">
+    <div class="ba-u3-case-head"><span class="ba-u3-case-num">01</span><h4>مشروع دينا الناشئ لإعادة التدوير — بورسعيد</h4></div>
+    <p>يكافح مشروع دينا الصغير لجمع المخلفات القابلة للتدوير من أجل البقاء في عامه الأول، بينما يعرض منافس شراءه بسعر منخفض.</p>
+    <p class="ba-u3-task">المهمة: ما الهدف الرئيسي الأنسب الآن: البقاء أم الربح أم النمو؟ برّر اختيارك.</p>
+  </div>
+  <div class="ba-u3-case">
+    <div class="ba-u3-case-head"><span class="ba-u3-case-num">02</span><h4>ورشة عمر للنسيج — المحلة</h4></div>
+    <p>يستطيع عمر زيادة الربح بخفض أجر العمل الإضافي، لكن ذلك قد يضعف الروح المعنوية ويرفع دوران العاملين.</p>
+    <p class="ba-u3-task">المهمة: حدّد تعارض أصحاب المصلحة في الموقف، ثم قدّم نصيحة لعمر مع تبريرها.</p>
+  </div>
+  <div class="ba-u3-case">
+    <div class="ba-u3-case-head"><span class="ba-u3-case-num">03</span><h4>مزرعة رانيا العضوية — الفيوم</h4></div>
+    <p>تستطيع رانيا كسب المزيد باستخدام سماد أرخص وغير عضوي، لكن ذلك يخالف الوعد الأخلاقي الذي قطعته لعملائها.</p>
+    <p class="ba-u3-task">المهمة: هل تعطي رانيا الربح القصير أم التزامها الأخلاقي الأولوية؟ برّر رأيك.</p>
+  </div>
+  <div class="ba-u3-case">
+    <div class="ba-u3-case-head"><span class="ba-u3-case-num">04</span><h4>مطبخ مريم — مهلة يوسف — القاهرة</h4></div>
+    <p>يمنح يوسف مريم ولينا أسبوعًا واحدًا لقبول استثماره وفق شروط النمو السريع الأصلية.</p>
+    <p class="ba-u3-task">المهمة: أوصِ برد عملي على يوسف، وناقش أثره على مجموعتين على الأقل من أصحاب المصلحة.</p>
+  </div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">PRACTICAL WORKSHEET</span><h3>ثامنًا: صمّم أهدافًا وازن بها بين المصالح</h3></div>
+    <p>اكتب توصية قابلة للمراجعة</p>
+  </div>
+  <form id="baUnit3DecisionForm" class="ba-u3-form">
+    <div class="ba-u3-field"><label for="baU3ProjectName">اسم المنظمة أو المشروع</label><input id="baU3ProjectName" name="projectName" required placeholder="مثال: مطبخ، ورشة، متجر..."></div>
+    <div class="ba-u3-field"><label for="baU3Stage">مرحلة المنظمة</label><select id="baU3Stage" name="stage" required><option value="">اختر المرحلة</option><option>منظمة جديدة — السنة الأولى</option><option>منظمة مستقرة وراسخة</option><option>منظمة ذات استثمار قوي</option><option>منظمة ناضجة ومعروفة</option></select></div>
+    <div class="ba-u3-field"><label for="baU3Goal">الهدف ذو الأولوية</label><select id="baU3Goal" name="goal" required><option value="">اختر الهدف</option><option>البقاء</option><option>تعظيم الربح</option><option>النمو</option><option>زيادة الحصة السوقية</option><option>الأهداف الاجتماعية والأخلاقية</option></select></div>
+    <div class="ba-u3-field"><label for="baU3Measure">مؤشر قياس الهدف والمدة الزمنية</label><input id="baU3Measure" name="measure" required placeholder="مثال: استمرار التشغيل 6 أشهر..."></div>
+    <div class="ba-u3-field"><label for="baU3Primary">أصحاب المصلحة الأساسيون ومصالحهم</label><textarea id="baU3Primary" name="primaryStakeholders" required placeholder="الملاك، العاملون، العملاء، الموردون..."></textarea></div>
+    <div class="ba-u3-field"><label for="baU3Secondary">أصحاب المصلحة الثانويون ومصالحهم</label><textarea id="baU3Secondary" name="secondaryStakeholders" required placeholder="المجتمع المحلي، الحكومة، الجمهور..."></textarea></div>
+    <div class="ba-u3-field full"><label for="baU3Conflict">ما التعارض المحتمل بين المصالح؟</label><textarea id="baU3Conflict" name="conflict" required placeholder="مثال: زيادة العائد قد تضغط على الجودة أو العاملين..."></textarea></div>
+    <div class="ba-u3-field full"><label for="baU3Decision">ما القرار الذي تقترحه لتحقيق توازن مسؤول؟</label><textarea id="baU3Decision" name="decision" required placeholder="اكتب قرارًا عمليًا ووضح كيف يحمي مصالح أكثر من طرف..."></textarea></div>
+    <div class="ba-u3-field full"><button class="ba-u3-submit" type="submit">تنزيل ورقة العمل كملف ←</button></div>
+  </form>
+  <div id="baUnit3DecisionFeedback" class="ba-u3-feedback" role="status" aria-live="polite"></div>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">UNIT 03 CHECKPOINT</span><h3>تاسعًا: اختبر فهمك</h3></div>
+    <p>خمسة أسئلة للتقييم الذاتي</p>
+  </div>
+  <form id="baUnit3QuizForm" class="ba-u3-quiz">
+    <fieldset class="ba-u3-question"><legend>1. ما الهدف الرئيسي المرجح لمنظمة جديدة في عامها الأول؟</legend>
+      <label class="ba-u3-option"><input type="radio" name="q1" value="a" required> زيادة الحصة السوقية فورًا.</label>
+      <label class="ba-u3-option"><input type="radio" name="q1" value="b"> البقاء واستمرار التشغيل.</label>
+      <label class="ba-u3-option"><input type="radio" name="q1" value="c"> المسؤولية الاجتماعية وحدها.</label>
+    </fieldset>
+    <fieldset class="ba-u3-question"><legend>2. أي مما يلي يُعد صاحب مصلحة أساسيًا وفق أمثلة الوحدة؟</legend>
+      <label class="ba-u3-option"><input type="radio" name="q2" value="a" required> المورد الذي يشارك مباشرة في تزويد المنظمة.</label>
+      <label class="ba-u3-option"><input type="radio" name="q2" value="b"> الجمهور الذي يتأثر بالنشاط دون مشاركة مباشرة.</label>
+      <label class="ba-u3-option"><input type="radio" name="q2" value="c"> المجتمع المحلي بوصفه جهة غير مشاركة في التشغيل اليومي.</label>
+    </fieldset>
+    <fieldset class="ba-u3-question"><legend>3. ماذا تعني المسؤولية الاجتماعية للشركات (CSR) في الوحدة؟</legend>
+      <label class="ba-u3-option"><input type="radio" name="q3" value="a" required> تعظيم الربح في الأجل القصير فقط.</label>
+      <label class="ba-u3-option"><input type="radio" name="q3" value="b"> الالتزام بالحد الأدنى القانوني فقط.</label>
+      <label class="ba-u3-option"><input type="radio" name="q3" value="c"> التزام طوعي بما يفيد المجتمع والبيئة فوق الحد الأدنى القانوني.</label>
+    </fieldset>
+    <fieldset class="ba-u3-question"><legend>4. ما الخطر المحتمل لتجاهل الأخلاقيات في سبيل الربح؟</legend>
+      <label class="ba-u3-option"><input type="radio" name="q4" value="a" required> ضمان نمو الحصة السوقية.</label>
+      <label class="ba-u3-option"><input type="radio" name="q4" value="b"> الإضرار بالثقة والسمعة على المدى الطويل.</label>
+      <label class="ba-u3-option"><input type="radio" name="q4" value="c"> عدم تأثر العملاء بالقرارات.</label>
+    </fieldset>
+    <fieldset class="ba-u3-question"><legend>5. ما النهج الأقرب إلى إدارة تعارض أصحاب المصلحة؟</legend>
+      <label class="ba-u3-option"><input type="radio" name="q5" value="a" required> إعطاء طرف واحد الأولوية دائمًا مهما كانت النتائج.</label>
+      <label class="ba-u3-option"><input type="radio" name="q5" value="b"> تجاهل المصالح التي لا تشارك في الإدارة.</label>
+      <label class="ba-u3-option"><input type="radio" name="q5" value="c"> تقييم المصالح والأعباء والوصول إلى قرار متوازن ومبرر.</label>
+    </fieldset>
+    <button class="ba-u3-submit" type="submit">اعرض نتيجة التقييم ←</button>
+    <div id="baUnit3QuizFeedback" class="ba-u3-feedback" role="status" aria-live="polite"></div>
+    <p class="ba-u3-footnote">هذا تقييم تكويني للتدريب الفوري داخل المتصفح؛ لا تُرسل الإجابات أو الدرجة إلى الخادم ولا تُحفظ في ملف الطالب.</p>
+  </form>
+
+  <div class="ba-u3-section-head">
+    <div><span class="ba-u3-kicker">JUDGEMENT & REASONING</span><h3>عاشرًا: ابنِ حكمًا واستدلالًا قويًا</h3></div>
+  </div>
+  <div class="ba-u3-intro"><strong>السؤال المحوري:</strong> هل ينبغي إعطاء عوائد المساهمين الأولوية أم مصالح جميع أصحاب المصلحة عند وضع الأهداف؟</div>
+  <div class="ba-u3-stage-grid">
+    <article class="ba-u3-stage"><b>01 · المقدمة</b><h4>عرّف القضية</h4><p>اشرح أهداف المنظمة وأصحاب المصلحة، وحدد ما الذي يتطلب المفاضلة.</p></article>
+    <article class="ba-u3-stage"><b>02 · الحجة الأولى</b><h4>عوائد المساهمين</h4><p>ناقش كيف يمكن للعائد جذب الاستثمار وتمويل البقاء والنمو.</p></article>
+    <article class="ba-u3-stage"><b>03 · الحجة الثانية</b><h4>مصالح أصحاب المصلحة</h4><p>ناقش أثر الثقة والجودة ورفاهية العاملين والمجتمع.</p></article>
+    <article class="ba-u3-stage"><b>04 · التقييم والخاتمة</b><h4>قرار مبرر</h4><p>قارن الحجج وفق نوع المنظمة وحجمها ومرحلتها، ثم قدّم نتيجة متوازنة.</p></article>
+  </div>
+  <div class="ba-u3-callout"><strong>معيار الاستجابة القوية:</strong> تعريف المفاهيم بوضوح، وعرض الحجتين، واستخدام أمثلة مثل مطبخ مريم وورشة عمر ومزرعة رانيا، ثم تبرير النتيجة بدل الاكتفاء برأي عام.</div>
+
+  <div class="ba-u3-endcap">
+    <div><strong>أكملت الوحدة الثالثة — انتقل إلى تحليل بيئة الأعمال</strong><p>تذكّر: الهدف الجيد يوجّه القرار، والقرار المسؤول يراعي الأطراف التي تتأثر به.</p></div>
+    <a href="#unit-4">انتقل إلى الوحدة الرابعة ↙</a>
+  </div>
+  <!-- BUSINESS ADMINISTRATION UNIT 03 END -->
+</section>
+
+  <section class="ba-section" id="unit-4">
+    <div class="ba-section-head"><div><span class="ba-kicker" style="color:var(--ba-violet)">UNIT 04</span><h2>البيئة الداخلية والخارجية</h2></div></div>
+    <details class="ba-details"><summary>ماذا تتناول الوحدة الرابعة؟</summary><div class="ba-detail-content"><p>تفرّق الوحدة بين ظروف داخلية تستطيع المنظمة التأثير فيها، وقوى خارجية يلزمها التكيّف معها. ويتضمن تحليل البيئة الخارجية إطار PESTEL: السياسي، والاقتصادي، والاجتماعي، والتكنولوجي، والبيئي، والقانوني.</p><ul class="ba-bullets"><li>صنّف العامل بوصفه داخليًا أو خارجيًا، ووضح مدى قدرة الإدارة على التحكم فيه.</li><li>استخرج فرصة وتهديدًا من تغيّر السوق أو سلوك العملاء.</li><li>قارن بدائل الاستجابة عندما ترتفع أسعار الدقيق أو تظهر متطلبات سلامة جديدة.</li></ul><div class="ba-activity"><strong>تطبيق سريع:</strong><p>ارتفعت تكلفة مكون أساسي وبدأ العملاء يطلبون خيارات صحية. اكتب استجابة قصيرة تفرق بين ما يمكن التحكم فيه وما يتطلب التكيّف.</p></div></div></details>
+  </section>
+
+  <section class="ba-section" id="unit-5">
+    <div class="ba-section-head"><div><span class="ba-kicker" style="color:var(--ba-violet)">UNIT 05</span><h2>الإدارة والقيادة</h2></div></div>
+    <details class="ba-details"><summary>ماذا تتناول الوحدة الخامسة؟</summary><div class="ba-detail-content"><p>تركّز الوحدة على وظائف الإدارة الأربع: التخطيط والتنظيم والقيادة والرقابة، وعلى المقارنة بين أساليب القيادة المختلفة، مع مراعاة ظروف الفريق والقرار والوقت.</p><ul class="ba-bullets"><li>ميّز بين تنظيم الموارد وتوجيه الأشخاص وتحفيزهم.</li><li>قارن بين القيادة الأوتوقراطية والديمقراطية والتفويضية والموقفية.</li><li>حلّل كيف تتخذ الإدارة قرارًا تحت ضغط الوقت والمعلومات المحدودة.</li></ul><div class="ba-activity"><strong>تطبيق سريع:</strong><p>تأخر تسليم طلب مهم. حدّد ما الذي يجب التخطيط له وتنظيمه، وكيف ستتواصل مع الفريق، وما المؤشر الذي ستراجعه بعد التنفيذ.</p></div></div></details>
+  </section>
+
+  <section class="ba-panel" id="unit-project">
+    <span class="ba-kicker" style="color:var(--ba-violet)">UNIT PROJECT</span>
+    <h2>مشروع الوحدة: خطة قرار لمشروع مريم</h2>
+    <p>اجمع ما تعلمته في نموذج قصير. هذا ملف عمل أولي يمكنك الاحتفاظ به، وسنربط تسليم المشروع بحساب الطالب بعد اعتماد آلية الحفظ والتقييم المناسبة.</p>
+    <ol class="ba-bullets"><li>حدد الغرض من المشروع والقيمة التي يقدمها.</li><li>صف شريحة العملاء والمنتج أو الخدمة.</li><li>ارسم قائمة بأصحاب المصلحة ومصلحة كل طرف.</li><li>حدد هدفًا قصير الأجل وهدفًا طويل الأجل.</li><li>اكتب عاملًا داخليًا وآخر خارجيًا قد يؤثران في النجاح.</li><li>قارن بديلين، ثم اختر واحدًا وبرّره بالدليل والنتيجة المتوقعة.</li></ol>
+    <div class="ba-highlight"><strong>قالب الإجابة:</strong> الحكم الذي أتخذه هو… / السبب… / الدليل من الحالة… / الأثر المتوقع على أصحاب المصلحة… / النتيجة التي سأراجعها بعد التنفيذ…</div>
+  </section>
+
+  <div class="ba-alert"><strong>ملاحظة الإصدار الأول:</strong> هذه الصفحة تفتح مسار الإدارة والأعمال أولًا. خريطة الوحدات مبنية على موضوعات الكتاب، بينما سيتم إضافة فيديوهات الشرح وبنوك الأسئلة الموسعة تدريجيًا. لا ترفع الملفات الأصلية للكتاب على موقع عام دون التأكد من أذونات النشر؛ استخدم الملخصات والأنشطة المصاغة للمنصة.</div>
+</main>
+<footer class="gs-footer"><a href="../index.html">Mohammed Afify</a><span>Learn · Analyze · Build · Transform</span></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/membership-config.js"></script>
+<script>
+(() => {
+  const projectForm = document.getElementById('baProjectForm');
+  const projectNotice = document.getElementById('baProjectNotice');
+  projectForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(projectForm);
+    const labels = {
+      opportunity: 'الفرصة', value: 'القيمة المقترحة', stakeholders: 'أصحاب المصلحة', decision: 'القرار والتبرير'
+    };
+    const lines = ['مشروع الوحدة الأولى: قرار مريم', 'التاريخ: ' + new Date().toLocaleDateString('ar-EG'), ''];
+    for (const [key, label] of Object.entries(labels)) lines.push(label + ':', String(data.get(key) || '').trim(), '');
+    const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url; link.download = 'mohammed-afify-business-unit1-project.txt';
+    document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+    projectNotice.textContent = 'تم تنزيل ملف النشاط على جهازك. هذا الملف لم يُرسل إلى المنصة.';
+    projectNotice.className = 'ba-result show success';
+  });
+
+  const quizForm = document.getElementById('baQuizForm');
+  const quizResult = document.getElementById('baQuizResult');
+  quizForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    quizResult.className = 'ba-result show';
+    quizResult.textContent = 'جارٍ إرسال الإجابات للتحقق الآمن وحفظ النتيجة…';
+    const cfg = window.MEMBERSHIP_CONFIG || {};
+    const publicKey = cfg.supabasePublishableKey || cfg.supabaseAnonKey || '';
+    if (!window.supabase?.createClient || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(cfg.supabaseUrl || '') || !publicKey || /YOUR_PROJECT_ID|YOUR_SUPABASE|REPLACE_ME/i.test(String(cfg.supabaseUrl) + String(publicKey))) {
+      quizResult.className = 'ba-result show error';
+      quizResult.textContent = 'إعدادات الاتصال غير جاهزة. راجع ملف assets/js/membership-config.js.';
+      return;
+    }
+    const answers = {};
+    for (let i = 1; i <= 5; i++) {
+      const selected = quizForm.querySelector(`input[name="q${i}"]:checked`);
+      if (!selected) {
+        quizResult.className = 'ba-result show error'; quizResult.textContent = 'أجب عن الأسئلة الخمسة قبل الإرسال.'; return;
+      }
+      answers['q' + i] = selected.value;
+    }
+    const client = window.supabase.createClient(cfg.supabaseUrl, publicKey, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+    });
+    try {
+      const { data, error } = await client.rpc('submit_business_unit1_quiz', { p_answers: answers });
+      if (error) throw error;
+      const result = Array.isArray(data) ? data[0] : data;
+      if (!result) throw new Error('لم تصل نتيجة من الخادم.');
+      quizResult.className = 'ba-result show success';
+      quizResult.textContent = `نتيجتك: ${Number(result.score_percent)}% (${result.correct_answers} من ${result.total_questions}). تم حفظ النتيجة في لوحة الطالب.`;
+    } catch (error) {
+      quizResult.className = 'ba-result show error';
+      const message = String(error?.message || 'تعذر حفظ التقييم.');
+      if (/submit_business_unit1_quiz|Could not find the function|schema cache/i.test(message)) {
+        quizResult.textContent = 'التقييم جاهز، لكن حفظ الدرجات لم يُفعّل بعد. افتح ملف sql/business-administration-quiz.sql داخل مجلد الموقع، وشغّله في Supabase SQL Editor ثم حاول مرة أخرى.';
+      } else if (/JWT|auth|session|not authenticated/i.test(message)) {
+        quizResult.textContent = 'سجّل الدخول بحساب طالب معتمد في مسار الإدارة والأعمال، ثم أعد إرسال التقييم.';
+      } else {
+        quizResult.textContent = 'تعذر حفظ النتيجة: ' + message;
+      }
+    }
+  });
+})();
+</script>
+
+<script src="../assets/js/business-administration-access.js" defer></script>
+<script src="../assets/js/business-administration-unit2.js" defer></script>
+<script src="../assets/js/business-administration-unit3.js" defer></script>
+  <script src="../assets/js/ma-global-navigation-v1.js" defer></script>
+</body>
+</html>
