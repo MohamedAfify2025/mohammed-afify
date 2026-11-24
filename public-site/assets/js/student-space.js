@@ -9,6 +9,10 @@
   let allowedCourses = [];
   let lessonsByCourse = new Map();
   let isAdminSession = false;
+  let isActiveStudent = false;
+  let currentUserId = "";
+  let currentLesson = null;
+  let progressByLesson = new Map();
   let selectedCourseSlug = "";
 
   function show(text, isError = false) {
@@ -72,9 +76,16 @@
       if (activeLessonUrl) URL.revokeObjectURL(activeLessonUrl);
       activeLessonUrl = nextUrl;
 
+      currentLesson = lesson;
       $("lessonTitle").textContent = lesson.title || "المحاضرة";
       $("lessonViewer").hidden = false;
       frame.src = nextUrl;
+      refreshCompleteButton(lesson);
+      if (canTrackCourse(lesson.course_slug)) {
+        saveLessonProgress(lesson, false).catch(() => {
+          show("تم فتح المحاضرة، لكن تعذر تحديث سجل التقدم. تحقق من صلاحية متابعة التقدم في اشتراكك.", true);
+        });
+      }
       $("lessonViewer").scrollIntoView({ behavior: "smooth", block: "start" });
       show("تم فتح المحاضرة بصيغة HTML UTF-8 داخل إطار معزول.");
     } catch (error) {
@@ -84,11 +95,72 @@
     }
   }
 
+  function progressKey(courseSlug, lessonSlug) {
+    return String(courseSlug || "") + "::" + String(lessonSlug || "");
+  }
+
+  function canTrackCourse(courseSlug) {
+    const course = allowedCourses.find(item => item.course_slug === courseSlug);
+    return isActiveStudent && course?.can_track_progress === true;
+  }
+
+  function refreshCompleteButton(lesson) {
+    const button = $("completeLessonButton");
+    if (!button) return;
+    const enabled = Boolean(lesson && canTrackCourse(lesson.course_slug));
+    const saved = lesson ? progressByLesson.get(progressKey(lesson.course_slug, lesson.lesson_slug)) : null;
+    button.hidden = !enabled;
+    button.disabled = saved?.completed === true;
+    button.textContent = saved?.completed === true ? "✓ تم إكمال المحاضرة" : "تم إكمال المحاضرة";
+  }
+
+  async function saveLessonProgress(lesson, completed) {
+    if (!lesson || !canTrackCourse(lesson.course_slug) || !currentUserId) return;
+    const key = progressKey(lesson.course_slug, lesson.lesson_slug);
+    const previous = progressByLesson.get(key);
+    const payload = {
+      user_id: currentUserId,
+      course_slug: lesson.course_slug,
+      lesson_slug: lesson.lesson_slug,
+      lesson_title: lesson.title || lesson.lesson_slug,
+      seconds_watched: Number(previous?.seconds_watched || 0),
+      completed: completed === true || previous?.completed === true,
+      updated_at: new Date().toISOString()
+    };
+    const { error } = await client
+      .from("learning_progress")
+      .upsert(payload, { onConflict: "user_id,course_slug,lesson_slug" });
+    if (error) throw error;
+    progressByLesson.set(key, payload);
+    refreshCompleteButton(lesson);
+    refreshCourseProgress(lesson.course_slug);
+    return payload;
+  }
+
+  function refreshCourseProgress(courseSlug) {
+    const item = [...$("courseList").querySelectorAll(".course-item")]
+      .find(row => row.dataset.courseSlug === courseSlug);
+    if (!item) return;
+    const host = item.querySelector(".course-progress");
+    const lessons = lessonsByCourse.get(courseSlug) || [];
+    if (!host || !lessons.length) return;
+    const completed = lessons.filter(lesson =>
+      progressByLesson.get(progressKey(courseSlug, lesson.lesson_slug))?.completed === true
+    ).length;
+    const percent = Math.round((completed / lessons.length) * 100);
+    const label = host.querySelector(".course-progress-top strong");
+    const fill = host.querySelector(".course-progress-fill");
+    if (label) label.textContent = completed + " من " + lessons.length + " محاضرة";
+    if (fill) fill.style.width = percent + "%";
+  }
+
   function closeLesson() {
     $("lessonViewer").hidden = true;
     $("lessonFrame").src = "about:blank";
     if (activeLessonUrl) URL.revokeObjectURL(activeLessonUrl);
     activeLessonUrl = "";
+    currentLesson = null;
+    refreshCompleteButton(null);
   }
 
   function updateCourseUrl(slug, replace = false) {
@@ -283,6 +355,30 @@
       li.appendChild(badges);
     }
 
+    if (isActiveStudent && course.can_track_progress === true && lessons.length) {
+      const completed = lessons.filter(lesson =>
+        progressByLesson.get(progressKey(course.course_slug, lesson.lesson_slug))?.completed === true
+      ).length;
+      const percent = Math.round((completed / lessons.length) * 100);
+      const progress = document.createElement("div");
+      progress.className = "course-progress";
+      const top = document.createElement("div");
+      top.className = "course-progress-top";
+      const label = document.createElement("span");
+      label.textContent = "تقدمك في هذا المقرر";
+      const value = document.createElement("strong");
+      value.textContent = completed + " من " + lessons.length + " محاضرة";
+      top.append(label, value);
+      const track = document.createElement("div");
+      track.className = "course-progress-track";
+      const fill = document.createElement("div");
+      fill.className = "course-progress-fill";
+      fill.style.width = percent + "%";
+      track.appendChild(fill);
+      progress.append(top, track);
+      li.appendChild(progress);
+    }
+
     if (hasOdooIntro) {
       const actionRow = document.createElement("div");
       actionRow.className = "course-action-row";
@@ -308,7 +404,9 @@
         button.type = "button";
         button.className = "lesson-open";
         const draftLabel = isAdmin && lesson.is_published !== true ? " · مسودة / غير منشورة" : "";
-        button.textContent = "فتح: " + (lesson.title || lesson.lesson_slug) + draftLabel;
+        const lessonProgress = progressByLesson.get(progressKey(lesson.course_slug, lesson.lesson_slug));
+        button.textContent = (lessonProgress?.completed === true ? "✓ " : "") + "فتح: " + (lesson.title || lesson.lesson_slug) + draftLabel;
+        if (lessonProgress?.completed === true) button.classList.add("completed");
         if (index === 0) button.dataset.firstLesson = "true";
         button.addEventListener("click", () => openLesson(lesson, button));
         lessonList.appendChild(button);
@@ -351,6 +449,7 @@
       return;
     }
 
+    currentUserId = sessionData.session.user.id;
     $("studentEmail").textContent = sessionData.session.user.email || "";
     const { data: profile, error: profileError } = await client
       .from("profiles")
@@ -381,6 +480,8 @@
     }
 
     isAdminSession = isAdmin;
+    isActiveStudent = !isAdmin && profile.role === "student" &&
+      profile.status === "approved" && profile.account_state === "active";
     if (isAdmin) {
       $("adminDashboardLink").hidden = false;
       $("adminCourseManagerLink").hidden = false;
@@ -445,6 +546,24 @@
       lessonsByCourse.set(lesson.course_slug, list);
     }
 
+    if (isActiveStudent) {
+      const trackableSlugs = allowedCourses
+        .filter(course => course.can_track_progress === true)
+        .map(course => course.course_slug);
+      if (trackableSlugs.length) {
+        const { data: progressRows, error: progressError } = await client
+          .from("learning_progress")
+          .select("course_slug,lesson_slug,lesson_title,seconds_watched,completed,updated_at")
+          .eq("user_id", currentUserId)
+          .in("course_slug", trackableSlugs)
+          .order("updated_at", { ascending: false });
+        if (progressError) throw progressError;
+        progressByLesson = new Map((Array.isArray(progressRows) ? progressRows : []).map(row => [
+          progressKey(row.course_slug, row.lesson_slug), row
+        ]));
+      }
+    }
+
     const requestedCourse = new URLSearchParams(window.location.search).get("course") || "";
     selectedCourseSlug = allowedCourses.some(course => course.course_slug === requestedCourse)
       ? requestedCourse
@@ -489,6 +608,20 @@
     location.href = "student-login.html";
   });
   $("closeLesson").addEventListener("click", closeLesson);
+  $("completeLessonButton").addEventListener("click", async () => {
+    const button = $("completeLessonButton");
+    if (!currentLesson || button.disabled) return;
+    button.disabled = true;
+    button.textContent = "جارٍ حفظ الإنجاز...";
+    try {
+      await saveLessonProgress(currentLesson, true);
+      show("تم حفظ إكمال المحاضرة في حسابك.");
+    } catch (error) {
+      button.disabled = false;
+      button.textContent = "تم إكمال المحاضرة";
+      show(error?.message || "تعذر حفظ إكمال المحاضرة. راجع صلاحية متابعة التقدم.", true);
+    }
+  });
 
   boot().catch((error) => show(error.message || "تعذر تحميل مساحتك التعليمية.", true));
 })();
