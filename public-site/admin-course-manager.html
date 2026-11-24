@@ -66,6 +66,25 @@
   <div id="pageMessage" class="notice" role="status">جارٍ التحقق من صلاحية المدير...</div>
 
   <section id="managerContent" hidden>
+    <section class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div><h2 style="margin-bottom:5px">تقسيم المقرر إلى وحدات</h2><p class="muted">أنشئ الوحدات بالترتيب، ثم اختر الوحدة عند إضافة كل محاضرة أو اختبار أو مادة.</p></div>
+        <button id="newUnitButton" class="secondary" type="button">وحدة جديدة</button>
+      </div>
+      <form id="unitForm">
+        <div class="grid-3">
+          <div><label for="unitTitle">اسم الوحدة</label><input id="unitTitle" type="text" maxlength="180" required></div>
+          <div><label for="unitSlug">رمز الوحدة</label><input id="unitSlug" type="text" maxlength="100" placeholder="unit-01" required></div>
+          <div><label for="unitSort">ترتيب الوحدة</label><input id="unitSort" type="number" min="1" max="9999" value="1" required></div>
+        </div>
+        <label for="unitDescription">وصف الوحدة (اختياري)</label>
+        <textarea id="unitDescription" maxlength="1500" placeholder="موضوعات الوحدة باختصار..."></textarea>
+        <label class="check"><input id="unitPublish" type="checkbox"> إظهار اسم الوحدة للطلاب</label>
+        <div class="form-actions"><button id="saveUnitButton" class="primary" type="submit">إضافة الوحدة</button></div>
+      </form>
+      <div id="unitList" class="lesson-list" style="margin-top:18px" aria-live="polite"></div>
+    </section>
+
     <div class="split">
       <section class="card">
         <h2>إدارة المقرر المحدد</h2>
@@ -95,8 +114,16 @@
             <div><label for="lessonSlug">رمز المحاضرة</label><input id="lessonSlug" type="text" maxlength="100" placeholder="lesson-01" required></div>
             <div><label for="lessonTitle">عنوان المحاضرة</label><input id="lessonTitle" type="text" maxlength="180" required></div>
           </div>
+          <div class="grid">
+            <div><label for="lessonUnit">الوحدة التي تتبعها المادة</label><select id="lessonUnit"><option value="">بدون وحدة — مواد إضافية</option></select></div>
+            <div><label for="lessonType">نوع المادة</label><select id="lessonType"><option value="overview">نظرة عامة</option><option value="lesson" selected>محاضرة</option><option value="assessment">اختبار</option><option value="resource">مادة إضافية</option></select></div>
+          </div>
           <label for="lessonDescription">وصف مختصر</label>
           <textarea id="lessonDescription" maxlength="1500" placeholder="موضوعات المحاضرة أو ملاحظات للمدير..."></textarea>
+          <div class="grid">
+            <div><label for="lessonSourcePath">مسار المصدر الأصلي (اختياري)</label><input id="lessonSourcePath" type="text" maxlength="300" placeholder="academy/accounting-lesson-01.html"></div>
+            <div><label for="lessonBaseUrl">مجلد الملفات والصور المرتبطة (اختياري)</label><input id="lessonBaseUrl" type="url" value="https://mohamedafify2025.github.io/mohammed-afify/academy/"></div>
+          </div>
           <div class="grid-3">
             <div><label for="lessonFile">ملف المحاضرة HTML</label><input id="lessonFile" type="file" accept=".html,text/html"></div>
             <div><label for="lessonSort">ترتيب المحاضرة</label><input id="lessonSort" type="number" min="1" max="9999" value="1" required></div>
@@ -119,6 +146,6 @@
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/membership-config.js"></script>
-<script src="assets/js/admin-course-manager.js" defer></script>
+<script src="assets/js/admin-course-manager.js?v=20261124-unit-manager-v1" defer></script>
 </body>
 </html>
