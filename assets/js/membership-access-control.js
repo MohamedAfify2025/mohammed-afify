@@ -19,7 +19,7 @@
   const isAcademyPage = /\/academy\/[^/]+\.html?$/i.test(path);
   const isHomepage = !/\/academy\//i.test(path) && (/\/index\.html?$/i.test(path) || path.endsWith('/'));
   const currentSlug = (path.split('/').pop() || '').replace(/\.html?$/i, '').toLowerCase();
-  const isPublicCatalog = isAcademyPage && currentSlug === 'index';
+  const isPublicInfoPage = isAcademyPage && ['index', 'certificates'].includes(currentSlug);
   const gateClass = 'm-access-checking';
 
   const CATEGORY_SLUGS = {
@@ -282,7 +282,7 @@
     try {
       const profile = await getSignedInProfile();
       if (!profile) {
-        if (isPublicCatalog) {
+        if (isPublicInfoPage) {
           document.documentElement.classList.remove(gateClass);
           const main = document.querySelector('main');
           if (main) main.style.visibility = 'visible';
@@ -301,7 +301,7 @@
       }
 
       if (profile.status !== 'approved' || profile.account_state !== 'active') {
-        if (isPublicCatalog) {
+        if (isPublicInfoPage) {
           document.documentElement.classList.remove(gateClass);
           const main = document.querySelector('main');
           if (main) main.style.visibility = 'visible';
@@ -315,8 +315,8 @@
         return;
       }
 
-      // The library is a public discovery surface; only individual lesson pages require an active subscription.
-      if (isPublicCatalog) {
+      // The learning catalogue and professional profile are public discovery pages; individual lesson pages remain subscription-gated.
+      if (isPublicInfoPage) {
         document.documentElement.classList.remove(gateClass);
         const main = document.querySelector('main');
         if (main) main.style.visibility = 'visible';
@@ -363,11 +363,11 @@
       document.documentElement.classList.remove(gateClass);
       if (main) main.style.visibility = 'visible';
     } catch (error) {
-      if (isPublicCatalog) {
+      if (isPublicInfoPage) {
         document.documentElement.classList.remove(gateClass);
         const main = document.querySelector('main');
         if (main) main.style.visibility = 'visible';
-        console.warn('Public course catalogue opened without membership verification:', error?.message || error);
+        console.warn('Public information page opened without membership verification:', error?.message || error);
         return;
       }
       if (isAcademyPage) {
