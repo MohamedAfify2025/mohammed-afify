@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<meta name="description" content="إنشاء حساب جديد وتقديم طلب اشتراك في دورات Mohammed Afify التعليمية.">
+<title>طلب اشتراك جديد | Mohammed Afify Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif;padding:20px}
+main{width:min(100%,620px);background:#fff;border:1px solid #e3eaf2;border-radius:22px;padding:clamp(22px,5vw,40px);box-shadow:0 18px 50px #17243b10}
+.brand{font-weight:900;color:#0b8379}.muted{color:#68778e;font-size:13px;line-height:1.95}h1{font-size:clamp(24px,4vw,30px);margin:10px 0 6px}
+label{display:block;font-size:13px;font-weight:800;margin:15px 0 6px}
+input,select{width:100%;border:1px solid #d9e2ed;border-radius:10px;padding:12px;font:inherit;color:#17243b;background:#fff;min-height:48px}
+input:focus,select:focus{outline:2px solid #19b7a233;border-color:#19a997}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button,a{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:12px 17px;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}
+button{background:#0b8379;color:#fff;width:100%;margin-top:20px}button:disabled{opacity:.55;cursor:wait}.secondary{background:#edf2f8;color:#243650}
+.notice{padding:13px 14px;border-radius:11px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.9;margin:14px 0}.notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
+.info{margin:16px 0;padding:13px 15px;border:1px solid #dcece7;background:#f4fbf8;border-radius:12px;color:#456475;font-size:12px;line-height:2}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.actions a{flex:1}
+@media(max-width:520px){.grid{grid-template-columns:1fr}main{padding:22px}.actions a{width:100%}}
+</style>
+</head>
+<body><main>
+<div class="brand">MOHAMMED AFIFY · LEARNING</div>
+<h1>إنشاء حساب وطلب اشتراك</h1>
+<p class="muted">سجّل بياناتك واختر الدورة التي ترغب في الالتحاق بها. ستراجع الإدارة طلبك وتحدد الباقة والتكلفة وخطوات التفعيل.</p>
+<div id="pageMessage" class="notice" hidden></div>
+<form id="subscribeForm" novalidate>
+<label for="fullName">الاسم بالكامل</label>
+<input id="fullName" type="text" autocomplete="name" maxlength="120" placeholder="اكتب اسمك كما تريد ظهوره في حسابك" required>
+<div class="grid">
+<div><label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="email" maxlength="254" placeholder="name@example.com" required></div>
+<div><label for="phone">رقم الهاتف / WhatsApp</label><input id="phone" type="tel" autocomplete="tel" maxlength="30" placeholder="+20..." required></div>
+</div>
+<label for="course">الدورة التي ترغب بالاشتراك بها</label>
+<select id="course" required disabled><option value="">جارٍ تحميل الدورات المتاحة...</option></select>
+<div class="grid">
+<div><label for="password">كلمة المرور</label><input id="password" type="password" minlength="10" autocomplete="new-password" required></div>
+<div><label for="confirmPassword">تأكيد كلمة المرور</label><input id="confirmPassword" type="password" minlength="10" autocomplete="new-password" required></div>
+</div>
+<div class="info"><strong>ماذا يحدث بعد إرسال الطلب؟</strong><br>
+1. ينشأ حسابك بحالة «قيد المراجعة».<br>
+2. تراجع الإدارة طلبك وتحدد الباقة المناسبة والسعر وطريقة الدفع.<br>
+3. بعد اعتماد الطلب وتفعيل الاشتراك، تحصل على صلاحيات الدروس وفق الباقة التي تعتمدها الإدارة.<br>
+لا يمنح إرسال النموذج وصولًا تلقائيًا إلى الدروس أو الملفات.</div>
+<button id="submitButton" type="submit" disabled>إنشاء الحساب وإرسال طلب الاشتراك</button>
+</form>
+<div class="actions">
+<a class="secondary" href="student-login.html">لديّ حساب بالفعل — تسجيل الدخول</a>
+<a class="secondary" href="academy-access.html">استعراض الدورات</a>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.local.js"></script>
+<script src="assets/js/membership-config.js"></script>
+<script src="assets/js/student-subscribe.js" defer></script>
+</body></html>
