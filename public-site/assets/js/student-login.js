@@ -69,7 +69,8 @@
           if (isAdmin === true) {
             let adminTarget = destination || "admin-dashboard.html";
             const targetUrl = new URL(adminTarget, window.location.href);
-            if (targetUrl.pathname.endsWith("/admin-course-manager.html")) {
+            if (targetUrl.pathname.endsWith("/admin-course-manager.html") &&
+                targetUrl.searchParams.get("prepare") !== "odoo-business-flow-01") {
               const course = targetUrl.searchParams.get("course");
               adminTarget = "admin-dashboard.html" + (course ? "?course=" + encodeURIComponent(course) : "");
             }
