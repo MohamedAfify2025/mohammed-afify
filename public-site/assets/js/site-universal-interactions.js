@@ -64,7 +64,8 @@
     document.querySelectorAll(".platform-video-card").forEach((card) => {
       const anchor = card.querySelector("a[href]");
       if (anchor) markSurface(card, "href", "مشاهدة " + (card.querySelector("h3")?.textContent.trim() || "الفيديو"), {
-        siteClickHref: anchor.getAttribute("href")
+        siteClickHref: anchor.getAttribute("href"),
+        siteClickTarget: anchor.getAttribute("target") || ""
       });
     });
   }
@@ -101,7 +102,12 @@
 
     if (action === "href") {
       const href = surface.dataset.siteClickHref;
-      if (href) window.location.assign(href);
+      if (href && surface.dataset.siteClickTarget === "_blank") {
+        const opened = window.open(href, "_blank", "noopener,noreferrer");
+        if (opened) opened.opener = null;
+      } else if (href) {
+        window.location.assign(href);
+      }
       return;
     }
 
