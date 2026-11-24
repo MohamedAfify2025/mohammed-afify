@@ -9,6 +9,7 @@
 
   let client = null;
   let adminReady = false;
+  let activeCourses = [];
   let previewFingerprint = "";
   let previewRows = [];
 
@@ -36,7 +37,7 @@
   }
 
   function parseCsv(source) {
-    const text = String(source || "").replace(/^\uFEFF/, "");
+    const text = String(source || "").replace(/^\\uFEFF/, "");
     const rows = [];
     let row = [];
     let value = "";
@@ -58,8 +59,8 @@
       } else if (char === ",") {
         row.push(value.trim());
         value = "";
-      } else if (char === "\n" || char === "\r") {
-        if (char === "\r" && text[i + 1] === "\n") i++;
+      } else if (char === "\\n" || char === "\\r") {
+        if (char === "\\r" && text[i + 1] === "\\n") i++;
         row.push(value.trim());
         value = "";
         if (row.some((cell) => cell !== "")) rows.push(row);
@@ -70,20 +71,48 @@
     }
     row.push(value.trim());
     if (row.some((cell) => cell !== "")) rows.push(row);
-
     if (!rows.length) return [];
-    const first = rows[0].map((cell) => cell.toLowerCase());
-    const hasHeader = first.includes("email") || first.includes("البريد الإلكتروني");
-    const dataRows = hasHeader ? rows.slice(1) : rows;
 
-    return dataRows.map((cells) => ({
-      full_name: cells[0] || "",
-      email: cells[1] || "",
-      phone: cells[2] || "",
-      delivery_method: ["whatsapp", "واتساب"].includes(String(cells[3] || "").trim().toLowerCase())
-        ? "whatsapp"
-        : ((cells[1] || "").trim() ? "email" : "whatsapp")
-    }));
+    const normalizeHeader = (value) => String(value || "").trim().toLowerCase();
+    const first = rows[0].map(normalizeHeader);
+    const hasHeader = first.some((cell) =>
+      ["full_name", "name", "الاسم", "اسم المتدرب", "email", "البريد الإلكتروني"].includes(cell)
+    );
+
+    const dataRows = hasHeader ? rows.slice(1) : rows;
+    const indexOf = (names, fallback) => {
+      if (!hasHeader) return fallback;
+      const index = first.findIndex((cell) => names.includes(cell));
+      return index >= 0 ? index : fallback;
+    };
+
+    const nameIndex = indexOf(["full_name", "name", "الاسم", "اسم المتدرب"], 0);
+    const emailIndex = indexOf(["email", "البريد الإلكتروني", "البريد"], 1);
+    const phoneIndex = indexOf(["phone", "mobile", "whatsapp", "الهاتف", "رقم الهاتف"], 2);
+    const methodIndex = indexOf(["delivery_method", "method", "channel", "طريقة الدعوة", "القناة"], 3);
+    const courseIndex = indexOf(["requested_course", "course_slug", "course", "الدورة", "الدورة المطلوبة"], 4);
+
+    return dataRows.map((cells) => {
+      const rawMethod = normalizeHeader(cells[methodIndex] || "");
+      const isChannel = ["email", "mail", "البريد الإلكتروني", "whatsapp", "واتساب"].includes(rawMethod);
+      // Support the previous four-column CSV layout where column four was the requested course.
+      const legacyCourse = !hasHeader && methodIndex === 3 && !isChannel ? (cells[3] || "") : "";
+      const courseValue = cells[courseIndex] || legacyCourse;
+      const course = activeCourses.find((item) =>
+        item.course_slug.toLowerCase() === String(courseValue).trim().toLowerCase() ||
+        item.title.trim().toLowerCase() === String(courseValue).trim().toLowerCase()
+      );
+
+      return {
+        full_name: cells[nameIndex] || "",
+        email: cells[emailIndex] || "",
+        phone: cells[phoneIndex] || "",
+        delivery_method: ["whatsapp", "واتساب"].includes(rawMethod)
+          ? "whatsapp"
+          : ((cells[emailIndex] || "").trim() ? "email" : "whatsapp"),
+        requested_course: course?.course_slug || ""
+      };
+    });
   }
 
   function addStudentRow(student = {}) {
@@ -116,6 +145,31 @@
       wrap.append(label, input);
       row.appendChild(wrap);
     });
+
+    const courseWrap = document.createElement("div");
+    courseWrap.className = "field";
+    const courseLabel = document.createElement("label");
+    courseLabel.textContent = "الدورة المطلوبة";
+    const courseSelect = document.createElement("select");
+    courseSelect.className = "student-requested_course";
+    const coursePlaceholder = document.createElement("option");
+    coursePlaceholder.value = "";
+    coursePlaceholder.textContent = activeCourses.length ? "اختر الدورة" : "لا توجد دورات نشطة";
+    courseSelect.appendChild(coursePlaceholder);
+    activeCourses.forEach((course) => {
+      const option = document.createElement("option");
+      option.value = course.course_slug;
+      option.textContent = course.title;
+      courseSelect.appendChild(option);
+    });
+    const requestedCourse = String(student.requested_course || "");
+    const matchingCourse = activeCourses.find((course) =>
+      course.course_slug === requestedCourse ||
+      course.title.trim().toLowerCase() === requestedCourse.trim().toLowerCase()
+    );
+    courseSelect.value = matchingCourse?.course_slug || "";
+    courseWrap.append(courseLabel, courseSelect);
+    row.appendChild(courseWrap);
 
     const methodWrap = document.createElement("div");
     methodWrap.className = "field";
@@ -154,6 +208,7 @@
       input.addEventListener("input", invalidatePreview);
     });
     methodSelect.addEventListener("change", invalidatePreview);
+    courseSelect.addEventListener("change", invalidatePreview);
     $("studentRows").appendChild(row);
     return row;
   }
@@ -170,7 +225,9 @@
       full_name: row.querySelector(".student-full_name").value.trim(),
       email: row.querySelector(".student-email").value.trim().toLowerCase(),
       phone: row.querySelector(".student-phone").value.trim(),
-      delivery_method: row.querySelector(".student-delivery_method").value
+      delivery_method: row.querySelector(".student-delivery_method").value,
+      requested_course: row.querySelector(".student-requested_course").value,
+      course_title: activeCourses.find((course) => course.course_slug === row.querySelector(".student-requested_course").value)?.title || ""
     })).filter((row) => row.full_name || row.email || row.phone);
   }
 
@@ -198,6 +255,9 @@
 
       if (name.length < 2 || name.length > 120) {
         errors.push("المتدرب " + line + ": اكتب الاسم من حرفين إلى 120 حرفًا.");
+      }
+      if (!row.requested_course) {
+        errors.push("المتدرب " + line + ": اختر الدورة المطلوبة من القائمة.");
       }
       if (row.delivery_method === "email" && !email) {
         errors.push("المتدرب " + line + ": اخترت البريد الإلكتروني؛ أدخل عنوان البريد.");
@@ -231,6 +291,7 @@
       "مرحبًا " + student.full_name + " 👋",
       "",
       "يسعدنا دعوتك للانضمام إلى منصة Mohammed Afify التعليمية.",
+      "الدورة المطلوبة: " + (student.course_title || "الدورة التدريبية"),
       "تعرّف على المنصة والدورات من هنا:",
       SITE_URL,
       "",
@@ -247,7 +308,7 @@
       const tr = document.createElement("tr");
       const method = student.delivery_method === "whatsapp" ? "WhatsApp" : "البريد الإلكتروني";
 
-      [index + 1, student.full_name, student.email || "—", student.phone || "—", method].forEach((value) => {
+      [index + 1, student.full_name, student.email || "—", student.phone || "—", student.course_title || "—", method].forEach((value) => {
         const td = document.createElement("td");
         td.textContent = String(value);
         tr.appendChild(td);
@@ -320,6 +381,15 @@
     client = window.supabase.createClient(supabaseUrl, publishableKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
+
+    const { data: courses, error: coursesError } = await client
+      .from("course_catalog")
+      .select("course_slug,title")
+      .eq("is_active", true)
+      .order("title");
+    if (coursesError) throw new Error("تعذر تحميل قائمة الدورات النشطة: " + coursesError.message);
+    activeCourses = Array.isArray(courses) ? courses : [];
+    if (!activeCourses.length) throw new Error("لا توجد دورات نشطة في فهرس الدورات. أضف الدورة قبل دعوة المتدربين.");
 
     addStudentRow();
 
@@ -394,7 +464,7 @@
       const emailCount = rows.filter((row) => row.delivery_method === "email").length;
       const whatsappCount = rows.filter((row) => row.delivery_method === "whatsapp").length;
       message("القائمة جاهزة: " + rows.length + " متدربًا؛ " +
-        emailCount + " دعوة بريد إلكتروني و" + whatsappCount + " دعوة WhatsApp.");
+        emailCount + " دعوة بريد إلكتروني و" + whatsappCount + " رسالة WhatsApp. تم ربط كل طلب بالدورة التي اخترتها.");
     });
 
     $("previewBody").addEventListener("click", (event) => {
@@ -428,7 +498,7 @@
 
       const emailStudents = rows
         .filter((row) => row.delivery_method === "email")
-        .map(({ full_name, email, phone }) => ({ full_name, email, phone }));
+        .map(({ full_name, email, phone, requested_course }) => ({ full_name, email, phone, requested_course }));
       const whatsappCount = rows.filter((row) => row.delivery_method === "whatsapp").length;
       if (!emailStudents.length) {
         if (whatsappCount) {
