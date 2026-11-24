@@ -37,7 +37,7 @@
   }
 
   function parseCsv(source) {
-    const text = String(source || "").replace(/^\\uFEFF/, "");
+    const text = String(source || "").replace(/^\uFEFF/, "");
     const rows = [];
     let row = [];
     let value = "";
@@ -59,8 +59,8 @@
       } else if (char === ",") {
         row.push(value.trim());
         value = "";
-      } else if (char === "\\n" || char === "\\r") {
-        if (char === "\\r" && text[i + 1] === "\\n") i++;
+      } else if (char === "\n" || char === "\r") {
+        if (char === "\r" && text[i + 1] === "\n") i++;
         row.push(value.trim());
         value = "";
         if (row.some((cell) => cell !== "")) rows.push(row);
