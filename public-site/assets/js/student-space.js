@@ -67,7 +67,17 @@
         'catch(e){window.localStorage=store;}' +
       '})();</' + 'script>';
 
-      const injected = source.replace(/<head\b[^>]*>/i, (head) => head + bridge);
+      let frameHead = bridge;
+      const baseUrl = String(lesson.source_base_url || "").trim();
+      if (baseUrl) {
+        let parsedBase;
+        try { parsedBase = new URL(baseUrl); } catch (_) { throw new Error("رابط موارد المحاضرة غير صالح."); }
+        if (!["https:", "http:"].includes(parsedBase.protocol) || parsedBase.username || parsedBase.password) {
+          throw new Error("رابط موارد المحاضرة غير صالح.");
+        }
+        frameHead = '<base href="' + parsedBase.href.replace(/["<>]/g, "") + '" target="_self">' + frameHead;
+      }
+      const injected = source.replace(/<head\\b[^>]*>/i, (head) => head + frameHead);
       if (injected === source) throw new Error("تعذر تهيئة صفحة المحاضرة.");
 
       const blob = new Blob([injected], { type: "text/html;charset=utf-8" });
