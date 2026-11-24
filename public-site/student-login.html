@@ -7,7 +7,13 @@
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif;padding:20px}
 main{width:min(100%,520px);background:#fff;border:1px solid #e3eaf2;border-radius:22px;padding:clamp(24px,5vw,42px);box-shadow:0 18px 50px #17243b10}
-.brand{font-weight:900;color:#0b8379}.muted{color:#6a7890;font-size:13px;line-height:1.9}h1{font-size:27px;margin:10px 0}label{display:block;font-size:13px;font-weight:800;margin:14px 0 6px}input{width:100%;border:1px solid #d9e2ed;border-radius:10px;padding:12px;font:inherit}button,a{display:inline-block;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}button{background:#14233d;color:#fff;width:100%;margin-top:16px}.secondary{background:#edf2f8;color:#243650}.notice{padding:12px;border-radius:10px;background:#e8f7f1;color:#126447;font-size:13px;margin:14px 0}.notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}.links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:20px}
+.brand{font-weight:900;color:#0b8379}.muted{color:#6a7890;font-size:13px;line-height:1.9}h1{font-size:27px;margin:10px 0}label{display:block;font-size:13px;font-weight:800;margin:14px 0 6px}input{width:100%;border:1px solid #d9e2ed;border-radius:10px;padding:12px;font:inherit}button,a{display:inline-block;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}button{background:#14233d;color:#fff;width:100%;margin-top:16px}.secondary{background:#edf2f8;color:#243650}.notice{padding:12px;border-radius:10px;background:#e8f7f1;color:#126447;font-size:13px;margin:14px 0}.notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
+.links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:20px}
+.signup-panel{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:17px;margin-top:22px;border:1px solid #ccebe4;border-radius:14px;background:linear-gradient(135deg,#f1fbf8,#f7fbff)}
+.signup-panel strong{display:block;color:#14233d;font-size:15px}
+.signup-panel p{margin:4px 0 0;color:#68778e;font-size:12px;line-height:1.8}
+.signup-panel a{background:#0b8379;color:#fff;white-space:nowrap;padding:12px 20px}
+@media(max-width:460px){.signup-panel{align-items:stretch}.signup-panel a{text-align:center}}
 </style></head>
 <body><main>
 <div class="brand">MOHAMMED AFIFY · LEARNING</div>
@@ -20,6 +26,10 @@ main{width:min(100%,520px);background:#fff;border:1px solid #e3eaf2;border-radiu
 <button id="loginButton" type="submit">دخول إلى مساحتي التعليمية</button>
 </form>
 <div class="links"><button id="resetButton" type="button" class="secondary">نسيت كلمة المرور؟</button><a class="secondary" href="index.html">الرئيسية</a></div>
+<section class="signup-panel" aria-label="طلب اشتراك جديد">
+  <div><strong>ليس لديك حساب على المنصة؟</strong><p>أنشئ حسابًا جديدًا واطلب الاشتراك في الدورة التي تناسبك.</p></div>
+  <a href="student-subscribe.html">اشترك الآن</a>
+</section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/membership-config.local.js"></script>
