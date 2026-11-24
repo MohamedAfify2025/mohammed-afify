@@ -6,9 +6,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif;padding:20px}
-main{max-width:850px;margin:24px auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.card{background:#fff;border:1px solid #e3eaf2;border-radius:20px;padding:25px;margin:16px 0;box-shadow:0 12px 35px #17243b09}
+main{max-width:1180px;margin:24px auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.card{background:#fff;border:1px solid #e3eaf2;border-radius:20px;padding:25px;margin:16px 0;box-shadow:0 12px 35px #17243b09}
 .brand{font-weight:900;color:#0b8379}.muted{color:#6a7890;font-size:13px;line-height:1.9}h1{font-size:30px;margin:9px 0}button,a{display:inline-block;border:0;border-radius:10px;padding:10px 15px;background:#14233d;color:#fff;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}
 .notice{padding:14px;border-radius:11px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.9;margin:14px 0}.notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
+.course-tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 13px;margin:14px 0 18px;scrollbar-width:thin}
+.course-tab{flex:0 0 auto;display:inline-flex;align-items:center;gap:9px;border:1px solid #dfe7f0;border-radius:12px;padding:10px 14px;background:#f7f9fc;color:#43536c;font-size:12px;font-weight:800;white-space:nowrap}
+.course-tab[aria-selected="true"]{background:#e8f7f4;color:#08776d;border-color:#0b9b8d;box-shadow:0 5px 15px #0b837915}
+.course-tab-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 5px;border-radius:7px;background:#e7edf4;color:#607087;font-size:10px}
+.course-tab[aria-selected="true"] .course-tab-count{background:#0b8379;color:#fff}
+.course-view-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:10px 0 6px}
+.course-view-heading h2{margin:0;font-size:21px}
+.course-view-hint{font-size:12px;color:#718097;line-height:1.8;margin:4px 0 10px}
 li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-right:22px}
 .course-item{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
 .course-name{font-weight:800}
@@ -48,7 +56,14 @@ li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-righ
 <section class="card">
 <p class="muted">مساحتك التعليمية الشخصية</p><h1>أهلًا <span id="studentName">بك</span></h1><p class="muted" id="studentEmail"></p>
 <div id="pageMessage" class="notice" hidden></div>
-<div id="coursePanel" hidden><h2 id="coursePanelTitle">الدورات وصلاحيات حسابك</h2><ul id="courseList"></ul><p class="muted" id="coursePanelDescription">تعرض هذه القائمة صلاحياتك لكل دورة. لن تتمكن من فتح أي درس أو ملف إلا إذا كانت صلاحيته مفعّلة.</p></div>
+<div id="coursePanel" hidden>
+  <div class="course-view-heading">
+    <div><h2 id="coursePanelTitle">مساراتك التعليمية</h2><p class="course-view-hint" id="coursePanelDescription">اختر مقررًا لعرض محتواه ومحاضراته فقط.</p></div>
+    <a id="courseOverviewLink" class="nav-link" href="student-space.html">كل المقررات</a>
+  </div>
+  <nav id="courseTabs" class="course-tabs" role="tablist" aria-label="المقررات المتاحة"></nav>
+  <ul id="courseList"></ul>
+</div>
 </section>
 <section id="lessonViewer" class="lesson-viewer" hidden>
   <div class="lesson-viewer-head"><strong id="lessonTitle">المحاضرة</strong><button id="closeLesson" type="button">إغلاق المحاضرة</button></div>
