@@ -14,7 +14,7 @@
 
   function requestedAdminDestination() {
     const candidate = new URLSearchParams(window.location.search).get("next") || "";
-    const match = candidate.match(/^(admin-course-manager\.html|admin-students\.html|admin-subscriptions\.html|lesson-admin-upload\.html)(\?course=([a-z0-9-]+))?$/);
+    const match = candidate.match(/^(admin-dashboard\.html|admin-course-manager\.html|admin-students\.html|admin-subscriptions\.html|lesson-admin-upload\.html)(\?course=([a-z0-9-]+))?$/);
     return match ? candidate : "";
   }
 
@@ -42,22 +42,33 @@
         if (!data.user) throw new Error("تعذر التحقق من الحساب.");
 
         const destination = requestedAdminDestination();
-        if (destination) {
-          const { data: profile, error: profileError } = await client
-            .from("profiles")
-            .select("role,status,account_state")
-            .eq("user_id", data.user.id)
-            .maybeSingle();
-          if (profileError) throw profileError;
-          if (profile?.role === "admin" && profile.status === "approved" && profile.account_state === "active") {
-            const { data: isAdmin, error: adminError } = await client.rpc("is_platform_admin");
-            if (adminError) throw adminError;
-            if (isAdmin === true) {
-              window.location.replace(destination);
-              return;
+        const { data: profile, error: profileError } = await client
+          .from("profiles")
+          .select("role,status,account_state")
+          .eq("user_id", data.user.id)
+          .maybeSingle();
+        if (profileError) throw profileError;
+
+        const isAdminProfile = profile?.role === "admin" &&
+          profile.status === "approved" &&
+          profile.account_state === "active";
+
+        if (isAdminProfile) {
+          const { data: isAdmin, error: adminError } = await client.rpc("is_platform_admin");
+          if (adminError) throw adminError;
+          if (isAdmin === true) {
+            let adminTarget = destination || "admin-dashboard.html";
+            if (adminTarget.startsWith("admin-course-manager.html")) {
+              const course = new URLSearchParams(adminTarget.split("?")[1] || "").get("course");
+              adminTarget = "admin-dashboard.html" + (course ? "?course=" + encodeURIComponent(course) : "");
             }
+            window.location.replace(adminTarget);
+            return;
           }
-          show("تم تسجيل الدخول، لكن هذا القسم يتطلب حساب مدير معتمد. سيتم فتح مساحتك حسب صلاحيات حسابك.");
+        }
+
+        if (destination) {
+          show("هذا القسم يتطلب حساب مدير معتمد. سيتم فتح مساحتك حسب صلاحيات حسابك.");
         }
         window.location.replace("student-space.html");
       } catch (error) {
