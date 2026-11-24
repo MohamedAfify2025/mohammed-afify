@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#14233d">
+  <title>مساحة المدرس | Mohammed Afify Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif}
+    main{max-width:1120px;margin:24px auto;padding:0 18px 54px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .brand{font-weight:900;color:#0b8379}
+    .nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    a,button{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 14px;font:inherit;font-size:12px;font-weight:800;text-decoration:none;cursor:pointer}
+    .secondary{background:#edf2f8;color:#243650}.primary{background:#0b8379;color:#fff}.dark{background:#14233d;color:#fff}
+    .hero{background:linear-gradient(120deg,#14233d,#24516d);border-radius:22px;padding:clamp(22px,4vw,38px);color:#fff}
+    .hero .eyebrow{font-size:11px;font-weight:900;letter-spacing:1px;color:#75e1d2}
+    h1{font-size:clamp(26px,4vw,38px);margin:8px 0}
+    .hero p{margin:0;color:#d9e6f0;font-size:13px;line-height:2;max-width:760px}
+    .panel{background:#fff;border:1px solid #e1e8f0;border-radius:18px;padding:22px;margin-top:16px;box-shadow:0 10px 30px #14233d08}
+    .panel h2{font-size:18px;margin:0 0 12px}
+    .notice{padding:13px 15px;border-radius:11px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.9;margin:14px 0}
+    .notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
+    .course-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .course-card{border:1px solid #e5ebf2;border-radius:15px;padding:17px;background:#fff}
+    .course-card h3{margin:0 0 5px;font-size:16px}
+    .course-card p{margin:7px 0 12px;color:#63728a;font-size:12px;line-height:1.9}
+    .course-meta{font-size:10px;color:#7c8aa0;direction:ltr;text-align:right}
+    .permission-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+    .permission{padding:5px 9px;border-radius:20px;background:#e5f7ef;color:#14704c;font-size:10px;font-weight:800}
+    .permission.off{background:#f0f2f5;color:#788397}
+    .empty{padding:22px;border:1px dashed #d6e0ea;border-radius:13px;background:#f8fafc;text-align:center;color:#65748a;font-size:13px;line-height:2}
+    .muted{font-size:12px;color:#6e7c92;line-height:1.9}
+    @media(max-width:700px){main{margin-top:14px}.panel{padding:16px}.course-grid{grid-template-columns:1fr}.nav a{flex:1}}
+  </style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div class="brand">MOHAMMED AFIFY · TEACHER SPACE</div>
+    <nav class="nav" aria-label="التنقل">
+      <a class="secondary" href="index.html">الرئيسية</a>
+      <button id="logoutButton" class="dark" type="button">تسجيل الخروج</button>
+    </nav>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">TEACHING WORKSPACE</div>
+    <h1>أهلًا <span id="teacherName">بك</span></h1>
+    <p>هذه مساحة المدرس لمتابعة المقررات التي أسندتها الإدارة إليك، والصلاحيات التعليمية المتاحة لحسابك.</p>
+  </section>
+  <div id="pageMessage" class="notice" role="status">جارٍ التحقق من حساب المدرس...</div>
+  <section id="teacherContent" hidden>
+    <section class="panel">
+      <h2>المقررات المسندة إليك</h2>
+      <div id="teacherCourses" class="course-grid"></div>
+    </section>
+    <section class="panel">
+      <h2>صلاحيات حسابك</h2>
+      <div id="teacherPermissions" class="permission-list"></div>
+      <p class="muted">تعرض هذه الصفحة الإسنادات والصلاحيات الممنوحة من الإدارة. أدوات عرض الدروس وإدارتها ستظهر فقط بعد تفعيل صلاحية المحتوى المناسبة في النظام.</p>
+    </section>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.js"></script>
+<script src="assets/js/teacher-space.js?v=20261124-1" defer></script>
+</body>
+</html>
