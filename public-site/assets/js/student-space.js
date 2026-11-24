@@ -5,6 +5,7 @@
   const url = String(config.supabaseUrl || "").trim();
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
   let client = null;
+  let activeLessonUrl = "";
 
   function show(text, isError = false) {
     const el = $("pageMessage");
@@ -15,30 +16,65 @@
 
   async function openLesson(lesson, button) {
     if (button) button.disabled = true;
-    show("جارٍ التحقق من صلاحية المحاضرة وتجهيز رابط آمن...");
+    show("جارٍ تحميل المحاضرة وتجهيز عرض HTML بالعربية...");
     try {
-      // Supabase checks the current user's JWT against Storage RLS before issuing this short-lived URL.
+      // Storage RLS validates the signed-in user before returning the private object.
       const { data, error } = await client.storage
         .from(lesson.storage_bucket)
-        .createSignedUrl(lesson.storage_path, 900);
-      if (error || !data?.signedUrl) throw error || new Error("تعذر إنشاء رابط آمن للمحاضرة.");
+        .download(lesson.storage_path);
+      if (error || !data) throw error || new Error("تعذر تحميل ملف المحاضرة.");
 
-      // Accept signed URLs only from this configured Supabase project.
-      const signed = new URL(data.signedUrl, url);
-      const projectOrigin = new URL(url).origin;
-      if (signed.origin !== projectOrigin || !signed.pathname.includes("/storage/v1/object/sign/")) {
-        throw new Error("رابط المحاضرة غير مطابق لمشروع التخزين.");
+      // Force the browser MIME type and UTF-8 encoding instead of trusting a generic Storage Blob type.
+      const source = await data.text();
+      if (!/<html[\s>]/i.test(source) || !/<head[\s>]/i.test(source)) {
+        throw new Error("محتوى الملف لا يبدو صفحة HTML صالحة.");
       }
 
+      // Keep the iframe sandboxed with an opaque origin. Bridge only the lesson's progress key.
+      const progressKey = "ma_lecture1_visited";
+      let initialProgress = null;
+      try {
+        const stored = localStorage.getItem(progressKey);
+        const parsed = stored ? JSON.parse(stored) : null;
+        if (Array.isArray(parsed) && parsed.length <= 100 &&
+            parsed.every((item) => typeof item === "string" && item.length <= 100)) {
+          initialProgress = JSON.stringify(parsed);
+        }
+      } catch (_) {
+        initialProgress = null;
+      }
+
+      const bridge = '<script>(function(){' +
+        'var key="ma_lecture1_visited";' +
+        'var initial=' + JSON.stringify(initialProgress) + ';' +
+        'var values={}; if(initial!==null){values[key]=initial;}' +
+        'var store={' +
+          'getItem:function(k){return Object.prototype.hasOwnProperty.call(values,k)?values[k]:null;},' +
+          'setItem:function(k,v){v=String(v);values[k]=v;parent.postMessage({type:"ma-lecture1-storage",key:k,value:v},"*");},' +
+          'removeItem:function(k){delete values[k];parent.postMessage({type:"ma-lecture1-storage-remove",key:k},"*");},' +
+          'clear:function(){values={};parent.postMessage({type:"ma-lecture1-storage-remove",key:key},"*");}' +
+        '};' +
+        'try{Object.defineProperty(window,"localStorage",{configurable:true,value:store});}' +
+        'catch(e){window.localStorage=store;}' +
+      '})();<\\/script>';
+
+      const injected = source.replace(/<head\\b[^>]*>/i, (head) => head + bridge);
+      if (injected === source) throw new Error("تعذر تهيئة صفحة المحاضرة.");
+
+      const blob = new Blob([injected], { type: "text/html;charset=utf-8" });
+      const nextUrl = URL.createObjectURL(blob);
       const frame = $("lessonFrame");
       frame.src = "about:blank";
+      if (activeLessonUrl) URL.revokeObjectURL(activeLessonUrl);
+      activeLessonUrl = nextUrl;
+
       $("lessonTitle").textContent = lesson.title || "المحاضرة";
       $("lessonViewer").hidden = false;
-      frame.src = signed.toString();
+      frame.src = nextUrl;
       $("lessonViewer").scrollIntoView({ behavior: "smooth", block: "start" });
-      show("تم فتح المحاضرة. رابط العرض مؤقت وصالح لمدة 15 دقيقة.");
+      show("تم فتح المحاضرة بصيغة HTML UTF-8 داخل إطار معزول.");
     } catch (error) {
-      show("تعذر فتح المحاضرة. تأكد من أن اشتراكك يتضمن صلاحية مشاهدة صفحة المقرر، ثم أعد المحاولة.", true);
+      show("تعذر فتح المحاضرة. تأكد من صلاحية المشاهدة، ثم أعد المحاولة.", true);
     } finally {
       if (button) button.disabled = false;
     }
@@ -47,6 +83,8 @@
   function closeLesson() {
     $("lessonViewer").hidden = true;
     $("lessonFrame").src = "about:blank";
+    if (activeLessonUrl) URL.revokeObjectURL(activeLessonUrl);
+    activeLessonUrl = "";
   }
 
   function addCourse(course, lessons) {
@@ -205,6 +243,28 @@
 
     $("coursePanel").hidden = false;
   }
+
+  window.addEventListener("message", (event) => {
+    const frame = $("lessonFrame");
+    if (event.source !== frame.contentWindow) return;
+    const message = event.data;
+    const keyName = "ma_lecture1_visited";
+
+    if (message?.type === "ma-lecture1-storage" && message.key === keyName &&
+        typeof message.value === "string" && message.value.length <= 5000) {
+      try {
+        const parsed = JSON.parse(message.value);
+        if (Array.isArray(parsed) && parsed.length <= 100 &&
+            parsed.every((item) => typeof item === "string" && item.length <= 100)) {
+          localStorage.setItem(keyName, JSON.stringify(parsed));
+        }
+      } catch (_) {
+        // Ignore malformed progress messages from the sandboxed frame.
+      }
+    } else if (message?.type === "ma-lecture1-storage-remove" && message.key === keyName) {
+      localStorage.removeItem(keyName);
+    }
+  });
 
   $("logoutButton").addEventListener("click", async () => {
     if (client) await client.auth.signOut();
