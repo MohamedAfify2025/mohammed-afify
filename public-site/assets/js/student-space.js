@@ -345,7 +345,7 @@
       } else if (lessons.length) {
         openLesson(lessons[0], name);
       } else if (hasOdooIntro) {
-        window.location.href = "course-preview.html?course=odoo-training";
+        window.location.href = "academy/odoo-training.html";
       } else {
         show("هذا المقرر ظاهر في حسابك، لكن لا توجد له محاضرات مسجلة في مكتبة المحتوى بعد.", true);
       }
@@ -424,8 +424,8 @@
       actionRow.className = "course-action-row";
       const odooIntroLink = document.createElement("a");
       odooIntroLink.className = "lesson-open odoo-intro-link";
-      odooIntroLink.href = "course-preview.html?course=odoo-training";
-      odooIntroLink.textContent = "▶ ابدأ العرض الافتتاحي لدورة Odoo";
+      odooIntroLink.href = "academy/odoo-training.html";
+      odooIntroLink.textContent = "فتح صفحة دورة Odoo";
       odooIntroLink.setAttribute("aria-label", "ابدأ العرض الافتتاحي لدورة Odoo");
       actionRow.appendChild(odooIntroLink);
       li.appendChild(actionRow);
