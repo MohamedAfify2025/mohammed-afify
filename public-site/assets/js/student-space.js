@@ -8,6 +8,7 @@
   let activeLessonUrl = "";
   let allowedCourses = [];
   let lessonsByCourse = new Map();
+  let unitsByCourse = new Map();
   let isAdminSession = false;
   let isActiveStudent = false;
   let currentUserId = "";
@@ -404,32 +405,79 @@
       li.appendChild(actionRow);
     }
 
-    if (lessons.length) {
+    const units = unitsByCourse.get(course.course_slug) || [];
+    if (lessons.length || units.length) {
       const lessonList = document.createElement("div");
       lessonList.className = "lesson-list";
       const lessonHeading = document.createElement("div");
       lessonHeading.className = "lesson-heading";
-      lessonHeading.textContent = isAdmin ? "كل المحاضرات والمواد" : "المحاضرات المتاحة";
+      lessonHeading.textContent = isAdmin ? "الوحدات والمحاضرات والمواد" : "الوحدات والمحاضرات المتاحة";
       lessonList.appendChild(lessonHeading);
 
-      lessons.forEach((lesson, index) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "lesson-open";
-        const draftLabel = isAdmin && lesson.is_published !== true ? " · مسودة / غير منشورة" : "";
-        const lessonProgress = progressByLesson.get(progressKey(lesson.course_slug, lesson.lesson_slug));
-        button.textContent = (lessonProgress?.completed === true ? "✓ " : "") + "فتح: " + (lesson.title || lesson.lesson_slug) + draftLabel;
-        button.dataset.lessonSlug = lesson.lesson_slug;
-        if (lessonProgress?.completed === true) button.classList.add("completed");
-        if (index === 0) button.dataset.firstLesson = "true";
-        button.addEventListener("click", () => openLesson(lesson, button));
-        lessonList.appendChild(button);
-      });
+      let firstButton = true;
+      const appendLessons = (target, items) => {
+        for (const lesson of items) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "lesson-open";
+          const draftLabel = isAdmin && lesson.is_published !== true ? " · مسودة / غير منشورة" : "";
+          const progress = progressByLesson.get(progressKey(lesson.course_slug, lesson.lesson_slug));
+          const typeLabel = lesson.lesson_type === "assessment" ? "اختبار: " :
+            (lesson.lesson_type === "resource" ? "مادة: " : "محاضرة: ");
+          button.textContent = (progress?.completed === true ? "✓ " : "") +
+            typeLabel + (lesson.title || lesson.lesson_slug) + draftLabel;
+          button.dataset.lessonSlug = lesson.lesson_slug;
+          if (progress?.completed === true) button.classList.add("completed");
+          if (firstButton) {
+            button.dataset.firstLesson = "true";
+            firstButton = false;
+          }
+          button.addEventListener("click", () => openLesson(lesson, button));
+          target.appendChild(button);
+        }
+      };
+
+      for (const unit of units) {
+        const unitCard = document.createElement("section");
+        unitCard.className = "lesson-unit";
+        const unitTitle = document.createElement("h4");
+        unitTitle.className = "lesson-unit-title";
+        unitTitle.textContent = "الوحدة " + unit.sort_order + " · " + (unit.title || unit.unit_slug) +
+          (isAdmin && !unit.is_published ? " · مسودة" : "");
+        unitCard.appendChild(unitTitle);
+        if (unit.description) {
+          const unitDescription = document.createElement("p");
+          unitDescription.className = "lesson-unit-description";
+          unitDescription.textContent = unit.description;
+          unitCard.appendChild(unitDescription);
+        }
+        const unitLessons = lessons.filter(lesson => lesson.unit_id === unit.id);
+        if (unitLessons.length) appendLessons(unitCard, unitLessons);
+        else {
+          const empty = document.createElement("p");
+          empty.className = "muted";
+          empty.textContent = "لم تُضف محاضرات لهذه الوحدة بعد.";
+          unitCard.appendChild(empty);
+        }
+        lessonList.appendChild(unitCard);
+      }
+
+      const unassigned = lessons.filter(lesson => !lesson.unit_id);
+      if (unassigned.length) {
+        const extra = document.createElement("section");
+        extra.className = "lesson-unit";
+        const extraTitle = document.createElement("h4");
+        extraTitle.className = "lesson-unit-title";
+        extraTitle.textContent = "مواد إضافية";
+        extra.appendChild(extraTitle);
+        appendLessons(extra, unassigned);
+        lessonList.appendChild(extra);
+      }
       li.appendChild(lessonList);
     } else if (!hasBusinessCoursePage && !hasOdooIntro) {
       const empty = document.createElement("div");
       empty.className = "lesson-list";
-      empty.innerHTML = '<div class="lesson-heading">المحتوى التعليمي</div><p class="muted">لم تُضف محاضرات لهذا المقرر بعد. ستظهر هنا تلقائيًا عند نشر أول مادة تعليمية.</p>';
+      empty.innerHTML = '<div class="lesson-heading">المحتوى التعليمي</div><p class="muted">لم تُضف وحدات أو محاضرات لهذا المقرر بعد. ستظهر هنا تلقائيًا عند إضافة المحتوى من الإدارة.</p>';
       li.appendChild(empty);
     }
 
@@ -558,9 +606,25 @@
       return;
     }
 
+    let unitQuery = client
+      .from("course_units")
+      .select("id,course_slug,unit_slug,title,description,sort_order,is_published")
+      .in("course_slug", allowedCourses.map(course => course.course_slug))
+      .order("sort_order", { ascending: true });
+    if (!isAdmin) unitQuery = unitQuery.eq("is_published", true);
+
+    const { data: unitRows, error: unitError } = await unitQuery;
+    if (unitError) throw unitError;
+    unitsByCourse = new Map();
+    for (const unit of (Array.isArray(unitRows) ? unitRows : [])) {
+      const list = unitsByCourse.get(unit.course_slug) || [];
+      list.push(unit);
+      unitsByCourse.set(unit.course_slug, list);
+    }
+
     let lessonQuery = client
       .from("course_lessons")
-      .select("course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order,is_published")
+      .select("course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order,is_published,unit_id,lesson_type,source_base_url")
       .in("course_slug", allowedCourses.map(course => course.course_slug))
       .order("sort_order", { ascending: true });
     if (!isAdmin) lessonQuery = lessonQuery.eq("is_published", true);
