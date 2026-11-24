@@ -117,35 +117,11 @@
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
     isAdmin = await checkAdmin();
-    if (!isAdmin) {
-      const { data: userData, error: userError } = await client.auth.getUser();
-      if (userError) throw userError;
-      if (userData?.user) {
-        const { data: profile, error: profileError } = await client
-          .from("profiles")
-          .select("role,status,account_state")
-          .eq("user_id", userData.user.id)
-          .maybeSingle();
-        if (profileError) throw profileError;
-        isActiveStudent = profile?.role === "student" &&
-          profile.status === "approved" &&
-          profile.account_state === "active";
-
-        if (isActiveStudent) {
-          const result = await client.rpc("get_my_course_permissions_v2");
-          if (!result.error) {
-            coursePermissions = Array.isArray(result.data) ? result.data : [];
-          } else {
-            const migrationNotApplied = result.error.code === "PGRST202" ||
-              /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(result.error.message || "");
-            if (!migrationNotApplied) throw result.error;
-            const legacy = await client.rpc("get_my_active_courses_v2");
-            if (legacy.error) throw legacy.error;
-            coursePermissions = Array.isArray(legacy.data) ? legacy.data : [];
-          }
-        }
-      }
-    }
+    const memberContext = await (window.MA_ACADEMY_MEMBER_ACCESS_READY || Promise.resolve(null));
+    isActiveStudent = memberContext?.isActiveStudent === true;
+    coursePermissions = Array.isArray(memberContext?.coursePermissions)
+      ? memberContext.coursePermissions
+      : [];
 
     let query = client
       .from("course_catalog")
