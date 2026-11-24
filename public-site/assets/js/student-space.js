@@ -297,6 +297,9 @@
       if (selected.course_slug === "business-administration") {
         const link = host.querySelector('a[href="academy/business-administration.html"]');
         link?.focus();
+      } else if (selected.course_slug === "odoo-training") {
+        window.location.replace("academy/odoo-training.html");
+        return;
       } else {
         const courseLessons = lessonsByCourse.get(selected.course_slug) || [];
         const recentLesson = courseLessons
@@ -337,15 +340,15 @@
     const hasOdooIntro = course.course_slug === "odoo-training";
     name.title = hasBusinessCoursePage
       ? "افتح منهج الإدارة والأعمال"
-      : (lessons.length ? "اضغط لفتح أول محاضرة في هذا المقرر" :
-        (hasOdooIntro ? "افتح العرض الافتتاحي لدورة Odoo" : "لا توجد محاضرات مضافة لهذا المقرر بعد"));
+      : (hasOdooIntro ? "افتح صفحة دورة Odoo" :
+        (lessons.length ? "اضغط لفتح أول محاضرة في هذا المقرر" : "لا توجد محاضرات مضافة لهذا المقرر بعد"));
     name.addEventListener("click", () => {
       if (hasBusinessCoursePage) {
         window.location.href = "academy/business-administration.html";
-      } else if (lessons.length) {
-        openLesson(lessons[0], name);
       } else if (hasOdooIntro) {
         window.location.href = "academy/odoo-training.html";
+      } else if (lessons.length) {
+        openLesson(lessons[0], name);
       } else {
         show("هذا المقرر ظاهر في حسابك، لكن لا توجد له محاضرات مسجلة في مكتبة المحتوى بعد.", true);
       }
