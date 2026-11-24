@@ -16,31 +16,51 @@
     const list = $("courseList");
     list.replaceChildren();
     for (const row of rows) {
+      const slugValue = String(row.course_slug || "");
+      const courseQuery = "?course=" + encodeURIComponent(slugValue);
+      const previewHref = "course-preview.html" + courseQuery;
+      const subscribeHref = "student-subscribe.html" + courseQuery;
+
       const card = document.createElement("article");
-      card.className = "course-card";
-      const title = document.createElement("h2");
-      title.textContent = row.title || row.course_slug || "دورة تعليمية";
-      const description = document.createElement("p");
-      description.textContent = row.description || "تفاصيل الدورة قيد الإضافة.";
-      const slug = document.createElement("small");
-      slug.textContent = row.course_slug || "";
-
-      const action = document.createElement("a");
-      action.className = "course-card-action";
-      action.href = "student-subscribe.html?course=" + encodeURIComponent(row.course_slug || "");
-      action.textContent = "طلب الاشتراك في هذه الدورة";
-
-      card.classList.add("site-clickable-surface");
+      card.className = "course-card site-clickable-surface";
       card.dataset.siteClickAction = "href";
-      card.dataset.siteClickHref = action.getAttribute("href");
+      card.dataset.siteClickHref = previewHref;
       card.tabIndex = 0;
       card.setAttribute("role", "group");
-      card.setAttribute("aria-label", "فتح " + (row.title || row.course_slug || "الدورة"));
-      card.append(title, description, slug, action);
+      card.setAttribute("aria-label", "استعراض دورة " + (row.title || slugValue || "تعليمية"));
+
+      const title = document.createElement("h2");
+      title.textContent = row.title || slugValue || "دورة تعليمية";
+
+      const description = document.createElement("p");
+      description.textContent = row.description || "تفاصيل الدورة قيد الإضافة.";
+
+      const slug = document.createElement("small");
+      slug.textContent = slugValue;
+
+      const actions = document.createElement("div");
+      actions.className = "course-card-actions";
+
+      const browse = document.createElement("a");
+      browse.className = "course-card-browse";
+      browse.href = previewHref;
+      browse.textContent = "تصفح الدورة";
+      browse.setAttribute("aria-label", "تصفح تفاصيل " + (row.title || slugValue || "الدورة"));
+
+      const subscribe = document.createElement("a");
+      subscribe.className = "course-card-action";
+      subscribe.href = subscribeHref;
+      subscribe.textContent = "طلب الاشتراك في هذه الدورة";
+      subscribe.setAttribute("aria-label", "طلب الاشتراك في " + (row.title || slugValue || "الدورة"));
+
+      actions.append(browse, subscribe);
+      card.append(title, description, slug, actions);
       list.appendChild(card);
     }
     $("courseCount").textContent = String(rows.length);
-    show(rows.length ? "يمكنك تصفح جميع الدورات ومعلوماتها التعريفية. الدروس الخاصة متاحة وفق صلاحيات حساب المتدرب." : "لا توجد دورات منشورة حاليًا.");
+    show(rows.length
+      ? "يمكنك تصفح تفاصيل كل دورة أولًا، ثم اختيار طلب الاشتراك عند رغبتك. الدروس الخاصة متاحة وفق صلاحيات حساب المتدرب."
+      : "لا توجد دورات منشورة حاليًا.");
   }
 
   async function load() {
