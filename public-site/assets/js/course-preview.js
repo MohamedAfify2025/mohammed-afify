@@ -13,10 +13,7 @@
     host.hidden = !message;
   }
 
-  async function redirectAdministrator(client) {
-    // The Odoo training preview contains its introductory presentation; keep it visible to administrators.
-    if (slug === "odoo-training") return false;
-
+  async function redirectMemberToLearning(client) {
     const { data: userData, error: userError } = await client.auth.getUser();
     if (userError) throw userError;
     const user = userData?.user;
@@ -28,15 +25,42 @@
       .eq("user_id", user.id)
       .maybeSingle();
     if (profileError) throw profileError;
-    if (profile?.role !== "admin" || profile.status !== "approved" || profile.account_state !== "active") {
-      return false;
+
+    const activeProfile = profile?.status === "approved" && profile?.account_state === "active";
+    if (!activeProfile) return false;
+
+    if (profile.role === "admin") {
+      const { data: allowed, error: adminError } = await client.rpc("is_platform_admin");
+      if (adminError) throw adminError;
+      if (allowed !== true) return false;
+      // Odoo has a self-contained introductory presentation; keep it visible.
+      if (slug === "odoo-training") return false;
+      window.location.replace("student-space.html?course=" + encodeURIComponent(slug));
+      return true;
     }
 
-    const { data: allowed, error: adminError } = await client.rpc("is_platform_admin");
-    if (adminError) throw adminError;
-    if (allowed !== true) return false;
+    if (profile.role !== "student") return false;
 
-    window.location.replace("admin-dashboard.html?course=" + encodeURIComponent(slug));
+    let permissionsResult = await client.rpc("get_my_course_permissions_v2");
+    if (permissionsResult.error) {
+      const migrationNotApplied = permissionsResult.error.code === "PGRST202" ||
+        /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(permissionsResult.error.message || "");
+      if (!migrationNotApplied) throw permissionsResult.error;
+      permissionsResult = await client.rpc("get_my_active_courses_v2");
+    }
+    if (permissionsResult.error) throw permissionsResult.error;
+
+    const permission = (Array.isArray(permissionsResult.data) ? permissionsResult.data : [])
+      .find(item => item.course_slug === slug && item.can_view_course_page === true);
+    if (!permission) return false;
+
+    if (slug === "odoo-training") return false;
+    if (slug === "business-administration") {
+      window.location.replace("academy/business-administration.html");
+      return true;
+    }
+
+    window.location.replace("student-space.html?course=" + encodeURIComponent(slug));
     return true;
   }
 
@@ -59,7 +83,7 @@
 
     // A verified active administrator goes straight to the full course workspace,
     // not the visitor-facing description page.
-    const redirected = await redirectAdministrator(client);
+    const redirected = await redirectMemberToLearning(client);
     if (redirected) return;
 
     const { data, error } = await client
