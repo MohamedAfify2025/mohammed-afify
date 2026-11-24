@@ -128,11 +128,13 @@
       .select("full_name,role,status,account_state")
       .eq("user_id", sessionData.session.user.id)
       .maybeSingle();
-    if (profileError || !profile || profile.role !== "student") {
-      throw new Error("تعذر العثور على ملف طالب صالح لهذا الحساب.");
+    if (profileError || !profile || !["student", "admin"].includes(profile.role)) {
+      throw new Error("هذا الحساب غير مخصص لمساحة الطلاب أو إدارة المحاضرات.");
     }
+    const isAdmin = profile.role === "admin";
 
-    $("studentName").textContent = profile.full_name || "متدرب";
+    $("studentName").textContent = profile.full_name || (isAdmin ? "مدير المنصة" : "متدرب");
+    if (isAdmin) $("adminUploadLink").hidden = false;
     if (profile.status !== "approved") {
       show("حسابك أُنشئ بنجاح، وطلبك بانتظار اعتماد الإدارة. ستظهر المحاضرات بعد الاعتماد وإسناد الاشتراك.");
       return;
@@ -143,19 +145,39 @@
     }
 
     let allowedCourses = [];
-    const { data: permissions, error: permissionsError } = await client.rpc("get_my_course_permissions_v2");
-
-    if (permissionsError) {
-      const migrationNotApplied = permissionsError.code === "PGRST202" ||
-        /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(permissionsError.message || "");
-      if (!migrationNotApplied) throw permissionsError;
-      const { data: legacyCourses, error: legacyError } = await client.rpc("get_my_active_courses_v2");
-      if (legacyError) throw legacyError;
-      allowedCourses = Array.isArray(legacyCourses) ? legacyCourses : [];
-      show("يتم عرض صلاحيات الباقة الحالية. ستظهر الصلاحيات الفردية لكل طالب بعد تحديث إعدادات المنصة.");
+    if (isAdmin) {
+      const { data: adminCourses, error: adminCoursesError } = await client
+        .from("course_catalog")
+        .select("course_slug,title")
+        .eq("is_active", true)
+        .order("title");
+      if (adminCoursesError) throw adminCoursesError;
+      allowedCourses = (Array.isArray(adminCourses) ? adminCourses : []).map((course) => ({
+        course_slug: course.course_slug,
+        course_title: course.title,
+        can_view_course_page: true,
+        can_watch_video: true,
+        can_download: true,
+        can_take_assessments: true,
+        can_receive_certificate: true,
+        can_track_progress: true
+      }));
+      show("أنت داخل بصلاحيات مدير المنصة. تظهر هنا جميع المقررات والمحاضرات المنشورة.");
     } else {
-      allowedCourses = Array.isArray(permissions) ? permissions : [];
-      show("هذه هي الصلاحيات المفعّلة لحسابك في كل دورة. لا يمكن للحساب تعديلها بنفسه.");
+      const { data: permissions, error: permissionsError } = await client.rpc("get_my_course_permissions_v2");
+
+      if (permissionsError) {
+        const migrationNotApplied = permissionsError.code === "PGRST202" ||
+          /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(permissionsError.message || "");
+        if (!migrationNotApplied) throw permissionsError;
+        const { data: legacyCourses, error: legacyError } = await client.rpc("get_my_active_courses_v2");
+        if (legacyError) throw legacyError;
+        allowedCourses = Array.isArray(legacyCourses) ? legacyCourses : [];
+        show("يتم عرض صلاحيات الباقة الحالية. ستظهر الصلاحيات الفردية لكل طالب بعد تحديث إعدادات المنصة.");
+      } else {
+        allowedCourses = Array.isArray(permissions) ? permissions : [];
+        show("هذه هي الصلاحيات المفعّلة لحسابك في كل دورة. لا يمكن للحساب تعديلها بنفسه.");
+      }
     }
 
     const { data: lessonRows, error: lessonError } = await client
