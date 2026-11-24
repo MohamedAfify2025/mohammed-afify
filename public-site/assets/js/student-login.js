@@ -80,9 +80,8 @@
 
         const isActiveStudent = profile?.role === "student" &&
           profile.status === "approved" && profile.account_state === "active";
-        const isActiveTeacher = profile?.role === "teacher" &&
-          profile.status === "approved" && profile.account_state === "active";
-        if (isActiveTeacher) {
+        const isTeacherAccount = profile?.role === "teacher";
+        if (isTeacherAccount) {
           window.location.replace(destination && new URL(destination, window.location.href).pathname.endsWith("/teacher-space.html")
             ? destination
             : "teacher-space.html");
