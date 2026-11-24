@@ -97,9 +97,15 @@
     name.type = "button";
     name.className = "course-name course-open";
     name.textContent = course.course_title || course.title || course.course_slug || "دورة";
-    name.title = lessons.length ? "اضغط لفتح أول محاضرة في هذا المقرر" : "لا توجد محاضرات مضافة لهذا المقرر بعد";
+    const hasBusinessCoursePage = course.course_slug === "business-administration" &&
+      (isAdmin || course.can_view_course_page === true);
+    name.title = hasBusinessCoursePage
+      ? "افتح منهج الإدارة والأعمال"
+      : (lessons.length ? "اضغط لفتح أول محاضرة في هذا المقرر" : "لا توجد محاضرات مضافة لهذا المقرر بعد");
     name.addEventListener("click", () => {
-      if (lessons.length) {
+      if (hasBusinessCoursePage) {
+        window.location.href = "academy/business-administration.html";
+      } else if (lessons.length) {
         openLesson(lessons[0], name);
       } else {
         show("لا توجد محاضرات مسجلة لهذا المقرر حتى الآن.", true);
@@ -111,6 +117,14 @@
     details.append(name, slug);
 
     li.appendChild(details);
+
+    if (hasBusinessCoursePage) {
+      const businessLink = document.createElement("a");
+      businessLink.className = "lesson-open";
+      businessLink.href = "academy/business-administration.html";
+      businessLink.textContent = "فتح المنهج التعليمي الكامل";
+      li.appendChild(businessLink);
+    }
 
     if (isAdmin) {
       const access = document.createElement("span");
@@ -289,6 +303,13 @@
     // Course links selected by an administrator open this full-access workspace
     // focused on the requested course rather than showing its public description.
     const requestedCourse = new URLSearchParams(window.location.search).get("course");
+    if (requestedCourse === "business-administration") {
+      const businessCourse = allowedCourses.find((course) => course.course_slug === requestedCourse);
+      if (isAdmin || businessCourse?.can_view_course_page === true) {
+        window.location.replace("academy/business-administration.html");
+        return;
+      }
+    }
     if (isAdmin && requestedCourse) {
       $("adminCourseManagerLink").href = "admin-course-manager.html?course=" + encodeURIComponent(requestedCourse);
       const targetCourse = allowedCourses.find((course) => course.course_slug === requestedCourse);
