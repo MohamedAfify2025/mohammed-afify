@@ -473,7 +473,7 @@
     if (profileError || !profile) {
       throw new Error("لم يتم العثور على ملف الحساب.");
     }
-    if (profile.role === "teacher" && profile.status === "approved" && profile.account_state === "active") {
+    if (profile.role === "teacher") {
       location.replace("teacher-space.html" + window.location.search);
       return;
     }
