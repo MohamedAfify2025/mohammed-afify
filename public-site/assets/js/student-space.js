@@ -99,14 +99,18 @@
     name.textContent = course.course_title || course.title || course.course_slug || "دورة";
     const hasBusinessCoursePage = course.course_slug === "business-administration" &&
       (isAdmin || course.can_view_course_page === true);
+    const hasOdooIntro = course.course_slug === "odoo-training";
     name.title = hasBusinessCoursePage
       ? "افتح منهج الإدارة والأعمال"
-      : (lessons.length ? "اضغط لفتح أول محاضرة في هذا المقرر" : "لا توجد محاضرات مضافة لهذا المقرر بعد");
+      : (lessons.length ? "اضغط لفتح أول محاضرة في هذا المقرر" :
+        (hasOdooIntro ? "افتح العرض الافتتاحي لدورة Odoo" : "لا توجد محاضرات مضافة لهذا المقرر بعد"));
     name.addEventListener("click", () => {
       if (hasBusinessCoursePage) {
         window.location.href = "academy/business-administration.html";
       } else if (lessons.length) {
         openLesson(lessons[0], name);
+      } else if (hasOdooIntro) {
+        window.location.href = "course-preview.html?course=odoo-training";
       } else {
         show("لا توجد محاضرات مسجلة لهذا المقرر حتى الآن.", true);
       }
@@ -124,6 +128,14 @@
       businessLink.href = "academy/business-administration.html";
       businessLink.textContent = "فتح المنهج التعليمي الكامل";
       li.appendChild(businessLink);
+    }
+
+    if (hasOdooIntro) {
+      const odooIntroLink = document.createElement("a");
+      odooIntroLink.className = "lesson-open";
+      odooIntroLink.href = "course-preview.html?course=odoo-training";
+      odooIntroLink.textContent = "فتح العرض الافتتاحي للدورة";
+      li.appendChild(odooIntroLink);
     }
 
     if (isAdmin) {

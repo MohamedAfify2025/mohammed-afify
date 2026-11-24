@@ -14,6 +14,9 @@
   }
 
   async function redirectAdministrator(client) {
+    // The Odoo training preview contains its introductory presentation; keep it visible to administrators.
+    if (slug === "odoo-training") return false;
+
     const { data: userData, error: userError } = await client.auth.getUser();
     if (userError) throw userError;
     const user = userData?.user;
@@ -79,6 +82,16 @@
     $("subscribeLink").href = "student-subscribe.html?course=" + encodeURIComponent(data.course_slug);
     document.title = title + " | Mohammed Afify Learning";
     $("courseDetails").hidden = false;
+
+    if (data.course_slug === "odoo-training") {
+      const introSection = $("odooIntroPresentation");
+      const introFrame = $("odooIntroFrame");
+      if (introSection && introFrame) {
+        introFrame.src = introFrame.dataset.src || "odoo-training-intro.html";
+        introSection.hidden = false;
+      }
+    }
+
     showMessage("تم تحميل معلومات الدورة بنجاح.");
   }
 

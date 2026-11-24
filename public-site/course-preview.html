@@ -25,6 +25,14 @@
     .primary{background:#0b8379;color:#fff}.secondary{background:#edf2f8;color:#243650}
     a:focus-visible{outline:3px solid #19b7a255;outline-offset:3px}
     @media(max-width:560px){body{padding:14px}.actions a{width:100%}}
+    .odoo-intro-presentation{margin-top:34px;padding-top:28px;border-top:1px solid #e5ebf2}
+    .odoo-intro-heading{margin-bottom:18px}
+    .odoo-intro-heading h2{font-size:clamp(21px,3.5vw,30px);line-height:1.6;margin:10px 0;color:#17243b}
+    .odoo-intro-heading p{color:#64748b;line-height:2;font-size:14px;margin:0}
+    .odoo-intro-frame-wrap{border:1px solid #26334a;border-radius:16px;overflow:hidden;background:#090d16;box-shadow:0 16px 42px #17243b1c}
+    #odooIntroFrame{display:block;width:100%;height:min(82vh,920px);min-height:620px;border:0;background:#090d16}
+    .odoo-intro-actions{display:flex;justify-content:flex-start;gap:10px;flex-wrap:wrap;margin-top:14px}
+    @media(max-width:650px){#odooIntroFrame{height:78vh;min-height:560px}.odoo-intro-heading p{font-size:13px}}
   </style>
 </head>
 <body>
@@ -44,6 +52,26 @@
         <a id="subscribeLink" class="primary" href="student-subscribe.html">طلب الاشتراك في هذه الدورة</a>
         <a class="secondary" href="academy-access.html">استعراض دورات أخرى</a>
       </div>
+      <section id="odooIntroPresentation" class="odoo-intro-presentation" hidden aria-labelledby="odooIntroTitle">
+        <div class="odoo-intro-heading">
+          <span class="eyebrow">COURSE INTRODUCTION · ODOO ERP</span>
+          <h2 id="odooIntroTitle">العرض الافتتاحي لدورة تدريب وتنفيذ Odoo</h2>
+          <p>استعرض فكرة البرنامج ومحاوره وخطة العمل والعرض التمهيدي للمحاضرة الأولى. ستُضاف المحاضرات التفصيلية والاختبارات لاحقًا كلٌّ على حدة.</p>
+        </div>
+        <div class="odoo-intro-frame-wrap">
+          <iframe
+            id="odooIntroFrame"
+            data-src="odoo-training-intro.html"
+            title="العرض الافتتاحي لدورة تدريب وتنفيذ Odoo ERP"
+            loading="lazy"
+            allow="fullscreen"
+            allowfullscreen
+            sandbox="allow-scripts allow-presentation"></iframe>
+        </div>
+        <div class="odoo-intro-actions">
+          <a class="primary" href="odoo-training-intro.html" target="_blank" rel="noopener noreferrer">فتح العرض في نافذة مستقلة</a>
+        </div>
+      </section>
     </div>
     <div id="courseNotFound" hidden>
       <p>لم نعثر على دورة منشورة بهذا الرابط. ارجع إلى مكتبة الدورات واختر دورة متاحة.</p>
