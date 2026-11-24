@@ -33,7 +33,7 @@
       const { data: allowed, error: adminError } = await client.rpc("is_platform_admin");
       if (adminError) throw adminError;
       if (allowed !== true) return false;
-      // Keep the Odoo introduction visible; open the full business curriculum directly.
+      // Authorized Odoo members continue to the protected standalone course page.
       if (slug === "odoo-training") { window.location.replace("academy/odoo-training.html"); return true; }
       if (slug === "business-administration") {
         window.location.replace("academy/business-administration.html");
@@ -58,7 +58,7 @@
       .find(item => item.course_slug === slug && item.can_view_course_page === true);
     if (!permission) return false;
 
-    if (slug === "odoo-training") return false;
+    if (slug === "odoo-training") { window.location.replace("academy/odoo-training.html"); return true; }
     if (slug === "business-administration") {
       window.location.replace("academy/business-administration.html");
       return true;
