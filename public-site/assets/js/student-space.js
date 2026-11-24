@@ -346,7 +346,8 @@
     const { data: sessionData, error: sessionError } = await client.auth.getSession();
     if (sessionError) throw sessionError;
     if (!sessionData.session) {
-      location.href = "student-login.html";
+      const next = "student-space.html" + window.location.search + window.location.hash;
+      location.href = "student-login.html?next=" + encodeURIComponent(next);
       return;
     }
 
