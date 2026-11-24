@@ -8,6 +8,7 @@
   let courses = [];
   let lessons = [];
   let isLoading = false;
+  let selectedCourseSlug = "";
 
   const sections = [
     {group:"الإدارة",items:[
@@ -107,99 +108,208 @@
     }
   }
 
-  function renderCourses() {
-    const host=$("courseGrid");
-    host.replaceChildren();
-    const query=$("courseSearch").value.trim().toLowerCase();
-    const filtered=courses.filter(course=>{
-      const courseLessons=lessons.filter(lesson=>lesson.course_slug===course.course_slug);
-      const text=[course.title,course.course_slug,course.description,...courseLessons.map(x=>x.title+" "+x.lesson_slug)].join(" ").toLowerCase();
-      return !query||text.includes(query);
+  function getSearchFilteredCourses() {
+    const query = $("courseSearch").value.trim().toLocaleLowerCase();
+    return courses.filter(course => {
+      const courseLessons = lessons.filter(lesson => lesson.course_slug === course.course_slug);
+      const text = [
+        course.title,
+        course.course_slug,
+        course.description,
+        ...courseLessons.map(item => (item.title || "") + " " + (item.lesson_slug || ""))
+      ].join(" ").toLocaleLowerCase();
+      return !query || text.includes(query);
     });
-    $("noCourses").hidden=filtered.length>0;
-    for(const course of filtered) {
-      const courseLessons=lessons.filter(item=>item.course_slug===course.course_slug);
-      const published=courseLessons.filter(item=>item.is_published===true).length;
-      const drafts=courseLessons.length-published;
-      const card=document.createElement("article");
-      card.className="course-card";
-      card.dataset.courseSlug=course.course_slug;
+  }
 
-      const top=document.createElement("div");
-      top.className="course-top";
-      const title=document.createElement("h3");
-      title.textContent=course.title||course.course_slug;
-      const slug=document.createElement("span");
-      slug.className="slug";
-      slug.textContent=course.course_slug;
-      top.append(title,slug);
+  function updateCourseUrl(slug, replace = false) {
+    const next = new URL(window.location.href);
+    if (slug) next.searchParams.set("course", slug);
+    else next.searchParams.delete("course");
+    const method = replace ? "replaceState" : "pushState";
+    window.history[method]({}, "", next.pathname + next.search + next.hash);
+  }
 
-      const status=document.createElement("span");
-      status.className="status"+(course.is_active?" active":"");
-      status.textContent=course.is_active?"مقرر نشط":"مقرر غير نشط";
+  function chooseCourse(slug, updateUrl = true) {
+    const value = String(slug || "");
+    if (value && !courses.some(course => course.course_slug === value)) return;
+    selectedCourseSlug = value;
+    if (updateUrl) updateCourseUrl(value);
+    renderCourseTabs();
+    renderCourses();
+  }
 
-      const description=document.createElement("p");
-      description.className="description";
-      description.textContent=course.description||"لم يُضف وصف لهذا المقرر.";
+  function renderCourseTabs() {
+    const host = $("courseTabs");
+    host.replaceChildren();
+    const visibleCourses = getSearchFilteredCourses();
 
-      const stats=document.createElement("div");
-      stats.className="course-stats";
-      for(const label of [
-        "عدد المحاضرات: "+courseLessons.length,
-        "منشورة: "+published,
-        "مسودات: "+drafts
+    const all = document.createElement("button");
+    all.type = "button";
+    all.className = "course-tab";
+    all.setAttribute("role", "tab");
+    all.setAttribute("aria-selected", selectedCourseSlug ? "false" : "true");
+    all.textContent = "كل المقررات";
+    all.addEventListener("click", () => {
+      $("courseSearch").value = "";
+      chooseCourse("");
+    });
+    host.appendChild(all);
+
+    for (const course of visibleCourses) {
+      const count = lessons.filter(item => item.course_slug === course.course_slug).length;
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = "course-tab";
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-selected", selectedCourseSlug === course.course_slug ? "true" : "false");
+      tab.setAttribute("aria-controls", "courseGrid");
+      tab.dataset.courseSlug = course.course_slug;
+
+      const label = document.createElement("strong");
+      label.textContent = course.title || course.course_slug;
+      const badge = document.createElement("span");
+      badge.textContent = String(count);
+      badge.setAttribute("aria-label", count + " محاضرة أو مادة");
+      tab.append(label, badge);
+      tab.addEventListener("click", () => {
+        $("courseSearch").value = "";
+        chooseCourse(course.course_slug);
+      });
+      host.appendChild(tab);
+    }
+
+    if (!visibleCourses.length) {
+      const empty = document.createElement("span");
+      empty.className = "course-tabs-empty";
+      empty.textContent = "لا توجد مقررات تطابق البحث الحالي.";
+      host.appendChild(empty);
+    }
+  }
+
+  function renderCourses() {
+    const host = $("courseGrid");
+    host.replaceChildren();
+    const searched = getSearchFilteredCourses();
+    const visible = selectedCourseSlug
+      ? searched.filter(course => course.course_slug === selectedCourseSlug)
+      : searched;
+    const selectedCourse = selectedCourseSlug
+      ? courses.find(course => course.course_slug === selectedCourseSlug)
+      : null;
+
+    host.classList.toggle("single-course", Boolean(selectedCourse));
+    $("courseViewTitle").textContent = selectedCourse
+      ? "محتوى المقرر: " + (selectedCourse.title || selectedCourse.course_slug)
+      : "جميع المقررات والمحتوى";
+    $("courseViewDescription").textContent = selectedCourse
+      ? "يعرض هذا التبويب بيانات هذا المقرر ومحاضراته ومواده فقط. استخدم تبويبات المقررات للتنقل دون خلط المحتوى."
+      : "اختر تبويب المقرر لعرض بياناته ومحاضراته ومواده بصورة مستقلة.";
+
+    $("noCourses").hidden = visible.length > 0;
+    $("noCourses").textContent = selectedCourseSlug
+      ? "لا توجد نتائج مطابقة لهذا المقرر أو لم تعد بياناته متاحة."
+      : "لا توجد مقررات تطابق البحث الحالي.";
+
+    for (const course of visible) {
+      const courseLessons = lessons
+        .filter(item => item.course_slug === course.course_slug)
+        .slice()
+        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+      const published = courseLessons.filter(item => item.is_published === true).length;
+      const drafts = courseLessons.length - published;
+      const card = document.createElement("article");
+      card.className = "course-card";
+      card.dataset.courseSlug = course.course_slug;
+
+      const top = document.createElement("div");
+      top.className = "course-top";
+      const title = document.createElement("h3");
+      title.textContent = course.title || course.course_slug;
+      const slug = document.createElement("span");
+      slug.className = "slug";
+      slug.textContent = course.course_slug;
+      top.append(title, slug);
+
+      const status = document.createElement("span");
+      status.className = "status" + (course.is_active ? " active" : "");
+      status.textContent = course.is_active ? "مقرر نشط" : "مقرر غير نشط";
+
+      const description = document.createElement("p");
+      description.className = "description";
+      description.textContent = course.description || "لم يُضف وصف لهذا المقرر.";
+
+      const stats = document.createElement("div");
+      stats.className = "course-stats";
+      for (const label of [
+        "عدد المحاضرات: " + courseLessons.length,
+        "منشورة: " + published,
+        "مسودات: " + drafts
       ]) {
-        const badge=document.createElement("span");
-        badge.textContent=label;
+        const badge = document.createElement("span");
+        badge.textContent = label;
         stats.appendChild(badge);
       }
 
-      const lessonPanel=document.createElement("div");
-      lessonPanel.className="lesson-items";
-      const lessonHeading=document.createElement("h4");
-      lessonHeading.textContent="المحاضرات والمواد";
+      const lessonPanel = document.createElement("div");
+      lessonPanel.className = "lesson-items";
+      const lessonHeading = document.createElement("h4");
+      lessonHeading.textContent = "المحاضرات والمواد — " + (course.title || course.course_slug);
       lessonPanel.appendChild(lessonHeading);
-      if(courseLessons.length) {
-        for(const lesson of courseLessons.sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))) {
-          const row=document.createElement("div");
-          row.className="lesson-item";
-          const lessonTitle=document.createElement("span");
-          lessonTitle.textContent=lesson.title||lesson.lesson_slug;
-          const lessonStatus=document.createElement("small");
-          lessonStatus.textContent=lesson.is_published?"منشورة":"مسودة";
-          row.append(lessonTitle,lessonStatus);
+
+      if (courseLessons.length) {
+        for (const lesson of courseLessons) {
+          const row = document.createElement("div");
+          row.className = "lesson-item";
+          const lessonTitle = document.createElement("span");
+          lessonTitle.textContent = lesson.title || lesson.lesson_slug;
+          const lessonStatus = document.createElement("small");
+          lessonStatus.textContent = lesson.is_published ? "منشورة" : "مسودة";
+          row.append(lessonTitle, lessonStatus);
           lessonPanel.appendChild(row);
         }
       } else {
-        const empty=document.createElement("div");
-        empty.className="no-lessons";
-        empty.textContent=course.course_slug === "business-administration"
-          ? "المنهج محفوظ كصفحة تعليمية مستقلة: 3 وحدات تفصيلية ووحدتان ملخصتان."
-          : "لا توجد محاضرات أو مواد مسجلة لهذا المقرر حتى الآن.";
+        const empty = document.createElement("div");
+        empty.className = "no-lessons";
+        empty.textContent = course.course_slug === "business-administration"
+          ? "المنهج محفوظ كصفحة تعليمية مستقلة. استخدم زر فتح منهج الإدارة والأعمال."
+          : "لا توجد محاضرات أو مواد مسجلة في سجل هذا المقرر حتى الآن. يمكنك إضافتها من إدارة المقرر والمحاضرات.";
         lessonPanel.appendChild(empty);
       }
 
-      const actions=document.createElement("div");
-      actions.className="course-actions";
-      const manage=document.createElement("a");
-      manage.className="primary";
-      manage.href="admin-course-manager.html?course="+encodeURIComponent(course.course_slug);
-      manage.textContent="إدارة المقرر والمحاضرات";
-      const open=document.createElement("a");
-      open.href="student-space.html?course="+encodeURIComponent(course.course_slug);
-      open.textContent="فتح المحتوى للمدير";
-      actions.append(manage,open);
+      const actions = document.createElement("div");
+      actions.className = "course-actions";
+      const manage = document.createElement("a");
+      manage.className = "primary";
+      manage.href = "admin-course-manager.html?course=" + encodeURIComponent(course.course_slug);
+      manage.textContent = "إدارة هذا المقرر ومحاضراته";
+
+      const open = document.createElement("a");
+      open.href = "student-space.html?course=" + encodeURIComponent(course.course_slug);
+      open.textContent = "فتح محتوى هذا المقرر";
+      actions.append(manage, open);
+
       if (course.course_slug === "business-administration") {
-        const curriculum=document.createElement("a");
-        curriculum.className="primary";
-        curriculum.href="academy/business-administration.html";
-        curriculum.textContent="فتح منهج الإدارة والأعمال";
+        const curriculum = document.createElement("a");
+        curriculum.className = "primary";
+        curriculum.href = "academy/business-administration.html";
+        curriculum.textContent = "فتح منهج الإدارة والأعمال";
         actions.appendChild(curriculum);
       }
 
-      card.append(top,status,description,stats,lessonPanel,actions);
+      card.append(top, status, description, stats, lessonPanel, actions);
       host.appendChild(card);
     }
+  }
+
+  function handleCourseSearch() {
+    const visible = getSearchFilteredCourses();
+    if (selectedCourseSlug && !visible.some(course => course.course_slug === selectedCourseSlug)) {
+      selectedCourseSlug = "";
+      updateCourseUrl("", true);
+    }
+    renderCourseTabs();
+    renderCourses();
   }
 
   async function loadData() {
@@ -227,6 +337,10 @@
       if(lessonResult.error) throw lessonResult.error;
       courses=Array.isArray(courseResult.data)?courseResult.data:[];
       lessons=Array.isArray(lessonResult.data)?lessonResult.data:[];
+      const requestedCourse = new URLSearchParams(window.location.search).get("course") || "";
+      selectedCourseSlug = courses.some(course => course.course_slug === requestedCourse)
+        ? requestedCourse
+        : "";
       const metrics=[
         ["metricCourses",courses.length],
         ["metricLessons",lessons.length],
@@ -242,6 +356,7 @@
       ];
       for(const [id,value] of metrics) $(id).textContent=value.toLocaleString("en-US");
       renderSections();
+      renderCourseTabs();
       renderCourses();
       $("dashboardContent").hidden=false;
       show("تم التحقق من صلاحية المدير وتحميل جميع أقسام المنصة ومقرراتها ومحتوياتها. يمكنك فتح أو إدارة أي قسم من هذه الصفحة.");
@@ -264,18 +379,18 @@
     const allowed=await verifyAdmin();
     if(!allowed) return;
     await loadData();
-    const selected=new URLSearchParams(window.location.search).get("course");
-    if(selected) {
-      const target=[...$("courseGrid").querySelectorAll(".course-card")]
-        .find(el=>el.dataset.courseSlug===selected);
-      if(target) {
-        target.style.outline="3px solid #19b7a255";
-        target.scrollIntoView({behavior:"smooth",block:"center"});
-      }
+    if (selectedCourseSlug) {
+      $("courseTabs").scrollIntoView({behavior:"smooth",block:"center"});
     }
   }
 
-  $("courseSearch").addEventListener("input",renderCourses);
+  $("courseSearch").addEventListener("input",handleCourseSearch);
+  window.addEventListener("popstate", () => {
+    const requested = new URLSearchParams(window.location.search).get("course") || "";
+    selectedCourseSlug = courses.some(course => course.course_slug === requested) ? requested : "";
+    renderCourseTabs();
+    renderCourses();
+  });
   $("refreshButton").addEventListener("click",()=>loadData().catch(error=>show(error.message||"تعذر تحديث البيانات.",true)));
   $("logoutButton").addEventListener("click",async()=>{
     if(client) await client.auth.signOut();
