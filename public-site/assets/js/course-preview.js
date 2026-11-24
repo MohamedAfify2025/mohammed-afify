@@ -101,6 +101,18 @@
     }
 
     const title = data.title || data.course_slug || "دورة تعليمية";
+    const categoryLabels = {
+      programming: "البرمجة", python: "البرمجة", scratch: "برمجة الأطفال",
+      "data-analysis": "تحليل البيانات", "business-administration": "الإدارة والأعمال",
+      projects: "المشروعات التطبيقية", accounting: "المحاسبة",
+      excel: "المهارات الرقمية", word: "المهارات الرقمية", powerpoint: "المهارات الرقمية",
+      icdl: "المهارات الرقمية", windows: "المهارات الرقمية", "odoo-training": "أنظمة ERP"
+    };
+    const category = $("courseCategory");
+    if (category) {
+      category.textContent = categoryLabels[data.course_slug] || "مسار تعليمي";
+      category.hidden = false;
+    }
     $("courseTitle").textContent = title;
     $("courseDescription").textContent = data.description || "لم تُضف الإدارة وصفًا تفصيليًا لهذه الدورة بعد.";
     $("subscribeLink").href = "student-subscribe.html?course=" + encodeURIComponent(data.course_slug);
