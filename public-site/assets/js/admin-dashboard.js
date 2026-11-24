@@ -319,9 +319,10 @@
     show("جارٍ تحميل جميع بيانات المنصة...");
     try {
       const [
-        courseResult,lessonResult,students,pending,plans,subscriptions,payments,teachers,progress,assessments,audit
+        courseResult,unitCount,lessonResult,students,pending,plans,subscriptions,payments,teachers,progress,assessments,audit
       ]=await Promise.all([
         client.from("course_catalog").select("course_slug,title,description,is_active").order("title"),
+        countValue("course_units","id"),
         client.from("course_lessons").select("course_slug,lesson_slug,title,description,is_published,sort_order").order("course_slug").order("sort_order"),
         countValue("profiles","user_id",[["role","student"]]),
         countValue("profiles","user_id",[["status","pending"]]),
@@ -344,6 +345,7 @@
       const metrics=[
         ["metricCourses",courses.length],
         ["metricLessons",lessons.length],
+        ["metricUnits",unitCount],
         ["metricStudents",students],
         ["metricPending",pending],
         ["metricPlans",plans],
