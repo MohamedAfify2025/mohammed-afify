@@ -20,7 +20,7 @@
       const target = new URL(candidate, base);
       if (target.origin !== window.location.origin || !target.pathname.startsWith(base.pathname)) return "";
       const relative = target.pathname.slice(base.pathname.length);
-      const allowed = /^(?:student-space|course-preview|admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|lesson-admin-upload)\.html$/.test(relative) ||
+      const allowed = /^(?:student-space|teacher-space|course-preview|admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|lesson-admin-upload)\.html$/.test(relative) ||
         /^academy\/[a-z0-9-]+\.html$/i.test(relative);
       return allowed ? target.pathname + target.search + target.hash : "";
     } catch (_) {
@@ -80,6 +80,14 @@
 
         const isActiveStudent = profile?.role === "student" &&
           profile.status === "approved" && profile.account_state === "active";
+        const isActiveTeacher = profile?.role === "teacher" &&
+          profile.status === "approved" && profile.account_state === "active";
+        if (isActiveTeacher) {
+          window.location.replace(destination && new URL(destination, window.location.href).pathname.endsWith("/teacher-space.html")
+            ? destination
+            : "teacher-space.html");
+          return;
+        }
         const destinationIsAdminOnly = destination && /\/(?:admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|lesson-admin-upload)\.html$/.test(new URL(destination, window.location.href).pathname);
         if (isActiveStudent && destination && !destinationIsAdminOnly) {
           window.location.replace(destination);
