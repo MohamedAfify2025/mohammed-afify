@@ -81,7 +81,7 @@
     const { data: userData, error: userError } = await client.auth.getUser();
     if (userError) throw userError;
     if (!userData?.user) {
-      const next = "admin-dashboard.html" + window.location.search;
+      const next = "admin-course-manager.html" + window.location.search;
       window.location.replace("student-login.html?next=" + encodeURIComponent(next));
       return false;
     }
@@ -732,9 +732,13 @@
     resetUnitForm();
     resetLessonForm();
     $("managerContent").hidden = false;
-    prepareRequestedLesson();
-    if (!courses.length) message("تم التحقق من المدير. ابدأ بإضافة أول مقرر ثم أضف المحاضرات.");
-    else message("تم التحقق من صلاحية المدير. لديك تحكم كامل في جميع المقررات والمحاضرات والملفات المنشورة والمسودات.");
+    if (!courses.length) {
+      message("تم التحقق من المدير. ابدأ بإضافة أول مقرر ثم أضف المحاضرات.");
+    } else if (new URLSearchParams(window.location.search).get("prepare") === "odoo-business-flow-01" && selectedSlug === "odoo-training") {
+      prepareRequestedLesson();
+    } else {
+      message("تم التحقق من صلاحية المدير. لديك تحكم كامل في جميع المقررات والمحاضرات والملفات المنشورة والمسودات.");
+    }
   }
 
   $("courseSelect").addEventListener("change", () => {
