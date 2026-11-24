@@ -6,6 +6,10 @@
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
   let client = null;
   let activeLessonUrl = "";
+  let allowedCourses = [];
+  let lessonsByCourse = new Map();
+  let isAdminSession = false;
+  let selectedCourseSlug = "";
 
   function show(text, isError = false) {
     const el = $("pageMessage");
@@ -87,6 +91,125 @@
     activeLessonUrl = "";
   }
 
+  function updateCourseUrl(slug, replace = false) {
+    const next = new URL(window.location.href);
+    if (slug) next.searchParams.set("course", slug);
+    else next.searchParams.delete("course");
+    const method = replace ? "replaceState" : "pushState";
+    window.history[method]({}, "", next.pathname + next.search + next.hash);
+  }
+
+  function renderCourseTabs() {
+    const host = $("courseTabs");
+    host.replaceChildren();
+
+    const all = document.createElement("button");
+    all.type = "button";
+    all.className = "course-tab";
+    all.setAttribute("role", "tab");
+    all.setAttribute("aria-selected", selectedCourseSlug ? "false" : "true");
+    all.textContent = "كل المقررات";
+    all.addEventListener("click", () => {
+      selectedCourseSlug = "";
+      updateCourseUrl("");
+      renderCourseTabs();
+      renderCourseContent(false);
+    });
+    host.appendChild(all);
+
+    for (const course of allowedCourses) {
+      const slug = course.course_slug;
+      const count = (lessonsByCourse.get(slug) || []).length;
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = "course-tab";
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-selected", selectedCourseSlug === slug ? "true" : "false");
+      tab.setAttribute("aria-controls", "courseList");
+      tab.dataset.courseSlug = slug;
+
+      const label = document.createElement("strong");
+      label.textContent = course.course_title || course.title || slug;
+      const badge = document.createElement("span");
+      badge.className = "course-tab-count";
+      badge.textContent = String(count);
+      badge.setAttribute("aria-label", count + " محاضرات");
+      tab.append(label, badge);
+      tab.addEventListener("click", () => {
+        selectedCourseSlug = slug;
+        updateCourseUrl(slug);
+        renderCourseTabs();
+        renderCourseContent(true);
+      });
+      host.appendChild(tab);
+    }
+  }
+
+  function renderCourseContent(autoOpenFirstLesson = false) {
+    const host = $("courseList");
+    host.replaceChildren();
+
+    const visibleCourses = selectedCourseSlug
+      ? allowedCourses.filter(course => course.course_slug === selectedCourseSlug)
+      : allowedCourses;
+
+    if (selectedCourseSlug && !visibleCourses.length) {
+      $("coursePanelTitle").textContent = "المقرر غير متاح";
+      $("coursePanelDescription").textContent = "لا توجد صلاحية وصول لهذا المقرر في حسابك الحالي.";
+      show("المقرر المطلوب غير مسند إلى حسابك أو لم يعد متاحًا.", true);
+      selectedCourseSlug = "";
+      updateCourseUrl("", true);
+      renderCourseTabs();
+      return;
+    }
+
+    const selected = visibleCourses.length === 1 && selectedCourseSlug
+      ? visibleCourses[0]
+      : null;
+
+    $("coursePanelTitle").textContent = selected
+      ? (selected.course_title || selected.title || selected.course_slug)
+      : (isAdminSession ? "كل المقررات التعليمية" : "مساراتك التعليمية");
+
+    if (selected) {
+      const count = (lessonsByCourse.get(selected.course_slug) || []).length;
+      $("coursePanelDescription").textContent = count
+        ? "يعرض هذا القسم محاضرات ومواد هذا المقرر فقط. اختر المحاضرة لفتحها، وستظل بقية المقررات في تبويباتها."
+        : "هذا المقرر متاح لحسابك، لكن لم تُسجّل له محاضرات في مكتبة المحتوى بعد.";
+      $("courseOverviewLink").href = "student-space.html";
+      $("courseOverviewLink").textContent = "عرض كل المقررات";
+      const managerLink = $("adminCourseManagerLink");
+      if (isAdminSession && managerLink) {
+        managerLink.href = "admin-course-manager.html?course=" + encodeURIComponent(selected.course_slug);
+      }
+    } else {
+      $("coursePanelDescription").textContent = isAdminSession
+        ? "اختر مقررًا من التبويبات لعرض محتواه منفصلًا، أو اعرض القائمة الكاملة."
+        : "هذه هي المقررات المسندة إلى حسابك. اختر أي مقرر لعرض دروسه ومواده.";
+      $("courseOverviewLink").href = "student-space.html";
+      $("courseOverviewLink").textContent = "عرض المقررات";
+    }
+
+    for (const course of visibleCourses) {
+      addCourse(course, lessonsByCourse.get(course.course_slug) || [], isAdminSession);
+    }
+
+    if (selected && autoOpenFirstLesson) {
+      if (selected.course_slug === "business-administration") {
+        const link = host.querySelector('a[href="academy/business-administration.html"]');
+        link?.focus();
+      } else {
+        const firstLesson = host.querySelector('[data-first-lesson="true"]');
+        if (firstLesson) firstLesson.click();
+        else if (selected.course_slug === "odoo-training") {
+          const intro = host.querySelector(".odoo-intro-link");
+          intro?.focus();
+        }
+      }
+      $("coursePanel").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
   function addCourse(course, lessons, isAdmin = false) {
     const li = document.createElement("li");
     li.className = "course-item";
@@ -112,14 +235,13 @@
       } else if (hasOdooIntro) {
         window.location.href = "course-preview.html?course=odoo-training";
       } else {
-        show("لا توجد محاضرات مسجلة لهذا المقرر حتى الآن.", true);
+        show("هذا المقرر ظاهر في حسابك، لكن لا توجد له محاضرات مسجلة في مكتبة المحتوى بعد.", true);
       }
     });
     const slug = document.createElement("small");
     slug.className = "course-slug";
     slug.textContent = course.course_slug || "";
     details.append(name, slug);
-
     li.appendChild(details);
 
     if (hasBusinessCoursePage) {
@@ -164,7 +286,6 @@
     if (hasOdooIntro) {
       const actionRow = document.createElement("div");
       actionRow.className = "course-action-row";
-
       const odooIntroLink = document.createElement("a");
       odooIntroLink.className = "lesson-open odoo-intro-link";
       odooIntroLink.href = "course-preview.html?course=odoo-training";
@@ -182,20 +303,34 @@
       lessonHeading.textContent = isAdmin ? "كل المحاضرات والمواد" : "المحاضرات المتاحة";
       lessonList.appendChild(lessonHeading);
 
-      for (const lesson of lessons) {
+      lessons.forEach((lesson, index) => {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "lesson-open";
         const draftLabel = isAdmin && lesson.is_published !== true ? " · مسودة / غير منشورة" : "";
         button.textContent = "فتح: " + (lesson.title || lesson.lesson_slug) + draftLabel;
+        if (index === 0) button.dataset.firstLesson = "true";
         button.addEventListener("click", () => openLesson(lesson, button));
         lessonList.appendChild(button);
-      }
+      });
       li.appendChild(lessonList);
+    } else if (!hasBusinessCoursePage && !hasOdooIntro) {
+      const empty = document.createElement("div");
+      empty.className = "lesson-list";
+      empty.innerHTML = '<div class="lesson-heading">المحتوى التعليمي</div><p class="muted">لم تُضف محاضرات لهذا المقرر بعد. ستظهر هنا تلقائيًا عند نشر أول مادة تعليمية.</p>';
+      li.appendChild(empty);
     }
 
-    $("courseList").appendChild(li);
+    host.appendChild(li);
+    return li;
   }
+
+  window.addEventListener("popstate", () => {
+    const requested = new URLSearchParams(window.location.search).get("course") || "";
+    selectedCourseSlug = allowedCourses.some(course => course.course_slug === requested) ? requested : "";
+    renderCourseTabs();
+    renderCourseContent(false);
+  });
 
   async function boot() {
     if (!window.supabase?.createClient ||
@@ -244,35 +379,33 @@
       return;
     }
 
+    isAdminSession = isAdmin;
     if (isAdmin) {
       $("adminDashboardLink").hidden = false;
       $("adminCourseManagerLink").hidden = false;
       $("adminStudentsLink").hidden = false;
       $("adminSubscriptionsLink").hidden = false;
       $("adminUploadLink").hidden = false;
-      $("coursePanelTitle").textContent = "كل محتوى المنصة";
-      $("coursePanelDescription").textContent = "لديك وصول إداري شامل لجميع المقررات والمحاضرات والمواد، بما فيها المسودات وغير المنشورة. لا تحتاج إلى إسناد صلاحيات طالب إلى حساب المدير.";
-      show("تم التحقق من دور مدير المنصة. كل المحتوى متاح لك إداريًا دون إعداد صلاحيات فردية.");
+      show("تم التحقق من دور مدير المنصة. لديك وصول إداري شامل لجميع المقررات والمحاضرات والمسودات.");
     } else {
-      $("coursePanelTitle").textContent = "الدورات وصلاحيات حسابك";
-      $("coursePanelDescription").textContent = "تعرض هذه القائمة صلاحياتك لكل دورة. لن تتمكن من فتح أي درس أو ملف إلا إذا كانت صلاحيته مفعّلة.";
+      show("تم التحقق من حسابك. ستظهر هنا المقررات التي يسمح بها اشتراكك وصلاحياته.");
     }
 
-    let allowedCourses = [];
     if (isAdmin) {
       const { data: adminCourses, error: adminCoursesError } = await client
         .from("course_catalog")
-        .select("course_slug,title,is_active")
+        .select("course_slug,title,is_active,description")
         .order("title");
       if (adminCoursesError) throw adminCoursesError;
-      allowedCourses = (Array.isArray(adminCourses) ? adminCourses : []).map((course) => ({
+      allowedCourses = (Array.isArray(adminCourses) ? adminCourses : []).map(course => ({
         course_slug: course.course_slug,
         course_title: course.title,
+        title: course.title,
+        description: course.description,
         is_active: course.is_active === true
       }));
     } else {
       const { data: permissions, error: permissionsError } = await client.rpc("get_my_course_permissions_v2");
-
       if (permissionsError) {
         const migrationNotApplied = permissionsError.code === "PGRST202" ||
           /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(permissionsError.message || "");
@@ -280,70 +413,51 @@
         const { data: legacyCourses, error: legacyError } = await client.rpc("get_my_active_courses_v2");
         if (legacyError) throw legacyError;
         allowedCourses = Array.isArray(legacyCourses) ? legacyCourses : [];
-        show("يتم عرض صلاحيات الباقة الحالية. ستظهر الصلاحيات الفردية لكل طالب بعد تحديث إعدادات المنصة.");
       } else {
         allowedCourses = Array.isArray(permissions) ? permissions : [];
-        show("هذه هي الصلاحيات المفعّلة لحسابك في كل دورة. لا يمكن للحساب تعديلها بنفسه.");
       }
     }
 
-    let lessonQuery = client
-      .from("course_lessons")
-      .select("course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order,is_published")
-      .order("sort_order", { ascending: true });
-    if (!isAdmin) {
-      lessonQuery = lessonQuery.eq("is_published", true);
-    }
-    const { data: lessonRows, error: lessonError } = await lessonQuery;
-    if (lessonError) throw lessonError;
-
-    const lessonsByCourse = new Map();
-    for (const lesson of (Array.isArray(lessonRows) ? lessonRows : [])) {
-      const list = lessonsByCourse.get(lesson.course_slug) || [];
-      list.push(lesson);
-      lessonsByCourse.set(lesson.course_slug, list);
-    }
-
-    allowedCourses.forEach((course) => {
-      addCourse(course, lessonsByCourse.get(course.course_slug) || [], isAdmin);
-    });
-
+    allowedCourses = allowedCourses.filter(course => course && /^[a-z0-9-]+$/i.test(String(course.course_slug || "")));
     if (!allowedCourses.length) {
+      $("coursePanel").hidden = true;
       show(isAdmin
         ? "لا توجد مقررات مسجلة في فهرس المنصة حاليًا."
         : "حسابك معتمد، لكن لا يوجد اشتراك تدريبي نشط مسند إلى حسابك حاليًا.");
       return;
     }
 
-    $("coursePanel").hidden = false;
+    let lessonQuery = client
+      .from("course_lessons")
+      .select("course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order,is_published")
+      .in("course_slug", allowedCourses.map(course => course.course_slug))
+      .order("sort_order", { ascending: true });
+    if (!isAdmin) lessonQuery = lessonQuery.eq("is_published", true);
 
-    // Course links selected by an administrator open this full-access workspace
-    // focused on the requested course rather than showing its public description.
-    const requestedCourse = new URLSearchParams(window.location.search).get("course");
-    if (requestedCourse === "business-administration") {
-      const businessCourse = allowedCourses.find((course) => course.course_slug === requestedCourse);
-      if (isAdmin || businessCourse?.can_view_course_page === true) {
-        window.location.replace("academy/business-administration.html");
-        return;
-      }
+    const { data: lessonRows, error: lessonError } = await lessonQuery;
+    if (lessonError) throw lessonError;
+
+    lessonsByCourse = new Map();
+    for (const lesson of (Array.isArray(lessonRows) ? lessonRows : [])) {
+      const list = lessonsByCourse.get(lesson.course_slug) || [];
+      list.push(lesson);
+      lessonsByCourse.set(lesson.course_slug, list);
     }
-    if (isAdmin && requestedCourse) {
-      $("adminCourseManagerLink").href = "admin-course-manager.html?course=" + encodeURIComponent(requestedCourse);
-      const targetCourse = allowedCourses.find((course) => course.course_slug === requestedCourse);
-      const targetItem = [...$("courseList").querySelectorAll(".course-item")]
-        .find((item) => item.dataset.courseSlug === requestedCourse);
-      if (targetItem) {
-        targetItem.classList.add("course-item-selected");
-        targetItem.scrollIntoView({ behavior: "smooth", block: "center" });
-        const courseLessons = lessonsByCourse.get(requestedCourse) || [];
-        if (courseLessons.length) {
-          openLesson(courseLessons[0], null);
-        } else {
-          show("تم فتح المقرر بصلاحيات المدير الكاملة. لا توجد محاضرات أو ملفات مسجلة لهذا المقرر حتى الآن.");
-        }
-      } else if (!targetCourse) {
-        show("المقرر المطلوب غير موجود في فهرس المنصة.", true);
-      }
+
+    const requestedCourse = new URLSearchParams(window.location.search).get("course") || "";
+    selectedCourseSlug = allowedCourses.some(course => course.course_slug === requestedCourse)
+      ? requestedCourse
+      : "";
+
+    if (requestedCourse && !selectedCourseSlug) {
+      show("لا يملك هذا الحساب صلاحية فتح المقرر المطلوب. يمكنك استعراض المقررات المتاحة فقط.", true);
+    }
+
+    $("coursePanel").hidden = false;
+    renderCourseTabs();
+    renderCourseContent(Boolean(selectedCourseSlug));
+    if (selectedCourseSlug && isAdmin) {
+      $("adminCourseManagerLink").href = "admin-course-manager.html?course=" + encodeURIComponent(selectedCourseSlug);
     }
   }
 
