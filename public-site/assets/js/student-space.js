@@ -214,6 +214,7 @@
     }
 
     if (isAdmin) {
+      $("adminCourseManagerLink").hidden = false;
       $("adminStudentsLink").hidden = false;
       $("adminSubscriptionsLink").hidden = false;
       $("adminUploadLink").hidden = false;
@@ -288,6 +289,7 @@
     // focused on the requested course rather than showing its public description.
     const requestedCourse = new URLSearchParams(window.location.search).get("course");
     if (isAdmin && requestedCourse) {
+      $("adminCourseManagerLink").href = "admin-course-manager.html?course=" + encodeURIComponent(requestedCourse);
       const targetCourse = allowedCourses.find((course) => course.course_slug === requestedCourse);
       const targetItem = [...$("courseList").querySelectorAll(".course-item")]
         .find((item) => item.dataset.courseSlug === requestedCourse);
