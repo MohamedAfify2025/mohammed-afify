@@ -6,6 +6,7 @@
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
   let client = null;
   let courses = [];
+  let units = [];
   let lessons = [];
   let isLoading = false;
   let selectedCourseSlug = "";
@@ -216,6 +217,10 @@
         .filter(item => item.course_slug === course.course_slug)
         .slice()
         .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+      const courseUnits = units
+        .filter(item => item.course_slug === course.course_slug)
+        .slice()
+        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
       const published = courseLessons.filter(item => item.is_published === true).length;
       const drafts = courseLessons.length - published;
       const card = document.createElement("article");
@@ -242,7 +247,8 @@
       const stats = document.createElement("div");
       stats.className = "course-stats";
       for (const label of [
-        "عدد المحاضرات: " + courseLessons.length,
+        "الوحدات: " + courseUnits.length,
+        "المحاضرات والمواد: " + courseLessons.length,
         "منشورة: " + published,
         "مسودات: " + drafts
       ]) {
@@ -254,8 +260,31 @@
       const lessonPanel = document.createElement("div");
       lessonPanel.className = "lesson-items";
       const lessonHeading = document.createElement("h4");
-      lessonHeading.textContent = "المحاضرات والمواد — " + (course.title || course.course_slug);
+      lessonHeading.textContent = "الوحدات والمحاضرات — " + (course.title || course.course_slug);
       lessonPanel.appendChild(lessonHeading);
+
+      if (courseUnits.length) {
+        const unitList = document.createElement("div");
+        unitList.className = "dashboard-unit-list";
+        for (const unit of courseUnits) {
+          const unitRow = document.createElement("div");
+          unitRow.className = "dashboard-unit-row";
+          const unitTitle = document.createElement("strong");
+          unitTitle.textContent = "الوحدة " + unit.sort_order + " · " + unit.title;
+          const unitLessons = courseLessons.filter(item => item.unit_id === unit.id);
+          const unitMeta = document.createElement("small");
+          unitMeta.textContent = unitLessons.length + " مادة · " +
+            (unit.is_published ? "الوحدة منشورة" : "مسودة");
+          unitRow.append(unitTitle, unitMeta);
+          unitList.appendChild(unitRow);
+        }
+        lessonPanel.appendChild(unitList);
+      } else {
+        const noUnits = document.createElement("div");
+        noUnits.className = "no-lessons";
+        noUnits.textContent = "لم تُنشأ وحدات لهذا المقرر بعد.";
+        lessonPanel.appendChild(noUnits);
+      }
 
       if (courseLessons.length) {
         for (const lesson of courseLessons) {
@@ -319,11 +348,11 @@
     show("جارٍ تحميل جميع بيانات المنصة...");
     try {
       const [
-        courseResult,unitCount,lessonResult,students,pending,plans,subscriptions,payments,teachers,progress,assessments,audit
+        courseResult,unitResult,lessonResult,students,pending,plans,subscriptions,payments,teachers,progress,assessments,audit
       ]=await Promise.all([
         client.from("course_catalog").select("course_slug,title,description,is_active").order("title"),
-        countValue("course_units","id"),
-        client.from("course_lessons").select("course_slug,lesson_slug,title,description,is_published,sort_order").order("course_slug").order("sort_order"),
+        client.from("course_units").select("id,course_slug,unit_slug,title,sort_order,is_published").order("course_slug").order("sort_order"),
+        client.from("course_lessons").select("course_slug,lesson_slug,title,description,is_published,sort_order,unit_id,lesson_type").order("course_slug").order("sort_order"),
         countValue("profiles","user_id",[["role","student"]]),
         countValue("profiles","user_id",[["status","pending"]]),
         countValue("subscription_plans","id"),
@@ -335,8 +364,10 @@
         countValue("membership_audit_log","id")
       ]);
       if(courseResult.error) throw courseResult.error;
+      if(unitResult.error) throw unitResult.error;
       if(lessonResult.error) throw lessonResult.error;
       courses=Array.isArray(courseResult.data)?courseResult.data:[];
+      units=Array.isArray(unitResult.data)?unitResult.data:[];
       lessons=Array.isArray(lessonResult.data)?lessonResult.data:[];
       const requestedCourse = new URLSearchParams(window.location.search).get("course") || "";
       selectedCourseSlug = courses.some(course => course.course_slug === requestedCourse)
@@ -345,7 +376,7 @@
       const metrics=[
         ["metricCourses",courses.length],
         ["metricLessons",lessons.length],
-        ["metricUnits",unitCount],
+        ["metricUnits",units.length],
         ["metricStudents",students],
         ["metricPending",pending],
         ["metricPlans",plans],
