@@ -6,6 +6,8 @@
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
   let client = null;
   let isAdmin = false;
+  let isActiveStudent = false;
+  let coursePermissions = [];
 
   function show(text, error = false) {
     const host = $("courseListMessage");
@@ -21,6 +23,13 @@
     return allowed === true;
   }
 
+  function learningHref(slug) {
+    const query = "?course=" + encodeURIComponent(slug);
+    if (slug === "business-administration") return "academy/business-administration.html";
+    if (slug === "odoo-training") return "course-preview.html" + query;
+    return "student-space.html" + query;
+  }
+
   function renderCourses(rows) {
     const list = $("courseList");
     list.replaceChildren();
@@ -29,9 +38,12 @@
       const slugValue = String(row.course_slug || "");
       const courseQuery = "?course=" + encodeURIComponent(slugValue);
       const previewHref = "course-preview.html" + courseQuery;
-      const adminHref = "admin-dashboard.html" + courseQuery;
       const subscribeHref = "student-subscribe.html" + courseQuery;
-      const openHref = isAdmin ? adminHref : previewHref;
+      const permission = coursePermissions.find(item => item.course_slug === slugValue);
+      const hasStudentAccess = isActiveStudent && permission?.can_view_course_page === true;
+      const openHref = (isAdmin || hasStudentAccess)
+        ? learningHref(slugValue)
+        : previewHref;
 
       const card = document.createElement("article");
       card.className = "course-card site-clickable-surface";
@@ -39,7 +51,7 @@
       card.dataset.siteClickHref = openHref;
       card.tabIndex = 0;
       card.setAttribute("role", "group");
-      card.setAttribute("aria-label", (isAdmin ? "فتح محتوى " : "استعراض ") + (row.title || slugValue || "الدورة"));
+      card.setAttribute("aria-label", (isAdmin || hasStudentAccess ? "فتح محتوى " : "استعراض ") + (row.title || slugValue || "الدورة"));
 
       const title = document.createElement("h2");
       title.textContent = row.title || slugValue || "دورة تعليمية";
@@ -53,15 +65,21 @@
       const browse = document.createElement("a");
       browse.className = "course-card-browse";
       browse.href = openHref;
-      browse.textContent = isAdmin ? "دخول المحتوى بصلاحيات المدير" : "تصفح الدورة";
-      browse.setAttribute("aria-label", (isAdmin ? "فتح محتوى " : "تصفح تفاصيل ") + (row.title || slugValue || "الدورة"));
-
+      browse.textContent = isAdmin
+        ? "فتح المقرر بصلاحيات المدير"
+        : hasStudentAccess ? "متابعة التعلّم" : "استعراض تفاصيل الدورة";
+      browse.setAttribute("aria-label", (isAdmin || hasStudentAccess ? "فتح محتوى " : "تصفح تفاصيل ") + (row.title || slugValue || "الدورة"));
       actions.appendChild(browse);
 
       if (isAdmin) {
         const status = document.createElement("small");
         status.className = "course-admin-status";
         status.textContent = "وصول إداري شامل";
+        actions.appendChild(status);
+      } else if (hasStudentAccess) {
+        const status = document.createElement("small");
+        status.className = "course-admin-status";
+        status.textContent = "اشتراكك يتيح فتح هذا المقرر";
         actions.appendChild(status);
       } else {
         const subscribe = document.createElement("a");
@@ -72,16 +90,18 @@
         actions.appendChild(subscribe);
       }
 
-      if (isAdmin) card.append(title, slug, actions);
+      if (isAdmin || hasStudentAccess) card.append(title, slug, actions);
       else card.append(title, Object.assign(document.createElement("p"), { textContent: row.description || "تفاصيل الدورة قيد الإضافة." }), slug, actions);
       list.appendChild(card);
     }
 
     $("courseCount").textContent = String(rows.length);
     show(isAdmin
-      ? "تم التحقق من صلاحية المدير. الضغط على أي مقرر يفتح لوحة إدارته الكاملة دون صفحة الوصف العامة."
-      : (rows.length
-          ? "يمكنك تصفح تفاصيل كل دورة أولًا، ثم اختيار طلب الاشتراك عند رغبتك. الدروس الخاصة متاحة وفق صلاحيات حساب المتدرب."
+      ? "تم التحقق من صلاحية المدير. اختر أي مقرر لفتح مساحته التعليمية وإدارته."
+      : isActiveStudent
+        ? "المقررات التي يتيحها اشتراكك تفتح مباشرة في مساحتها التعليمية. يمكنك معاينة بقية الدورات وطلب الاشتراك."
+        : (rows.length
+          ? "استعرض تفاصيل كل دورة، ثم انتقل إلى نموذج الاشتراك عند رغبتك."
           : "لا توجد دورات منشورة حاليًا."));
   }
 
@@ -97,6 +117,35 @@
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
     isAdmin = await checkAdmin();
+    if (!isAdmin) {
+      const { data: userData, error: userError } = await client.auth.getUser();
+      if (userError) throw userError;
+      if (userData?.user) {
+        const { data: profile, error: profileError } = await client
+          .from("profiles")
+          .select("role,status,account_state")
+          .eq("user_id", userData.user.id)
+          .maybeSingle();
+        if (profileError) throw profileError;
+        isActiveStudent = profile?.role === "student" &&
+          profile.status === "approved" &&
+          profile.account_state === "active";
+
+        if (isActiveStudent) {
+          const result = await client.rpc("get_my_course_permissions_v2");
+          if (!result.error) {
+            coursePermissions = Array.isArray(result.data) ? result.data : [];
+          } else {
+            const migrationNotApplied = result.error.code === "PGRST202" ||
+              /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(result.error.message || "");
+            if (!migrationNotApplied) throw result.error;
+            const legacy = await client.rpc("get_my_active_courses_v2");
+            if (legacy.error) throw legacy.error;
+            coursePermissions = Array.isArray(legacy.data) ? legacy.data : [];
+          }
+        }
+      }
+    }
 
     let query = client
       .from("course_catalog")
