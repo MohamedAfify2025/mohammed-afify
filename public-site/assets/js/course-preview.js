@@ -33,7 +33,7 @@
     if (adminError) throw adminError;
     if (allowed !== true) return false;
 
-    window.location.replace("admin-course-manager.html?course=" + encodeURIComponent(slug));
+    window.location.replace("admin-dashboard.html?course=" + encodeURIComponent(slug));
     return true;
   }
 
