@@ -90,6 +90,7 @@
   function addCourse(course, lessons, isAdmin = false) {
     const li = document.createElement("li");
     li.className = "course-item";
+    li.dataset.courseSlug = course.course_slug || "";
 
     const details = document.createElement("div");
     const name = document.createElement("button");
@@ -282,6 +283,27 @@
     }
 
     $("coursePanel").hidden = false;
+
+    // Course links selected by an administrator open this full-access workspace
+    // focused on the requested course rather than showing its public description.
+    const requestedCourse = new URLSearchParams(window.location.search).get("course");
+    if (isAdmin && requestedCourse) {
+      const targetCourse = allowedCourses.find((course) => course.course_slug === requestedCourse);
+      const targetItem = [...$("courseList").querySelectorAll(".course-item")]
+        .find((item) => item.dataset.courseSlug === requestedCourse);
+      if (targetItem) {
+        targetItem.classList.add("course-item-selected");
+        targetItem.scrollIntoView({ behavior: "smooth", block: "center" });
+        const courseLessons = lessonsByCourse.get(requestedCourse) || [];
+        if (courseLessons.length) {
+          openLesson(courseLessons[0], null);
+        } else {
+          show("تم فتح المقرر بصلاحيات المدير الكاملة. لا توجد محاضرات أو ملفات مسجلة لهذا المقرر حتى الآن.");
+        }
+      } else if (!targetCourse) {
+        show("المقرر المطلوب غير موجود في فهرس المنصة.", true);
+      }
+    }
   }
 
   window.addEventListener("message", (event) => {
