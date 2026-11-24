@@ -373,8 +373,9 @@
       const index = Number(button.dataset.whatsappIndex);
       const student = previewRows[index];
       if (!student?.phone) return;
-      const opened = window.open(whatsappUrl(student), "_blank", "noopener,noreferrer");
-      if (!opened) message("المتصفح منع فتح WhatsApp. اسمح بالنوافذ المنبثقة لهذا الموقع ثم أعد المحاولة.", true);
+      const opened = window.open(whatsappUrl(student), "_blank");
+      if (opened) opened.opener = null;
+      else message("المتصفح منع فتح WhatsApp. اسمح بالنوافذ المنبثقة لهذا الموقع ثم أعد المحاولة.", true);
     });
 
     $("sendInvitesButton").addEventListener("click", async () => {
