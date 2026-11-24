@@ -123,6 +123,7 @@
       const drafts=courseLessons.length-published;
       const card=document.createElement("article");
       card.className="course-card";
+      card.dataset.courseSlug=course.course_slug;
 
       const top=document.createElement("div");
       top.className="course-top";
@@ -199,7 +200,7 @@
     show("جارٍ تحميل جميع بيانات المنصة...");
     try {
       const [
-        courseResult,lessonResult,students,pending,plans,subscriptions,payments,teachers
+        courseResult,lessonResult,students,pending,plans,subscriptions,payments,teachers,progress,assessments,audit
       ]=await Promise.all([
         client.from("course_catalog").select("course_slug,title,description,is_active").order("title"),
         client.from("course_lessons").select("course_slug,lesson_slug,title,description,is_published,sort_order").order("course_slug").order("sort_order"),
@@ -208,7 +209,10 @@
         countValue("subscription_plans","id"),
         countValue("student_subscriptions","id"),
         countValue("subscription_payments","id"),
-        countValue("teacher_course_assignments","id")
+        countValue("teacher_course_assignments","id"),
+        countValue("learning_progress","id"),
+        countValue("assessment_results","id"),
+        countValue("membership_audit_log","id")
       ]);
       if(courseResult.error) throw courseResult.error;
       if(lessonResult.error) throw lessonResult.error;
@@ -222,7 +226,10 @@
         ["metricPlans",plans],
         ["metricSubscriptions",subscriptions],
         ["metricPayments",payments],
-        ["metricTeachers",teachers]
+        ["metricTeachers",teachers],
+        ["metricProgress",progress],
+        ["metricAssessments",assessments],
+        ["metricAudit",audit]
       ];
       for(const [id,value] of metrics) $(id).textContent=value.toLocaleString("en-US");
       renderSections();
@@ -250,8 +257,8 @@
     await loadData();
     const selected=new URLSearchParams(window.location.search).get("course");
     if(selected) {
-      const card=[...$("courseGrid").children].find(el=>el.querySelector("a.manage")?.href.includes("course="+encodeURIComponent(selected)));
-      const target=[...document.querySelectorAll(".course-card")].find(el=>el.textContent.includes(selected));
+      const target=[...$("courseGrid").querySelectorAll(".course-card")]
+        .find(el=>el.dataset.courseSlug===selected);
       if(target) {
         target.style.outline="3px solid #19b7a255";
         target.scrollIntoView({behavior:"smooth",block:"center"});
