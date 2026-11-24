@@ -18,6 +18,8 @@ li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-righ
 .permission-badge.yes{background:#e5f7ef;color:#14704c}
 .top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .admin-link{background:#0b8379}
+.nav-link{background:#edf2f8;color:#243650}
+.course-item-selected{background:#f0fbf7;border:1px solid #a9dfd0;border-radius:12px;padding:16px;margin-block:8px;box-shadow:0 8px 22px #0b837911}
 .admin-link.secondary-admin{background:#edf2f8;color:#243650}
 .admin-access-badge{display:inline-flex;align-items:center;border-radius:20px;padding:5px 10px;background:#e5f7ef;color:#14704c;font-size:11px;font-weight:800}
 .lesson-list{width:100%;padding:12px;background:#f7f9fc;border:1px solid #e8edf3;border-radius:12px;margin-top:8px}
@@ -32,9 +34,12 @@ li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-righ
 </style></head>
 <body><main>
 <header class="top"><div class="brand">MOHAMMED AFIFY · LEARNING SPACE</div><div class="top-actions">
+<a class="nav-link" href="index.html">الرئيسية</a>
+<a class="nav-link" href="academy-access.html">مكتبة الدورات</a>
+<a id="adminCourseManagerLink" class="admin-link" href="admin-course-manager.html" hidden>إدارة المقررات والمحتوى</a>
 <a id="adminStudentsLink" class="admin-link secondary-admin" href="admin-students.html" hidden>إدارة الطلاب</a>
 <a id="adminSubscriptionsLink" class="admin-link secondary-admin" href="admin-subscriptions.html" hidden>الاشتراكات والمدفوعات</a>
-<a id="adminUploadLink" class="admin-link" href="lesson-admin-upload.html" hidden>إدارة المحاضرات</a>
+<a id="adminUploadLink" class="admin-link" href="lesson-admin-upload.html" hidden>إدارة محاضرة المحاسبة</a>
 <button id="logoutButton" type="button">تسجيل الخروج</button></div></header>
 <section class="card">
 <p class="muted">مساحتك التعليمية الشخصية</p><h1>أهلًا <span id="studentName">بك</span></h1><p class="muted" id="studentEmail"></p>

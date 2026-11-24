@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>إدارة المقررات والمحتوى | Mohammed Afify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif;padding:20px}
+    main{max-width:1180px;margin:20px auto 50px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .brand{font-weight:900;color:#0b8379}
+    .nav{display:flex;gap:8px;flex-wrap:wrap}
+    a,button{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 15px;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}
+    button:disabled{opacity:.55;cursor:wait}
+    .secondary{background:#edf2f8;color:#243650}.primary{background:#0b8379;color:#fff}.dark{background:#14233d;color:#fff}.danger{background:#fff0f0;color:#9b2632}
+    h1{font-size:clamp(25px,4vw,34px);margin:8px 0}
+    h2{font-size:19px;margin:0 0 16px}
+    .muted{color:#68778e;font-size:13px;line-height:1.9}
+    .card{background:#fff;border:1px solid #e3eaf2;border-radius:18px;padding:22px;margin:15px 0;box-shadow:0 10px 30px #17243b08}
+    .notice{padding:13px 15px;border-radius:11px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.9;margin:14px 0}
+    .notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
+    label{display:block;font-size:12px;font-weight:800;margin:12px 0 6px}
+    input,select,textarea{width:100%;border:1px solid #d9e2ed;border-radius:10px;padding:11px 12px;font:inherit;font-size:13px;color:#17243b;background:#fff}
+    textarea{min-height:115px;resize:vertical;line-height:1.9}
+    input:focus,select:focus,textarea:focus{outline:2px solid #19b7a233;border-color:#19a997}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+    .grid-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:13px}
+    .check{display:flex;align-items:center;gap:9px;margin-top:18px;font-size:13px;font-weight:800}
+    .check input{width:18px;height:18px}
+    .form-actions{display:flex;justify-content:flex-start;gap:9px;flex-wrap:wrap;margin-top:16px}
+    .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.85fr);gap:15px}
+    .lesson-list{display:grid;gap:10px}
+    .lesson-row{border:1px solid #e5ebf2;border-radius:13px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .lesson-title{font-weight:800}
+    .lesson-meta{font-size:11px;color:#748198;line-height:1.8;margin-top:4px}
+    .lesson-actions{display:flex;gap:7px;flex-wrap:wrap}
+    .status{display:inline-flex;border-radius:18px;padding:4px 9px;font-size:11px;font-weight:800;background:#fff5dc;color:#916300}
+    .status.published{background:#e5f7ef;color:#14704c}
+    .empty{padding:18px;text-align:center;color:#68778e;background:#f7f9fc;border:1px dashed #d9e2ed;border-radius:12px;font-size:13px}
+    @media(max-width:850px){.split{grid-template-columns:1fr}}
+    @media(max-width:600px){body{padding:12px}.card{padding:17px}.grid,.grid-3{grid-template-columns:1fr}.lesson-row{align-items:flex-start}.lesson-actions{width:100%}.lesson-actions>*{flex:1}}
+  </style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div>
+      <div class="brand">MOHAMMED AFIFY · ADMINISTRATOR</div>
+      <h1>إدارة المقررات والمحتوى</h1>
+      <p class="muted">إدارة شاملة لفهرس الدورات والمحاضرات والمواد، مع التحكم في النشر والملفات الخاصة.</p>
+    </div>
+    <nav class="nav" aria-label="أقسام الإدارة">
+      <a class="secondary" href="index.html">الرئيسية</a>
+      <a class="secondary" href="student-space.html">المحتوى التعليمي</a>
+      <a class="secondary" href="admin-students.html">إدارة الطلاب</a>
+      <a class="secondary" href="admin-subscriptions.html">الاشتراكات والمدفوعات</a>
+      <button id="logoutButton" class="dark" type="button">تسجيل الخروج</button>
+    </nav>
+  </header>
+
+  <div id="pageMessage" class="notice" role="status">جارٍ التحقق من صلاحية المدير...</div>
+
+  <section id="managerContent" hidden>
+    <div class="split">
+      <section class="card">
+        <h2>إدارة المقرر المحدد</h2>
+        <label for="courseSelect">اختر المقرر</label>
+        <select id="courseSelect"></select>
+        <form id="courseForm">
+          <div class="grid">
+            <div><label for="courseSlug">رمز المقرر</label><input id="courseSlug" type="text" maxlength="80" autocomplete="off" required></div>
+            <div><label for="courseTitle">اسم المقرر</label><input id="courseTitle" type="text" maxlength="160" required></div>
+          </div>
+          <label for="courseDescription">وصف المقرر</label>
+          <textarea id="courseDescription" maxlength="3000" placeholder="اكتب وصفًا مختصرًا وواضحًا للدورة..."></textarea>
+          <label class="check"><input id="courseActive" type="checkbox" checked> المقرر متاح في مكتبة الدورات العامة</label>
+          <div class="form-actions">
+            <button id="saveCourseButton" class="primary" type="submit">حفظ بيانات المقرر</button>
+            <button id="newCourseButton" class="secondary" type="button">إضافة مقرر جديد</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>إضافة محاضرة أو مادة جديدة</h2>
+        <form id="lessonForm">
+          <label for="lessonCourse">المقرر</label>
+          <select id="lessonCourse" required></select>
+          <div class="grid">
+            <div><label for="lessonSlug">رمز المحاضرة</label><input id="lessonSlug" type="text" maxlength="100" placeholder="lesson-01" required></div>
+            <div><label for="lessonTitle">عنوان المحاضرة</label><input id="lessonTitle" type="text" maxlength="180" required></div>
+          </div>
+          <label for="lessonDescription">وصف مختصر</label>
+          <textarea id="lessonDescription" maxlength="1500" placeholder="موضوعات المحاضرة أو ملاحظات للمدير..."></textarea>
+          <div class="grid-3">
+            <div><label for="lessonFile">ملف المحاضرة HTML</label><input id="lessonFile" type="file" accept=".html,text/html"></div>
+            <div><label for="lessonSort">ترتيب المحاضرة</label><input id="lessonSort" type="number" min="1" max="9999" value="1" required></div>
+            <div><label class="check"><input id="lessonPublish" type="checkbox"> نشر للطلاب</label></div>
+          </div>
+          <p class="muted">الملفات تُحفظ في التخزين الخاص. الحد الأقصى 10 ميجابايت. اترك الملف فارغًا عند تعديل بيانات محاضرة موجودة فقط.</p>
+          <div class="form-actions"><button id="saveLessonButton" class="primary" type="submit">حفظ المحاضرة</button><button id="resetLessonButton" class="secondary" type="button">تفريغ النموذج</button></div>
+        </form>
+      </section>
+    </div>
+
+    <section class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div><h2 style="margin-bottom:5px">محاضرات ومواد المقرر</h2><p id="lessonListCaption" class="muted">كل المحاضرات، بما فيها المسودات وغير المنشورة.</p></div>
+        <a id="openCourseContent" class="dark" href="student-space.html">فتح المحتوى في مساحة المدير</a>
+      </div>
+      <div id="lessonList" class="lesson-list" aria-live="polite"></div>
+    </section>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.js"></script>
+<script src="assets/js/admin-course-manager.js" defer></script>
+</body>
+</html>
