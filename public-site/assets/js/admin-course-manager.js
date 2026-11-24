@@ -33,7 +33,8 @@
     const { data: userData, error: userError } = await client.auth.getUser();
     if (userError) throw userError;
     if (!userData?.user) {
-      window.location.replace("student-login.html");
+      const next = "admin-course-manager.html" + window.location.search;
+      window.location.replace("student-login.html?next=" + encodeURIComponent(next));
       return false;
     }
 
@@ -86,9 +87,10 @@
     if (error) throw error;
     courses = Array.isArray(data) ? data : [];
     const requested = new URLSearchParams(window.location.search).get("course");
-    if (requested) selectedSlug = requested;
+    if (requested && courses.some((course) => course.course_slug === requested)) selectedSlug = requested;
+    else selectedSlug = courses[0]?.course_slug || "";
     fillCourseSelects();
-    if (selectedSlug) loadSelectedCourse();
+    if (selectedSlug) await loadSelectedCourse();
     else resetCourseForm();
   }
 
@@ -103,7 +105,7 @@
     $("lessonList").innerHTML = '<div class="empty">أضف أول مقرر لبدء إدارة المحتوى.</div>';
   }
 
-  function loadSelectedCourse() {
+  async function loadSelectedCourse() {
     const course = courses.find((item) => item.course_slug === selectedSlug);
     if (!course) return;
     $("courseSelect").value = selectedSlug;
@@ -115,7 +117,7 @@
     $("courseActive").checked = course.is_active === true;
     $("saveCourseButton").textContent = "حفظ بيانات المقرر";
     $("openCourseContent").href = "student-space.html?course=" + encodeURIComponent(selectedSlug);
-    loadLessons().catch((error) => message(error.message || "تعذر تحميل محاضرات المقرر.", true));
+    await loadLessons();
   }
 
   async function loadLessons() {
@@ -183,6 +185,7 @@
 
   function fillLessonForm(item) {
     $("lessonCourse").value = item.course_slug;
+    $("lessonCourse").disabled = true;
     $("lessonSlug").value = item.lesson_slug;
     $("lessonSlug").readOnly = true;
     $("lessonTitle").value = item.title || "";
@@ -198,6 +201,7 @@
   function resetLessonForm() {
     $("lessonForm").reset();
     $("lessonSlug").readOnly = false;
+    $("lessonCourse").disabled = false;
     $("lessonSort").value = "1";
     $("saveLessonButton").textContent = "حفظ المحاضرة";
     delete $("lessonForm").dataset.editId;
@@ -256,9 +260,11 @@
 
     setBusy(button, true, "جارٍ حفظ المحاضرة...");
     try {
-      const storagePath = courseSlug + "/" + lessonSlug + ".html";
+      const existingLesson = editId ? lessons.find((item) => item.id === editId) : null;
+      const storageBucket = existingLesson?.storage_bucket || BUCKET;
+      const storagePath = existingLesson?.storage_path || (courseSlug + "/" + lessonSlug + ".html");
       if (file) {
-        const { error: uploadError } = await client.storage.from(BUCKET).upload(storagePath, file, {
+        const { error: uploadError } = await client.storage.from(storageBucket).upload(storagePath, file, {
           upsert: true,
           contentType: "text/html"
         });
@@ -270,7 +276,7 @@
         lesson_slug: lessonSlug,
         title,
         description,
-        storage_bucket: BUCKET,
+        storage_bucket: storageBucket,
         storage_path: storagePath,
         content_type: "text/html",
         file_size_bytes: file?.size || undefined,
@@ -279,9 +285,14 @@
         updated_at: new Date().toISOString()
       };
 
-      const result = editId
-        ? await client.from("course_lessons").update(values).eq("id", editId)
-        : await client.from("course_lessons").insert({ ...values, created_by: (await client.auth.getUser()).data.user.id });
+      let result;
+      if (editId) {
+        result = await client.from("course_lessons").update(values).eq("id", editId);
+      } else {
+        const { data: userData, error: userError } = await client.auth.getUser();
+        if (userError || !userData?.user) throw userError || new Error("تعذر التحقق من جلسة المدير.");
+        result = await client.from("course_lessons").insert({ ...values, created_by: userData.user.id });
+      }
       if (result.error) throw result.error;
 
       selectedSlug = courseSlug;
