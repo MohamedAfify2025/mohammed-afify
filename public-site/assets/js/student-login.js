@@ -12,10 +12,20 @@
     el.hidden = !text;
   }
 
-  function requestedAdminDestination() {
+  function requestedDestination() {
     const candidate = new URLSearchParams(window.location.search).get("next") || "";
-    const match = candidate.match(/^(admin-dashboard\.html|admin-course-manager\.html|admin-students\.html|admin-subscriptions\.html|lesson-admin-upload\.html)(\?course=([a-z0-9-]+))?$/);
-    return match ? candidate : "";
+    if (!candidate || candidate.length > 700) return "";
+    try {
+      const base = new URL(".", window.location.href);
+      const target = new URL(candidate, base);
+      if (target.origin !== window.location.origin || !target.pathname.startsWith(base.pathname)) return "";
+      const relative = target.pathname.slice(base.pathname.length);
+      const allowed = /^(?:student-space|course-preview|admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|lesson-admin-upload)\.html$/.test(relative) ||
+        /^academy\/[a-z0-9-]+\.html$/i.test(relative);
+      return allowed ? target.pathname + target.search + target.hash : "";
+    } catch (_) {
+      return "";
+    }
   }
 
   async function boot() {
@@ -41,7 +51,7 @@
         if (error) throw error;
         if (!data.user) throw new Error("تعذر التحقق من الحساب.");
 
-        const destination = requestedAdminDestination();
+        const destination = requestedDestination();
         const { data: profile, error: profileError } = await client
           .from("profiles")
           .select("role,status,account_state")
@@ -58,8 +68,8 @@
           if (adminError) throw adminError;
           if (isAdmin === true) {
             let adminTarget = destination || "admin-dashboard.html";
-            if (adminTarget.startsWith("admin-course-manager.html")) {
-              const course = new URLSearchParams(adminTarget.split("?")[1] || "").get("course");
+            if (adminTarget.endsWith("/admin-course-manager.html") || adminTarget.startsWith("admin-course-manager.html")) {
+              const course = new URL(adminTarget, window.location.href).searchParams.get("course");
               adminTarget = "admin-dashboard.html" + (course ? "?course=" + encodeURIComponent(course) : "");
             }
             window.location.replace(adminTarget);
@@ -67,7 +77,14 @@
           }
         }
 
-        if (destination) {
+        const isActiveStudent = profile?.role === "student" &&
+          profile.status === "approved" && profile.account_state === "active";
+        const destinationIsAdminOnly = destination && /\/(?:admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|lesson-admin-upload)\.html$/.test(new URL(destination, window.location.href).pathname);
+        if (isActiveStudent && destination && !destinationIsAdminOnly) {
+          window.location.replace(destination);
+          return;
+        }
+        if (destinationIsAdminOnly) {
           show("هذا القسم يتطلب حساب مدير معتمد. سيتم فتح مساحتك حسب صلاحيات حسابك.");
         }
         window.location.replace("student-space.html");
