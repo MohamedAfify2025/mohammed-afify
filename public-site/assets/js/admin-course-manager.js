@@ -8,7 +8,9 @@
   let client = null;
   let courses = [];
   let lessons = [];
+  let units = [];
   let selectedSlug = "";
+  let editUnitId = "";
 
   function message(text, error = false) {
     const host = $("pageMessage");
@@ -125,13 +127,157 @@
     $("openCourseContent").textContent = selectedSlug === "business-administration"
       ? "فتح منهج الإدارة والأعمال"
       : "فتح المحتوى في مساحة المدير";
+    await loadUnits();
     await loadLessons();
+  }
+
+  async function loadUnits() {
+    const { data, error } = await client
+      .from("course_units")
+      .select("id,course_slug,unit_slug,title,description,sort_order,is_published")
+      .eq("course_slug", selectedSlug)
+      .order("sort_order", { ascending: true });
+    if (error) throw error;
+    units = Array.isArray(data) ? data : [];
+    renderUnits();
+    renderUnitOptions();
+  }
+
+  function renderUnitOptions(selectedId = "") {
+    const select = $("lessonUnit");
+    if (!select) return;
+    const options = [new Option("بدون وحدة — مواد إضافية", "")];
+    for (const unit of units) options.push(new Option(unit.sort_order + " · " + unit.title, unit.id));
+    select.replaceChildren(...options);
+    select.value = selectedId;
+  }
+
+  function renderUnits() {
+    const host = $("unitList");
+    if (!host) return;
+    host.replaceChildren();
+    if (!units.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "لم تُنشأ وحدات لهذا المقرر بعد. أنشئ الوحدات أولًا، ثم اربط كل محاضرة بالوحدة المناسبة.";
+      host.appendChild(empty);
+      return;
+    }
+    for (const unit of units) {
+      const row = document.createElement("article");
+      row.className = "lesson-row";
+      const details = document.createElement("div");
+      const title = document.createElement("div");
+      title.className = "lesson-title";
+      title.textContent = "الوحدة " + unit.sort_order + " · " + unit.title;
+      const meta = document.createElement("div");
+      meta.className = "lesson-meta";
+      meta.textContent = unit.unit_slug + (unit.description ? " · " + unit.description : "");
+      const state = document.createElement("span");
+      state.className = "status" + (unit.is_published ? " published" : "");
+      state.textContent = unit.is_published ? "متاحة للطلاب" : "مسودة";
+      details.append(title, meta, state);
+      const actions = document.createElement("div");
+      actions.className = "lesson-actions";
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.className = "secondary";
+      edit.textContent = "تعديل";
+      edit.addEventListener("click", () => fillUnitForm(unit));
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "danger";
+      remove.textContent = "حذف الوحدة";
+      remove.addEventListener("click", () => deleteUnit(unit, remove));
+      actions.append(edit, remove);
+      row.append(details, actions);
+      host.appendChild(row);
+    }
+  }
+
+  function fillUnitForm(unit) {
+    editUnitId = unit.id;
+    $("unitSlug").value = unit.unit_slug;
+    $("unitSlug").readOnly = true;
+    $("unitTitle").value = unit.title || "";
+    $("unitDescription").value = unit.description || "";
+    $("unitSort").value = unit.sort_order || 1;
+    $("unitPublish").checked = unit.is_published === true;
+    $("saveUnitButton").textContent = "حفظ تعديل الوحدة";
+    $("unitForm").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function resetUnitForm() {
+    $("unitForm").reset();
+    $("unitSlug").readOnly = false;
+    $("unitSort").value = "1";
+    $("saveUnitButton").textContent = "إضافة الوحدة";
+    editUnitId = "";
+  }
+
+  async function saveUnit(event) {
+    event.preventDefault();
+    const title = $("unitTitle").value.trim();
+    const slug = $("unitSlug").value.trim().toLowerCase();
+    const description = $("unitDescription").value.trim();
+    const sortOrder = Number($("unitSort").value);
+    const isPublished = $("unitPublish").checked;
+    const button = $("saveUnitButton");
+    if (!validSlug(slug, 100)) return message("رمز الوحدة يجب أن يتكون من أحرف إنجليزية صغيرة وأرقام وشرطات فقط.", true);
+    if (title.length < 2) return message("اكتب عنوان الوحدة.", true);
+    if (!Number.isInteger(sortOrder) || sortOrder < 1 || sortOrder > 9999) return message("ترتيب الوحدة يجب أن يكون من 1 إلى 9999.", true);
+    if (!editUnitId && units.some(unit => unit.unit_slug === slug)) return message("رمز الوحدة مستخدم بالفعل.", true);
+    setBusy(button, true, "جارٍ حفظ الوحدة...");
+    try {
+      const values = {
+        course_slug: selectedSlug,
+        unit_slug: slug,
+        title,
+        description,
+        sort_order: sortOrder,
+        is_published: isPublished,
+        updated_at: new Date().toISOString()
+      };
+      let result;
+      if (editUnitId) {
+        result = await client.from("course_units").update(values).eq("id", editUnitId);
+      } else {
+        const { data: userData, error: userError } = await client.auth.getUser();
+        if (userError || !userData?.user) throw userError || new Error("تعذر التحقق من جلسة المدير.");
+        result = await client.from("course_units").insert({ ...values, created_by: userData.user.id });
+      }
+      if (result.error) throw result.error;
+      resetUnitForm();
+      await loadUnits();
+      message("تم حفظ الوحدة وربطها بالمقرر.");
+    } catch (error) {
+      message(error.message || "تعذر حفظ الوحدة.", true);
+    } finally {
+      setBusy(button, false);
+    }
+  }
+
+  async function deleteUnit(unit, button) {
+    if (!window.confirm("حذف الوحدة؟ ستظل محاضراتها محفوظة وستنتقل إلى قسم المواد الإضافية.")) return;
+    setBusy(button, true, "جارٍ الحذف...");
+    try {
+      const { error } = await client.from("course_units").delete().eq("id", unit.id);
+      if (error) throw error;
+      await loadUnits();
+      await loadLessons();
+      resetUnitForm();
+      message("تم حذف الوحدة. لم يتم حذف أي محاضرة أو ملف.");
+    } catch (error) {
+      message(error.message || "تعذر حذف الوحدة.", true);
+    } finally {
+      setBusy(button, false);
+    }
   }
 
   async function loadLessons() {
     const { data, error } = await client
       .from("course_lessons")
-      .select("id,course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order,is_published,created_at")
+      .select("id,course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order,is_published,created_at,unit_id,lesson_type,source_path,source_base_url")
       .eq("course_slug", selectedSlug)
       .order("sort_order", { ascending: true });
     if (error) throw error;
@@ -159,7 +305,8 @@
       title.textContent = item.title || item.lesson_slug;
       const meta = document.createElement("div");
       meta.className = "lesson-meta";
-      meta.textContent = item.lesson_slug + " · الترتيب " + item.sort_order + (item.storage_path ? " · " + item.storage_path : "");
+      const unitName = units.find(unit => unit.id === item.unit_id)?.title || "مواد إضافية";
+      meta.textContent = unitName + " · " + item.lesson_slug + " · الترتيب " + item.sort_order + (item.storage_path ? " · " + item.storage_path : "");
       const state = document.createElement("span");
       state.className = "status" + (item.is_published ? " published" : "");
       state.textContent = item.is_published ? "منشورة للطلاب" : "مسودة / غير منشورة";
@@ -200,6 +347,10 @@
     $("lessonDescription").value = item.description || "";
     $("lessonSort").value = item.sort_order || 1;
     $("lessonPublish").checked = item.is_published === true;
+    $("lessonUnit").value = item.unit_id || "";
+    $("lessonType").value = item.lesson_type || "lesson";
+    $("lessonSourcePath").value = item.source_path || "";
+    $("lessonBaseUrl").value = item.source_base_url || "";
     $("lessonFile").value = "";
     $("saveLessonButton").textContent = "حفظ تعديل المحاضرة";
     $("lessonForm").dataset.editId = item.id;
@@ -211,6 +362,10 @@
     $("lessonSlug").readOnly = false;
     $("lessonCourse").disabled = false;
     $("lessonSort").value = "1";
+    $("lessonUnit").value = "";
+    $("lessonType").value = "lesson";
+    $("lessonSourcePath").value = "";
+    $("lessonBaseUrl").value = "https://mohamedafify2025.github.io/mohammed-afify/academy/";
     $("saveLessonButton").textContent = "حفظ المحاضرة";
     delete $("lessonForm").dataset.editId;
     if (selectedSlug) $("lessonCourse").value = selectedSlug;
@@ -253,6 +408,10 @@
     const description = $("lessonDescription").value.trim();
     const sortOrder = Number($("lessonSort").value);
     const isPublished = $("lessonPublish").checked;
+    const unitId = $("lessonUnit").value || null;
+    const lessonType = $("lessonType").value;
+    const sourcePath = $("lessonSourcePath").value.trim();
+    const sourceBaseUrl = $("lessonBaseUrl").value.trim();
     const file = $("lessonFile").files?.[0] || null;
     const editId = $("lessonForm").dataset.editId || "";
     const button = $("saveLessonButton");
@@ -266,6 +425,16 @@
     if (!Number.isInteger(sortOrder) || sortOrder < 1 || sortOrder > 9999) return message("ترتيب المحاضرة يجب أن يكون رقمًا من 1 إلى 9999.", true);
     if (file && (!file.name.toLowerCase().endsWith(".html") || file.size > 10 * 1024 * 1024)) {
       return message("اختر ملف HTML صالحًا لا يتجاوز حجمه 10 ميجابايت.", true);
+    }
+    if (unitId && !units.some(unit => unit.id === unitId)) return message("الوحدة المحددة غير موجودة في هذا المقرر.", true);
+    if (!["overview","lesson","assessment","resource"].includes(lessonType)) return message("نوع المادة غير صالح.", true);
+    if (sourceBaseUrl) {
+      try {
+        const parsed = new URL(sourceBaseUrl);
+        if (!["https:","http:"].includes(parsed.protocol) || parsed.username || parsed.password) throw new Error("invalid");
+      } catch (_) {
+        return message("رابط مجلد موارد المحاضرة غير صالح.", true);
+      }
     }
     if (!editId && !file) return message("اختر ملف HTML للمحاضرة الجديدة.", true);
 
@@ -293,6 +462,10 @@
         file_size_bytes: file?.size || undefined,
         is_published: isPublished,
         sort_order: sortOrder,
+        unit_id: unitId,
+        lesson_type: lessonType,
+        source_path: sourcePath || null,
+        source_base_url: sourceBaseUrl || null,
         updated_at: new Date().toISOString()
       };
 
@@ -308,6 +481,7 @@
 
       selectedSlug = courseSlug;
       await loadLessons();
+      await loadUnits();
       resetLessonForm();
       message(editId ? "تم تحديث المحاضرة وبياناتها." : "تمت إضافة المحاضرة بنجاح.");
     } catch (error) {
@@ -366,6 +540,8 @@
     if (!allowed) return;
 
     await loadCourses();
+    resetUnitForm();
+    resetLessonForm();
     $("managerContent").hidden = false;
     if (!courses.length) message("تم التحقق من المدير. ابدأ بإضافة أول مقرر ثم أضف المحاضرات.");
     else message("تم التحقق من صلاحية المدير. لديك تحكم كامل في جميع المقررات والمحاضرات والملفات المنشورة والمسودات.");
@@ -383,6 +559,8 @@
     }
   });
   $("courseForm").addEventListener("submit", saveCourse);
+  $("unitForm").addEventListener("submit", saveUnit);
+  $("newUnitButton").addEventListener("click", resetUnitForm);
   $("lessonForm").addEventListener("submit", saveLesson);
   $("newCourseButton").addEventListener("click", () => {
     $("courseForm").reset();
