@@ -87,7 +87,7 @@
     activeLessonUrl = "";
   }
 
-  function addCourse(course, lessons) {
+  function addCourse(course, lessons, isAdmin = false) {
     const li = document.createElement("li");
     li.className = "course-item";
 
@@ -100,39 +100,53 @@
     slug.textContent = course.course_slug || "";
     details.append(name, slug);
 
-    const permissions = [
-      ["مشاهدة الصفحة", "can_view_course_page"],
-      ["الفيديو", "can_watch_video"],
-      ["التنزيل", "can_download"],
-      ["الاختبارات", "can_take_assessments"],
-      ["الشهادة", "can_receive_certificate"],
-      ["متابعة التقدم", "can_track_progress"]
-    ];
-    const badges = document.createElement("div");
-    badges.className = "permission-list";
-    for (const [label, keyName] of permissions) {
-      const badge = document.createElement("span");
-      const allowed = course[keyName] === true;
-      badge.className = "permission-badge" + (allowed ? " yes" : "");
-      badge.textContent = label + (allowed ? " · متاح" : " · غير متاح");
-      badges.appendChild(badge);
-    }
+    li.appendChild(details);
 
-    li.append(details, badges);
+    if (isAdmin) {
+      const access = document.createElement("span");
+      access.className = "admin-access-badge";
+      access.textContent = "وصول إداري شامل";
+      li.appendChild(access);
+
+      const state = document.createElement("span");
+      state.className = "permission-badge" + (course.is_active ? " yes" : "");
+      state.textContent = course.is_active ? "المقرر نشط" : "المقرر غير نشط";
+      li.appendChild(state);
+    } else {
+      const permissions = [
+        ["مشاهدة الصفحة", "can_view_course_page"],
+        ["الفيديو", "can_watch_video"],
+        ["التنزيل", "can_download"],
+        ["الاختبارات", "can_take_assessments"],
+        ["الشهادة", "can_receive_certificate"],
+        ["متابعة التقدم", "can_track_progress"]
+      ];
+      const badges = document.createElement("div");
+      badges.className = "permission-list";
+      for (const [label, keyName] of permissions) {
+        const badge = document.createElement("span");
+        const allowed = course[keyName] === true;
+        badge.className = "permission-badge" + (allowed ? " yes" : "");
+        badge.textContent = label + (allowed ? " · متاح" : " · غير متاح");
+        badges.appendChild(badge);
+      }
+      li.appendChild(badges);
+    }
 
     if (lessons.length) {
       const lessonList = document.createElement("div");
       lessonList.className = "lesson-list";
       const lessonHeading = document.createElement("div");
       lessonHeading.className = "lesson-heading";
-      lessonHeading.textContent = "المحاضرات المتاحة";
+      lessonHeading.textContent = isAdmin ? "كل المحاضرات والمواد" : "المحاضرات المتاحة";
       lessonList.appendChild(lessonHeading);
 
       for (const lesson of lessons) {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "lesson-open";
-        button.textContent = "فتح: " + (lesson.title || lesson.lesson_slug);
+        const draftLabel = isAdmin && lesson.is_published !== true ? " · مسودة / غير منشورة" : "";
+        button.textContent = "فتح: " + (lesson.title || lesson.lesson_slug) + draftLabel;
         button.addEventListener("click", () => openLesson(lesson, button));
         lessonList.appendChild(button);
       }
@@ -169,10 +183,17 @@
     if (profileError || !profile || !["student", "admin"].includes(profile.role)) {
       throw new Error("هذا الحساب غير مخصص لمساحة الطلاب أو إدارة المحاضرات.");
     }
-    const isAdmin = profile.role === "admin";
+    let isAdmin = false;
+    if (profile.role === "admin") {
+      const { data: isPlatformAdmin, error: adminCheckError } = await client.rpc("is_platform_admin");
+      if (adminCheckError) throw adminCheckError;
+      if (isPlatformAdmin !== true) {
+        throw new Error("حساب المدير غير معتمد أو غير نشط. راجع إعدادات إدارة المنصة.");
+      }
+      isAdmin = true;
+    }
 
     $("studentName").textContent = profile.full_name || (isAdmin ? "مدير المنصة" : "متدرب");
-    if (isAdmin) $("adminUploadLink").hidden = false;
     if (profile.status !== "approved") {
       show("حسابك أُنشئ بنجاح، وطلبك بانتظار اعتماد الإدارة. ستظهر المحاضرات بعد الاعتماد وإسناد الاشتراك.");
       return;
@@ -182,25 +203,30 @@
       return;
     }
 
+    if (isAdmin) {
+      $("adminStudentsLink").hidden = false;
+      $("adminSubscriptionsLink").hidden = false;
+      $("adminUploadLink").hidden = false;
+      $("coursePanelTitle").textContent = "كل محتوى المنصة";
+      $("coursePanelDescription").textContent = "لديك وصول إداري شامل لجميع المقررات والمحاضرات والمواد، بما فيها المسودات وغير المنشورة. لا تحتاج إلى إسناد صلاحيات طالب إلى حساب المدير.";
+      show("تم التحقق من دور مدير المنصة. كل المحتوى متاح لك إداريًا دون إعداد صلاحيات فردية.");
+    } else {
+      $("coursePanelTitle").textContent = "الدورات وصلاحيات حسابك";
+      $("coursePanelDescription").textContent = "تعرض هذه القائمة صلاحياتك لكل دورة. لن تتمكن من فتح أي درس أو ملف إلا إذا كانت صلاحيته مفعّلة.";
+    }
+
     let allowedCourses = [];
     if (isAdmin) {
       const { data: adminCourses, error: adminCoursesError } = await client
         .from("course_catalog")
-        .select("course_slug,title")
-        .eq("is_active", true)
+        .select("course_slug,title,is_active")
         .order("title");
       if (adminCoursesError) throw adminCoursesError;
       allowedCourses = (Array.isArray(adminCourses) ? adminCourses : []).map((course) => ({
         course_slug: course.course_slug,
         course_title: course.title,
-        can_view_course_page: true,
-        can_watch_video: true,
-        can_download: true,
-        can_take_assessments: true,
-        can_receive_certificate: true,
-        can_track_progress: true
+        is_active: course.is_active === true
       }));
-      show("أنت داخل بصلاحيات مدير المنصة. تظهر هنا جميع المقررات والمحاضرات المنشورة.");
     } else {
       const { data: permissions, error: permissionsError } = await client.rpc("get_my_course_permissions_v2");
 
@@ -218,11 +244,14 @@
       }
     }
 
-    const { data: lessonRows, error: lessonError } = await client
+    let lessonQuery = client
       .from("course_lessons")
-      .select("course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order")
-      .eq("is_published", true)
+      .select("course_slug,lesson_slug,title,description,storage_bucket,storage_path,sort_order,is_published")
       .order("sort_order", { ascending: true });
+    if (!isAdmin) {
+      lessonQuery = lessonQuery.eq("is_published", true);
+    }
+    const { data: lessonRows, error: lessonError } = await lessonQuery;
     if (lessonError) throw lessonError;
 
     const lessonsByCourse = new Map();
@@ -233,11 +262,13 @@
     }
 
     allowedCourses.forEach((course) => {
-      addCourse(course, lessonsByCourse.get(course.course_slug) || []);
+      addCourse(course, lessonsByCourse.get(course.course_slug) || [], isAdmin);
     });
 
     if (!allowedCourses.length) {
-      show("حسابك معتمد، لكن لا يوجد اشتراك تدريبي نشط مسند إلى حسابك حاليًا.");
+      show(isAdmin
+        ? "لا توجد مقررات مسجلة في فهرس المنصة حاليًا."
+        : "حسابك معتمد، لكن لا يوجد اشتراك تدريبي نشط مسند إلى حسابك حاليًا.");
       return;
     }
 
