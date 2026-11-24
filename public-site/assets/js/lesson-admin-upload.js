@@ -101,7 +101,7 @@
         .from(BUCKET)
         .upload(PATH, file, {
           upsert: true,
-          contentType: "text/html",
+          contentType: "text/html; charset=utf-8",
           cacheControl: "0"
         });
       if (uploadError) throw uploadError;
