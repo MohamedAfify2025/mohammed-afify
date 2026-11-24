@@ -240,6 +240,24 @@ td{color:#293954}
   <div class="metric"><span>المدرسون</span><strong id="teacherCount">—</strong></div>
 </section>
 
+<section class="panel" id="pendingStudentRequestsPanel">
+  <div class="panel-head">
+    <h2 class="section-title">طلبات الطلاب قيد المراجعة</h2>
+    <span class="muted" id="pendingStudentsLabel">—</span>
+  </div>
+  <p class="help">تُراجع طلبات الطلاب باختيار باقة مطابقة للدورة والخصم عند الحاجة. أما طلبات المدرسين فتُعتمد دون باقة، ثم يُسند المدرس إلى دوراته من قسم المدرسين.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>الحساب</th><th>نوع الطلب والتفاصيل</th><th>الدورة المطلوبة</th><th>الباقة المطابقة</th>
+        <th>الخصم</th><th>صافي المستحق</th><th>الإجراء</th>
+      </tr></thead>
+      <tbody id="pendingStudentsBody"><tr><td colspan="7" class="empty">جارٍ تحميل الطلبات...</td></tr></tbody>
+    </table>
+  </div>
+  <p class="notice">الطلبات التي لا تحتوي على دورة مطابقة لا يمكن اعتمادها من هنا. حدّث بيانات الدورة المطلوبة أولًا بدل إسناد باقة عشوائية.</p>
+</section>
+
 <section class="panel">
   <div class="panel-head">
     <h2 class="section-title">إنشاء باقة اشتراك</h2>
@@ -570,18 +588,19 @@ td{color:#293954}
 
   const panels = Array.from(main.querySelectorAll(':scope > section.panel'));
 
-  if (panels.length !== 8) {
+  if (panels.length !== 10) {
     console.warn('Membership tabs: unexpected panel count. No sections were changed.');
     return;
   }
 
   const groups = [
-    { id: 'plans', label: 'الباقات', indexes: [0, 4] },
-    { id: 'assign', label: 'إسناد باقة', indexes: [1] },
-    { id: 'subscriptions', label: 'اشتراكات الطلاب', indexes: [3, 5] },
-    { id: 'payment-entry', label: 'تسجيل دفعة', indexes: [2] },
-    { id: 'payment-history', label: 'سجل المدفوعات', indexes: [6] },
-    { id: 'teachers', label: 'المدرسون', indexes: [7] }
+    { id: 'requests', label: 'طلبات الطلاب', indexes: [0] },
+    { id: 'plans', label: 'الباقات', indexes: [1, 6] },
+    { id: 'assign', label: 'إسناد باقة', indexes: [2] },
+    { id: 'student-permissions', label: 'صلاحيات الطلاب', indexes: [3] },
+    { id: 'subscriptions', label: 'الاشتراكات والتفعيل', indexes: [4, 5, 7] },
+    { id: 'payment-history', label: 'سجل المدفوعات', indexes: [8] },
+    { id: 'teachers', label: 'المدرسون', indexes: [9] }
   ];
 
   const tabs = document.createElement('nav');
@@ -590,7 +609,7 @@ td{color:#293954}
   tabs.setAttribute('aria-label', 'أقسام إدارة العضويات والاشتراكات');
 
   const buttons = new Map();
-  const defaultTab = 'subscriptions';
+  const defaultTab = 'requests';
 
   groups.forEach(group => {
     const button = document.createElement('button');

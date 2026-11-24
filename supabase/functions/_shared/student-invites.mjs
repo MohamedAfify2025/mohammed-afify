@@ -25,8 +25,8 @@ export function normalizeStudentRecord(raw) {
   }
   if (!email) return { ok: false, error: "البريد الإلكتروني غير صالح." };
   if (phone.length > 30) return { ok: false, error: "رقم الهاتف أطول من المسموح." };
-  if (requestedCourse.length > 120) {
-    return { ok: false, error: "اسم الدورة أطول من المسموح." };
+  if (!/^[a-z0-9][a-z0-9-]{0,119}$/i.test(requestedCourse)) {
+    return { ok: false, error: "اختر دورة صحيحة من فهرس الدورات قبل إرسال الدعوة." };
   }
 
   return {
