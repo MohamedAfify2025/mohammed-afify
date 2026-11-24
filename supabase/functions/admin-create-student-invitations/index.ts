@@ -170,7 +170,7 @@ Deno.serve(async (req: Request) => {
           data: {
             full_name: student.full_name,
             phone: student.phone,
-            requested_course: student.requested_course || "دفعة تدريبية",
+            requested_course: student.requested_course,
             requested_role: "student",
             invite_source: "admin_student_invitation",
           },
