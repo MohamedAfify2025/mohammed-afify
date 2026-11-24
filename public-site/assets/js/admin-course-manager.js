@@ -87,8 +87,11 @@
     if (error) throw error;
     courses = Array.isArray(data) ? data : [];
     const requested = new URLSearchParams(window.location.search).get("course");
-    if (requested && courses.some((course) => course.course_slug === requested)) selectedSlug = requested;
-    else selectedSlug = courses[0]?.course_slug || "";
+    if (!selectedSlug || !courses.some((course) => course.course_slug === selectedSlug)) {
+      selectedSlug = requested && courses.some((course) => course.course_slug === requested)
+        ? requested
+        : (courses[0]?.course_slug || "");
+    }
     fillCourseSelects();
     if (selectedSlug) await loadSelectedCourse();
     else resetCourseForm();
@@ -250,6 +253,9 @@
     const button = $("saveLessonButton");
 
     if (!courses.some((course) => course.course_slug === courseSlug)) return message("اختر مقررًا صحيحًا.", true);
+    if (!editId && lessons.some((item) => item.course_slug === courseSlug && item.lesson_slug === lessonSlug)) {
+      return message("رمز هذه المحاضرة مستخدم بالفعل داخل المقرر. اختر رمزًا آخر أو افتح المحاضرة الحالية للتعديل.", true);
+    }
     if (!validSlug(lessonSlug)) return message("رمز المحاضرة يجب أن يتكون من أحرف إنجليزية صغيرة وأرقام وشرطات فقط.", true);
     if (title.length < 2) return message("اكتب عنوانًا واضحًا للمحاضرة.", true);
     if (!Number.isInteger(sortOrder) || sortOrder < 1 || sortOrder > 9999) return message("ترتيب المحاضرة يجب أن يكون رقمًا من 1 إلى 9999.", true);
@@ -362,10 +368,14 @@
 
   $("courseSelect").addEventListener("change", () => {
     selectedSlug = $("courseSelect").value;
-    loadSelectedCourse();
+    loadSelectedCourse().catch((error) => message(error.message || "تعذر تحميل المقرر.", true));
   });
   $("lessonCourse").addEventListener("change", () => {
-    if (!$("lessonForm").dataset.editId) selectedSlug = $("lessonCourse").value;
+    if (!$("lessonForm").dataset.editId) {
+      selectedSlug = $("lessonCourse").value;
+      $("courseSelect").value = selectedSlug;
+      loadSelectedCourse().catch((error) => message(error.message || "تعذر تحميل المقرر.", true));
+    }
   });
   $("courseForm").addEventListener("submit", saveCourse);
   $("lessonForm").addEventListener("submit", saveLesson);
