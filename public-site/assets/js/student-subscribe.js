@@ -35,6 +35,14 @@ async function loadCourses() {
   }
   select.disabled = courses.length === 0;
   $("submitButton").disabled = courses.length === 0;
+
+  const requestedSlug = new URLSearchParams(window.location.search).get("course");
+  if (requestedSlug && courses.some((course) => course.course_slug === requestedSlug)) {
+    select.value = requestedSlug;
+    const requestedCourse = courses.find((course) => course.course_slug === requestedSlug);
+    if (requestedCourse) show("تم تحديد دورة " + requestedCourse.title + ". أكمل بياناتك لإرسال طلب الاشتراك.");
+  }
+
   if(!courses.length) show("لا توجد دورات منشورة متاحة لطلب الاشتراك حاليًا. يمكنك العودة لاحقًا أو التواصل مع إدارة المنصة.",true);
 }
 function friendlyError(error) {
