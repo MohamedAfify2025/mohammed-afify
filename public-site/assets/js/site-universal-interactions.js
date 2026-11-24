@@ -148,7 +148,8 @@
   document.addEventListener("click", (event) => {
     const surface = event.target.closest("[data-site-click-action]");
     if (!surface) return;
-    if (event.target.closest(interactiveSelector)) return;
+    const nestedControl = event.target.closest("a,button,input,select,textarea,summary,[role='button'],[role='link']");
+    if (nestedControl && nestedControl !== surface) return;
     event.preventDefault();
     activateSurface(surface);
   });
