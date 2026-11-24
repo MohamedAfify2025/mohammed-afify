@@ -130,14 +130,6 @@
       li.appendChild(businessLink);
     }
 
-    if (hasOdooIntro) {
-      const odooIntroLink = document.createElement("a");
-      odooIntroLink.className = "lesson-open";
-      odooIntroLink.href = "course-preview.html?course=odoo-training";
-      odooIntroLink.textContent = "فتح العرض الافتتاحي للدورة";
-      li.appendChild(odooIntroLink);
-    }
-
     if (isAdmin) {
       const access = document.createElement("span");
       access.className = "admin-access-badge";
@@ -167,6 +159,19 @@
         badges.appendChild(badge);
       }
       li.appendChild(badges);
+    }
+
+    if (hasOdooIntro) {
+      const actionRow = document.createElement("div");
+      actionRow.className = "course-action-row";
+
+      const odooIntroLink = document.createElement("a");
+      odooIntroLink.className = "lesson-open odoo-intro-link";
+      odooIntroLink.href = "course-preview.html?course=odoo-training";
+      odooIntroLink.textContent = "▶ ابدأ العرض الافتتاحي لدورة Odoo";
+      odooIntroLink.setAttribute("aria-label", "ابدأ العرض الافتتاحي لدورة Odoo");
+      actionRow.appendChild(odooIntroLink);
+      li.appendChild(actionRow);
     }
 
     if (lessons.length) {
