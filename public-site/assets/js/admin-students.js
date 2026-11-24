@@ -421,7 +421,8 @@
       event.preventDefault();
       const button = $("promoteAdminButton");
       const host = $("promotionMessage");
-      const email = $("promoteAdminEmail").value.trim().toLowerCase();
+      const emailInput = $("promoteAdminEmail");
+      const email = emailInput.value.trim().toLowerCase();
 
       const showPromotion = (text, isError = false) => {
         host.textContent = text;
@@ -433,15 +434,14 @@
         showPromotion("هذه العملية متاحة لمدير المنصة المعتمد فقط.", true);
         return;
       }
-      if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) || email.length > 254) {
+      if (!email || email.length > 254 || !emailInput.checkValidity()) {
         showPromotion("اكتب بريدًا إلكترونيًا صحيحًا.", true);
         return;
       }
-      if (!window.confirm(
-        "سيتم منح صلاحية مدير المنصة للحساب المرتبط بالبريد التالي بعد التحقق من تأكيد البريد الإلكتروني:\\n\\n" +
-        email +
-        "\\n\\nسيتم تسجيل هذه العملية في سجل التدقيق. هل تريد المتابعة؟"
-      )) return;
+
+      const confirmation = "سيتم منح دور مدير المنصة للحساب: " + email +
+        ". يجب أن يكون البريد مؤكّدًا، وسيتم تسجيل الترقية في سجل التدقيق. هل تريد المتابعة؟";
+      if (!window.confirm(confirmation)) return;
 
       button.disabled = true;
       button.textContent = "جارٍ التحقق والترقية…";
@@ -458,7 +458,7 @@
         if (result.already_admin === true) {
           showPromotion("هذا الحساب مدير معتمد ونشط بالفعل. لم يتم إجراء أي تغيير.");
         } else {
-          showPromotion("تمت ترقية الحساب بنجاح إلى مدير منصة. سجّل الدخول بهذا البريد الإلكتروني في تبويب جديد للتحقق من الصلاحيات.");
+          showPromotion("تمت ترقية الحساب " + email + " إلى مدير منصة بنجاح. استخدم هذا البريد لتسجيل الدخول في تبويب جديد.");
           $("adminPromotionForm").reset();
         }
       } catch (error) {
