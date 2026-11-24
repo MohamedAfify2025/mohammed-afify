@@ -169,10 +169,12 @@
     $("saveCourseButton").textContent = "حفظ بيانات المقرر";
     $("openCourseContent").href = selectedSlug === "business-administration"
       ? "academy/business-administration.html"
-      : "student-space.html?course=" + encodeURIComponent(selectedSlug);
+      : (selectedSlug === "odoo-training"
+          ? "academy/odoo-training.html"
+          : "student-space.html?course=" + encodeURIComponent(selectedSlug));
     $("openCourseContent").textContent = selectedSlug === "business-administration"
       ? "فتح منهج الإدارة والأعمال"
-      : "فتح المحتوى في مساحة المدير";
+      : (selectedSlug === "odoo-training" ? "فتح صفحة دورة Odoo" : "فتح المحتوى في مساحة المدير");
     const importButton = $("importAcademyButton");
     if (importButton) {
       const importItems = SOURCE_IMPORTS[selectedSlug] || [];
@@ -705,7 +707,8 @@
     $("lessonTitle").value = "المحاضرة الأولى: فهم دورة العمل في الشركات وأثرها على المحاسبة";
     $("lessonDescription").value = "محاضرة تفاعلية عن ترابط الإدارات التشغيلية وأثرها المحاسبي في Odoo 19، تتضمن مثال مقاولات تفاعليًا وقائمة مراجعة واختبارًا من 10 أسئلة.";
     $("lessonSort").value = "1";
-    $("lessonUnit").value = "";
+    const firstUnit = units.find((unit) => unit.unit_slug === "unit-01-business-flow");
+    $("lessonUnit").value = firstUnit?.id || "";
     $("lessonType").value = "lesson";
     $("lessonSourcePath").value = "";
     $("lessonBaseUrl").value = "";
