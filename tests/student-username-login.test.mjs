@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { runInNewContext } from "node:vm";
 
-const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config] = await Promise.all([
+const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs] = await Promise.all([
   readFile(new URL("../public-site/student-login.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/student-login.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/admin-dashboard.js", import.meta.url), "utf8"),
@@ -10,6 +10,7 @@ const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config] = awai
   readFile(new URL("../public-site/assets/js/admin-student-accounts.js", import.meta.url), "utf8"),
   readFile(new URL("../supabase/functions/admin-manage-student-accounts/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/config.toml", import.meta.url), "utf8"),
+  readFile(new URL("../public-site/assets/js/membership-config.js", import.meta.url), "utf8"),
 ]);
 
 assert.match(loginHtml, /اسم المستخدم أو البريد الإلكتروني/);
@@ -60,5 +61,21 @@ assert.match(edge, /is_public: false/);
 assert.match(edge, /admin_direct_student_created/);
 assert.doesNotMatch(edge, /password.*(insert|update|details)/i);
 assert.match(config, /\[functions\.admin-manage-student-accounts\]\s+verify_jwt = true/);
+
+// Cloudflare preview deployments must use TEST; the root Pages domain and
+// custom production domains must keep using LIVE.
+const branchPreviewWindow = { location: { hostname: "feature-username-student-acc.mohammed-afify.pages.dev" } };
+const hashPreviewWindow = { location: { hostname: "0fbee368.mohammed-afify.pages.dev" } };
+const productionWindow = { location: { hostname: "mohammed-afify.pages.dev" } };
+const customDomainWindow = { location: { hostname: "mohamedafify.com" } };
+for (const targetWindow of [branchPreviewWindow, hashPreviewWindow, productionWindow, customDomainWindow]) {
+  runInNewContext(membershipConfigJs, { window: targetWindow });
+}
+assert.equal(branchPreviewWindow.MEMBERSHIP_CONFIG.supabaseUrl, "https://jniekfbelqticopcotxg.supabase.co");
+assert.equal(branchPreviewWindow.MEMBERSHIP_CONFIG.environment, "preview");
+assert.equal(hashPreviewWindow.MEMBERSHIP_CONFIG.supabaseUrl, "https://jniekfbelqticopcotxg.supabase.co");
+assert.equal(productionWindow.MEMBERSHIP_CONFIG.supabaseUrl, "https://ybsjnubrswqksvktgmay.supabase.co");
+assert.equal(customDomainWindow.MEMBERSHIP_CONFIG.supabaseUrl, "https://ybsjnubrswqksvktgmay.supabase.co");
+assert.doesNotMatch(membershipConfigJs, /sb_secret_|sb_service_role_/);
 
 console.log("PASS: username login routing, admin controls, WhatsApp link, and server-only account management checks.");
