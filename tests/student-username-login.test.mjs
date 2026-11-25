@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { runInNewContext } from "node:vm";
 
-const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs, liveDeployScript, livePreflightSql, liveRunbook, globalNavCss] = await Promise.all([
+const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs, liveDeployScript, livePreflightSql, liveRunbook, liveBackupScript, globalNavCss] = await Promise.all([
   readFile(new URL("../public-site/student-login.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/student-login.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/admin-dashboard.js", import.meta.url), "utf8"),
@@ -17,6 +17,7 @@ const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, member
   readFile(new URL("../scripts/Deploy-UsernameStudentAccounts-LIVE.ps1", import.meta.url), "utf8"),
   readFile(new URL("../sql/student-username-accounts-live-preflight.sql", import.meta.url), "utf8"),
   readFile(new URL("../docs/USERNAME-STUDENT-ACCOUNTS-LIVE-ROLLOUT.md", import.meta.url), "utf8"),
+  readFile(new URL("../scripts/Backup-LIVE-Supabase.ps1", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/css/ma-global-navigation-v1.css", import.meta.url), "utf8"),
 ]);
 
@@ -139,7 +140,13 @@ assert.match(livePreflightSql, /GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE pu
 assert.match(livePreflightSql, /has_table_privilege/);
 assert.doesNotMatch(livePreflightSql, /INSERT INTO auth\.users|INSERT INTO public\.profiles|UPDATE public\.profiles/);
 
-assert.match(liveRunbook, /Storage objects must be downloaded separately/);
+assert.match(liveRunbook, /downloads each object using the authenticated Storage object endpoint/);
+assert.match(liveRunbook, /masked PowerShell prompt/);
+assert.match(liveBackupScript, /Read-Host -AsSecureString/);
+assert.match(liveBackupScript, /\/storage\/v1\/object\/authenticated\//);
+assert.match(liveBackupScript, /Download-LiveStorageObjects/);
+assert.doesNotMatch(liveBackupScript, /Invoke-SupabaseCli @\("storage", "cp"/);
+assert.match(liveBackupScript, /BACKUP-STATUS-INCOMPLETE\.txt/);
 assert.match(liveRunbook, /BACKUP-VERIFIED/);
 assert.match(liveRunbook, /GRANTS-VERIFIED/);
 assert.match(liveRunbook, /No production student receives a course assignment automatically/);
