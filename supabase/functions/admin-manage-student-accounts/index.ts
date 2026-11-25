@@ -203,6 +203,16 @@ async function updateCourseAccess(
     .eq("plan_id", subscription.plan_id);
   if (oldError) throw oldError;
 
+  const restoreOldCourses = async () => {
+    await admin.from("subscription_plan_courses").delete().eq("plan_id", subscription.plan_id);
+    if (Array.isArray(oldRows) && oldRows.length) {
+      const { error: restoreError } = await admin.from("subscription_plan_courses").insert(
+        oldRows.map((row) => ({ ...row, plan_id: subscription.plan_id })),
+      );
+      if (restoreError) console.error("Failed to restore previous direct-course mapping:", restoreError.message);
+    }
+  };
+
   const { error: deleteError } = await admin.from("subscription_plan_courses")
     .delete()
     .eq("plan_id", subscription.plan_id);
@@ -221,20 +231,21 @@ async function updateCourseAccess(
     }));
     const { error: insertError } = await admin.from("subscription_plan_courses").insert(insertRows);
     if (insertError) {
-      if (Array.isArray(oldRows) && oldRows.length) {
-        await admin.from("subscription_plan_courses").insert(
-          oldRows.map((row) => ({ ...row, plan_id: subscription.plan_id })),
-        );
-      }
+      await restoreOldCourses();
       throw insertError;
     }
   }
 
   const requestedCourse = courses[0]?.course_slug || "عام";
-  const { error: profileError } = await admin.from("profiles")
+  const { data: updatedProfile, error: profileError } = await admin.from("profiles")
     .update({ requested_course: requestedCourse, updated_at: new Date().toISOString() })
-    .eq("user_id", profile.user_id);
-  if (profileError) throw profileError;
+    .eq("user_id", profile.user_id)
+    .select("user_id")
+    .maybeSingle();
+  if (profileError || !updatedProfile?.user_id) {
+    await restoreOldCourses();
+    throw profileError || new Error("لم يتم تحديث ملف الطالب؛ تمت استعادة صلاحيات الدورات السابقة.");
+  }
 
   await logAction(admin, actorId, "admin_direct_student_courses_updated", String(profile.user_id), {
     username: String(profile.email || "").replace(STUDENT_EMAIL_SUFFIX, ""),
