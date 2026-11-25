@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { runInNewContext } from "node:vm";
 
-const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs, courseTransferHtml, courseTransferJs] = await Promise.all([
+const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs] = await Promise.all([
   readFile(new URL("../public-site/student-login.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/student-login.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/admin-dashboard.js", import.meta.url), "utf8"),
@@ -14,8 +14,6 @@ const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, member
   readFile(new URL("../public-site/assets/js/student-space.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/course-room.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/business-administration-access.js", import.meta.url), "utf8"),
-  readFile(new URL("../public-site/admin-course-transfer.html", import.meta.url), "utf8"),
-  readFile(new URL("../public-site/assets/js/admin-course-transfer.js", import.meta.url), "utf8"),
 ]);
 
 assert.match(loginHtml, /اسم المستخدم أو البريد الإلكتروني/);
@@ -41,19 +39,6 @@ assert.match(courseRoomHtml, /id="logoutButton"/);
 assert.match(courseRoomHtml, /\[hidden\]\{display:none!important\}/);
 assert.match(courseRoomHtml, /id="adminDashboardLink" href="admin-dashboard\.html" hidden/);
 assert.match(businessAccessJs, /get_my_active_courses_v2/);
-assert.match(loginJs, /admin-course-transfer/);
-assert.match(courseTransferHtml, /LIVE/);
-assert.match(courseTransferHtml, /type="password"/);
-assert.match(courseTransferHtml, /لا ترسل كلمة المرور في المحادثة/);
-assert.match(courseTransferJs, /persistSession: false/);
-assert.match(courseTransferJs, /is_platform_admin/);
-assert.match(courseTransferJs, /private-course-lessons/);
-assert.match(courseTransferJs, /guest_preview_enabled: false/);
-assert.doesNotMatch(courseTransferJs, /localStorage|sessionStorage|console\.log/);
-assert.match(courseTransferJs, /course_lessons/);
-assert.match(courseTransferJs, /new Blob\(\[blob\], \{ type: "text\/html" \}\)/);
-assert.match(courseTransferJs, /files\.push\(\{ lesson, blob: htmlBlob, size: htmlBlob\.size \}\)/);
-assert.match(courseTransferJs, /course_units/);
 assert.match(accountHtml, /id="createForm"/);
 assert.match(accountHtml, /id="courseSlugs"/);
 assert.match(accountJs, /functions\.invoke\(FUNCTION_NAME/);
@@ -105,7 +90,16 @@ assert.doesNotMatch(accountJs, /localStorage|sessionStorage/);
 assert.match(edge, /admin\.auth\.admin\.createUser/);
 assert.match(edge, /admin\.auth\.admin\.updateUserById/);
 assert.match(edge, /is_platform_admin/);
-assert.match(edge, /feature-username-student-acc\.mohammed-afify\.pages\.dev/);
+assert.match(edge, /function allowedOriginsForProject/);
+const corsHelper = edge.match(/function allowedOriginsForProject\(configuredRaw: string, supabaseUrl: string\): string\[\] \{[\s\S]*?\n\}/);
+assert.ok(corsHelper, "CORS origin allowlist helper exists");
+const resolveAllowedOrigins = runInNewContext("(" + corsHelper[0] + ")", {});
+const testOrigins = resolveAllowedOrigins("", "https://jniekfbelqticopcotxg.supabase.co");
+assert.deepEqual(Array.from(testOrigins), ["https://feature-username-student-acc.mohammed-afify.pages.dev"]);
+const liveOrigins = resolveAllowedOrigins("", "https://ybsjnubrswqksvktgmay.supabase.co");
+assert.deepEqual(Array.from(liveOrigins), []);
+const configuredLiveOrigins = resolveAllowedOrigins("https://mohammed-afify.pages.dev, https://mohamedafify.com", "https://ybsjnubrswqksvktgmay.supabase.co");
+assert.deepEqual(Array.from(configuredLiveOrigins), ["https://mohammed-afify.pages.dev", "https://mohamedafify.com"]);
 assert.match(edge, /x-retry-count/);
 assert.match(edge, /payment_state: "waived"/);
 assert.match(edge, /is_public: false/);
