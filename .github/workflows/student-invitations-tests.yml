@@ -6,6 +6,7 @@ on:
       - "supabase/functions/**"
       - "supabase/config.toml"
       - "scripts/Deploy-UsernameStudentAccounts-LIVE.ps1"
+      - "scripts/Backup-LIVE-Supabase.ps1"
       - "sql/student-username-accounts-live-preflight.sql"
       - "docs/USERNAME-STUDENT-ACCOUNTS-LIVE-ROLLOUT.md"
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
@@ -42,6 +43,7 @@ on:
       - "supabase/functions/**"
       - "supabase/config.toml"
       - "scripts/Deploy-UsernameStudentAccounts-LIVE.ps1"
+      - "scripts/Backup-LIVE-Supabase.ps1"
       - "sql/student-username-accounts-live-preflight.sql"
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
@@ -115,7 +117,8 @@ jobs:
         run: |
           $scripts = @(
             "scripts/Deploy-StudentInvitations-LIVE.ps1",
-            "scripts/Deploy-UsernameStudentAccounts-LIVE.ps1"
+            "scripts/Deploy-UsernameStudentAccounts-LIVE.ps1",
+            "scripts/Backup-LIVE-Supabase.ps1"
           )
           foreach ($relativePath in $scripts) {
             $tokens = $null
