@@ -122,6 +122,7 @@ assert.match(config, /\[functions\.admin-manage-student-accounts\]\s+verify_jwt 
 assert.match(liveDeployScript, /\$ExpectedLiveProjectRef = "ybsjnubrswqksvktgmay"/);
 assert.match(liveDeployScript, /\$branchName -cne "main"/);
 assert.match(liveDeployScript, /BACKUP-VERIFIED/);
+assert.match(liveDeployScript, /AUTH-RECOVERY-VERIFIED/);
 assert.match(liveDeployScript, /GRANTS-VERIFIED/);
 assert.match(liveDeployScript, /DEPLOY-LIVE/);
 assert.match(liveDeployScript, /ALLOWED_ORIGINS/);
