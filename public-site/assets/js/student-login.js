@@ -31,7 +31,7 @@
       const target = new URL(candidate, base);
       if (target.origin !== window.location.origin || !target.pathname.startsWith(base.pathname)) return "";
       const relative = target.pathname.slice(base.pathname.length);
-      const allowed = /^(?:student-space|teacher-space|course-preview|admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|admin-student-accounts|lesson-admin-upload)\.html$/.test(relative) ||
+      const allowed = /^(?:student-space|course-room|teacher-space|course-preview|admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|admin-student-accounts|lesson-admin-upload)\.html$/.test(relative) ||
         /^academy\/[a-z0-9-]+\.html$/i.test(relative);
       return allowed ? target.pathname + target.search + target.hash : "";
     } catch (_) {
