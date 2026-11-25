@@ -24,23 +24,6 @@
     return allowed === true;
   }
 
-  async function loadCurrentAccount() {
-    const { data: userData, error: userError } = await client.auth.getUser();
-    if (userError) throw userError;
-    if (!userData?.user) {
-      currentAccount = { loggedIn: false, profile: null };
-      return;
-    }
-
-    const { data: profile, error: profileError } = await client
-      .from("profiles")
-      .select("role,status,account_state")
-      .eq("user_id", userData.user.id)
-      .maybeSingle();
-    if (profileError) throw profileError;
-    currentAccount = { loggedIn: true, profile: profile || null };
-  }
-
   function learningHref(slug) {
     const query = "?course=" + encodeURIComponent(slug);
     if (slug === "business-administration") return "academy/business-administration.html";
@@ -229,9 +212,12 @@
     client = window.supabase.createClient(url, key, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
-    await loadCurrentAccount();
     isAdmin = await checkAdmin();
     const memberContext = await (window.MA_ACADEMY_MEMBER_ACCESS_READY || Promise.resolve(null));
+    currentAccount = {
+      loggedIn: memberContext?.isSignedIn === true,
+      profile: memberContext?.profile || null
+    };
     isActiveStudent = memberContext?.isActiveStudent === true;
     coursePermissions = Array.isArray(memberContext?.coursePermissions)
       ? memberContext.coursePermissions
