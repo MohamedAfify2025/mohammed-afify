@@ -97,7 +97,7 @@
     const courseName = account.course_titles?.[0] || firstCourse || "مساحتك التعليمية";
     const loginUrl = directCourseUrl(firstCourse);
     return [
-      "مرحبًا " + (account.full_name || "بك") + " 🌷",
+      "مرحبًا " + (account.full_name || "بك") + ",",
       "تم إنشاء حسابك على منصة Mohammed Afify التعليمية.",
       "",
       "اسم المستخدم: " + account.username,
