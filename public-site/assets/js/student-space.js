@@ -290,7 +290,7 @@
     }
 
     for (const course of visibleCourses) {
-      addCourse(course, lessonsByCourse.get(course.course_slug) || [], isAdminSession);
+      host.appendChild(addCourse(course, lessonsByCourse.get(course.course_slug) || [], isAdminSession));
     }
 
     if (selected && autoOpenFirstLesson) {
@@ -510,7 +510,6 @@
       li.appendChild(empty);
     }
 
-    host.appendChild(li);
     return li;
   }
 
