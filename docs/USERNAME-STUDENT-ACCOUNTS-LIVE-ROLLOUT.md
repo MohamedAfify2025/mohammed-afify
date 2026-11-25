@@ -40,23 +40,28 @@ It does not migrate the LIVE course catalog, students, subscriptions, or course 
 3. The LIVE function needs to be deployed with `verify_jwt=true`.
 4. LIVE backup must be verified before any production grant or deployment operation.
 
-## Backup requirements
+## Backup requirements — verified 2026-11-25
 
-Do not assume an automatic backup exists. Check the actual project plan and Supabase Dashboard before rollout.
+The Supabase organization is currently on the **Free** plan. Do not assume scheduled daily database backups are available; verify the Dashboard's **Database → Backups** page and record what restore points are actually offered.
 
-Export the LIVE database before changes. For a logical backup, Supabase documents these separate exports:
+Important CLI limitation: Supabase CLI v3 `db dump` excludes Supabase-managed schemas, including `auth` and `storage`, as well as extension-managed schemas. The SQL files are therefore a logical export of the application database and roles, **not a complete project backup**. Supabase CLI v3 targets the local stack by default; commands that must read LIVE need an explicit `--remote` flag. References:
+- https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore
+- https://supabase.com/docs/guides/local-development/cli/migrating-to-v3
+- https://supabase.com/docs/guides/platform/backups
+
+Use these logical exports after linking the local CLI checkout to the exact LIVE project:
 
 ```powershell
-supabase db dump --db-url "<LIVE_CONNECTION_STRING>" -f roles.sql --role-only
-supabase db dump --db-url "<LIVE_CONNECTION_STRING>" -f schema.sql
-supabase db dump --db-url "<LIVE_CONNECTION_STRING>" -f data.sql --use-copy --data-only
+supabase db dump --remote -f roles.sql --role-only
+supabase db dump --remote -f schema.sql
+supabase db dump --remote -f data.sql --use-copy --data-only -x "storage.buckets_vectors" -x "storage.vector_indexes"
 ```
 
-Obtain the connection string from the LIVE project's Connect dialog. Never commit it or paste it into chat. Store the exports off-site in an access-controlled location.
+These commands do not export Auth users/password hashes/tokens or Storage object bytes. Storage objects must be downloaded separately with the CLI `storage ls/cp --remote --experimental` commands or another verified export method. The two LIVE buckets discovered by read-only inspection are `private-course-lessons` and `public-course-assets`; preserve object paths, MIME types, bucket visibility, size limits, and allowed MIME types. Verify object counts, total bytes, and SHA-256 hashes after export.
 
-Back up Storage separately. Database dumps/backups do not contain Storage API object bytes. At minimum, inventory and export the LIVE buckets `private-course-lessons` and `public-course-assets`. Preserve object paths, MIME types, bucket visibility, size limits, and allowed MIME types. Verify file counts and representative file hashes/sizes after export.
+A sanitized Auth user/identity inventory can support manual recovery, but it is not an Auth backup: password hashes, confirmation/recovery tokens, MFA secrets, and sessions are intentionally omitted. If no platform-level full restore path is available for the Free project, document and approve a manual Auth recovery process (including password resets and MFA re-enrollment) before classifying recovery as acceptable.
 
-Record the backup timestamp, export location, file counts, and the person responsible for restore.
+The script prepared for this step writes a clear INCOMPLETE status marker by design. It must not be treated as complete until the Dashboard restore path/Auth recovery is resolved and the exported files have been copied off-device to access-controlled storage. Record timestamp, output location, file counts, byte totals, hashes, and restore owner.
 
 ## Ordered LIVE rollout
 
