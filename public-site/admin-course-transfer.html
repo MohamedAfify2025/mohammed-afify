@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>نقل دورة Odoo إلى TEST | Mohammed Afify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;padding:22px;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif}
+    main{max-width:850px;margin:25px auto}
+    .top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+    .brand{color:#0b8379;font-weight:900}
+    .card{background:#fff;border:1px solid #e3eaf2;border-radius:18px;padding:24px;margin:15px 0;box-shadow:0 10px 30px #17243b08}
+    h1{font-size:clamp(25px,4vw,34px);margin:8px 0}
+    h2{font-size:18px;margin:0 0 10px}
+    p{font-size:13px;line-height:2;color:#68778e}
+    label{display:block;font-size:12px;font-weight:800;margin:13px 0 6px}
+    input{width:100%;border:1px solid #d9e2ed;border-radius:10px;padding:12px;font:inherit;font-size:14px}
+    input:focus{outline:2px solid #19b7a233;border-color:#19a997}
+    button,a{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}
+    button:disabled{opacity:.55;cursor:wait}
+    .primary{background:#0b8379;color:#fff}
+    .secondary{background:#edf2f8;color:#243650}
+    .notice{padding:13px 15px;border-radius:11px;background:#edf3ff;color:#24446f;font-size:13px;line-height:1.9;margin:13px 0}
+    .notice.success{background:#e8f7f1;color:#126447}
+    .notice.error{background:#fff0f0;color:#9b2632}
+    [hidden]{display:none!important}
+    .steps{padding-inline-start:22px;color:#53647d;font-size:13px;line-height:2.1}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    .security{border-inline-start:4px solid #d99a2b;background:#fff8e9;color:#855300;padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.9}
+    @media(max-width:600px){body{padding:12px}.card{padding:18px}}
+  </style>
+  <link rel="stylesheet" href="assets/css/platform-finish-v1.css">
+</head>
+<body class="ma-platform-page">
+<main>
+  <header class="top">
+    <div><div class="brand">MOHAMMED AFIFY · TEST ADMINISTRATOR</div><h1>ربط دورة Odoo من LIVE إلى TEST</h1></div>
+    <a class="secondary" href="admin-course-manager.html?course=odoo-training">العودة لإدارة المقررات</a>
+  </header>
+
+  <section class="card">
+    <h2>ما الذي ستفعله الأداة؟</h2>
+    <p>تنقل هذه الأداة بيانات دورة Odoo المنشورة وملفاتها الخاصة من LIVE إلى TEST، مع الاحتفاظ بسياسات التخزين الخاص. لا تنقل حسابات أو اشتراكات أو بيانات طلاب، ولا تفتح الدورة للعامة.</p>
+    <ol class="steps">
+      <li>تتحقق من جلسة مدير TEST الحالية.</li>
+      <li>تطلب تسجيل دخول مدير LIVE للتحقق من صلاحية قراءة ملف المحاضرة الخاصة.</li>
+      <li>تنقل ملفات المحاضرات والوحدات وسجلاتها وغلاف الدورة إلى TEST.</li>
+      <li>تتحقق من أعداد السجلات وإمكانية تنزيل الملفات من TEST.</li>
+    </ol>
+    <div id="testAdminStatus" class="notice">جارٍ التحقق من مدير TEST...</div>
+    <a id="testLoginLink" class="secondary" href="student-login.html?next=admin-course-transfer.html" hidden>تسجيل الدخول إلى TEST</a>
+  </section>
+
+  <section class="card">
+    <h2>تسجيل الدخول إلى مصدر LIVE</h2>
+    <div class="security">استخدم حساب مدير LIVE المعتمد الذي يملك صلاحية إدارة محتوى Odoo. أدخل بياناته هنا في متصفحك فقط؛ لا ترسل كلمة المرور في المحادثة. الأداة لا تحفظ كلمة المرور ولا ترسلها إلى خادم الموقع، وتستخدمها مباشرة مع خدمة تسجيل الدخول في Supabase LIVE ثم تمسح الحقل بعد المحاولة.</div>
+    <form id="transferForm" hidden>
+      <label for="liveAdminEmail">بريد مدير LIVE</label>
+      <input id="liveAdminEmail" type="email" autocomplete="username" required placeholder="بريد حساب المدير في LIVE">
+      <label for="liveAdminPassword">كلمة مرور مدير LIVE</label>
+      <input id="liveAdminPassword" type="password" autocomplete="current-password" required placeholder="أدخل كلمة المرور">
+      <div class="actions">
+        <button id="transferButton" class="primary" type="submit">نقل دورة Odoo إلى TEST</button>
+        <a id="openOdooTestLink" class="secondary" href="academy/odoo-training.html" hidden>فتح دورة Odoo في TEST</a>
+      </div>
+    </form>
+    <div id="transferProgress" class="notice" hidden aria-live="polite"></div>
+    <div id="transferMessage" class="notice" hidden aria-live="polite"></div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.js"></script>
+<script src="assets/js/admin-course-transfer.js?v=20261125-odoo-live-transfer-v1" defer></script>
+</body>
+</html>
