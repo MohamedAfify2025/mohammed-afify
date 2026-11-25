@@ -267,10 +267,14 @@ function allowedOriginsForProject(configuredRaw: string, supabaseUrl: string): s
   const functionProjectUrl = supabaseUrl.replace(/\/+$/, "");
   const isIsolatedTestProject =
     functionProjectUrl === "https://jniekfbelqticopcotxg.supabase.co";
+  const isLiveProject =
+    functionProjectUrl === "https://ybsjnubrswqksvktgmay.supabase.co";
   const testPreviewOrigin = "https://feature-username-student-acc.mohammed-afify.pages.dev";
+  const liveProductionOrigin = "https://mohamedafify2025.github.io";
   return [...new Set([
     ...configuredOrigins,
     ...(isIsolatedTestProject ? [testPreviewOrigin] : []),
+    ...(isLiveProject ? [liveProductionOrigin] : []),
   ])];
 }
 
