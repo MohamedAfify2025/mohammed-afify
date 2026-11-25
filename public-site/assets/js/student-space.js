@@ -15,6 +15,7 @@
   let currentLesson = null;
   let progressByLesson = new Map();
   let selectedCourseSlug = "";
+  const directCourseView = /(?:^|\/)course-room\.html$/.test(window.location.pathname);
 
   function show(text, isError = false) {
     const el = $("pageMessage");
@@ -299,8 +300,8 @@
 
     if (selected && autoOpenFirstLesson) {
       if (selected.course_slug === "business-administration") {
-        const link = host.querySelector('a[href="academy/business-administration.html"]');
-        link?.focus();
+        window.location.replace("academy/business-administration.html");
+        return;
       } else if (selected.course_slug === "odoo-training") {
         window.location.replace("academy/odoo-training.html");
         return;
@@ -695,7 +696,31 @@
       : "";
 
     if (requestedCourse && !selectedCourseSlug) {
+      if (directCourseView) {
+        $("coursePanel").hidden = true;
+        show("لا يملك هذا الحساب صلاحية فتح هذا المقرر. تواصل مع إدارة المنصة إذا كنت تعتقد أن هذا خطأ.", true);
+        return;
+      }
       show("لا يملك هذا الحساب صلاحية فتح المقرر المطلوب. يمكنك استعراض المقررات المتاحة فقط.", true);
+    }
+    if (directCourseView && !requestedCourse) {
+      $("coursePanel").hidden = true;
+      show("رابط المقرر غير مكتمل. افتح الرابط الذي أرسلته لك إدارة المنصة.", true);
+      return;
+    }
+
+    if (directCourseView) {
+      document.body.classList.add("direct-course-view");
+      $("studentName").hidden = true;
+      $("studentEmail").hidden = true;
+      $("courseTabs").hidden = true;
+      $("courseOverviewLink").hidden = true;
+      const topHeader = document.querySelector("header.top");
+      if (topHeader && !directCourseView) topHeader.hidden = true;
+      for (const id of ["adminDashboardLink","adminCourseManagerLink","adminStudentsLink","adminSubscriptionsLink","adminUploadLink"]) {
+        const adminLink = $(id);
+        if (adminLink) adminLink.hidden = true;
+      }
     }
 
     $("coursePanel").hidden = false;

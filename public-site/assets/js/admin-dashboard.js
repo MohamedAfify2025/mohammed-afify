@@ -15,6 +15,7 @@
     {group:"الإدارة",items:[
       ["👥","إدارة الطلاب والدعوات","دعوة المتدربين ومراجعة الحسابات والترقية الإدارية.","admin-students.html"],
       ["💳","الاشتراكات والمدفوعات","الباقات والاشتراكات والتفعيل والمدفوعات والصلاحيات الفردية.","admin-subscriptions.html"],
+      ["🔑","حسابات الطلاب باسم المستخدم","إنشاء حساب دون بريد إلكتروني وتحديد الكورسات وتغيير كلمة المرور وإيقاف الحساب.","admin-student-accounts.html"],
       ["🎓","إدارة المقررات والمحتوى","تعديل بيانات الدورات وإضافة المحاضرات ونشرها وإدارة الملفات.","admin-course-manager.html"],
       ["📚","كل المحتوى التعليمي","عرض كل المقررات ومحاضراتها بما فيها المسودات وغير المنشورة.","student-space.html"],
       ["📤","رفع محاضرة المحاسبة","أداة الرفع القديمة المخصصة لمحاضرة المحاسبة الأولى.","lesson-admin-upload.html"]
@@ -52,6 +53,16 @@
   }
 
   async function verifyAdmin() {
+    // Check the local session first. Calling getUser() without any stored
+    // session returns "Auth session missing!" and leaves users on this page.
+    const {data:sessionData,error:sessionError}=await client.auth.getSession();
+    if(sessionError) throw sessionError;
+    if(!sessionData?.session?.user) {
+      window.location.replace("student-login.html?next=admin-dashboard.html");
+      return null;
+    }
+
+    // Confirm the saved access token with Supabase before granting dashboard access.
     const {data:userData,error:userError}=await client.auth.getUser();
     if(userError) throw userError;
     const user=userData?.user;

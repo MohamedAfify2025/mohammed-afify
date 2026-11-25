@@ -28,6 +28,8 @@
   column-gap: clamp(18px, 2.8vw, 38px);
 }
 .ma-global-header a { text-decoration: none; }
+/* Preserve the HTML hidden state even when component classes declare display. */
+.ma-global-header [hidden] { display: none !important; }
 .ma-global-header button { font: inherit; }
 .ma-global-header a:focus-visible,
 .ma-global-header button:focus-visible {

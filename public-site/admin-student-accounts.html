@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>حسابات الطلاب باسم المستخدم | Mohammed Afify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--navy:#14233d;--teal:#0b8379;--ink:#17243b;--muted:#68778e;--line:#e2e9f1;--bg:#f3f6fb;--good:#14704c;--bad:#9b2632}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,Tahoma,Arial,sans-serif}
+    button,input,select{font:inherit}
+    main{max-width:1180px;margin:0 auto;padding:24px 16px 64px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+    .brand{font-weight:900;color:var(--teal)}
+    .nav{display:flex;gap:8px;flex-wrap:wrap}
+    .nav a,.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:10px 14px;background:var(--navy);color:#fff;font-size:12px;font-weight:800;text-decoration:none;cursor:pointer}
+    .nav a.secondary,.btn.secondary{background:#eaf0f6;color:#243650}
+    .hero{border-radius:20px;background:linear-gradient(120deg,#14233d,#24466b);color:#fff;padding:clamp(20px,4vw,34px);margin-bottom:18px}
+    .hero small{color:#7de0d2;font-weight:900;letter-spacing:.5px}
+    .hero h1{font-size:clamp(25px,4vw,36px);margin:8px 0}
+    .hero p{font-size:13px;line-height:2;color:#d9e3ef;margin:0;max-width:850px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:22px;margin:15px 0;box-shadow:0 8px 24px #14233d08}
+    h2{font-size:18px;margin:0 0 7px}
+    .muted{color:var(--muted);font-size:12px;line-height:1.9}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+    .field{min-width:0}
+    label{display:block;font-size:12px;font-weight:900;margin:0 0 6px}
+    input,select{width:100%;border:1px solid #d9e2ed;border-radius:10px;padding:11px 12px;background:#fff;color:var(--ink);min-height:45px}
+    input:focus,select:focus{outline:2px solid #19b7a233;border-color:#19a997}
+    select[multiple]{min-height:150px;padding:7px}
+    select[multiple] option{padding:6px 9px}
+    .help{font-size:11px;color:#78869a;margin-top:5px;line-height:1.8}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+    .btn.teal{background:var(--teal)}
+    .btn.danger{background:#fff0f0;color:var(--bad)}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+    .notice{padding:12px 14px;border-radius:11px;background:#e8f7f1;color:#126447;font-size:12px;line-height:1.9;margin:14px 0}
+    .notice.error{background:#fff0f0;color:var(--bad)}
+    .notice.warning{background:#fff7e5;color:#795400}
+    .notice[hidden]{display:none}
+    .account-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:14px}
+    .account{border:1px solid var(--line);border-radius:15px;padding:16px;background:#fff;min-width:0}
+    .account-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .account h3{font-size:15px;margin:0}
+    .username{direction:ltr;display:inline-block;color:var(--teal);font-size:12px;font-weight:900;margin-top:3px}
+    .status{padding:4px 9px;border-radius:30px;font-size:10px;font-weight:900;background:#e8f7f1;color:var(--good);white-space:nowrap}
+    .status.suspended{background:#fff0f0;color:var(--bad)}
+    .meta{font-size:11px;color:var(--muted);line-height:1.9;margin:10px 0}
+    .account-section{border-top:1px solid #edf1f5;padding-top:12px;margin-top:12px}
+    .account-section h4{font-size:12px;margin:0 0 8px}
+    .account-controls{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+    .account-controls .field{min-width:0}
+    .course-list{display:flex;flex-wrap:wrap;gap:6px}
+    .course-chip{font-size:10px;background:#eef6f5;color:#176d64;border-radius:7px;padding:5px 8px}
+    .wa-link{display:inline-flex;margin-top:9px;color:#087c50;text-decoration:underline;font-size:11px;font-weight:900}
+    .empty{padding:25px;text-align:center;border:1px dashed #d7e0eb;border-radius:13px;color:var(--muted);font-size:12px}
+    .hidden{display:none!important}
+    @media(max-width:800px){.account-grid{grid-template-columns:1fr}}
+    @media(max-width:560px){.grid{grid-template-columns:1fr}.card{padding:17px}.account-controls{grid-template-columns:1fr}.actions .btn{flex:1}}
+  </style>
+  <link rel="stylesheet" href="assets/css/platform-finish-v1.css">
+</head>
+<body class="ma-platform-page ma-platform-admin">
+<main>
+  <header class="top">
+    <div class="brand">MOHAMMED AFIFY · ADMIN CONSOLE</div>
+    <nav class="nav">
+      <a class="secondary" href="admin-dashboard.html">لوحة المدير</a>
+      <a class="secondary" href="admin-subscriptions.html">الاشتراكات والمدفوعات</a>
+      <a class="secondary" href="admin-students.html">دعوات البريد</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <small>USERNAME STUDENT ACCOUNTS</small>
+    <h1>إنشاء وإدارة حسابات الطلاب</h1>
+    <p>أنشئ حسابًا باسم مستخدم وكلمة مرور دون بريد إلكتروني للطالب، وحدد الدورات المسموح بها. بعد الإنشاء جهّز رسالة واتساب ببيانات الدخول ورابط فتح الدورة.</p>
+  </section>
+
+  <div id="pageMessage" class="notice" role="status" hidden></div>
+
+  <section class="card">
+    <h2>إنشاء حساب طالب جديد</h2>
+    <p class="muted">اسم المستخدم باللغة الإنجليزية، ورقم الهاتف لاستخدامه في رابط واتساب. يمكن تحديد أكثر من دورة للحساب الواحد.</p>
+    <form id="createForm" autocomplete="off">
+      <div class="grid">
+        <div class="field">
+          <label for="fullName">اسم الطالب بالكامل</label>
+          <input id="fullName" type="text" maxlength="120" required autocomplete="off" placeholder="مثال: أحمد محمد">
+        </div>
+        <div class="field">
+          <label for="username">اسم المستخدم</label>
+          <input id="username" type="text" minlength="3" maxlength="32" required autocomplete="off" dir="ltr" placeholder="ahmed.mohamed">
+          <div class="help">3–32 حرفًا إنجليزيًا أو رقمًا. مسموح النقطة والشرطة والشرطة السفلية.</div>
+        </div>
+        <div class="field">
+          <label for="phone">رقم WhatsApp</label>
+          <input id="phone" type="tel" maxlength="30" required autocomplete="off" dir="ltr" placeholder="مصر: 01012345678 | السعودية: 05xxxxxxxx | دول أخرى: +...">
+          <div class="help">مصر: رقم محمول محلي يبدأ بـ 010 أو 011 أو 012 أو 015. السعودية: رقم محمول محلي يبدأ بـ 05. باقي الدول: أدخل الرقم بمفتاح الدولة مثل +966.</div>
+        </div>
+        <div class="field">
+          <label for="password">كلمة المرور الأولية</label>
+          <input id="password" type="password" minlength="10" maxlength="128" required autocomplete="new-password">
+          <div class="help">10 أحرف على الأقل. ستظهر في رسالة واتساب بعد نجاح إنشاء الحساب فقط.</div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label for="courseSlugs">الدورات المسموح بها</label>
+        <select id="courseSlugs" multiple required aria-describedby="courseHelp"></select>
+        <div id="courseHelp" class="help">استخدم Ctrl (أو Command على Mac) لاختيار أكثر من دورة.</div>
+      </div>
+      <div class="actions">
+        <button class="btn teal" id="createButton" type="submit">إنشاء الحساب وتجهيز رسالة واتساب</button>
+        <button class="btn secondary" id="refreshButton" type="button">تحديث قائمة الحسابات</button>
+      </div>
+    </form>
+    <div class="notice warning">حسابات هذا القسم تُنشأ كصلاحيات تعليمية ممنوحة إداريًا بخطة داخلية غير منشورة ومُعفاة ماليًا. لا يتم تسجيل دفعة أو إيصال مالي عند إنشاء الحساب؛ استخدم قسم الاشتراكات والمدفوعات لتسجيل أي تحصيل فعلي.</div>
+  </section>
+
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <div>
+        <h2>الحسابات التي أنشأتها الإدارة</h2>
+        <p class="muted">يمكنك تغيير كلمة المرور، تعديل الدورات أو إيقاف الحساب وإعادة تفعيله.</p>
+      </div>
+      <span id="accountCount" class="status">0 حساب</span>
+    </div>
+    <div id="accountsList" class="account-grid" aria-live="polite">
+      <div class="empty">جارٍ تحميل الحسابات...</div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.js"></script>
+<script src="assets/js/admin-student-accounts.js?v=20261125-direct-course-links-v2" defer></script>
+</body>
+</html>
