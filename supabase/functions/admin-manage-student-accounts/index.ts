@@ -22,7 +22,7 @@ function jsonResponse(status: number, payload: Record<string, unknown>, origin: 
   if (origin) {
     headers.set("Access-Control-Allow-Origin", origin);
     headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
-    headers.set("Access-Control-Allow-Headers", "authorization, apikey, content-type, x-client-info, traceparent, tracestate, baggage");
+    headers.set("Access-Control-Allow-Headers", "authorization, apikey, content-type, x-client-info, x-retry-count, traceparent, tracestate, baggage");
   }
   return new Response(JSON.stringify(payload), { status, headers });
 }
@@ -260,8 +260,15 @@ async function updateCourseAccess(
 
 Deno.serve(async (req: Request) => {
   const origin = req.headers.get("origin");
-  const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") || "")
+  const configuredOrigins = (Deno.env.get("ALLOWED_ORIGINS") || "")
     .split(",").map((item) => item.trim()).filter(Boolean);
+  // Keep the TEST branch preview usable even when ALLOWED_ORIGINS has not
+  // been configured yet. Production deployments must configure their exact
+  // public site origin in the Edge Function environment.
+  const allowedOrigins = [...new Set([
+    ...configuredOrigins,
+    "https://feature-username-student-acc.mohammed-afify.pages.dev",
+  ])];
 
   if (!origin || !allowedOrigins.includes(origin)) {
     return jsonResponse(403, { error: "Origin is not allowed." }, null);
@@ -273,7 +280,7 @@ Deno.serve(async (req: Request) => {
         ...HEADERS,
         "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info, traceparent, tracestate, baggage",
+        "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info, x-retry-count, traceparent, tracestate, baggage",
       },
     });
   }
