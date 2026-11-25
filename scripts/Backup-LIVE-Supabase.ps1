@@ -78,10 +78,28 @@ function Invoke-SupabaseCapture([string[]]$Arguments, [string]$Step, [string]$Ou
     Write-Host "`n[$Step]" -ForegroundColor Cyan
     $stderrPath = "$OutputPath.stderr.txt"
     $allArgs = @($script:SupabasePrefixArgs) + @($Arguments)
-    $output = & $script:SupabaseExe @allArgs 2> $stderrPath | Out-String
-    if ($LASTEXITCODE -ne 0) {
+
+    # Supabase CLI prints a normal "Target: project ..." progress line to stderr
+    # for hosted database commands. PowerShell can promote native stderr records
+    # to terminating errors when ErrorActionPreference=Stop; keep this as captured
+    # diagnostic output and trust the process exit code instead.
+    $previousErrorAction = $ErrorActionPreference
+    $nativePreferenceExists = Test-Path variable:PSNativeCommandUseErrorActionPreference
+    if ($nativePreferenceExists) { $previousNativePreference = $PSNativeCommandUseErrorActionPreference }
+    try {
+        $ErrorActionPreference = "Continue"
+        if ($nativePreferenceExists) { $PSNativeCommandUseErrorActionPreference = $false }
+        $output = & $script:SupabaseExe @allArgs 2> $stderrPath | Out-String
+        $exitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorAction
+        if ($nativePreferenceExists) { $PSNativeCommandUseErrorActionPreference = $previousNativePreference }
+    }
+
+    if ($exitCode -ne 0) {
         $diagnostic = if (Test-Path -LiteralPath $stderrPath) { Get-Content -Raw $stderrPath } else { "No CLI diagnostic was captured." }
-        Stop-Backup "Supabase CLI failed during '$Step'. Diagnostic: $diagnostic"
+        Stop-Backup "Supabase CLI failed during '$Step' (exit code $exitCode). Diagnostic: $diagnostic"
     }
     [IO.File]::WriteAllText($OutputPath, $output, [Text.UTF8Encoding]::new($false))
     return $stderrPath
@@ -103,10 +121,26 @@ function Invoke-SupabaseQueryCsv([string]$SqlPath, [string]$Step, [string]$CsvPa
         "--file", $SqlPath
     )
     $allArgs = @($script:SupabasePrefixArgs) + $queryArgs
-    $raw = & $script:SupabaseExe @allArgs 2> $stderrPath | Out-String
-    if ($LASTEXITCODE -ne 0) {
+
+    # "Target: project ..." is normal CLI stderr progress, not a query failure.
+    # Capture it separately; only a non-zero process exit makes the query fail.
+    $previousErrorAction = $ErrorActionPreference
+    $nativePreferenceExists = Test-Path variable:PSNativeCommandUseErrorActionPreference
+    if ($nativePreferenceExists) { $previousNativePreference = $PSNativeCommandUseErrorActionPreference }
+    try {
+        $ErrorActionPreference = "Continue"
+        if ($nativePreferenceExists) { $PSNativeCommandUseErrorActionPreference = $false }
+        $raw = & $script:SupabaseExe @allArgs 2> $stderrPath | Out-String
+        $exitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorAction
+        if ($nativePreferenceExists) { $PSNativeCommandUseErrorActionPreference = $previousNativePreference }
+    }
+
+    if ($exitCode -ne 0) {
         $diagnostic = if (Test-Path -LiteralPath $stderrPath) { Get-Content -Raw $stderrPath } else { "No CLI diagnostic was captured." }
-        Stop-Backup "Read-only SQL query failed during '$Step'. Diagnostic: $diagnostic"
+        Stop-Backup "Read-only SQL query failed during '$Step' (exit code $exitCode). Diagnostic: $diagnostic"
     }
     [IO.File]::WriteAllText($jsonPath, $raw, [Text.UTF8Encoding]::new($false))
 
@@ -116,11 +150,16 @@ function Invoke-SupabaseQueryCsv([string]$SqlPath, [string]$Step, [string]$CsvPa
     catch {
         Stop-Backup "The CLI did not return valid JSON for '$Step'. Raw response retained at $jsonPath"
     }
-    if ($null -eq $payload.rows) {
-        Stop-Backup "The CLI JSON response for '$Step' did not contain a rows array. Raw response retained at $jsonPath"
+
+    $resultRows = $payload.rows
+    if ($null -eq $resultRows -and $null -ne $payload.data) { $resultRows = $payload.data.rows }
+    if ($null -eq $resultRows -and $null -ne $payload.result) { $resultRows = $payload.result.rows }
+    if ($null -eq $resultRows) {
+        $stderrHint = if (Test-Path -LiteralPath $stderrPath) { Get-Content -Raw $stderrPath } else { "No stderr was captured." }
+        Stop-Backup "The CLI JSON response for '$Step' did not contain a rows array. Raw response retained at $jsonPath. stderr: $stderrHint"
     }
 
-    $rows = @($payload.rows)
+    $rows = @($resultRows)
     if ($rows.Count -gt 0) {
         $rows | Export-Csv -LiteralPath $CsvPath -NoTypeInformation -Encoding UTF8
     }
