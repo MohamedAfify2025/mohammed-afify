@@ -716,7 +716,7 @@
       $("courseTabs").hidden = true;
       $("courseOverviewLink").hidden = true;
       const topHeader = document.querySelector("header.top");
-      if (topHeader) topHeader.hidden = true;
+      if (topHeader && !directCourseView) topHeader.hidden = true;
       for (const id of ["adminDashboardLink","adminCourseManagerLink","adminStudentsLink","adminSubscriptionsLink","adminUploadLink"]) {
         const adminLink = $(id);
         if (adminLink) adminLink.hidden = true;
