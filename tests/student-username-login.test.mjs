@@ -22,6 +22,9 @@ assert.match(loginJs, /students\.invalid/);
 assert.match(loginJs, /resetPasswordForEmail/);
 assert.match(loginJs, /حسابات اسم المستخدم لا تستخدم البريد الإلكتروني/);
 
+assert.match(adminJs, /client\.auth\.getSession\(\)/);
+assert.match(adminJs, /Auth session missing/);
+assert.match(adminJs, /student-login\.html\?next=admin-dashboard\.html/);
 assert.match(adminJs, /admin-student-accounts\.html/);
 assert.match(accountHtml, /id="createForm"/);
 assert.match(accountHtml, /id="courseSlugs"/);
