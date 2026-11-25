@@ -9,6 +9,8 @@
   Storage listing/download and read-only SQL inventories do not require Docker.
   Private Storage objects use short-lived signed URLs created with a masked, locally
   entered legacy service_role key; public Storage objects use their public object URL.
+  PowerShell Invoke-RestMethod/Invoke-WebRequest are used for HTTP requests to avoid
+  Windows PowerShell .NET HttpClient overload binding errors.
   Logical PostgreSQL dumps are attempted only when Docker Engine is running. If Docker
   is unavailable, Storage export still proceeds and the final backup status stays INCOMPLETE.
 
@@ -118,23 +120,21 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
     if ($objects.Count -eq 0) { Write-Host "No LIVE Storage objects were returned."; return @() }
 
     $failures = New-Object System.Collections.Generic.List[object]
-    Add-Type -AssemblyName System.Net.Http
-    $httpClient = [System.Net.Http.HttpClient]::new()
     $secureKey = $null
     $serviceRoleKey = $null
-    try {
-        $privateObjects = @($objects | Where-Object { -not [bool]$_.bucket_public })
-        if ($privateObjects.Count -gt 0) {
-            $secureKey = Read-Host -AsSecureString -Prompt "Enter the LIVE legacy service_role API key locally (masked; never paste it in chat)"
-            $serviceRoleKey = ConvertFrom-SecureStringToPlainText $secureKey
-            if ([string]::IsNullOrWhiteSpace($serviceRoleKey)) { Stop-Backup "No service_role key was provided." }
-            if ($serviceRoleKey -notmatch '^eyJ[A-Za-z0-9_=-]+\.[A-Za-z0-9_=-]+\.[A-Za-z0-9_=-]+$') {
-                Stop-Backup "Use the LIVE legacy JWT service_role key from Legacy API Keys; do not use anon/publishable keys."
-            }
-            $httpClient.DefaultRequestHeaders.Add("apikey", $serviceRoleKey)
-            $httpClient.DefaultRequestHeaders.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::new("Bearer", $serviceRoleKey)
-        }
+    $privateObjects = @($objects | Where-Object { -not [bool]$_.bucket_public })
 
+    if ($privateObjects.Count -gt 0) {
+        $secureKey = Read-Host -AsSecureString -Prompt "Enter the LIVE legacy service_role API key locally (masked; never paste it in chat)"
+        $serviceRoleKey = ConvertFrom-SecureStringToPlainText $secureKey
+        if ([string]::IsNullOrWhiteSpace($serviceRoleKey)) { Stop-Backup "No service_role key was provided." }
+        if ($serviceRoleKey -notmatch '^eyJ[A-Za-z0-9_=-]+\.[A-Za-z0-9_=-]+\.[A-Za-z0-9_=-]+$') {
+            if ($secureKey) { $secureKey.Dispose() }
+            Stop-Backup "Use the LIVE legacy JWT service_role key from Legacy API Keys; do not use anon/publishable keys."
+        }
+    }
+
+    try {
         foreach ($bucket in $BucketNames) {
             $bucketFolder = Join-Path $StorageRoot $bucket
             New-Item -ItemType Directory -Path $bucketFolder -Force | Out-Null
@@ -155,28 +155,17 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
                     $url = "$storageBaseUrl/object/public/$bucket/$encodedPath"
                 }
                 else {
-                    # Match the Dashboard/SDK flow for private files: create a short-lived
-                    # signed URL, then GET that URL. This avoids relying on the direct
-                    # authenticated object route which returned NoSuchKey for an object
-                    # that the Dashboard could successfully download.
+                    # Use the Supabase signed-URL REST flow for private files.
+                    # PowerShell's Invoke-RestMethod avoids .NET HttpClient overload binding
+                    # issues seen on Windows PowerShell during GET/POST method invocation.
                     $signUrl = "$storageBaseUrl/object/sign/$bucket/$encodedPath"
                     $signBody = @{ expiresIn = 3600; download = $true } | ConvertTo-Json -Compress
-                    $signContent = [System.Net.Http.StringContent]::new($signBody, [Text.Encoding]::UTF8, "application/json")
-                    $signResponse = $null
+                    $signHeaders = @{
+                        apikey = $serviceRoleKey
+                        Authorization = "Bearer $serviceRoleKey"
+                    }
                     try {
-                        $signResponse = $httpClient.PostAsync($signUrl, $signContent).GetAwaiter().GetResult()
-                        if (-not $signResponse.IsSuccessStatusCode) {
-                            $signError = $signResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult()
-                            if ($signError.Length -gt 1000) { $signError = $signError.Substring(0, 1000) }
-                            $failures.Add([pscustomobject]@{
-                                bucket=$bucket; object_path=$objectPath; stage="create-signed-url";
-                                status=[int]$signResponse.StatusCode; detail=$signError
-                            })
-                            continue
-                        }
-
-                        $signJson = $signResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult()
-                        $signData = $signJson | ConvertFrom-Json
+                        $signData = Invoke-RestMethod -Method Post -Uri $signUrl -Headers $signHeaders -ContentType "application/json" -Body $signBody -ErrorAction Stop
                         $signedPath = $signData.signedURL
                         if (-not $signedPath) { $signedPath = $signData.signedUrl }
                         if ([string]::IsNullOrWhiteSpace([string]$signedPath)) {
@@ -196,9 +185,15 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
                             $url = "$storageBaseUrl/$signedPath"
                         }
                     }
-                    finally {
-                        if ($signResponse) { $signResponse.Dispose() }
-                        $signContent.Dispose()
+                    catch {
+                        $detail = $_.Exception.Message
+                        if ($_.ErrorDetails -and $_.ErrorDetails.Message) { $detail = $_.ErrorDetails.Message }
+                        if ($detail.Length -gt 1000) { $detail = $detail.Substring(0, 1000) }
+                        $failures.Add([pscustomobject]@{
+                            bucket=$bucket; object_path=$objectPath; stage="create-signed-url";
+                            status="exception"; detail=$detail
+                        })
+                        continue
                     }
                 }
 
@@ -212,35 +207,21 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
                 New-Item -ItemType Directory -Path (Split-Path -Parent $localPath) -Force | Out-Null
                 Write-Host "Downloading $bucket/$objectPath ($(if ($isPublic) { 'public URL' } else { 'signed private URL' }))"
 
-                $response = $null; $inputStream = $null; $fileStream = $null
                 try {
-                    $response = $httpClient.GetAsync($url, [System.Net.Http.HttpCompletionOption]::ResponseHeadersRead).GetAwaiter().GetResult()
-                    if (-not $response.IsSuccessStatusCode) {
-                        $errorBody = $response.Content.ReadAsStringAsync().GetAwaiter().GetResult()
-                        if ($errorBody.Length -gt 1000) { $errorBody = $errorBody.Substring(0, 1000) }
-                        $failures.Add([pscustomobject]@{
-                            bucket=$bucket; object_path=$objectPath; stage="download";
-                            status=[int]$response.StatusCode; detail=$errorBody
-                        })
-                        continue
-                    }
-
-                    $inputStream = $response.Content.ReadAsStreamAsync().GetAwaiter().GetResult()
-                    $fileStream = [IO.File]::Open($localPath, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None)
-                    $inputStream.CopyToAsync($fileStream).GetAwaiter().GetResult()
+                    # Invoke-WebRequest streams directly to disk and avoids ambiguous
+                    # HttpClient.GetAsync overload binding under Windows PowerShell 5.1.
+                    $null = Invoke-WebRequest -Uri $url -OutFile $localPath -UseBasicParsing -MaximumRedirection 5 -ErrorAction Stop
                 }
                 catch {
+                    $detail = $_.Exception.Message
+                    if ($_.ErrorDetails -and $_.ErrorDetails.Message) { $detail = $_.ErrorDetails.Message }
+                    if ($detail.Length -gt 1000) { $detail = $detail.Substring(0, 1000) }
                     $failures.Add([pscustomobject]@{
                         bucket=$bucket; object_path=$objectPath; stage="download";
-                        status="exception"; detail=$_.Exception.Message
+                        status="exception"; detail=$detail
                     })
                     if (Test-Path -LiteralPath $localPath) { Remove-Item -LiteralPath $localPath -Force -ErrorAction SilentlyContinue }
                     continue
-                }
-                finally {
-                    if ($fileStream) { $fileStream.Dispose() }
-                    if ($inputStream) { $inputStream.Dispose() }
-                    if ($response) { $response.Dispose() }
                 }
 
                 $actualBytes = (Get-Item -LiteralPath $localPath).Length
@@ -255,7 +236,6 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
         }
     }
     finally {
-        $httpClient.Dispose()
         $serviceRoleKey = $null
         if ($secureKey) { $secureKey.Dispose() }
     }
