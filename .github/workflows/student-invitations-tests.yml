@@ -8,15 +8,20 @@ on:
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
+      - "public-site/admin-student-accounts.html"
       - "public-site/admin-subscriptions.html"
       - "public-site/academy-access.html"
       - "public-site/student-*.html"
       - "public-site/assets/js/admin-students.js"
+      - "public-site/assets/js/admin-student-accounts.js"
+      - "public-site/assets/js/admin-dashboard.js"
       - "public-site/assets/js/admin-subscriptions.js"
       - "public-site/assets/js/student-*.js"
       - "public-site/assets/js/academy-access.js"
       - "public-site/assets/js/membership-config.js"
       - "tests/student-invites.test.mjs"
+      - "tests/student-account-helpers.test.mjs"
+      - "tests/student-username-login.test.mjs"
       - "tests/admin-subscriptions-ui.test.mjs"
       - "tests/role-permissions.test.mjs"
       - "sql/membership-v2-per-user-course-permissions.sql"
@@ -28,6 +33,7 @@ on:
       - "feature/student-invitations-and-login-2026-11-23"
       - "feature/student-invitations-live-deploy-2026-11-23"
       - "feature/three-role-course-permissions"
+      - "feature/username-student-accounts-20261125"
     paths:
       - "supabase/functions/**"
       - "supabase/config.toml"
@@ -63,12 +69,16 @@ jobs:
       - name: Test invitation validation
         run: |
           node tests/student-invites.test.mjs
+          node tests/student-account-helpers.test.mjs
+          node tests/student-username-login.test.mjs
           node tests/admin-subscriptions-ui.test.mjs
           node tests/role-permissions.test.mjs
       - name: Syntax-check browser scripts
         run: |
           node --check public-site/assets/js/membership-config.js
           node --check public-site/assets/js/admin-students.js
+          node --check public-site/assets/js/admin-student-accounts.js
+          node --check public-site/assets/js/admin-dashboard.js
           node --check public-site/assets/js/admin-subscriptions.js
           node --check public-site/assets/js/student-login.js
           node --check public-site/assets/js/student-set-password.js
@@ -85,7 +95,9 @@ jobs:
         with:
           deno-version: v2.x
       - name: Type-check the admin invitation Edge Function
-        run: deno check supabase/functions/admin-create-student-invitations/index.ts
+        run: |
+          deno check supabase/functions/admin-create-student-invitations/index.ts
+          deno check supabase/functions/admin-manage-student-accounts/index.ts
 
   powershell-script-parse:
     runs-on: windows-latest
