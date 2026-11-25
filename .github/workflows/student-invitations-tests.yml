@@ -5,6 +5,8 @@ on:
     paths:
       - "supabase/functions/**"
       - "supabase/config.toml"
+      - "scripts/Deploy-UsernameStudentAccounts-LIVE.ps1"
+      - "sql/student-username-accounts-live-preflight.sql"
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
@@ -38,6 +40,8 @@ on:
     paths:
       - "supabase/functions/**"
       - "supabase/config.toml"
+      - "scripts/Deploy-UsernameStudentAccounts-LIVE.ps1"
+      - "sql/student-username-accounts-live-preflight.sql"
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
