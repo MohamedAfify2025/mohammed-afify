@@ -43,6 +43,10 @@ assert.equal(validateStudentAccountInput({
   password: "A-long-test-pass", course_slugs: ["excel"],
 }).ok, false);
 assert.equal(validateStudentAccountInput({
+  full_name: "Ahmed Student", username: "student01", phone: "1234567",
+  password: "A-long-test-pass", course_slugs: ["excel"],
+}).ok, false);
+assert.equal(validateStudentAccountInput({
   full_name: "Ahmed Student", username: "student01", phone: "01012345678",
   password: "short", course_slugs: ["excel"],
 }).ok, false);
