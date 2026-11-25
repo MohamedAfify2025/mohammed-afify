@@ -29,21 +29,28 @@ function Stop-With([string]$Message) {
 function Invoke-SupabaseCli([string[]]$Arguments) {
     $cli = Get-Command "supabase" -ErrorAction SilentlyContinue
     if ($cli) {
-        & $cli.Source @Arguments
+        $cliPath = $cli.Path
+        if (-not $cliPath) { $cliPath = $cli.Definition }
+        & $cliPath @Arguments
     }
     else {
         # Match the tested Windows environment: invoke a pinned CLI through npx.cmd.
         $npx = Get-Command "npx.cmd" -ErrorAction SilentlyContinue
-        if (-not $npx) {
-            $npxPath = Join-Path $env:ProgramFiles "nodejs/npx.cmd"
-            if (Test-Path -LiteralPath $npxPath) {
-                $npx = Get-Item -LiteralPath $npxPath
+        $npxPath = $null
+        if ($npx) {
+            $npxPath = $npx.Path
+            if (-not $npxPath) { $npxPath = $npx.Definition }
+        }
+        if (-not $npxPath) {
+            $candidateNpx = Join-Path $env:ProgramFiles "nodejs/npx.cmd"
+            if (Test-Path -LiteralPath $candidateNpx) {
+                $npxPath = $candidateNpx
             }
         }
-        if (-not $npx) {
+        if (-not $npxPath) {
             Stop-With "Neither a global Supabase CLI nor npx.cmd was found. Install Node.js or Supabase CLI, then retry."
         }
-        & $npx.Source --yes supabase@3.4.0 @Arguments
+        & $npxPath --yes supabase@3.4.0 @Arguments
     }
 
     if ($LASTEXITCODE -ne 0) {
@@ -96,9 +103,10 @@ try {
     Write-Host "Before continuing, verify both items:" -ForegroundColor Yellow
     Write-Host "1. LIVE database backup exported and stored off-site."
     Write-Host "2. LIVE Storage objects backed up separately, including private-course-lessons and public-course-assets."
-    Write-Host "3. sql/student-username-accounts-live-preflight.sql was executed in LIVE after the backup."
-    Write-Host "4. Every service_role privilege check at the end of that SQL script returned true."
-    Write-Host "5. The approved production admin identity and rollback owner are known."
+    Write-Host "3. Auth recovery is covered by a verified platform restore point or an approved manual recovery plan."
+    Write-Host "4. sql/student-username-accounts-live-preflight.sql was executed in LIVE after backup verification."
+    Write-Host "5. Every service_role privilege check at the end of that SQL script returned true."
+    Write-Host "6. The approved production admin identity and rollback owner are known."
     Write-Host ""
 
     $projectRef = (Read-Host "LIVE Supabase Project Ref").Trim()
@@ -109,6 +117,11 @@ try {
     $backupConfirmation = Read-Host "Type BACKUP-VERIFIED only after database AND Storage backups have been verified"
     if ($backupConfirmation -cne "BACKUP-VERIFIED") {
         Stop-With "Backup verification was not confirmed. Deployment cancelled."
+    }
+
+    $authConfirmation = Read-Host "Type AUTH-RECOVERY-VERIFIED only after Auth recovery is documented and approved"
+    if ($authConfirmation -cne "AUTH-RECOVERY-VERIFIED") {
+        Stop-With "Auth recovery path was not verified. Deployment cancelled."
     }
 
     $grantConfirmation = Read-Host "Type GRANTS-VERIFIED only after the LIVE SQL preflight returned all true"
