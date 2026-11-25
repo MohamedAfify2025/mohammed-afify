@@ -65,7 +65,7 @@ function Initialize-SupabaseCli {
 }
 
 function Invoke-SupabaseCli([string[]]$Arguments, [string]$Step) {
-    Write-Host "\`n[$Step] Supabase CLI $($Arguments -join ' ')" -ForegroundColor Cyan
+    Write-Host "`n[$Step] Supabase CLI $($Arguments -join ' ')" -ForegroundColor Cyan
     $allArgs = @($script:SupabasePrefixArgs) + @($Arguments)
     & $script:SupabaseExe @allArgs
     if ($LASTEXITCODE -ne 0) {
@@ -74,7 +74,7 @@ function Invoke-SupabaseCli([string[]]$Arguments, [string]$Step) {
 }
 
 function Invoke-SupabaseCapture([string[]]$Arguments, [string]$Step, [string]$OutputPath) {
-    Write-Host "\`n[$Step]" -ForegroundColor Cyan
+    Write-Host "`n[$Step]" -ForegroundColor Cyan
     $stderrPath = "$OutputPath.stderr.txt"
     $allArgs = @($script:SupabasePrefixArgs) + @($Arguments)
     $output = & $script:SupabaseExe @allArgs 2> $stderrPath | Out-String
@@ -89,7 +89,7 @@ function Invoke-SupabaseCapture([string[]]$Arguments, [string]$Step, [string]$Ou
 function Invoke-SupabaseQueryCsv([string]$SqlPath, [string]$Step, [string]$CsvPath) {
     $jsonPath = "$CsvPath.json"
     $stderrPath = "$CsvPath.stderr.txt"
-    Write-Host "\`n[$Step]" -ForegroundColor Cyan
+    Write-Host "`n[$Step]" -ForegroundColor Cyan
 
     # --output-format json selects machine-readable query rows. --agent yes avoids
     # the CLI's no-agent output path suppressing stdout in non-interactive sessions.
@@ -367,7 +367,7 @@ No LIVE grants, functions, secrets, student data, course assignments, or Storage
     $statusFile = Join-Path $BackupRoot "BACKUP-STATUS-INCOMPLETE.txt"
     $notes | Set-Content -LiteralPath $statusFile -Encoding UTF8
 
-    Write-Host "\`nStorage download and verification completed." -ForegroundColor Green
+    Write-Host "`nStorage download and verification completed." -ForegroundColor Green
     Write-Host "Database logical dump status: $databaseDumpStatus"
     Write-Host "Output folder: $BackupRoot"
     Write-Host "Final status intentionally remains INCOMPLETE until the Auth/platform recovery path and off-device copy are verified." -ForegroundColor Yellow
