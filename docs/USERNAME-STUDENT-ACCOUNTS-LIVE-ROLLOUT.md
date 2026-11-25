@@ -6,7 +6,7 @@
 - TEST project: `jniekfbelqticopcotxg` (`mohammed-afify-v2-test`).
 - LIVE project: `ybsjnubrswqksvktgmay` (`mohammed-afify-learning`).
 - TEST Edge Function `admin-manage-student-accounts`: version 3, ACTIVE, `verify_jwt=true` (verified 2026-11-25).
-- LIVE Edge Function `admin-manage-student-accounts`: not deployed at the time this runbook was prepared.
+- LIVE Edge Function `admin-manage-student-accounts`: ACTIVE, version 1, `verify_jwt=true` (deployed 2026-11-25 after the minimal grants were verified).
 - The completed one-time Odoo transfer utility is excluded from the product release.
 - No LIVE student accounts, course access, passwords, or course content were changed by this release preparation.
 
@@ -163,3 +163,13 @@ Supabase's current migration guidance describes migrating Auth data (including h
 - Confirm the locally retained backup contains the necessary Auth tables and columns; a sanitized user/identity inventory alone is not a restorable Auth backup.
 - Keep a protected copy in synchronized off-device storage and verify its hashes after synchronization.
 - Do not mark the full project backup complete until the Auth export and the off-device copy are confirmed.
+
+
+## LIVE deployment progress — 2026-11-25
+
+- The approved manual Auth recovery path has been documented. It requires preserving original Auth UUIDs; re-creating users with new IDs is not an acceptable substitute because existing tables reference `auth.users.id`.
+- Applied the dedicated migration `username_student_accounts_live_minimal_service_role_grants` to LIVE after confirming all six required public tables exist.
+- Read-back confirmed every required `service_role` privilege is `true` (profiles SELECT/UPDATE; course catalog SELECT; subscription plans SELECT/INSERT/DELETE; plan-course mappings SELECT/INSERT/DELETE; student subscriptions SELECT/INSERT/UPDATE/DELETE; membership audit log INSERT).
+- Deployed `admin-manage-student-accounts` to LIVE as version 1 with `verify_jwt=true`. Its source permits only the exact production Pages origin by default; the TEST preview origin remains isolated to the TEST project.
+- The function is present and ACTIVE, but the production website UI has not been merged or published. No LIVE student accounts, course assignments, passwords, subscriptions, or course content were created or changed by this deployment.
+- Remaining release gate: confirm the backup folder has synchronized to access-controlled off-device storage and verify that the Auth recovery material preserves the original user IDs. Until then keep PR #32 Draft and do not publish the UI to production.
