@@ -148,8 +148,59 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
 
                 $encodedPath = ($segments | ForEach-Object { [Uri]::EscapeDataString($_) }) -join '/'
                 $isPublic = [bool]$entry.bucket_public
-                $accessRoute = if ($isPublic) { "public" } else { "authenticated" }
-                $url = "https://$ExpectedProjectRef.supabase.co/storage/v1/object/$accessRoute/$bucket/$encodedPath"
+                $storageBaseUrl = "https://$ExpectedProjectRef.supabase.co/storage/v1"
+                $url = $null
+
+                if ($isPublic) {
+                    $url = "$storageBaseUrl/object/public/$bucket/$encodedPath"
+                }
+                else {
+                    # Match the Dashboard/SDK flow for private files: create a short-lived
+                    # signed URL, then GET that URL. This avoids relying on the direct
+                    # authenticated object route which returned NoSuchKey for an object
+                    # that the Dashboard could successfully download.
+                    $signUrl = "$storageBaseUrl/object/sign/$bucket/$encodedPath"
+                    $signBody = @{ expiresIn = 3600; download = $true } | ConvertTo-Json -Compress
+                    $signContent = [System.Net.Http.StringContent]::new($signBody, [Text.Encoding]::UTF8, "application/json")
+                    $signResponse = $null
+                    try {
+                        $signResponse = $httpClient.PostAsync($signUrl, $signContent).GetAwaiter().GetResult()
+                        if (-not $signResponse.IsSuccessStatusCode) {
+                            $signError = $signResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult()
+                            if ($signError.Length -gt 1000) { $signError = $signError.Substring(0, 1000) }
+                            $failures.Add([pscustomobject]@{
+                                bucket=$bucket; object_path=$objectPath; stage="create-signed-url";
+                                status=[int]$signResponse.StatusCode; detail=$signError
+                            })
+                            continue
+                        }
+
+                        $signJson = $signResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult()
+                        $signData = $signJson | ConvertFrom-Json
+                        $signedPath = $signData.signedURL
+                        if (-not $signedPath) { $signedPath = $signData.signedUrl }
+                        if ([string]::IsNullOrWhiteSpace([string]$signedPath)) {
+                            $failures.Add([pscustomobject]@{
+                                bucket=$bucket; object_path=$objectPath; stage="create-signed-url";
+                                status="invalid-response"; detail="Supabase did not return signedURL/signedUrl."
+                            })
+                            continue
+                        }
+                        if ([string]$signedPath -match '^https?://') {
+                            $url = [string]$signedPath
+                        }
+                        elseif ([string]$signedPath -match '^/') {
+                            $url = "$storageBaseUrl$signedPath"
+                        }
+                        else {
+                            $url = "$storageBaseUrl/$signedPath"
+                        }
+                    }
+                    finally {
+                        if ($signResponse) { $signResponse.Dispose() }
+                        $signContent.Dispose()
+                    }
+                }
 
                 $localPath = [IO.Path]::GetFullPath((Join-Path $bucketFolder $objectPath))
                 $allowedRoot = [IO.Path]::GetFullPath($bucketFolder).TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
@@ -159,7 +210,7 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
                 }
 
                 New-Item -ItemType Directory -Path (Split-Path -Parent $localPath) -Force | Out-Null
-                Write-Host "Downloading $bucket/$objectPath ($accessRoute route)"
+                Write-Host "Downloading $bucket/$objectPath ($(if ($isPublic) { 'public URL' } else { 'signed private URL' }))"
 
                 $response = $null; $inputStream = $null; $fileStream = $null
                 try {
