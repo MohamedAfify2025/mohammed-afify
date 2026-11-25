@@ -52,9 +52,9 @@ Important CLI limitation: Supabase CLI v3 `db dump` excludes Supabase-managed sc
 Use these logical exports after linking the local CLI checkout to the exact LIVE project:
 
 ```powershell
-supabase db dump --remote -f roles.sql --role-only
-supabase db dump --remote -f schema.sql
-supabase db dump --remote -f data.sql --use-copy --data-only -x "storage.buckets_vectors" -x "storage.vector_indexes"
+supabase db dump --remote=ybsjnubrswqksvktgmay -f roles.sql --role-only
+supabase db dump --remote=ybsjnubrswqksvktgmay -f schema.sql
+supabase db dump --remote=ybsjnubrswqksvktgmay -f data.sql --use-copy --data-only -x "storage.buckets_vectors" -x "storage.vector_indexes"
 ```
 
 These commands do not export Auth users/password hashes/tokens or Storage object bytes. Storage objects must be downloaded separately with the CLI `storage ls/cp --remote --experimental` commands or another verified export method. The two LIVE buckets discovered by read-only inspection are `private-course-lessons` and `public-course-assets`; preserve object paths, MIME types, bucket visibility, size limits, and allowed MIME types. Verify object counts, total bytes, and SHA-256 hashes after export.
@@ -88,6 +88,8 @@ The script does not change user rows, student roles, subscriptions, course mappi
 ### 4. Set the LIVE function origin and deploy the function
 
 Run `scripts/Deploy-UsernameStudentAccounts-LIVE.ps1` from a clean clone after PR #32 is merged into `main`.
+
+The script supports either a globally installed `supabase` command or Windows `npx.cmd`; when only `npx.cmd` is available it invokes the pinned `supabase@3.4.0` package. The current tested Windows machine has Node/npm/npx but does not have a global Supabase CLI command. Secret configuration is explicitly targeted with `--project-ref ybsjnubrswqksvktgmay`; it does not depend on whichever project may be linked locally.
 
 The script requires:
 - the exact repository and `main` branch;
