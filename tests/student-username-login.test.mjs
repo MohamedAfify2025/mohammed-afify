@@ -140,8 +140,8 @@ assert.match(livePreflightSql, /GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE pu
 assert.match(livePreflightSql, /has_table_privilege/);
 assert.doesNotMatch(livePreflightSql, /INSERT INTO auth\.users|INSERT INTO public\.profiles|UPDATE public\.profiles/);
 
-assert.match(liveRunbook, /downloads private files through/);
-assert.match(liveRunbook, /public files through/);
+assert.match(liveRunbook, /creates a short-lived signed URL for each private object through/);
+assert.match(liveRunbook, /public files use/);
 assert.match(liveRunbook, /storage-download-failures\.csv/);
 assert.match(liveRunbook, /masked PowerShell prompt/);
 assert.match(liveBackupScript, /Read-Host -AsSecureString/);
