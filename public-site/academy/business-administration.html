@@ -44,6 +44,9 @@
     .ba-details{border:1px solid var(--ba-line);border-radius:18px;background:#fff;margin:12px 0;overflow:hidden}.ba-details summary{display:flex;align-items:center;gap:12px;list-style:none;cursor:pointer;padding:19px 20px;font-weight:800}.ba-details summary::-webkit-details-marker{display:none}.ba-details summary:after{content:'+';margin-inline-start:auto;font-size:22px;color:var(--ba-violet)}.ba-details[open] summary:after{content:'−'}.ba-detail-content{padding:0 22px 22px;border-top:1px solid #edf0f6}.ba-detail-content .ba-pill{display:inline-block}.ba-footnote{font-size:12px!important;color:#7b8698!important}.ba-alert{padding:14px 16px;border:1px solid #f0dfb7;border-radius:14px;background:#fff8e9;color:#855300;line-height:1.9;margin:16px 0}
     @media(max-width:900px){.ba-hero{grid-template-columns:1fr}.ba-hero-art{min-height:180px}.ba-art-symbol{font-size:64px}.ba-units{grid-template-columns:repeat(2,minmax(0,1fr))}.ba-stats{grid-template-columns:1fr}}
     @media(max-width:600px){.ba-main{padding:20px 14px 48px}.ba-lead-grid,.ba-form-grid{grid-template-columns:1fr}.ba-unit-card{min-height:150px;padding:14px}.ba-video-placeholder{align-items:flex-start}.ba-hero{padding:25px 20px}.ba-panel{padding:19px}.ba-section-head{align-items:flex-start;flex-direction:column}}
+    .ba-hero-art[data-course-cover-slot]{position:relative;overflow:hidden;min-height:245px}
+    .ba-hero-art[data-course-cover-slot].has-course-cover{padding:0!important}
+    .ba-hero-art[data-course-cover-slot] [data-course-cover-image]{position:absolute;inset:0;width:100%;height:100%;min-height:100%;object-fit:cover;border-radius:inherit}
   </style>
   <!-- MEMBERSHIP ACCESS PRELOAD -->
   <style>html.ba-access-checking body main{visibility:hidden!important}.ba-access-status{margin:0 0 18px;padding:12px 15px;border-radius:12px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.8}.ba-access-status.admin{background:#e6f1ff;color:#23456f}.ba-access-status[hidden]{display:none!important}</style>
@@ -163,6 +166,7 @@ body { color: #101b35 !important; }
 
   <link rel="stylesheet" href="../assets/css/ma-global-navigation-v1.css">
   <link rel="stylesheet" href="../assets/css/ma-academy-breadcrumbs-v1.css?v=1">
+  <link rel="stylesheet" href="../assets/css/course-cover-manager.css?v=20261125-shared-v1">
 </head>
 <body>
 <header class="ma-global-header" data-ma-global-header>
@@ -225,7 +229,7 @@ body { color: #101b35 !important; }
     <span class="ma-academy-breadcrumb__separator" aria-hidden="true">/</span>
     <span aria-current="page">الإدارة والأعمال</span>
   </nav>
-  <section class="ba-hero" data-cinematic-bg="education">
+  <section class="ba-hero" data-cinematic-bg="education" data-course-cover="business-administration">
     <div>
       <span class="ba-kicker">MOHAMMED AFIFY · BUSINESS LEARNING</span>
       <h1>مسار الإدارة والأعمال</h1>
@@ -235,8 +239,13 @@ body { color: #101b35 !important; }
         <a class="ba-button secondary" href="#unit-map">خريطة الوحدات</a>
       </div>
     </div>
-    <div class="ba-hero-art" aria-label="Business and management learning path" role="img"><img class="ba-business-reference-image" src="../assets/images/business-administration-grade2-reference-cover.webp" alt="طلاب يعملون معًا على مشروع للإدارة والأعمال مع مؤشرات تحليلية" loading="eager" decoding="async"></div>
+    <div class="ba-hero-art" data-course-cover-slot aria-label="Business and management learning path" role="img"><img class="ba-business-reference-image" data-course-cover-fallback src="../assets/images/business-administration-grade2-reference-cover.webp" alt="طلاب يعملون معًا على مشروع للإدارة والأعمال مع مؤشرات تحليلية" loading="eager" decoding="async"><img data-course-cover-image alt="غلاف مسار الإدارة والأعمال" decoding="async" hidden></div>
   </section>
+  <div class="course-cover-admin" data-course-cover-admin="business-administration" hidden>
+    <div class="course-cover-admin-copy"><strong>غلاف مسار الإدارة والأعمال</strong><small>ارفع صورة بديلة أو غيّر الغلاف الحالي. ستظهر الصورة لجميع زوار المسار.</small><span class="course-cover-admin-status" data-course-cover-status role="status" aria-live="polite"></span></div>
+    <label class="course-cover-upload-label" data-course-cover-upload-label="business-administration" for="baCourseCoverFile">رفع / تغيير صورة الغلاف</label>
+    <input id="baCourseCoverFile" data-course-cover-file="business-administration" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+  </div>
 
   <div class="ba-stats" aria-label="ملخص المسار">
     <div class="ba-stat"><strong>5 وحدات</strong><span>خريطة المنهج كاملة</span></div>
@@ -814,6 +823,7 @@ body { color: #101b35 !important; }
 </script>
 
 <script src="../assets/js/business-administration-access.js" defer></script>
+<script src="../assets/js/course-cover-manager.js?v=20261125-shared-v1" defer></script>
 <script src="../assets/js/business-administration-unit2.js" defer></script>
 <script src="../assets/js/business-administration-unit3.js" defer></script>
   <script src="../assets/js/ma-global-navigation-v1.js" defer></script>
