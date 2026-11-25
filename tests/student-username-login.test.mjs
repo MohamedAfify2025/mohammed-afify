@@ -37,7 +37,7 @@ assert.match(studentSpaceJs, /window\.location\.replace\("academy\/business-admi
 assert.match(courseRoomHtml, /MOHAMMED AFIFY · LEARNING ROOM/);
 assert.match(courseRoomHtml, /id="logoutButton"/);
 assert.match(courseRoomHtml, /\[hidden\]\{display:none!important\}/);
-assert.doesNotMatch(courseRoomHtml, /href="admin-dashboard\.html">لوحة المدير الشاملة/);
+assert.match(courseRoomHtml, /id="adminDashboardLink" href="admin-dashboard\.html" hidden/);
 assert.match(businessAccessJs, /get_my_active_courses_v2/);
 assert.match(accountHtml, /id="createForm"/);
 assert.match(accountHtml, /id="courseSlugs"/);
