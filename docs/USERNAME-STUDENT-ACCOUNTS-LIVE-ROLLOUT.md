@@ -144,3 +144,22 @@ After testing, reset or suspend the test account according to the operator's dat
 - No production student receives a course assignment automatically.
 - No production Odoo content is copied or overwritten.
 - No TEST preview origin is allowed by the LIVE function unless an operator deliberately adds it to LIVE `ALLOWED_ORIGINS` (not recommended).
+
+
+## Approved manual Auth recovery path — 2026-11-25
+
+The operator approved a manual Auth recovery procedure for emergency recovery if a platform-level restore point is unavailable. This approval is for the recovery approach; it is not evidence that a complete Auth backup has been exported or restore-tested.
+
+1. Preserve the original Auth user UUIDs. Existing application tables reference `auth.users.id` (including `public.profiles.user_id`, `public.learning_progress.user_id`, `public.assessment_results.user_id`, and `public.course_lessons.created_by`). Do not recreate existing users with new UUIDs through `auth.admin.createUser()` as a substitute for restoring the original Auth records.
+2. Keep a separately protected export of the Auth records required for recovery, at minimum `auth.users` and `auth.identities`, including the original IDs and password hashes if password continuity is required. Never export plaintext passwords or place credential material in GitHub, browser files, or chat.
+3. Restore the Auth records into a compatible replacement Supabase project before restoring public application rows that reference those users. Confirm all original IDs are present before restoring dependent rows.
+4. Treat existing access/refresh tokens as invalid unless the signing-key migration path is explicitly supported and verified. Plan for users to authenticate again. Review MFA factors separately and require MFA re-enrollment where factor recovery is unavailable.
+5. Preserve an operator-only mapping and recovery log. Do not create student accounts or alter LIVE users as part of a disaster-recovery test.
+
+Supabase's current migration guidance describes migrating Auth data (including hashed passwords) through a full backup or SQL export/import. It also warns that tokens depend on project signing keys. See [Migrating Auth Users Between Supabase Projects](https://supabase.com/kb/troubleshooting/migrating-auth-users-between-projects).
+
+### Auth recovery evidence still required
+
+- Confirm the locally retained backup contains the necessary Auth tables and columns; a sanitized user/identity inventory alone is not a restorable Auth backup.
+- Keep a protected copy in synchronized off-device storage and verify its hashes after synchronization.
+- Do not mark the full project backup complete until the Auth export and the off-device copy are confirmed.
