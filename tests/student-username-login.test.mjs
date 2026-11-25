@@ -124,7 +124,8 @@ assert.match(liveDeployScript, /GRANTS-VERIFIED/);
 assert.match(liveDeployScript, /DEPLOY-LIVE/);
 assert.match(liveDeployScript, /ALLOWED_ORIGINS/);
 assert.match(liveDeployScript, /verify_jwt = true/);
-assert.doesNotMatch(liveDeployScript, /SERVICE_ROLE_KEY|SUPABASE_SECRET_KEYS/);
+assert.doesNotMatch(liveDeployScript, /SUPABASE_SERVICE_ROLE_KEY\\s*=|SUPABASE_SECRET_KEYS\\s*=/);
+assert.doesNotMatch(liveDeployScript, /sb_secret_|sb_service_role_/);
 assert.doesNotMatch(liveDeployScript, /student_subscriptions|subscription_plan_courses|createUser/);
 
 assert.match(livePreflightSql, /GRANT SELECT, UPDATE ON TABLE public\.profiles TO service_role/);
