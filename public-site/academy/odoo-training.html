@@ -27,6 +27,27 @@ button{font:inherit;cursor:pointer}.odoo-main{max-width:1240px;margin:auto;paddi
 .footer{max-width:1240px;margin:auto;padding:18px 22px 30px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#748198;font-size:11px}
 @media(max-width:700px){.odoo-main{padding:18px 13px 50px}.hero{padding:28px 20px;border-radius:21px}.hero p{font-size:14px}.stats{grid-template-columns:1fr;gap:9px}.stat{padding:13px 16px}.unit-grid{grid-template-columns:1fr}.lesson-entry{align-items:flex-start;flex-direction:column}.lesson-open{width:100%}.intro-card{padding:18px}#introFrame{min-height:480px;height:75vh}#lessonFrame{min-height:560px;height:82vh}.section-head{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+ 
+/* Odoo course promotional hero image */
+.course-hero{padding:0!important;min-height:0!important;background:transparent!important;box-shadow:none!important;border-radius:24px!important;overflow:visible!important;color:var(--ink)!important}
+.course-hero .hero-fallback{position:relative;overflow:hidden;border-radius:26px;padding:clamp(28px,5vw,58px);background:radial-gradient(circle at 14% 20%,#8d679b55,transparent 28%),linear-gradient(125deg,#101e35,#1e385b 62%,#3d315b);color:#fff;box-shadow:0 20px 55px #172b4719}
+.course-hero .hero-fallback h2{position:relative;z-index:1;font-size:clamp(31px,4.8vw,52px);line-height:1.35;margin:19px 0 12px;color:#fff}
+.course-hero .hero-fallback p{position:relative;z-index:1;color:#e2e9f2;max-width:850px;font-size:16px;line-height:2.1;margin:0}
+.course-hero .course-hero-visual{display:block;width:100%;border-radius:26px;overflow:hidden;background:#14233d;box-shadow:0 20px 55px #172b4722;line-height:0}
+.course-hero .course-hero-visual[hidden]{display:none!important}
+.course-hero .course-hero-visual img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#14233d}
+.course-hero.has-image .hero-fallback{display:none}
+.course-hero .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.course-hero-admin{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:12px;padding:13px 16px;border:1px dashed #b9c6d5;background:#fff;border-radius:14px}
+.course-hero-admin[hidden]{display:none!important}
+.course-hero-admin-copy{display:grid;gap:2px}
+.course-hero-admin-copy strong{font-size:13px;color:#263650}
+.course-hero-admin-copy small{font-size:11px;color:#748198;line-height:1.7}
+#courseHeroUploadStatus{font-size:11px;color:#147a78}
+#courseHeroUploadStatus.error{color:#a33b46}
+.course-hero-upload-label{cursor:pointer;min-height:42px}
+@media(max-width:700px){.course-hero .hero-fallback{padding:27px 19px;border-radius:20px}.course-hero .hero-fallback p{font-size:14px}.course-hero .course-hero-visual{border-radius:18px}.course-hero-admin{align-items:stretch}.course-hero-upload-label{width:100%}}
+
 </style>
 </head><body>
 <header class="ma-global-header" data-ma-global-header><div class="ma-header-shell">
@@ -38,11 +59,29 @@ button{font:inherit;cursor:pointer}.odoo-main{max-width:1240px;margin:auto;paddi
 <main class="odoo-main">
 <div id="accessStatus" class="access-status" role="status" hidden></div>
 <nav class="ma-academy-breadcrumb" aria-label="مسار التنقل"><a href="../index.html">الرئيسية</a><span class="ma-academy-breadcrumb__separator" aria-hidden="true">/</span><a href="../academy-access.html">مكتبة الدورات</a><span class="ma-academy-breadcrumb__separator" aria-hidden="true">/</span><span aria-current="page">تدريب وتنفيذ Odoo ERP</span></nav>
-<section class="hero"><div class="hero-top"><span class="hero-mark">SC</span><span>SYSTEMS CODES × ODOO 19<br><small>ERP PRACTICAL ACADEMY</small></span></div><h1 id="courseTitle">دورة تدريب وتنفيذ Odoo ERP</h1><p id="courseDescription">تعلّم كيف ترتبط الإدارات التشغيلية والمستندات بالقيود والتقارير، وانتقل من فهم دورة العمل إلى التطبيق العملي على Odoo 19.</p><div class="pills"><span>منهج عملي تفاعلي</span><span>Odoo 19</span><span>المحاسبة والتشغيل</span><span>المقاولات والأنشطة التجارية</span></div><div class="actions"><a class="action primary" href="#curriculum">استكشف محاضرات الدورة ↓</a><a class="action secondary" href="#courseIntro">العرض الافتتاحي</a></div></section>
+<section class="hero course-hero" id="courseHero">
+  <div class="hero-fallback" id="courseHeroFallback">
+    <div class="hero-top"><span class="hero-mark">SC</span><span>SYSTEMS CODES × ODOO 19<br><small>ERP PRACTICAL ACADEMY</small></span></div>
+    <h2>دورة تدريب وتنفيذ Odoo ERP</h2>
+    <p>تعلّم كيف ترتبط الإدارات التشغيلية والمستندات بالقيود والتقارير، وانتقل من فهم دورة العمل إلى التطبيق العملي على Odoo 19.</p>
+    <div class="pills"><span>منهج عملي تفاعلي</span><span>Odoo 19</span><span>المحاسبة والتشغيل</span><span>المقاولات والأنشطة التجارية</span></div>
+    <div class="actions"><a class="action primary" href="#curriculum">استكشف محاضرات الدورة ↓</a><a class="action secondary" href="#courseIntro">العرض الافتتاحي</a></div>
+  </div>
+  <a id="courseHeroVisual" class="course-hero-visual" href="#curriculum" aria-label="استكشف محاضرات دورة Odoo ERP" hidden>
+    <img id="courseHeroImage" alt="دورة تدريب Odoo ERP من SYSTEMS CODES، تدريب عملي على تطبيقات Odoo 19" decoding="async" fetchpriority="high">
+  </a>
+  <h1 id="courseTitle" class="sr-only">دورة تدريب وتنفيذ Odoo ERP</h1>
+  <p id="courseDescription" class="sr-only">تعلّم كيف ترتبط الإدارات التشغيلية والمستندات بالقيود والتقارير، وانتقل من فهم دورة العمل إلى التطبيق العملي على Odoo 19.</p>
+  <div id="courseHeroAdminTools" class="course-hero-admin" hidden>
+    <div class="course-hero-admin-copy"><strong>غلاف دورة Odoo</strong><small>ارفع الصورة الرئيسية لتظهر تلقائيًا لكل زوار صفحة الدورة</small><span id="courseHeroUploadStatus" role="status" aria-live="polite"></span></div>
+    <label class="action light course-hero-upload-label" for="courseHeroFile">رفع / تغيير صورة الغلاف</label>
+    <input id="courseHeroFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+  </div>
+</section>
 <section class="stats"><div class="stat"><strong id="unitCount">—</strong><span>وحدات تعليمية منشورة</span></div><div class="stat"><strong id="lessonCount">—</strong><span>محاضرات ومواد متاحة</span></div><div class="stat"><strong>Odoo 19</strong><span>بيئة التطبيق المستخدمة في المنهج</span></div></section>
 <section class="section" id="courseIntro"><div class="intro-card"><div class="intro-head"><div><span class="kicker">COURSE INTRODUCTION</span><h2>العرض الافتتاحي للدورة</h2><p>تعرف على فكرة الدورة ومحاورها وخطة العمل قبل بدء المحاضرات التفصيلية.</p></div><button class="action teal" id="toggleIntro" type="button" aria-expanded="false">عرض المقدمة</button></div><div class="intro-frame" id="introFrameWrap"><iframe id="introFrame" title="العرض الافتتاحي لدورة Odoo ERP" loading="lazy" allow="fullscreen" allowfullscreen></iframe></div></div></section>
 <section class="section" id="curriculum"><div class="section-head"><div><span class="kicker">COURSE CURRICULUM</span><h2>الوحدات والمحاضرات</h2></div><div class="admin-tools"><a class="action light" id="adminCourseManagerLink" href="../admin-course-manager.html?course=odoo-training&prepare=odoo-business-flow-01" hidden>إدارة محتوى الدورة</a><a class="action light" href="../student-space.html">مساحتي التعليمية</a></div></div><div id="curriculumMessage" class="loading">جارٍ تحميل الوحدات والمحاضرات…</div><div id="unitGrid" class="unit-grid" hidden></div></section>
 <section id="lessonViewer" class="viewer" aria-live="polite"><div class="viewer-head"><strong id="lessonTitle">المحاضرة</strong><button id="closeLesson" type="button">إغلاق المحاضرة</button></div><iframe id="lessonFrame" title="محتوى المحاضرة" sandbox="allow-scripts allow-forms allow-downloads allow-presentation" allow="fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe><div class="caption">المحتوى محفوظ في المكتبة الخاصة، ويُحمّل بعد التحقق من صلاحية الحساب. تظل المحاضرة مفتوحة داخل صفحة الدورة.</div></section>
 </main><footer class="footer"><span>MOHAMMED AFIFY · LEARNING</span><span>SYSTEMS CODES × ODOO 19</span></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/js/membership-config.js"></script><script src="../assets/js/odoo-training-course.js?v=20261124-odoo-course-page-v4" defer></script><script src="../assets/js/ma-global-navigation-v1.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/js/membership-config.js"></script><script src="../assets/js/odoo-training-course.js?v=20261125-odoo-course-hero-v5" defer></script><script src="../assets/js/ma-global-navigation-v1.js" defer></script>
 </body></html>
