@@ -19,10 +19,10 @@ main{width:min(100%,520px);background:#fff;border:1px solid #e3eaf2;border-radiu
 <body class="ma-platform-page ma-platform-login"><main>
 <div class="brand">MOHAMMED AFIFY · LEARNING</div>
 <h1>تسجيل دخول المتدربين</h1>
-<p class="muted">استخدم بريدك الإلكتروني وكلمة المرور التي أنشأتها عند قبول الدعوة.</p>
+<p class="muted">أدخل اسم المستخدم أو البريد الإلكتروني وكلمة المرور التي أرسلتها لك إدارة المنصة.</p>
 <div id="pageMessage" class="notice" hidden></div>
 <form id="loginForm">
-<label for="email">البريد الإلكتروني — اسم المستخدم</label><input id="email" type="email" autocomplete="username" required>
+<label for="email">اسم المستخدم أو البريد الإلكتروني</label><input id="email" type="text" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="اسم المستخدم أو البريد الإلكتروني">
 <label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="current-password" required>
 <button id="loginButton" type="submit">دخول إلى مساحتي التعليمية</button>
 </form>
@@ -34,5 +34,5 @@ main{width:min(100%,520px);background:#fff;border:1px solid #e3eaf2;border-radiu
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/membership-config.js"></script>
-<script src="assets/js/student-login.js?v=20261124-odoo-upload-route-v6" defer></script>
+<script src="assets/js/student-login.js?v=20261125-username-login-v1" defer></script>
 </body></html>
