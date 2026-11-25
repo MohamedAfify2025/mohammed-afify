@@ -1,2 +1,5 @@
 [functions.admin-create-student-invitations]
 verify_jwt = true
+
+[functions.admin-manage-student-accounts]
+verify_jwt = true
