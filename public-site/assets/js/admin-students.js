@@ -391,7 +391,22 @@
     activeCourses = Array.isArray(courses) ? courses : [];
     if (!activeCourses.length) throw new Error("لا توجد دورات نشطة في فهرس الدورات. أضف الدورة قبل دعوة المتدربين.");
 
-    addStudentRow();
+    const inviteParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const invitePreset = inviteParams.get("invite") === "1" ? {
+      full_name: (inviteParams.get("name") || "").trim(),
+      email: (inviteParams.get("email") || "").trim().toLowerCase(),
+      phone: (inviteParams.get("phone") || "").trim(),
+      requested_course: (inviteParams.get("course") || "").trim(),
+      delivery_method: "email"
+    } : null;
+    if (invitePreset) {
+      // Remove personal details from the address bar/history immediately after reading them.
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    addStudentRow(invitePreset || {});
+    if (invitePreset) {
+      message("تم تجهيز دعوة " + invitePreset.full_name + " لدورة Odoo. راجع البيانات ثم اضغط «مراجعة قائمة الدعوات» وبعدها «إرسال دعوات البريد الإلكتروني».");
+    }
 
     $("loginForm").addEventListener("submit", async (event) => {
       event.preventDefault();
