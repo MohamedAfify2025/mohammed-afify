@@ -7,10 +7,10 @@
   otherwise invokes the pinned package through npx.cmd (supabase@3.4.0).
 
   Storage listing/download and read-only SQL inventories do not require Docker.
-  Private/public Storage objects are downloaded through the authenticated Storage object
-  endpoint using a masked, locally entered legacy service_role key. Logical PostgreSQL
-  dumps are attempted only when Docker Engine is running. If Docker is unavailable,
-  Storage export still proceeds and the final backup status stays INCOMPLETE.
+  Private Storage objects use short-lived signed URLs created with a masked, locally
+  entered legacy service_role key; public Storage objects use their public object URL.
+  Logical PostgreSQL dumps are attempted only when Docker Engine is running. If Docker
+  is unavailable, Storage export still proceeds and the final backup status stays INCOMPLETE.
 
   This is NOT a full-project backup: Supabase CLI db dump excludes managed auth/storage
   schemas and extension-managed schemas. Auth exports intentionally omit password hashes,
