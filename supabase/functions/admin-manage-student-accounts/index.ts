@@ -258,17 +258,25 @@ async function updateCourseAccess(
   };
 }
 
+function allowedOriginsForProject(configuredRaw: string, supabaseUrl: string): string[] {
+  const configuredOrigins = configuredRaw
+    .split(",").map((item) => item.trim()).filter(Boolean);
+  const functionProjectUrl = supabaseUrl.replace(/\/+$/, "");
+  const isIsolatedTestProject =
+    functionProjectUrl === "https://jniekfbelqticopcotxg.supabase.co";
+  const testPreviewOrigin = "https://feature-username-student-acc.mohammed-afify.pages.dev";
+  return [...new Set([
+    ...configuredOrigins,
+    ...(isIsolatedTestProject ? [testPreviewOrigin] : []),
+  ])];
+}
+
 Deno.serve(async (req: Request) => {
   const origin = req.headers.get("origin");
-  const configuredOrigins = (Deno.env.get("ALLOWED_ORIGINS") || "")
-    .split(",").map((item) => item.trim()).filter(Boolean);
-  // Keep the TEST branch preview usable even when ALLOWED_ORIGINS has not
-  // been configured yet. Production deployments must configure their exact
-  // public site origin in the Edge Function environment.
-  const allowedOrigins = [...new Set([
-    ...configuredOrigins,
-    "https://feature-username-student-acc.mohammed-afify.pages.dev",
-  ])];
+  const allowedOrigins = allowedOriginsForProject(
+    Deno.env.get("ALLOWED_ORIGINS") || "",
+    Deno.env.get("SUPABASE_URL") || "",
+  );
 
   if (!origin || !allowedOrigins.includes(origin)) {
     return jsonResponse(403, { error: "Origin is not allowed." }, null);
