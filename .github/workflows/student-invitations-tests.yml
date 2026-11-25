@@ -7,6 +7,7 @@ on:
       - "supabase/config.toml"
       - "scripts/Deploy-UsernameStudentAccounts-LIVE.ps1"
       - "sql/student-username-accounts-live-preflight.sql"
+      - "docs/USERNAME-STUDENT-ACCOUNTS-LIVE-ROLLOUT.md"
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
@@ -113,7 +114,8 @@ jobs:
         shell: powershell
         run: |
           $scripts = @(
-            "scripts/Deploy-StudentInvitations-LIVE.ps1"
+            "scripts/Deploy-StudentInvitations-LIVE.ps1",
+            "scripts/Deploy-UsernameStudentAccounts-LIVE.ps1"
           )
           foreach ($relativePath in $scripts) {
             $tokens = $null
