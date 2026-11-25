@@ -93,7 +93,11 @@ assert.match(edge, /is_platform_admin/);
 assert.match(edge, /function allowedOriginsForProject/);
 const corsHelper = edge.match(/function allowedOriginsForProject\(configuredRaw: string, supabaseUrl: string\): string\[\] \{[\s\S]*?\n\}/);
 assert.ok(corsHelper, "CORS origin allowlist helper exists");
-const resolveAllowedOrigins = runInNewContext("(" + corsHelper[0] + ")", {});
+const corsHelperJavaScript = corsHelper[0]
+  .replace("configuredRaw: string", "configuredRaw")
+  .replace("supabaseUrl: string", "supabaseUrl")
+  .replace("): string[] {", ") {");
+const resolveAllowedOrigins = runInNewContext("(" + corsHelperJavaScript + ")", {});
 const testOrigins = resolveAllowedOrigins("", "https://jniekfbelqticopcotxg.supabase.co");
 assert.deepEqual(Array.from(testOrigins), ["https://feature-username-student-acc.mohammed-afify.pages.dev"]);
 const liveOrigins = resolveAllowedOrigins("", "https://ybsjnubrswqksvktgmay.supabase.co");
