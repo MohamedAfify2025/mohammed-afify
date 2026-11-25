@@ -61,7 +61,7 @@ function normalizePhone(value: unknown): string | null {
 }
 
 async function logAction(
-  admin: ReturnType<typeof createClient>,
+  admin: any,
   actorId: string,
   action: string,
   targetId: string | null,
@@ -80,7 +80,7 @@ async function logAction(
   }
 }
 
-async function getManagedProfile(admin: ReturnType<typeof createClient>, userId: string) {
+async function getManagedProfile(admin: any, userId: string) {
   if (!isUuid(userId)) throw new Error("معرّف حساب الطالب غير صالح.");
   const { data, error } = await admin
     .from("profiles")
@@ -94,7 +94,7 @@ async function getManagedProfile(admin: ReturnType<typeof createClient>, userId:
   return data;
 }
 
-async function getActiveCourses(admin: ReturnType<typeof createClient>, slugs: string[]) {
+async function getActiveCourses(admin: any, slugs: string[]) {
   if (!slugs.length) return [];
   const { data, error } = await admin
     .from("course_catalog")
@@ -107,7 +107,7 @@ async function getActiveCourses(admin: ReturnType<typeof createClient>, slugs: s
   return courses;
 }
 
-async function listAccounts(admin: ReturnType<typeof createClient>) {
+async function listAccounts(admin: any) {
   const [{ data: profiles, error: profileError }, { data: courses, error: courseError }] = await Promise.all([
     admin.from("profiles")
       .select("user_id,full_name,email,phone,status,account_state,created_at")
@@ -183,7 +183,7 @@ async function listAccounts(admin: ReturnType<typeof createClient>) {
 }
 
 async function updateCourseAccess(
-  admin: ReturnType<typeof createClient>,
+  admin: any,
   profile: Record<string, unknown>,
   courseSlugs: string[],
   actorId: string,
@@ -338,7 +338,13 @@ Deno.serve(async (req: Request) => {
     if (action === "create") {
       const normalized = validateStudentAccountInput(body);
       if (!normalized.ok) return jsonResponse(400, { error: normalized.error }, origin);
-      const input = normalized.value;
+      const input = normalized.value as {
+        full_name: string;
+        username: string;
+        phone: string;
+        password: string;
+        course_slugs: string[];
+      };
       const courses = await getActiveCourses(admin, input.course_slugs);
       const authEmail = studentSyntheticEmail(input.username);
 
@@ -481,7 +487,7 @@ Deno.serve(async (req: Request) => {
     if (action === "set_courses") {
       const normalizedCourses = normalizeStudentCourseSlugs(body.course_slugs, true);
       if (!normalizedCourses.ok) return jsonResponse(400, { error: normalizedCourses.error }, origin);
-      const result = await updateCourseAccess(admin, profile, normalizedCourses.value, authData.user.id);
+      const result = await updateCourseAccess(admin, profile, normalizedCourses.value as string[], authData.user.id);
       return jsonResponse(200, result, origin);
     }
 
