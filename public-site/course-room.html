@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>الدورة التعليمية | Mohammed Afify</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font-family:Cairo,Tahoma,Arial,sans-serif;padding:20px}
+main{max-width:1180px;margin:24px auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.card{background:#fff;border:1px solid #e3eaf2;border-radius:20px;padding:25px;margin:16px 0;box-shadow:0 12px 35px #17243b09}
+.brand{font-weight:900;color:#0b8379}.muted{color:#6a7890;font-size:13px;line-height:1.9}h1{font-size:30px;margin:9px 0}button,a{display:inline-block;border:0;border-radius:10px;padding:10px 15px;background:#14233d;color:#fff;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}
+.notice{padding:14px;border-radius:11px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.9;margin:14px 0}.notice.error{background:#fff0f0;color:#9b2632}.notice[hidden]{display:none}
+.course-tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 13px;margin:14px 0 18px;scrollbar-width:thin}
+.course-tab{flex:0 0 auto;display:inline-flex;align-items:center;gap:9px;border:1px solid #dfe7f0;border-radius:12px;padding:10px 14px;background:#f7f9fc;color:#43536c;font-size:12px;font-weight:800;white-space:nowrap}
+.course-tab[aria-selected="true"]{background:#e8f7f4;color:#08776d;border-color:#0b9b8d;box-shadow:0 5px 15px #0b837915}
+.course-tab-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 5px;border-radius:7px;background:#e7edf4;color:#607087;font-size:10px}
+.course-tab[aria-selected="true"] .course-tab-count{background:#0b8379;color:#fff}
+.course-progress{width:100%;margin-top:12px;padding:12px 14px;background:#f7fafc;border:1px solid #e5ecf3;border-radius:12px}
+.course-progress-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:800;color:#475871}
+.course-progress-track{height:8px;background:#e7edf4;border-radius:99px;overflow:hidden;margin-top:9px}
+.course-progress-fill{height:100%;background:#0b9b8d;border-radius:99px;transition:width .2s ease}
+.lesson-open.completed{background:#e7f6ef;color:#116a4d}
+.course-view-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:10px 0 6px}
+.course-view-heading h2{margin:0;font-size:21px}
+.course-view-hint{font-size:12px;color:#718097;line-height:1.8;margin:4px 0 10px}
+li{padding:12px 0;border-bottom:1px solid #e9eef4;font-size:14px}ul{padding-right:22px}
+.course-item{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.course-name{font-weight:800}
+.course-open{display:inline-block;border:0;background:transparent;padding:0;color:inherit;font:inherit;font-weight:800;text-align:right;cursor:pointer}.course-open:hover{color:#0b8379;text-decoration:underline;text-underline-offset:4px}.course-slug{display:block;color:#7a8799;font-size:11px;direction:ltr;text-align:right;margin-top:3px}
+.permission-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.permission-badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:4px 8px;background:#eef1f5;color:#69778b;font-size:11px;font-weight:700}
+.permission-badge.yes{background:#e5f7ef;color:#14704c}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.admin-link{background:#0b8379}
+.nav-link{background:#edf2f8;color:#243650}
+.course-item-selected{background:#f0fbf7;border:1px solid #a9dfd0;border-radius:12px;padding:16px;margin-block:8px;box-shadow:0 8px 22px #0b837911}
+.admin-link.secondary-admin{background:#edf2f8;color:#243650}
+.admin-access-badge{display:inline-flex;align-items:center;border-radius:20px;padding:5px 10px;background:#e5f7ef;color:#14704c;font-size:11px;font-weight:800}
+.lesson-list{width:100%;padding:12px;background:#f7f9fc;border:1px solid #e8edf3;border-radius:12px;margin-top:8px}
+.lesson-heading{font-size:12px;font-weight:800;color:#42516a;margin-bottom:8px}
+.lesson-open{background:#0b8379;color:#fff;margin:4px 0}.lesson-open:disabled{opacity:.6;cursor:wait}
+.course-action-row{flex:0 0 100%;width:100%;display:flex;align-items:center;margin-top:4px}
+.odoo-intro-link{padding:11px 18px;font-size:13px;box-shadow:0 5px 14px #0b837922}
+.odoo-intro-link:hover{background:#086c64}
+.lesson-viewer{background:#fff;border:1px solid #dfe7f0;border-radius:18px;overflow:hidden;margin-top:18px}
+.lesson-viewer[hidden]{display:none}
+.lesson-viewer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#14233d;color:#fff}
+.lesson-viewer-head strong{font-size:14px}
+.lesson-viewer-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#completeLessonButton{background:#0b8379;color:#fff;padding:7px 12px}
+#completeLessonButton:disabled{background:#e5f7ef;color:#14704c;cursor:default}
+#closeLesson{background:#fff;color:#14233d;padding:7px 12px}
+#lessonFrame{display:block;width:100%;height:min(78vh,900px);border:0;background:#fff}
+[hidden]{display:none!important}
+.direct-course-view main>section.card{margin-top:18px}
+.direct-course-view #coursePanelTitle{font-size:clamp(24px,3vw,32px)}
+.direct-course-view #coursePanelDescription{font-size:14px}
+</style><style>
+.lesson-unit{border:1px solid #e3eaf2;border-radius:13px;padding:13px;margin:10px 0;background:#fbfcfe}
+.lesson-unit-title{margin:0 0 8px;color:#18304a;font-size:14px;font-weight:800}
+.lesson-unit-description{margin:0 0 10px;color:#718098;font-size:12px;line-height:1.8}
+.lesson-unit .muted{font-size:12px;margin:8px 0}
+</style>
+  <link rel="stylesheet" href="assets/css/platform-finish-v1.css">
+</head>
+<body class="ma-platform-page ma-platform-student"><main>
+<header class="top"><div class="brand">MOHAMMED AFIFY · LEARNING ROOM</div><div class="top-actions">
+<button id="logoutButton" type="button">تسجيل الخروج</button></div>
+<a id="adminDashboardLink" href="admin-dashboard.html" hidden>لوحة المدير الشاملة</a>
+<a id="adminCourseManagerLink" href="admin-course-manager.html" hidden>إدارة المقررات والمحتوى</a>
+<a id="adminStudentsLink" href="admin-students.html" hidden>إدارة الطلاب</a>
+<a id="adminSubscriptionsLink" href="admin-subscriptions.html" hidden>الاشتراكات والمدفوعات</a>
+<a id="adminUploadLink" href="lesson-admin-upload.html" hidden>إدارة المحاضرة</a>
+</header>
+<section class="card">
+<p class="muted">الدورة المخصصة لحسابك</p><h1><span id="studentName" hidden>المتعلم</span></h1><p class="muted" id="studentEmail" hidden></p>
+<div id="pageMessage" class="notice" hidden></div>
+<div id="coursePanel" hidden>
+  <div class="course-view-heading">
+    <div><h2 id="coursePanelTitle">مساراتك التعليمية</h2><p class="course-view-hint" id="coursePanelDescription">اختر مقررًا لعرض محتواه ومحاضراته فقط.</p></div>
+    <a id="courseOverviewLink" class="nav-link" href="student-space.html">كل المقررات</a>
+  </div>
+  <nav id="courseTabs" class="course-tabs" role="tablist" aria-label="المقررات المتاحة"></nav>
+  <ul id="courseList"></ul>
+</div>
+</section>
+<section id="lessonViewer" class="lesson-viewer" hidden>
+  <div class="lesson-viewer-head"><strong id="lessonTitle">المحاضرة</strong><div class="lesson-viewer-actions"><button id="completeLessonButton" type="button" hidden>تم إكمال المحاضرة</button><button id="closeLesson" type="button">إغلاق المحاضرة</button></div></div>
+  <iframe id="lessonFrame" title="المحاضرة التعليمية" sandbox="allow-scripts allow-forms allow-downloads" referrerpolicy="no-referrer"></iframe>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/membership-config.js"></script>
+<script src="assets/js/student-space.js?v=20261125-direct-course-room-v3" defer></script>
+</body></html>
