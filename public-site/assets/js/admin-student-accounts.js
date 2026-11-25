@@ -50,10 +50,29 @@
   }
 
   function phoneForWhatsApp(value) {
-    let digits = String(value || "").replace(/\D/g, "");
-    if (digits.startsWith("00")) digits = digits.slice(2);
-    if (digits.startsWith("0")) digits = "20" + digits.slice(1);
-    return digits;
+    const raw = String(value || "").trim();
+    const digits = raw.replace(/\D/g, "");
+    if (!digits) throw new Error("أدخل رقم WhatsApp صحيحًا.");
+
+    let international = digits;
+    if (raw.startsWith("+")) {
+      international = digits;
+    } else if (digits.startsWith("00")) {
+      international = digits.slice(2);
+    } else if (digits.startsWith("20") || digits.startsWith("966")) {
+      international = digits;
+    } else if (/^01[0125]\d{8}$/.test(digits)) {
+      international = "20" + digits.slice(1);
+    } else if (/^05\d{8}$/.test(digits)) {
+      international = "966" + digits.slice(1);
+    } else if (digits.startsWith("0")) {
+      throw new Error("اكتب رقم مصر أو السعودية المحلي بصيغته المعروفة، أو أضف مفتاح الدولة بصيغة +.");
+    }
+
+    if (international.length < 10 || international.length > 15) {
+      throw new Error("رقم WhatsApp يجب أن يتكون من 10 إلى 15 رقمًا بعد إضافة مفتاح الدولة.");
+    }
+    return international;
   }
 
   function directCourseUrl(courseSlug) {
@@ -224,6 +243,12 @@
 
     if (payload.course_slugs.length < 1) {
       show("اختر دورة واحدة على الأقل.", "error");
+      return;
+    }
+    try {
+      payload.phone = "+" + phoneForWhatsApp(payload.phone);
+    } catch (error) {
+      show(error.message || "راجع رقم WhatsApp.", "error");
       return;
     }
     busy = true;
