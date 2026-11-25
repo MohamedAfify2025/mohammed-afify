@@ -6,6 +6,7 @@
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
   const slug = String(new URLSearchParams(window.location.search).get("course") || "").trim();
   const coverManagementRequested = new URLSearchParams(window.location.search).get("manage_cover") === "1";
+  let currentMember = { loggedIn: false };
 
   const PUBLIC_COURSE_OUTLINES = {
     accounting: [
@@ -103,7 +104,10 @@
     const { data: userData, error: userError } = await client.auth.getUser();
     if (userError) throw userError;
     const user = userData?.user;
-    if (!user) return false;
+    if (!user) {
+      currentMember = { loggedIn: false };
+      return false;
+    }
 
     const { data: profile, error: profileError } = await client
       .from("profiles")
@@ -112,16 +116,30 @@
       .maybeSingle();
     if (profileError) throw profileError;
 
-    const activeProfile = profile?.status === "approved" && profile?.account_state === "active";
-    if (!activeProfile) return false;
+    if (!profile) {
+      currentMember = { loggedIn: true, role: "unknown", activeProfile: false };
+      return false;
+    }
+
+    const activeProfile = profile.status === "approved" && profile.account_state === "active";
+    currentMember = {
+      loggedIn: true,
+      role: profile.role,
+      status: profile.status,
+      accountState: profile.account_state,
+      activeProfile,
+      canViewCourse: false,
+      isPlatformAdmin: false
+    };
 
     if (profile.role === "admin") {
+      if (!activeProfile) return false;
       const { data: allowed, error: adminError } = await client.rpc("is_platform_admin");
       if (adminError) throw adminError;
+      currentMember.isPlatformAdmin = allowed === true;
       if (allowed !== true) return false;
-      // Keep the preview open only for the explicit cover-management route.
+      currentMember.canViewCourse = true;
       if (coverManagementRequested) return false;
-      // Authorized Odoo members continue to the protected standalone course page.
       if (slug === "odoo-training") { window.location.replace("academy/odoo-training.html"); return true; }
       if (slug === "business-administration") {
         window.location.replace("academy/business-administration.html");
@@ -131,7 +149,8 @@
       return true;
     }
 
-    if (profile.role !== "student") return false;
+    if (profile.role === "teacher") return false;
+    if (profile.role !== "student" || !activeProfile) return false;
 
     let permissionsResult = await client.rpc("get_my_course_permissions_v2");
     if (permissionsResult.error) {
@@ -144,6 +163,7 @@
 
     const permission = (Array.isArray(permissionsResult.data) ? permissionsResult.data : [])
       .find(item => item.course_slug === slug && item.can_view_course_page === true);
+    currentMember.canViewCourse = Boolean(permission);
     if (!permission) return false;
 
     if (slug === "odoo-training") { window.location.replace("academy/odoo-training.html"); return true; }
@@ -154,6 +174,59 @@
 
     window.location.replace("student-space.html?course=" + encodeURIComponent(slug));
     return true;
+  }
+
+  function applyMemberActions() {
+    const subscribeLink = $("subscribeLink");
+    const accountLink = $("existingAccountLink");
+    const coursePath = "student-space.html?course=" + encodeURIComponent(slug);
+    const loginPath = "student-login.html?next=" +
+      encodeURIComponent("course-preview.html?course=" + encodeURIComponent(slug));
+
+    if (accountLink) {
+      accountLink.href = loginPath;
+      accountLink.hidden = currentMember.loggedIn;
+    }
+
+    if (!currentMember.loggedIn) {
+      showMessage("تم تحميل معلومات الدورة بنجاح.");
+      return;
+    }
+
+    if (currentMember.role === "student") {
+      subscribeLink.href = coursePath;
+      if (currentMember.status === "pending") {
+        subscribeLink.textContent = "متابعة حالة طلبك";
+        showMessage("حسابك مسجل بالفعل وطلبك قيد مراجعة الإدارة. تابع حالة الطلب من مساحتك التعليمية؛ لا تحتاج إلى إنشاء حساب جديد.");
+      } else if (currentMember.status === "rejected") {
+        subscribeLink.textContent = "متابعة حالة الحساب";
+        showMessage("هذا البريد مرتبط بحساب موجود، لكن طلبه لم يُعتمد. افتح مساحتك التعليمية أو تواصل مع الإدارة لمراجعة الحالة.");
+      } else if (!currentMember.activeProfile) {
+        subscribeLink.textContent = "متابعة حسابي";
+        showMessage("هذا البريد مرتبط بحساب موجود لكنه غير نشط حاليًا. انتقل إلى مساحتك التعليمية أو تواصل مع الإدارة.");
+      } else if (!currentMember.canViewCourse) {
+        subscribeLink.textContent = "فتح مساحتي التعليمية";
+        showMessage("أنت مسجل بالفعل، لكن هذه الدورة غير مفعّلة ضمن صلاحيات حسابك الحالية. افتح مساحتك التعليمية وتواصل مع الإدارة لإضافة الدورة بدل إنشاء حساب آخر.");
+      }
+      return;
+    }
+
+    if (currentMember.role === "teacher") {
+      subscribeLink.href = "teacher-space.html";
+      subscribeLink.textContent = "فتح مساحة المدرس";
+      showMessage("هذا الحساب مرتبط بدور مدرس. انتقل إلى مساحة المدرس لمتابعة المقررات المسندة إليك.");
+      return;
+    }
+
+    if (currentMember.role === "admin" && currentMember.isPlatformAdmin && coverManagementRequested) {
+      subscribeLink.hidden = true;
+      showMessage("تم التحقق من صلاحية مدير المنصة. يمكنك إدارة غلاف الدورة من هذه الصفحة.");
+      return;
+    }
+
+    subscribeLink.href = "index.html#contact";
+    subscribeLink.textContent = "التواصل مع الإدارة";
+    showMessage("هذا البريد مرتبط بحساب موجود. تعذر فتح صلاحيات الدورة من هذه الصفحة؛ تواصل مع إدارة المنصة لمراجعة الحساب.");
   }
 
   function renderPublicOutline(courseSlug) {
@@ -256,7 +329,7 @@
       }
     }
 
-    showMessage("تم تحميل معلومات الدورة بنجاح.");
+    applyMemberActions();
   }
 
   loadCourse().catch((error) => {
