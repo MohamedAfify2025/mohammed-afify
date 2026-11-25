@@ -107,9 +107,9 @@ const resolveAllowedOrigins = runInNewContext("(" + corsHelperJavaScript + ")", 
 const testOrigins = resolveAllowedOrigins("", "https://jniekfbelqticopcotxg.supabase.co");
 assert.deepEqual(Array.from(testOrigins), ["https://feature-username-student-acc.mohammed-afify.pages.dev"]);
 const liveOrigins = resolveAllowedOrigins("", "https://ybsjnubrswqksvktgmay.supabase.co");
-assert.deepEqual(Array.from(liveOrigins), []);
+assert.deepEqual(Array.from(liveOrigins), ["https://mohamedafify2025.github.io"]);
 const configuredLiveOrigins = resolveAllowedOrigins("https://mohammed-afify.pages.dev, https://mohamedafify.com", "https://ybsjnubrswqksvktgmay.supabase.co");
-assert.deepEqual(Array.from(configuredLiveOrigins), ["https://mohammed-afify.pages.dev", "https://mohamedafify.com"]);
+assert.deepEqual(Array.from(configuredLiveOrigins), ["https://mohammed-afify.pages.dev", "https://mohamedafify.com", "https://mohamedafify2025.github.io"]);
 assert.match(edge, /x-retry-count/);
 assert.match(edge, /payment_state: "waived"/);
 assert.match(edge, /is_public: false/);
