@@ -8,6 +8,7 @@
   let isAdmin = false;
   let isActiveStudent = false;
   let coursePermissions = [];
+  let currentAccount = { loggedIn: false, profile: null };
 
   function show(text, error = false) {
     const host = $("courseListMessage");
@@ -21,6 +22,23 @@
     const { data: allowed, error } = await client.rpc("is_platform_admin");
     if (error) return false;
     return allowed === true;
+  }
+
+  async function loadCurrentAccount() {
+    const { data: userData, error: userError } = await client.auth.getUser();
+    if (userError) throw userError;
+    if (!userData?.user) {
+      currentAccount = { loggedIn: false, profile: null };
+      return;
+    }
+
+    const { data: profile, error: profileError } = await client
+      .from("profiles")
+      .select("role,status,account_state")
+      .eq("user_id", userData.user.id)
+      .maybeSingle();
+    if (profileError) throw profileError;
+    currentAccount = { loggedIn: true, profile: profile || null };
   }
 
   function learningHref(slug) {
@@ -138,12 +156,31 @@
         status.textContent = isAdmin ? "وصول إداري شامل" : "متاح ضمن اشتراكك";
         actions.appendChild(status);
       } else {
-        const subscribe = document.createElement("a");
-        subscribe.className = "course-card-action";
-        subscribe.href = subscribeHref;
-        subscribe.textContent = "طلب الاشتراك";
-        subscribe.setAttribute("aria-label", "طلب الاشتراك في " + (row.title || slugValue || "الدورة"));
-        actions.appendChild(subscribe);
+        const accountAction = document.createElement("a");
+        accountAction.className = "course-card-action";
+        if (!currentAccount.loggedIn) {
+          accountAction.href = subscribeHref;
+          accountAction.textContent = "طلب الاشتراك";
+          accountAction.setAttribute("aria-label", "طلب الاشتراك في " + (row.title || slugValue || "الدورة"));
+        } else if (currentAccount.profile?.role === "student") {
+          accountAction.href = "student-space.html?course=" + encodeURIComponent(slugValue);
+          if (currentAccount.profile.status === "pending") {
+            accountAction.textContent = "متابعة حالة الطلب";
+          } else if (currentAccount.profile.status === "rejected" ||
+                     currentAccount.profile.account_state !== "active") {
+            accountAction.textContent = "متابعة حالة الحساب";
+          } else {
+            accountAction.textContent = "فتح مساحتي التعليمية";
+          }
+          accountAction.setAttribute("aria-label", "فتح حسابك لمراجعة صلاحيات " + (row.title || slugValue || "الدورة"));
+        } else if (currentAccount.profile?.role === "teacher") {
+          accountAction.href = "teacher-space.html";
+          accountAction.textContent = "فتح مساحة المدرس";
+        } else {
+          accountAction.href = "index.html#contact";
+          accountAction.textContent = "التواصل مع الإدارة";
+        }
+        actions.appendChild(accountAction);
       }
 
       card.append(visualHead, title, description, slug, actions);
@@ -192,6 +229,7 @@
     client = window.supabase.createClient(url, key, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
+    await loadCurrentAccount();
     isAdmin = await checkAdmin();
     const memberContext = await (window.MA_ACADEMY_MEMBER_ACCESS_READY || Promise.resolve(null));
     isActiveStudent = memberContext?.isActiveStudent === true;
@@ -201,18 +239,39 @@
 
     const accountLink = $("academyAccountLink");
     const subscribeLink = $("academySubscribeLink");
+    const profile = currentAccount.profile;
+
     if (accountLink && isAdmin) {
       accountLink.href = "admin-dashboard.html";
       accountLink.textContent = "لوحة الإدارة الشاملة";
       accountLink.className = "primary";
       accountLink.setAttribute("aria-label", "فتح لوحة إدارة المنصة");
-    } else if (accountLink && isActiveStudent) {
+    } else if (accountLink && profile?.role === "student") {
       accountLink.href = "student-space.html";
-      accountLink.textContent = "متابعة التعلّم";
+      accountLink.textContent = profile.status === "pending" ? "متابعة حالة الطلب" : "مساحتي التعليمية";
       accountLink.className = "primary";
       accountLink.setAttribute("aria-label", "فتح مساحتك التعليمية");
+    } else if (accountLink && profile?.role === "teacher") {
+      accountLink.href = "teacher-space.html";
+      accountLink.textContent = "مساحة المدرس";
+      accountLink.className = "primary";
     }
-    if (subscribeLink && isAdmin) subscribeLink.hidden = true;
+
+    if (subscribeLink && (isAdmin || currentAccount.loggedIn)) {
+      subscribeLink.hidden = false;
+      if (profile?.role === "student") {
+        subscribeLink.href = "student-space.html";
+        subscribeLink.textContent = profile.status === "pending" ? "متابعة حالة الطلب" : "مساحتي التعليمية";
+      } else if (profile?.role === "teacher") {
+        subscribeLink.href = "teacher-space.html";
+        subscribeLink.textContent = "مساحة المدرس";
+      } else if (isAdmin) {
+        subscribeLink.hidden = true;
+      } else {
+        subscribeLink.href = "index.html#contact";
+        subscribeLink.textContent = "التواصل مع الإدارة";
+      }
+    }
 
     let query = client
       .from("course_catalog")
