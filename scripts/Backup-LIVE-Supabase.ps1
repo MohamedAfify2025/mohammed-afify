@@ -9,8 +9,8 @@
   Storage listing/download and read-only SQL inventories do not require Docker.
   Private Storage objects use short-lived signed URLs created with a masked, locally
   entered legacy service_role key; public Storage objects use their public object URL.
-  PowerShell Invoke-RestMethod/Invoke-WebRequest are used for HTTP requests to avoid
-  Windows PowerShell .NET HttpClient overload binding errors.
+  PowerShell Invoke-RestMethod is used for signed-URL creation; curl.exe is used for
+  binary GET downloads to avoid PowerShell web-cmdlet argument binding issues.
   Logical PostgreSQL dumps are attempted only when Docker Engine is running. If Docker
   is unavailable, Storage export still proceeds and the final backup status stays INCOMPLETE.
 
@@ -122,6 +122,19 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
     $failures = New-Object System.Collections.Generic.List[object]
     $secureKey = $null
     $serviceRoleKey = $null
+    $curlCommand = Get-Command "curl.exe" -CommandType Application -ErrorAction SilentlyContinue
+    $script:StorageCurlExe = $null
+    if ($curlCommand) {
+        $script:StorageCurlExe = $curlCommand.Path
+        if (-not $script:StorageCurlExe) { $script:StorageCurlExe = $curlCommand.Definition }
+    }
+    if (-not $script:StorageCurlExe -and $env:SystemRoot) {
+        $curlCandidate = Join-Path $env:SystemRoot "System32\curl.exe"
+        if (Test-Path -LiteralPath $curlCandidate) { $script:StorageCurlExe = $curlCandidate }
+    }
+    if (-not $script:StorageCurlExe) {
+        Stop-Backup "curl.exe was not found. Install/enable Windows curl before downloading Storage objects."
+    }
     $privateObjects = @($objects | Where-Object { -not [bool]$_.bucket_public })
 
     if ($privateObjects.Count -gt 0) {
@@ -208,14 +221,25 @@ function Download-LiveStorageObjects([object[]]$InventoryRows, [string[]]$Bucket
                 Write-Host "Downloading $bucket/$objectPath ($(if ($isPublic) { 'public URL' } else { 'signed private URL' }))"
 
                 try {
-                    # Invoke-WebRequest streams directly to disk and avoids ambiguous
-                    # HttpClient.GetAsync overload binding under Windows PowerShell 5.1.
-                    $null = Invoke-WebRequest -Uri $url -OutFile $localPath -UseBasicParsing -MaximumRedirection 5 -ErrorAction Stop
+                    # Use Windows curl for binary GET downloads. Signed URLs are short-lived
+                    # and are not written to console output or backup logs.
+                    $curlOutput = & $script:StorageCurlExe --location --fail --silent --show-error --max-redirs 5 --output $localPath $url 2>&1
+                    $curlExitCode = $LASTEXITCODE
+                    if ($curlExitCode -ne 0) {
+                        $detail = ($curlOutput | Out-String).Trim()
+                        if (-not $detail) { $detail = "curl.exe exited with code $curlExitCode." }
+                        if ($detail.Length -gt 1000) { $detail = $detail.Substring(0, 1000) }
+                        $failures.Add([pscustomobject]@{
+                            bucket=$bucket; object_path=$objectPath; stage="download";
+                            status="curl-exit-$curlExitCode"; detail=$detail
+                        })
+                        if (Test-Path -LiteralPath $localPath) { Remove-Item -LiteralPath $localPath -Force -ErrorAction SilentlyContinue }
+                        continue
+                    }
                 }
                 catch {
-                    $detail = $_.Exception.Message
-                    if ($_.ErrorDetails -and $_.ErrorDetails.Message) { $detail = $_.ErrorDetails.Message }
-                    if ($detail.Length -gt 1000) { $detail = $detail.Substring(0, 1000) }
+                    $detail = $_.Exception.ToString()
+                    if ($detail.Length -gt 1500) { $detail = $detail.Substring(0, 1500) }
                     $failures.Add([pscustomobject]@{
                         bucket=$bucket; object_path=$objectPath; stage="download";
                         status="exception"; detail=$detail
@@ -570,7 +594,8 @@ No LIVE grants, functions, secrets, student data, course assignments, or Storage
     Write-Host "Final status intentionally remains INCOMPLETE until the Auth/platform recovery path and off-device copy are verified." -ForegroundColor Yellow
 }
 catch {
-    Write-Error $_.Exception.Message
+    Write-Error $_.Exception.ToString()
+    if ($_.ScriptStackTrace) { Write-Host ("PowerShell stack: " + $_.ScriptStackTrace) -ForegroundColor DarkYellow }
     if ($BackupRoot -and (Test-Path -LiteralPath $BackupRoot)) {
         $incompleteMarker = Join-Path $BackupRoot "BACKUP-STATUS-INCOMPLETE.txt"
         if (-not (Test-Path -LiteralPath $incompleteMarker)) {
