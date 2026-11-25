@@ -94,7 +94,10 @@ The script supports either a globally installed `supabase` command or Windows `n
 The script requires:
 - the exact repository and `main` branch;
 - the exact LIVE project ref;
-- explicit `BACKUP-VERIFIED`, `GRANTS-VERIFIED`, and `DEPLOY-LIVE` confirmations;
+- a verified off-site database + Storage export;
+- a documented and approved Auth recovery path (platform restore point or manual recovery procedure);
+- the minimal LIVE service-role grants to be applied and read-back verified;
+- explicit `BACKUP-VERIFIED`, `AUTH-RECOVERY-VERIFIED`, `GRANTS-VERIFIED`, and `DEPLOY-LIVE` confirmations;
 - Supabase CLI login.
 
 It sets only `ALLOWED_ORIGINS=https://mohamedafify2025.github.io` and deploys only `admin-manage-student-accounts` with `--use-api`. It does not run SQL, alter browser config, create users, or push site changes.
