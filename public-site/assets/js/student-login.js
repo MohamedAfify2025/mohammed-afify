@@ -12,6 +12,17 @@
     el.hidden = !text;
   }
 
+  function normalizeLoginIdentity(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    if (raw.includes("@")) return raw;
+    if (!/^[a-z0-9][a-z0-9._-]{2,31}$/.test(raw) ||
+        raw.includes("..") || raw.includes("--") || raw.includes("__") ||
+        /[._-]$/.test(raw)) {
+      throw new Error("اسم المستخدم غير صحيح.");
+    }
+    return raw + "@students.invalid";
+  }
+
   function requestedDestination() {
     const candidate = new URLSearchParams(window.location.search).get("next") || "";
     if (!candidate || candidate.length > 700) return "";
@@ -20,7 +31,7 @@
       const target = new URL(candidate, base);
       if (target.origin !== window.location.origin || !target.pathname.startsWith(base.pathname)) return "";
       const relative = target.pathname.slice(base.pathname.length);
-      const allowed = /^(?:student-space|teacher-space|course-preview|admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|lesson-admin-upload)\.html$/.test(relative) ||
+      const allowed = /^(?:student-space|teacher-space|course-preview|admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|admin-student-accounts|lesson-admin-upload)\.html$/.test(relative) ||
         /^academy\/[a-z0-9-]+\.html$/i.test(relative);
       return allowed ? target.pathname + target.search + target.hash : "";
     } catch (_) {
@@ -45,7 +56,7 @@
       button.disabled = true;
       try {
         const { data, error } = await client.auth.signInWithPassword({
-          email: $("email").value.trim().toLowerCase(),
+          email: normalizeLoginIdentity($("email").value),
           password: $("password").value
         });
         if (error) throw error;
@@ -88,7 +99,7 @@
             : "teacher-space.html");
           return;
         }
-        const destinationIsAdminOnly = destination && /\/(?:admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|lesson-admin-upload)\.html$/.test(new URL(destination, window.location.href).pathname);
+        const destinationIsAdminOnly = destination && /\/(?:admin-dashboard|admin-course-manager|admin-students|admin-subscriptions|admin-student-accounts|lesson-admin-upload)\.html$/.test(new URL(destination, window.location.href).pathname);
         if (isActiveStudent && destination && !destinationIsAdminOnly) {
           window.location.replace(destination);
           return;
@@ -98,17 +109,20 @@
         }
         window.location.replace("student-space.html");
       } catch (error) {
-        show("تعذر تسجيل الدخول. راجع البريد وكلمة المرور أو استخدم استعادة كلمة المرور.", true);
+        show("تعذر تسجيل الدخول. راجع اسم المستخدم أو البريد الإلكتروني وكلمة المرور.", true);
       } finally {
         button.disabled = false;
       }
     });
 
     $("resetButton").addEventListener("click", async () => {
-      const email = $("email").value.trim().toLowerCase();
-      if (!email) return show("اكتب البريد الإلكتروني أولًا ثم اضغط استعادة كلمة المرور.", true);
+      const identity = $("email").value.trim().toLowerCase();
+      if (!identity) return show("اكتب البريد الإلكتروني أولًا ثم اضغط استعادة كلمة المرور.", true);
+      if (!identity.includes("@") || identity.endsWith("@students.invalid")) {
+        return show("حسابات اسم المستخدم لا تستخدم البريد الإلكتروني. اطلب من مدير المنصة إعادة تعيين كلمة المرور.", true);
+      }
       try {
-        const { error } = await client.auth.resetPasswordForEmail(email, {
+        const { error } = await client.auth.resetPasswordForEmail(identity, {
           redirectTo: new URL("student-set-password.html", location.href).href
         });
         if (error) throw error;
