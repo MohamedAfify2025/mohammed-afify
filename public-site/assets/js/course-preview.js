@@ -5,6 +5,7 @@
   const url = String(config.supabaseUrl || "").trim();
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
   const slug = String(new URLSearchParams(window.location.search).get("course") || "").trim();
+  const coverManagementRequested = new URLSearchParams(window.location.search).get("manage_cover") === "1";
 
   function showMessage(message, isError = false) {
     const host = $("courseMessage");
@@ -33,6 +34,8 @@
       const { data: allowed, error: adminError } = await client.rpc("is_platform_admin");
       if (adminError) throw adminError;
       if (allowed !== true) return false;
+      // Keep the preview open only for the explicit cover-management route.
+      if (coverManagementRequested) return false;
       // Authorized Odoo members continue to the protected standalone course page.
       if (slug === "odoo-training") { window.location.replace("academy/odoo-training.html"); return true; }
       if (slug === "business-administration") {
