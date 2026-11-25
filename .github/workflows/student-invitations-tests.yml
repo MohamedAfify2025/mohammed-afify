@@ -149,10 +149,19 @@ jobs:
             '$ErrorActionPreference = "Continue"',
             'PSNativeCommandUseErrorActionPreference = $false',
             'BACKUP-STATUS-INCOMPLETE.txt',
+            'Read-Host -AsSecureString',
+            '/storage/v1/object/authenticated/',
+            'Download-LiveStorageObjects $inventoryRows $Buckets $storageRoot',
             'ybsjnubrswqksvktgmay'
           )) {
             if (-not $backupSource.Contains($guard)) {
               throw "Backup helper is missing expected safety guard: $guard"
             }
+          }
+          if ($backupSource.Contains('Invoke-SupabaseCli @("storage", "cp"')) {
+            throw "Backup helper must not use the unsupported remote-to-local storage cp command."
+          }
+          if (($backupSource.ToCharArray() | Measure-Object).Count -gt 50000) {
+            throw "Backup helper source unexpectedly large; inspect for accidental duplicated content."
           }
           Write-Host "PowerShell syntax and LIVE backup safety-guard checks passed."
