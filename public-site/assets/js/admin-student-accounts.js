@@ -77,10 +77,19 @@
 
   function directCourseUrl(courseSlug) {
     const base = new URL(".", window.location.href);
+    const routes = {
+      "odoo-training": "academy/odoo-training.html",
+      "business-administration": "academy/business-administration.html"
+    };
+    const destinationPath = routes[courseSlug] || "course-room.html";
     const login = new URL("student-login.html", base);
-    const destination = new URL("student-space.html", base);
-    if (courseSlug) destination.searchParams.set("course", courseSlug);
-    login.searchParams.set("next", destination.pathname.slice(base.pathname.length) + destination.search);
+    const destination = new URL(destinationPath, base);
+    if (!routes[courseSlug] && courseSlug) {
+      destination.searchParams.set("course", courseSlug);
+    }
+    const relativeDestination = destination.pathname.slice(base.pathname.length) +
+      destination.search + destination.hash;
+    login.searchParams.set("next", relativeDestination);
     return login.toString();
   }
 
