@@ -47,7 +47,8 @@ assert.equal(normalizeWhatsAppPhone("0512345678"), "966512345678");
 assert.equal(normalizeWhatsAppPhone("+966512345678"), "966512345678");
 assert.equal(normalizeWhatsAppPhone("00966512345678"), "966512345678");
 assert.equal(normalizeWhatsAppPhone("201012345678"), "201012345678");
-assert.throws(() => normalizeWhatsAppPhone("05123"), /10 إلى 15/);
+assert.throws(() => normalizeWhatsAppPhone("12345"), /10 إلى 15/);
+assert.throws(() => normalizeWhatsAppPhone("05123"), /أضف مفتاح الدولة/);
 assert.throws(() => normalizeWhatsAppPhone("0201234567"), /مفتاح الدولة/);
 assert.doesNotMatch(accountJs, /localStorage|sessionStorage/);
 
