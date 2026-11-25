@@ -35,6 +35,7 @@
     @media(max-width:650px){#odooIntroFrame{height:78vh;min-height:560px}.odoo-intro-heading p{font-size:13px}}
   </style>
   <link rel="stylesheet" href="assets/css/platform-finish-v1.css">
+  <link rel="stylesheet" href="assets/css/course-cover-manager.css?v=20261125-shared-v1">
 </head>
 <body class="ma-platform-page ma-platform-preview">
 <main>
@@ -47,6 +48,16 @@
       <span id="courseCategory" class="preview-category" hidden></span>
     <div id="courseMessage" class="notice" role="status">جارٍ تحميل معلومات الدورة...</div>
     <div id="courseDetails" hidden>
+      <section id="courseCover" class="course-preview-cover" data-course-cover="dynamic" aria-label="غلاف الدورة">
+        <a data-course-cover-visual href="#courseTitle" aria-label="غلاف الدورة" hidden>
+          <img data-course-cover-image alt="غلاف الدورة التعليمية" decoding="async" fetchpriority="high" hidden>
+        </a>
+        <div class="course-cover-admin" data-course-cover-admin hidden>
+          <div class="course-cover-admin-copy"><strong>غلاف الدورة</strong><small>ارفع صورة رئيسية أو غيّر الغلاف الحالي لهذا المقرر.</small><span class="course-cover-admin-status" data-course-cover-status role="status" aria-live="polite"></span></div>
+          <label class="course-cover-upload-label" data-course-cover-upload-label for="previewCourseCoverFile">رفع / تغيير صورة الغلاف</label>
+          <input id="previewCourseCoverFile" data-course-cover-file type="file" accept="image/png,image/jpeg,image/webp" hidden>
+        </div>
+      </section>
       <h1 id="courseTitle"></h1>
       <p id="courseDescription" class="description"></p>
       <div class="preview-highlights" aria-label="طريقة الوصول إلى محتوى الدورة">
@@ -89,5 +100,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/membership-config.js"></script>
 <script src="assets/js/course-preview.js?v=20261124-preview-finish-v2" defer></script>
+<script src="assets/js/course-cover-manager.js?v=20261125-shared-v1" defer></script>
 </body>
 </html>
