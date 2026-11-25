@@ -5,10 +5,27 @@
 - Source of truth: PR #32, branch `feature/username-student-accounts-20261125`.
 - TEST project: `jniekfbelqticopcotxg` (`mohammed-afify-v2-test`).
 - LIVE project: `ybsjnubrswqksvktgmay` (`mohammed-afify-learning`).
-- TEST Edge Function `admin-manage-student-accounts`: version 2, ACTIVE, `verify_jwt=true`.
+- TEST Edge Function `admin-manage-student-accounts`: version 3, ACTIVE, `verify_jwt=true` (verified 2026-11-25).
 - LIVE Edge Function `admin-manage-student-accounts`: not deployed at the time this runbook was prepared.
 - The completed one-time Odoo transfer utility is excluded from the product release.
 - No LIVE student accounts, course access, passwords, or course content were changed by this release preparation.
+
+
+## TEST browser verification record — 2026-11-25
+
+Using the existing synthetic TEST student account only (no additional student was created during the first round of checks), the manager confirmed:
+
+1. Admin account list loads and displays the student account.
+2. Saving the existing Odoo-only course selection succeeds.
+3. Student login succeeds and the student can access the assigned Odoo course.
+4. Password reset succeeds; the new password successfully authenticates.
+5. Suspension blocks student login, and reactivation restores login.
+
+A second, separate TEST student account (`moaz`) was then created with Odoo-only access. The manager confirmed that the credential message was sent through WhatsApp and that the student can log in and use the account. The database shows one creation audit entry for this account, and function logs for the creation window show successful POST requests without HTTP 4xx/5xx or matching handler/audit error events.
+
+A direct URL attempt to open the unassigned Business Administration course was denied, showing the “content unavailable for this account” message. During that visual check, the header still displayed a “لوحة المدير” link even though the student was not authorized for it. This was traced to the global navigation CSS overriding the HTML hidden attribute. The branch now includes a scoped hidden-state CSS rule and a regression assertion so role-gated admin navigation remains hidden.
+
+WhatsApp links are opened for manual sending; the platform does not send messages automatically.
 
 ## Release scope
 
