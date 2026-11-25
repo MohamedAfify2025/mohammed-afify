@@ -143,10 +143,12 @@ assert.doesNotMatch(livePreflightSql, /INSERT INTO auth\.users|INSERT INTO publi
 assert.match(liveRunbook, /downloads each object using the authenticated Storage object endpoint/);
 assert.match(liveRunbook, /masked PowerShell prompt/);
 assert.match(liveBackupScript, /Read-Host -AsSecureString/);
-assert.match(liveBackupScript, /\/storage\/v1\/object\/authenticated\//);
+assert.match(liveBackupScript, /\/storage\/v1\/object\/\$accessRoute/);
 assert.match(liveBackupScript, /Download-LiveStorageObjects/);
+assert.match(liveBackupScript, /storage-download-failures\.csv/);
+assert.match(liveBackupScript, /Storage backup is PARTIAL/);
+assert.match(liveBackupScript, /BACKUP STATUS: INCOMPLETE/);
 assert.doesNotMatch(liveBackupScript, /Invoke-SupabaseCli @\("storage", "cp"/);
-assert.match(liveBackupScript, /BACKUP-STATUS-INCOMPLETE\.txt/);
 assert.match(liveRunbook, /BACKUP-VERIFIED/);
 assert.match(liveRunbook, /GRANTS-VERIFIED/);
 assert.match(liveRunbook, /No production student receives a course assignment automatically/);
