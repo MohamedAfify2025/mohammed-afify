@@ -93,7 +93,7 @@
         }
         frameHead = '<base href="' + parsedBase.href.replace(/["<>]/g, "") + '" target="_self">' + frameHead;
       }
-      const injected = source.replace(/<head\\b[^>]*>/i, (head) => head + frameHead);
+      const injected = source.replace(/<head\b[^>]*>/i, (head) => head + frameHead);
       if (injected === source) throw new Error("تعذر تهيئة صفحة المحاضرة.");
 
       const blob = new Blob([injected], { type: "text/html;charset=utf-8" });
@@ -116,7 +116,11 @@
       $("lessonViewer").scrollIntoView({ behavior: "smooth", block: "start" });
       show("تم فتح المحاضرة بصيغة HTML UTF-8 داخل إطار معزول.");
     } catch (error) {
-      show("تعذر فتح المحاضرة. تأكد من صلاحية المشاهدة، ثم أعد المحاولة.", true);
+      console.error("Lesson opening failed:", error);
+      const detail = String(error?.message || "").trim();
+      show(detail
+        ? "تعذر فتح المحاضرة: " + detail
+        : "تعذر فتح المحاضرة. تأكد من صلاحية المشاهدة، ثم أعد المحاولة.", true);
     } finally {
       if (button) button.disabled = false;
     }
