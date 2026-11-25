@@ -147,7 +147,6 @@
       accounts = Array.isArray(data.accounts) ? data.accounts : [];
       fillCourses();
       renderAccounts();
-      show("تم تحديث قائمة الحسابات.");
     } finally {
       $("refreshButton").disabled = false;
     }
@@ -315,7 +314,7 @@
       if (!authorized) return;
       $("createForm").addEventListener("submit", createAccount);
       $("accountsList").addEventListener("click", handleAccountAction);
-      $("refreshButton").addEventListener("click", () => loadData().catch((error) =>
+      $("refreshButton").addEventListener("click", () => loadData().then(() => show("تم تحديث قائمة الحسابات.")).catch((error) =>
         show(error.message || "تعذر تحديث الحسابات.", "error")
       ));
       await loadData();
