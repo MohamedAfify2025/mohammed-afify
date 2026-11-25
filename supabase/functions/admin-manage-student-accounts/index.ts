@@ -337,7 +337,9 @@ Deno.serve(async (req: Request) => {
 
     if (action === "create") {
       const normalized = validateStudentAccountInput(body);
-      if (!normalized.ok) return jsonResponse(400, { error: normalized.error }, origin);
+      if (!normalized.ok) return jsonResponse(400, {
+        error: "error" in normalized ? normalized.error : "بيانات الحساب غير صالحة.",
+      }, origin);
       const input = normalized.value as {
         full_name: string;
         username: string;
@@ -486,7 +488,9 @@ Deno.serve(async (req: Request) => {
 
     if (action === "set_courses") {
       const normalizedCourses = normalizeStudentCourseSlugs(body.course_slugs, true);
-      if (!normalizedCourses.ok) return jsonResponse(400, { error: normalizedCourses.error }, origin);
+      if (!normalizedCourses.ok) return jsonResponse(400, {
+        error: "error" in normalizedCourses ? normalizedCourses.error : "قائمة الدورات غير صالحة.",
+      }, origin);
       const result = await updateCourseAccess(admin, profile, normalizedCourses.value as string[], authData.user.id);
       return jsonResponse(200, result, origin);
     }
