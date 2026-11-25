@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { runInNewContext } from "node:vm";
 
-const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs] = await Promise.all([
+const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs] = await Promise.all([
   readFile(new URL("../public-site/student-login.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/student-login.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/admin-dashboard.js", import.meta.url), "utf8"),
@@ -11,6 +11,9 @@ const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, member
   readFile(new URL("../supabase/functions/admin-manage-student-accounts/index.ts", import.meta.url), "utf8"),
   readFile(new URL("../supabase/config.toml", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/membership-config.js", import.meta.url), "utf8"),
+  readFile(new URL("../public-site/assets/js/student-space.js", import.meta.url), "utf8"),
+  readFile(new URL("../public-site/course-room.html", import.meta.url), "utf8"),
+  readFile(new URL("../public-site/assets/js/business-administration-access.js", import.meta.url), "utf8"),
 ]);
 
 assert.match(loginHtml, /اسم المستخدم أو البريد الإلكتروني/);
@@ -21,11 +24,21 @@ assert.match(loginJs, /admin-student-accounts/);
 assert.match(loginJs, /students\.invalid/);
 assert.match(loginJs, /resetPasswordForEmail/);
 assert.match(loginJs, /حسابات اسم المستخدم لا تستخدم البريد الإلكتروني/);
+assert.match(loginJs, /course-room/);
 
 assert.match(adminJs, /client\.auth\.getSession\(\)/);
 assert.match(adminJs, /Auth session missing/);
 assert.match(adminJs, /student-login\.html\?next=admin-dashboard\.html/);
 assert.match(adminJs, /admin-student-accounts\.html/);
+assert.match(studentSpaceJs, /course-room\\.html/);
+assert.match(studentSpaceJs, /direct-course-view/);
+assert.match(studentSpaceJs, /لا يملك هذا الحساب صلاحية فتح هذا المقرر/);
+assert.match(studentSpaceJs, /window\.location\.replace\("academy\/business-administration\.html"\)/);
+assert.match(courseRoomHtml, /MOHAMMED AFIFY · LEARNING ROOM/);
+assert.match(courseRoomHtml, /id="logoutButton"/);
+assert.match(courseRoomHtml, /\[hidden\]\{display:none!important\}/);
+assert.doesNotMatch(courseRoomHtml, /href="admin-dashboard\.html">لوحة المدير الشاملة/);
+assert.match(businessAccessJs, /get_my_active_courses_v2/);
 assert.match(accountHtml, /id="createForm"/);
 assert.match(accountHtml, /id="courseSlugs"/);
 assert.match(accountJs, /functions\.invoke\(FUNCTION_NAME/);
@@ -36,6 +49,22 @@ assert.match(accountJs, /action: "suspend"/);
 assert.match(accountJs, /action: "reactivate"/);
 assert.match(accountJs, /"مرحبًا " \+ \(account\.full_name \|\| "بك"\) \+ ","/);
 assert.doesNotMatch(accountJs, /🌷/);
+assert.match(accountJs, /"odoo-training": "academy\\/odoo-training\\.html"/);
+assert.match(accountJs, /"business-administration": "academy\\/business-administration\\.html"/);
+assert.match(accountJs, /const destinationPath = routes\[courseSlug\] \|\| "course-room\.html"/);
+
+const directCourseFunction = accountJs.match(/  function directCourseUrl\(courseSlug\) \{[\\s\\S]*?\\n  \}/);
+assert.ok(directCourseFunction, "direct course login URL helper exists");
+const buildDirectCourseUrl = runInNewContext("(" + directCourseFunction[0].trim() + ")", {
+  URL,
+  window: { location: { href: "https://feature-username-student-acc.mohammed-afify.pages.dev/admin-student-accounts.html" } }
+});
+const odooLoginUrl = new URL(buildDirectCourseUrl("odoo-training"));
+assert.equal(odooLoginUrl.searchParams.get("next"), "academy/odoo-training.html");
+const businessLoginUrl = new URL(buildDirectCourseUrl("business-administration"));
+assert.equal(businessLoginUrl.searchParams.get("next"), "academy/business-administration.html");
+const genericLoginUrl = new URL(buildDirectCourseUrl("excel"));
+assert.equal(genericLoginUrl.searchParams.get("next"), "course-room.html?course=excel");
 assert.match(accountJs, /https:\/\/wa\.me\//);
 assert.match(accountJs, /payload\.phone = "\+" \+ phoneForWhatsApp\(payload\.phone\)/);
 assert.match(accountHtml, /السعودية: 05xxxxxxxx/);
