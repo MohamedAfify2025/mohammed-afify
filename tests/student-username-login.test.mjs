@@ -34,6 +34,8 @@ assert.match(accountJs, /action: "reset_password"/);
 assert.match(accountJs, /action: "set_courses"/);
 assert.match(accountJs, /action: "suspend"/);
 assert.match(accountJs, /action: "reactivate"/);
+assert.match(accountJs, /"مرحبًا " \+ \(account\.full_name \|\| "بك"\) \+ ","/);
+assert.doesNotMatch(accountJs, /🌷/);
 assert.match(accountJs, /https:\/\/wa\.me\//);
 assert.match(accountJs, /payload\.phone = "\+" \+ phoneForWhatsApp\(payload\.phone\)/);
 assert.match(accountHtml, /السعودية: 05xxxxxxxx/);
