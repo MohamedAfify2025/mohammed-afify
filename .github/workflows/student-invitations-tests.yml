@@ -154,6 +154,8 @@ jobs:
             '/object/public/$bucket/$encodedPath',
             'expiresIn = 3600',
             'signedURL',
+            'Invoke-RestMethod -Method Post',
+            'Invoke-WebRequest -Uri $url -OutFile',
             'Download-LiveStorageObjects $inventoryRows $Buckets $storageRoot',
             'storage-download-failures.csv',
             'Storage backup is PARTIAL',
