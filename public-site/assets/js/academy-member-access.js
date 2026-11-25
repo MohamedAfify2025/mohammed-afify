@@ -26,6 +26,14 @@
       if (userError) throw userError;
       if (!userData?.user) return anonymous;
 
+      // Preserve signed-in state even if the own-profile lookup temporarily fails.
+      context = {
+        isSignedIn: true,
+        profile: null,
+        isActiveStudent: false,
+        coursePermissions: []
+      };
+
       const { data: profile, error: profileError } = await client
         .from("profiles")
         .select("role,status,account_state")
@@ -34,16 +42,11 @@
       if (profileError) throw profileError;
 
       // Only return the signed-in user's own role/status; never expose another member's data.
-      context = {
-        isSignedIn: true,
-        profile: profile ? {
-          role: profile.role,
-          status: profile.status,
-          account_state: profile.account_state
-        } : null,
-        isActiveStudent: false,
-        coursePermissions: []
-      };
+      context.profile = profile ? {
+        role: profile.role,
+        status: profile.status,
+        account_state: profile.account_state
+      } : null;
 
       if (!profile ||
           profile.role !== "student" ||
