@@ -234,11 +234,16 @@
       const message = credentialMessage(account, payload.password);
       const link = whatsappLink(account.phone, message);
       $("createForm").reset();
-      show("تم إنشاء حساب " + account.username + " بنجاح. افتح الرابط لإرسال بيانات الدخول للطالب.", "success", {
+      let refreshWarning = "";
+      try {
+        await loadData();
+      } catch (refreshError) {
+        refreshWarning = " تعذر تحديث القائمة تلقائيًا؛ استخدم زر تحديث قائمة الحسابات.";
+      }
+      show("تم إنشاء حساب " + account.username + " بنجاح." + refreshWarning + " افتح الرابط لإرسال بيانات الدخول للطالب.", refreshWarning ? "warning" : "success", {
         url: link,
         label: "فتح WhatsApp وإرسال بيانات الحساب"
       });
-      await loadData();
     } catch (error) {
       show(error.message || "تعذر إنشاء الحساب.", "error");
     } finally {
