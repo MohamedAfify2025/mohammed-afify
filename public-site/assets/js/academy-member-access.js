@@ -6,28 +6,49 @@
   const key = String(config.supabasePublishableKey || config.supabaseAnonKey || "").trim();
 
   window.MA_ACADEMY_MEMBER_ACCESS_READY = (async () => {
-    const anonymous = { isActiveStudent: false, coursePermissions: [] };
+    const anonymous = {
+      isSignedIn: false,
+      profile: null,
+      isActiveStudent: false,
+      coursePermissions: []
+    };
     if (!window.supabase?.createClient ||
         !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) ||
         window.isMembershipPublicKey?.(key) !== true) return anonymous;
 
+    let context = anonymous;
     try {
       const client = window.supabase.createClient(url, key, {
         auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
       });
 
       const { data: userData, error: userError } = await client.auth.getUser();
-      if (userError || !userData?.user) return anonymous;
+      if (userError) throw userError;
+      if (!userData?.user) return anonymous;
 
       const { data: profile, error: profileError } = await client
         .from("profiles")
         .select("role,status,account_state")
         .eq("user_id", userData.user.id)
         .maybeSingle();
-      if (profileError || !profile ||
+      if (profileError) throw profileError;
+
+      // Only return the signed-in user's own role/status; never expose another member's data.
+      context = {
+        isSignedIn: true,
+        profile: profile ? {
+          role: profile.role,
+          status: profile.status,
+          account_state: profile.account_state
+        } : null,
+        isActiveStudent: false,
+        coursePermissions: []
+      };
+
+      if (!profile ||
           profile.role !== "student" ||
           profile.status !== "approved" ||
-          profile.account_state !== "active") return anonymous;
+          profile.account_state !== "active") return context;
 
       let result = await client.rpc("get_my_course_permissions_v2");
       if (result.error) {
@@ -38,13 +59,12 @@
       }
       if (result.error) throw result.error;
 
-      return {
-        isActiveStudent: true,
-        coursePermissions: Array.isArray(result.data) ? result.data : []
-      };
+      context.isActiveStudent = true;
+      context.coursePermissions = Array.isArray(result.data) ? result.data : [];
+      return context;
     } catch (error) {
       console.warn("Academy member context could not be loaded:", error?.message || error);
-      return anonymous;
+      return context;
     }
   })();
 })();
