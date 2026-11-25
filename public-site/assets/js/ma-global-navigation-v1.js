@@ -4,6 +4,18 @@
   const root = document.querySelector('.ma-global-header');
   if (!root) return;
 
+  const aboutLink = root.querySelector('a[data-i18n="navAbout"]');
+  if (aboutLink) {
+    const path = window.location.pathname;
+    const marker = "/mohammed-afify/";
+    const markerIndex = path.indexOf(marker);
+    const siteBase = markerIndex >= 0 ? path.slice(0, markerIndex + marker.length) : "/";
+    aboutLink.href = siteBase + "about.html";
+    if (aboutLink.textContent.trim() === "عن المنصة") {
+      aboutLink.textContent = "عن محمد عفيفي";
+    }
+  }
+
   const dropdowns = [...root.querySelectorAll('.ma-nav-dropdown')];
   const closeDropdowns = (except = null) => {
     dropdowns.forEach(item => {
