@@ -4,6 +4,15 @@
   const root = document.querySelector('.ma-global-header');
   if (!root) return;
 
+  const aboutLink = root.querySelector('a[data-i18n="navAbout"]');
+  if (aboutLink) {
+    const isAcademyPage = /\/academy\//i.test(location.pathname);
+    aboutLink.href = isAcademyPage ? 'certificates.html' : 'academy/certificates.html';
+    if (!aboutLink.textContent.trim() || aboutLink.textContent.trim() === 'عن المنصة') {
+      aboutLink.textContent = 'عن محمد عفيفي';
+    }
+  }
+
   const dropdowns = [...root.querySelectorAll('.ma-nav-dropdown')];
   const closeDropdowns = (except = null) => {
     dropdowns.forEach(item => {
