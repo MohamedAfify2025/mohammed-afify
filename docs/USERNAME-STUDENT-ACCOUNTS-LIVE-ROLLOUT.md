@@ -173,3 +173,17 @@ Supabase's current migration guidance describes migrating Auth data (including h
 - Deployed `admin-manage-student-accounts` to LIVE as version 1 with `verify_jwt=true`. Its source permits only the exact production Pages origin by default; the TEST preview origin remains isolated to the TEST project.
 - The function is present and ACTIVE, but the production website UI has not been merged or published. No LIVE student accounts, course assignments, passwords, subscriptions, or course content were created or changed by this deployment.
 - Remaining release gate: confirm the backup folder has synchronized to access-controlled off-device storage and verify that the Auth recovery material preserves the original user IDs. Until then keep PR #32 Draft and do not publish the UI to production.
+
+
+## Production publication completed — 2026-11-25
+
+- PR #32 was merged to `main` at commit `1c384d43eadc621ebe2cd43ee416b63347e69af8` after the user explicitly instructed publication.
+- GitHub Pages workflow run `45696913145` completed successfully: public-site safety check, upload of `public-site/` only, GitHub Pages configuration, and deploy all passed.
+- The original production routes are:
+  - `https://mohamedafify2025.github.io/mohammed-afify/admin-student-accounts.html`
+  - `https://mohamedafify2025.github.io/mohammed-afify/student-login.html`
+- The administrator dashboard navigation includes `حسابات الطلاب باسم المستخدم` and routes to `admin-student-accounts.html`. Unauthenticated users are redirected to `student-login.html?next=admin-dashboard.html`.
+- The LIVE Edge Function `admin-manage-student-accounts` remains ACTIVE version 1 with `verify_jwt=true`; required minimal service-role grants were read-back verified.
+- CI on the merged commit completed successfully: Node tests, Deno type-check, PowerShell deployment-script parse, and Pages package build.
+- No production student account was created during deployment, and no existing student/password/course data was changed.
+- Backup status remains INCOMPLETE: the off-device OneDrive synchronization was not independently confirmed, and the CLI SQL dump is not a complete Auth/platform backup. Do not describe the project backup as fully restorable.
