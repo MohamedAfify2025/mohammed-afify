@@ -31,7 +31,9 @@
   }
 
   let allCourses = [];
-  let activeCategory = "all";
+  const requestedCategory = new URLSearchParams(window.location.search).get("category") || "all";
+  const validCategories = new Set(["all", "programming", "data", "digital", "business", "erp"]);
+  let activeCategory = validCategories.has(requestedCategory) ? requestedCategory : "all";
   let searchQuery = "";
 
   const categoryInfo = {
@@ -220,6 +222,7 @@
 
     const { data, error } = await query;
     if (error) throw error;
+    updateFilterButtons();
     renderCourses(Array.isArray(data) ? data : []);
   }
 
