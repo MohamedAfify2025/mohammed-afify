@@ -625,7 +625,7 @@ function renderPendingStudentRequests() {
       : '<small data-request-price-preview class="muted">اختر الباقة لحساب المستحق.</small>';
 
     return `<tr data-pending-student="${esc(profile.user_id)}" data-request-role="${isTeacher ? 'teacher' : 'student'}">
-      <td><strong>${esc(profile.full_name || '—')}</strong><br><small class="muted">${esc(profile.email || '')}</small><br><small class="muted">${esc(profile.phone || '')}</small></td>
+      <td><strong>${esc(profile.full_name || '—')}</strong><br><small class="muted">${esc(profileIdentifier(profile))}</small><br><small class="muted">${esc(profile.phone || '')}</small></td>
       <td><strong>${isTeacher ? 'طلب مدرس' : 'طلب متدرب'}</strong><br><small class="muted">${esc(specialties)}</small></td>
       <td>${esc(courseName || (isTeacher ? 'لم يحدد' : 'لم تحدد'))}<br><small class="muted">${esc(profile.requested_course || '—')}</small></td>
       <td>${planCell}</td>
@@ -751,7 +751,7 @@ function renderPayments() {
         : '—';
 
       return `<tr>
-        <td>${esc(student?.full_name || studenprofileIdentifier(t) || '—')}</td>
+        <td>${esc(student?.full_name || profileIdentifier(student) || '—')}</td>
         <td>${esc(money(p.amount,p.currency))}</td>
         <td>${esc(p.payment_method)}</td>
         <td>${esc(p.payment_reference || '—')}</td>
@@ -1002,7 +1002,7 @@ $('subscriptionForm').addEventListener('submit',async event => {
     return;
   }
   const confirmText = calc.net === 0
-    ? `سيتم إسناد ${selectedPlan.name} إلى ${selectedStudent.full_name || selectedStudent.email} بصافي صفر جنيه وتفعيل الاشتراك كإعفاء. هل تتابع؟`
+    ? `سيتم إسناد ${selectedPlan.name} إلى ${selectedStudent.full_name || profileIdentifier(selectedStudent)} بصافي صفر جنيه وتفعيل الاشتراك كإعفاء. هل تتابع؟`
     : `السعر الأساسي ${money(calc.base,selectedPlan.currency)}، الخصم ${money(calc.discount,selectedPlan.currency)}، الصافي ${money(calc.net,selectedPlan.currency)}. سيظل الاشتراك معلقًا حتى اكتمال السداد. هل تتابع؟`;
 
   if(!confirm(confirmText)) return;
