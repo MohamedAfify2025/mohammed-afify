@@ -175,6 +175,11 @@
     $("openCourseContent").textContent = selectedSlug === "business-administration"
       ? "فتح منهج الإدارة والأعمال"
       : (selectedSlug === "odoo-training" ? "فتح صفحة دورة Odoo" : "فتح المحتوى في مساحة المدير");
+    const coverLink = $("manageCourseCover");
+    if (coverLink) {
+      coverLink.href = "course-preview.html?course=" + encodeURIComponent(selectedSlug) + "&manage_cover=1";
+      coverLink.hidden = !selectedSlug;
+    }
     const importButton = $("importAcademyButton");
     if (importButton) {
       const importItems = SOURCE_IMPORTS[selectedSlug] || [];
