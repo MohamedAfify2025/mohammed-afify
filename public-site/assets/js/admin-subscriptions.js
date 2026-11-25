@@ -70,6 +70,15 @@ function person(userId) {
   return state.profiles.find(p => p.user_id === userId);
 }
 
+function profileIdentifier(profile) {
+  const email = String(profile?.email || "").trim();
+  const suffix = "@students.invalid";
+  if (email.toLowerCase().endsWith(suffix)) {
+    return "اسم المستخدم: " + email.slice(0, -suffix.length);
+  }
+  return email;
+}
+
 function plan(planId) {
   return state.plans.find(p => p.id === planId);
 }
@@ -492,7 +501,7 @@ function renderAll() {
   $('teacherCount').textContent = teachers.length;
 
   fillSelect('studentSelect',students,'user_id',
-    p => `${p.full_name || 'طالب'} — ${p.email || ''}`,
+    p => `${p.full_name || 'طالب'} — ${profileIdentifier(p)}`,
     'اختر الطالب المعتمد');
 
   refreshPlanOptionsForSelectedStudent();
@@ -505,7 +514,7 @@ function renderAll() {
   const subLabel = s => {
     const p = person(s.user_id);
     const pl = plan(s.plan_id);
-    return `${p?.full_name || p?.email || 'طالب'} — ${pl?.name || 'باقة'} — ${statusLabel(s.status)}`;
+    return `${p?.full_name || profileIdentifier(p) || 'طالب'} — ${pl?.name || 'باقة'} — ${statusLabel(s.status)}`;
   };
 
   fillSelect('paymentSubscription',payableSubs,'id',subLabel,'اختر اشتراكًا له رصيد مستحق');
@@ -518,15 +527,15 @@ function renderAll() {
   );
 
   fillSelect('teacherCandidate',teacherCandidates,'user_id',
-    p => `${p.full_name || 'طالب'} — ${p.email || ''}`,
+    p => `${p.full_name || 'طالب'} — ${profileIdentifier(p)}`,
     'لا يوجد حساب طالب غير مرتبط باشتراك نشط');
 
   fillSelect('teacherSelect',teachers,'user_id',
-    p => `${p.full_name || 'مدرس'} — ${p.email || ''}`,
+    p => `${p.full_name || 'مدرس'} — ${profileIdentifier(p)}`,
     'اختر المدرس');
 
   fillSelect('permissionTeacher',teachers,'user_id',
-    p => `${p.full_name || 'مدرس'} — ${p.email || ''}`,
+    p => `${p.full_name || 'مدرس'} — ${profileIdentifier(p)}`,
     'اختر المدرس');
 
   fillSelect('teacherCourse',state.courses,'course_slug',
@@ -534,7 +543,7 @@ function renderAll() {
     'اختر الدورة');
 
   fillSelect('accessStudentSelect',students,'user_id',
-    p => `${p.full_name || 'طالب'} — ${p.email || ''}`,
+    p => `${p.full_name || 'طالب'} — ${profileIdentifier(p)}`,
     'اختر الطالب المعتمد');
 
   renderStudentCoursePermissions();
@@ -716,7 +725,7 @@ function renderSubscriptions() {
       }
 
       return `<tr>
-        <td>${esc(p?.full_name || '—')}<br><span class="muted">${esc(p?.email || '')}</span></td>
+        <td>${esc(p?.full_name || '—')}<br><span class="muted">${esc(profileIdentifier(p))}</span></td>
         <td>${esc(pl?.name || '—')}</td>
         <td>${esc(money(s.base_amount ?? s.agreed_amount,s.currency))}</td>
         <td>${esc(money(s.discount_amount || 0,s.currency))}${s.discount_type && s.discount_type !== 'none' ? `<br><small class="muted">${esc(s.discount_type)} ${esc(s.discount_value ?? '')}</small>` : ''}</td>
@@ -742,7 +751,7 @@ function renderPayments() {
         : '—';
 
       return `<tr>
-        <td>${esc(student?.full_name || student?.email || '—')}</td>
+        <td>${esc(student?.full_name || studenprofileIdentifier(t) || '—')}</td>
         <td>${esc(money(p.amount,p.currency))}</td>
         <td>${esc(p.payment_method)}</td>
         <td>${esc(p.payment_reference || '—')}</td>
@@ -759,7 +768,7 @@ function renderAssignments() {
     ? state.assignments.map(a => {
       const t = person(a.teacher_user_id);
       return `<tr>
-        <td>${esc(t?.full_name || t?.email || '—')}</td>
+        <td>${esc(t?.full_name || profileIdentifier(t) || '—')}</td>
         <td>${esc(courseTitle(a.course_slug))}</td>
         <td>${statusHtml(a.is_active ? 'active' : 'cancelled')}</td>
         <td>${esc(dateTime(a.assigned_at))}</td>
@@ -784,7 +793,7 @@ function renderPermissions() {
     ? state.permissions.map(p => {
       const t = person(p.teacher_user_id);
       return `<tr>
-        <td>${esc(t?.full_name || t?.email || '—')}</td>
+        <td>${esc(t?.full_name || profileIdentifier(t) || '—')}</td>
         <td>${esc(labels[p.permission_key] || p.permission_key)}</td>
         <td>${statusHtml(p.enabled ? 'active' : 'cancelled')}</td>
         <td>${esc(dateTime(p.updated_at))}</td>
