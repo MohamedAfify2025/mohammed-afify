@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101a32">
-  <meta name="description" content="منصة Mohammed Afify للتعلم والتطبيق في البرمجة وتحليل البيانات والإدارة والمحاسبة وأنظمة Odoo.">
+  <meta name="description" content="منصة Mohammed Afify للتعلم والتطبيق في الإدارة والأعمال والبرمجة وتحليل البيانات والمهارات الرقمية والمحاسبة وOdoo. استعرض الدورات والمناهج قبل الاشتراك.">
   <title>Mohammed Afify | تعلّم، حلّل، ابنِ، طوّر</title>
   <link rel="icon" href="brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,7 @@
 <link rel="stylesheet" href="assets/css/course-card-reference-style.css">
 <link rel="stylesheet" href="assets/css/business-course-reference-card.css">
 <link rel="stylesheet" href="assets/css/about-showcase.css">
-<link rel="stylesheet" href="assets/css/ma-learning-paths-exact-v1.css?v=1">
+<link rel="stylesheet" href="assets/css/ma-learning-paths-cards-v2.css?v=2">
   <link rel="stylesheet" href="assets/css/ma-global-navigation-v1.css">
   <link rel="stylesheet" href="assets/css/ma-homepage-hierarchy-v2.css">
   <link rel="stylesheet" href="assets/css/site-assistant.css">
@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="assets/css/platform-finish-v1.css">
 </head>
 <body class="ma-platform-page ma-platform-home">
-  <div class="announcement"><span data-i18n="announcement">التعلّم الحقيقي يبدأ بالتطبيق — اكتشف الدروس والموارد المجانية</span><a href="#learning" data-i18n="explore">استكشف الآن ←</a></div>
+  <div class="announcement"><span data-i18n="announcement">استعرض الدورات ومحاورها، وتعرّف على طريقة الاشتراك قبل بدء التعلّم</span><a href="#learning" data-i18n="explore">استكشف الآن ←</a></div>
   <header class="ma-global-header" data-ma-global-header>
   <div class="ma-header-shell">
     <a class="ma-brand" href="#home" aria-label="Mohammed Afify home">
@@ -78,7 +78,7 @@
         </div>
       </div>
 
-      <a href="about.html" data-i18n="navAbout">عن المنصة</a>
+      <a href="about.html" data-i18n="navAbout">عن محمد عفيفي</a>
       <a href="student-guide.html">دليل الاستخدام</a>
       <a href="#contact" data-i18n="navContact">تواصل</a>
     </nav>
@@ -158,23 +158,24 @@
     </div>
   </div>
 </section>
-<section class="section learning-section ma-exact-image-section" id="learning">
-<!-- MA-EXACT-LEARNING-PATHS-V1 -->
-<div class="ma-exact-image-frame" data-ma-exact-learning-paths>
-  <img class="ma-exact-learning-image" src="assets/images/academy/ma-learning-paths-exact-v1.png" width="1672" height="941" alt="Mohammed Afify Academy - learning paths" decoding="async" fetchpriority="high">
-  <a class="ma-learning-hitbox ma-lp-home" href="#home" aria-label="Go to homepage" title="Mohammed Afify home"></a>
-  <a class="ma-learning-hitbox ma-lp-library" href="academy-access.html" aria-label="Open the course library" title="Open the course library"></a>
-  <a class="ma-learning-hitbox ma-lp-programming" href="course-preview.html?course=programming" aria-label="Open the programming path" title="Programming and technology"></a>
-  <a class="ma-learning-hitbox ma-lp-data" href="course-preview.html?course=data-analysis" aria-label="Open the data analysis path" title="Data analysis"></a>
-  <a class="ma-learning-hitbox ma-lp-business" href="course-preview.html?course=business-administration" aria-label="Open the business administration path" title="Business and management"></a>
-  <a class="ma-learning-hitbox ma-lp-accounting" href="course-preview.html?course=accounting" aria-label="Open the accounting course" title="Accounting"></a>
-  <a class="ma-learning-hitbox ma-lp-support" href="#contact" aria-label="Contact support" title="Contact support"></a>
-  <a class="ma-learning-hitbox ma-lp-certificates" href="about.html#certificates" aria-label="Open professional certificates" title="Professional certificates"></a>
-  <a class="ma-learning-hitbox ma-lp-resources" href="academy-access.html" aria-label="Open practical resources and projects" title="Practical resources and projects"></a>
-  <a class="ma-learning-hitbox ma-lp-pathways" href="academy-access.html" aria-label="Open all learning pathways" title="Complete learning pathways"></a>
-  <a class="ma-learning-hitbox ma-lp-whatsapp" href="https://wa.me/201092452759?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D9%85%D9%86%20%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D9%84%D8%AA%D8%B9%D9%84%D9%8A%D9%85%D9%8A%20Mohammed%20Afify" aria-label="Contact through WhatsApp" title="Contact through WhatsApp" target="_blank" rel="noopener noreferrer"></a>
-  <button class="ma-learning-hitbox ma-lp-assistant" type="button" data-ma-open-assistant aria-label="Open the Mohammed Afify assistant" title="Open assistant"></button>
-</div>
+<section class="section ma-learning-paths-section" id="learning" aria-labelledby="learningPathsTitle">
+  <div class="container ma-paths-container">
+    <div class="section-heading ma-paths-heading">
+      <div>
+        <span class="section-kicker" data-i18n="pathsKicker">مسارات التعلّم</span>
+        <h2 id="learningPathsTitle" data-i18n="pathsTitle">اختر المجال الذي يناسب هدفك.</h2>
+      </div>
+      <p data-i18n="pathsIntro">استكشف المجالات والدورات، وتعرّف على المنهج قبل تقديم طلب الاشتراك.</p>
+    </div>
+    <div class="ma-paths-grid">
+      <a class="ma-path-card ma-path-business" href="academy-access.html?category=business#courseList"><span class="ma-path-icon" aria-hidden="true">▤</span><span class="ma-path-meta">01 · BUSINESS</span><h3 data-i18n="pathBusinessTitle">الإدارة والأعمال</h3><p data-i18n="pathBusinessDesc">من فهم منظمات الأعمال إلى الإدارة والعمليات واتخاذ القرار.</p><span class="ma-path-link" data-i18n="pathBrowse">استكشف الدورات ←</span></a>
+      <a class="ma-path-card ma-path-programming" href="academy-access.html?category=programming#courseList"><span class="ma-path-icon" aria-hidden="true">⌘</span><span class="ma-path-meta">02 · TECHNOLOGY</span><h3 data-i18n="pathProgrammingTitle">البرمجة والتكنولوجيا</h3><p data-i18n="pathProgrammingDesc">ابدأ بالتفكير البرمجي، ثم انتقل إلى Python وScratch والتطبيق.</p><span class="ma-path-link" data-i18n="pathBrowse">استكشف الدورات ←</span></a>
+      <a class="ma-path-card ma-path-data" href="academy-access.html?category=data#courseList"><span class="ma-path-icon" aria-hidden="true">▥</span><span class="ma-path-meta">03 · DATA</span><h3 data-i18n="pathDataTitle">تحليل البيانات</h3><p data-i18n="pathDataDesc">نظّم البيانات، وابنِ التقارير، واستخرج مؤشرات تدعم القرار.</p><span class="ma-path-link" data-i18n="pathBrowse">استكشف الدورات ←</span></a>
+      <a class="ma-path-card ma-path-digital" href="academy-access.html?category=digital#courseList"><span class="ma-path-icon" aria-hidden="true">▦</span><span class="ma-path-meta">04 · DIGITAL SKILLS</span><h3 data-i18n="pathDigitalTitle">المهارات الرقمية وOffice</h3><p data-i18n="pathDigitalDesc">طوّر مهارات الكمبيوتر والإنترنت واستخدام تطبيقات Microsoft Office.</p><span class="ma-path-link" data-i18n="pathBrowse">استكشف الدورات ←</span></a>
+      <a class="ma-path-card ma-path-accounting" href="academy-access.html#courseList"><span class="ma-path-icon" aria-hidden="true">∑</span><span class="ma-path-meta">05 · ACCOUNTING & ERP</span><h3 data-i18n="pathAccountingTitle">المحاسبة وOdoo</h3><p data-i18n="pathAccountingDesc">من المبادئ المحاسبية إلى فهم تطبيقات ERP وإدارة الأعمال.</p><span class="ma-path-link" data-i18n="pathBrowse">استكشف الدورات ←</span></a>
+    </div>
+    <div class="ma-paths-footer"><span data-i18n="pathFootnote">يمكنك استعراض الدورات ومعلوماتها قبل إنشاء حساب أو طلب الاشتراك.</span><a href="academy-access.html#courseList" data-i18n="libraryCTA">استكشف المكتبة الكاملة ↗</a></div>
+  </div>
 </section>
 
 <section class="section courses-section" id="courses">
@@ -432,7 +433,7 @@
     <script src="assets/js/cinematic-motion.js"></script>
     <!-- MEMBERSHIP COURSE FILTER START -->
 <!-- MEMBERSHIP COURSE FILTER END -->
-<script src="assets/js/ma-learning-paths-exact-v1.js" defer></script>
+
   <script src="assets/js/ma-global-navigation-v1.js" defer></script>
   <script src="assets/js/site-assistant.js" defer></script>
 </body>
