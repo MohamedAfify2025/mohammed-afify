@@ -95,14 +95,16 @@
   }
 
   function hideCourseLinks(scope, rows) {
+    if (!scope) return;
     const allowed = new Set(rows.map((row) => String(row.course_slug).toLowerCase()));
+    const knownCourses = new Set(Object.values(CATEGORY_SLUGS).flat());
     scope.querySelectorAll('a[href]').forEach((link) => {
       try {
         const url = new URL(link.getAttribute('href'), location.href);
         const match = url.pathname.match(/\/academy\/([^/]+)\.html?$/i);
         if (!match) return;
         const slug = match[1].toLowerCase();
-        if (slug === 'index') return;
+        if (!knownCourses.has(slug)) return;
         if (!allowed.has(slug)) {
           const card = link.closest('.gs-home-card,.gs-catalog,.sc-content-card,.projects-btn,.gs-related a');
           if (card && card !== link) card.hidden = true;
@@ -114,13 +116,12 @@
 
   function filterGuestHomepage(message) {
     const section = document.querySelector('#googleSitesLibrary');
-    const grid = section?.querySelector('.gs-home-grid');
-    if (grid) grid.hidden = true;
-    const fullLibraryLink = section?.querySelector('a[href="academy/index.html"]');
-    if (fullLibraryLink) fullLibraryLink.hidden = true;
     const coursesSection = document.querySelector('#courses');
-    coursesSection?.querySelector('.course-grid')?.setAttribute('hidden', 'hidden');
-    coursesSection?.querySelector('.filter-row')?.setAttribute('hidden', 'hidden');
+
+    // Course overviews are public discovery content; only lesson pages require membership.
+    hideCourseLinks(section, []);
+    hideCourseLinks(coursesSection, []);
+
     if (section) {
       let note = section.querySelector('.m-access-message');
       if (!note) {
@@ -128,88 +129,45 @@
         note.className = 'm-access-message';
         section.appendChild(note);
       }
-      note.textContent = message || 'الدورات التعليمية متاحة بعد تسجيل الدخول وتقديم طلب الاشتراك. سجّل الدخول أو أنشئ حسابًا لمتابعة المسار التعليمي.';
+      note.textContent = message || 'يمكنك استعراض مناهج الدورات ومحاورها قبل التسجيل. مشاهدة الدروس ومتابعة التقدم تتطلب حسابًا واشتراكًا معتمدًا.';
       const actions = document.createElement('div');
       actions.className = 'm-access-actions';
-      actions.innerHTML = '<a class="m-access-action" href="membership/login.html">تسجيل الدخول</a><a class="m-access-action secondary" href="membership/register.html">طلب اشتراك</a>';
+      actions.innerHTML = '<a class="m-access-action" href="academy/index.html">استعراض مكتبة الدورات</a><a class="m-access-action secondary" href="membership/login.html">تسجيل الدخول</a><a class="m-access-action secondary" href="membership/register.html">طلب اشتراك</a>';
       note.replaceChildren(document.createTextNode(note.textContent), actions);
     }
   }
 
   function filterHomepage(profile, courses) {
     const section = document.querySelector('#googleSitesLibrary');
-    if (!section) return;
-    if (profile.role === 'admin') return;
+    if (!section || profile.role === 'admin') return;
 
-    const grid = section.querySelector('.gs-home-grid');
-    const fullLibraryLink = section.querySelector('a[href="academy/index.html"]');
     const coursesSection = document.querySelector('#courses');
+    const rows = allowedRows(courses);
 
+    // Keep public syllabi visible. Restrict only direct lesson-page links by course entitlement.
+    hideCourseLinks(section, rows);
+    hideCourseLinks(coursesSection, rows);
+
+    let note = section.querySelector('.m-access-message');
     if (profile.status !== 'approved' || profile.account_state !== 'active') {
-      document.querySelectorAll('.category-grid .category-card').forEach((card) => { card.hidden = true; });
-      if (grid) grid.hidden = true;
-      if (fullLibraryLink) fullLibraryLink.hidden = true;
-      coursesSection?.querySelector('.course-grid')?.setAttribute('hidden', 'hidden');
-      coursesSection?.querySelector('.filter-row')?.setAttribute('hidden', 'hidden');
-      let note = section.querySelector('.m-access-message');
-      if (!note) { note = document.createElement('div'); note.className = 'm-access-message'; section.appendChild(note); }
+      if (!note) {
+        note = document.createElement('div');
+        note.className = 'm-access-message';
+        section.appendChild(note);
+      }
       note.textContent = profile.status === 'rejected'
-        ? 'تم رفض طلب الاشتراك. تواصل مع الإدارة لمراجعة الحالة.'
-        : 'حسابك قيد المراجعة. ستظهر الدورات بعد اعتماد الحساب وإسناد اشتراك نشط.';
+        ? 'تم رفض طلب الاشتراك. تظل مناهج الدورات متاحة للمعاينة، ويمكنك التواصل مع الإدارة لمراجعة الحالة.'
+        : 'حسابك قيد المراجعة. يمكنك استعراض المناهج الآن، وسيتم فتح الدروس بعد اعتماد الحساب وتفعيل الاشتراك.';
       return;
     }
 
-    const rows = allowedRows(courses);
-    const slugs = new Set(rows.map((row) => String(row.course_slug).toLowerCase()));
-    const activeCategories = new Set(
-      Object.entries(CATEGORY_SLUGS)
-        .filter(([, categorySlugs]) => categorySlugs.some((slug) => slugs.has(slug)))
-        .map(([category]) => category)
-    );
-
-    const categoryMap = [
-      ['programming', 'category-code'],
-      ['data', 'category-data'],
-      ['business', 'category-business'],
-      ['accounting', 'category-accounting']
-    ];
-    document.querySelectorAll('.category-grid .category-card').forEach((card) => {
-      const item = categoryMap.find((candidate) => card.classList.contains(candidate[1]));
-      card.hidden = !item || !activeCategories.has(item[0]);
-    });
-
-    if (grid) {
-      grid.querySelectorAll('.gs-home-card').forEach((card) => {
-        let slug = '';
-        try {
-          slug = new URL(card.getAttribute('href'), location.href)
-            .pathname.split('/').pop().replace(/\.html?$/i, '').toLowerCase();
-        } catch (_) {}
-        card.hidden = !slugs.has(slug);
-      });
-      hideCourseLinks(grid, rows);
-      grid.hidden = rows.length === 0;
-    }
-
-    if (fullLibraryLink) fullLibraryLink.hidden = rows.length === 0;
-
-    if (coursesSection) {
-      coursesSection.querySelectorAll('.course-card').forEach((card) => {
-        const link = card.querySelector('a[href]');
-        let slug = '';
-        try {
-          if (link) slug = new URL(link.getAttribute('href'), location.href)
-            .pathname.split('/').pop().replace(/\.html?$/i, '').toLowerCase();
-        } catch (_) {}
-        card.hidden = !slugs.has(slug);
-      });
-      coursesSection.querySelector('.filter-row')?.setAttribute('hidden', 'hidden');
-    }
-
-    let note = section.querySelector('.m-access-message');
     if (!rows.length) {
-      if (!note) { note = document.createElement('div'); note.className = 'm-access-message'; section.appendChild(note); }
-      note.textContent = 'تم اعتماد حسابك، لكن لا يوجد اشتراك تعليمي نشط حاليًا. ستظهر الدورات هنا بعد إسناد باقة مجانية أو تأكيد دفع الباقة المدفوعة.';
+      if (!note) {
+        note = document.createElement('div');
+        note.className = 'm-access-message';
+        section.appendChild(note);
+      }
+      note.textContent = 'حسابك معتمد، لكن لا يوجد اشتراك تعليمي نشط حاليًا. يمكنك معاينة المناهج وتقديم طلب الاشتراك في الدورة المناسبة.';
     } else if (note) {
       note.remove();
     }
