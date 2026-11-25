@@ -56,7 +56,7 @@ assert.doesNotMatch(accountJs, /localStorage|sessionStorage/);
 assert.match(edge, /admin\.auth\.admin\.createUser/);
 assert.match(edge, /admin\.auth\.admin\.updateUserById/);
 assert.match(edge, /is_platform_admin/);
-assert.match(edge, /feature-username-student-acc\\.mohammed-afify\\.pages\\.dev/);
+assert.match(edge, /feature-username-student-acc\.mohammed-afify\.pages\.dev/);
 assert.match(edge, /x-retry-count/);
 assert.match(edge, /payment_state: "waived"/);
 assert.match(edge, /is_public: false/);
