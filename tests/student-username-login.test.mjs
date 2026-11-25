@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { runInNewContext } from "node:vm";
 
-const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs, liveDeployScript, livePreflightSql, liveRunbook] = await Promise.all([
+const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs, liveDeployScript, livePreflightSql, liveRunbook, globalNavCss] = await Promise.all([
   readFile(new URL("../public-site/student-login.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/student-login.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/admin-dashboard.js", import.meta.url), "utf8"),
@@ -17,6 +17,7 @@ const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, member
   readFile(new URL("../scripts/Deploy-UsernameStudentAccounts-LIVE.ps1", import.meta.url), "utf8"),
   readFile(new URL("../sql/student-username-accounts-live-preflight.sql", import.meta.url), "utf8"),
   readFile(new URL("../docs/USERNAME-STUDENT-ACCOUNTS-LIVE-ROLLOUT.md", import.meta.url), "utf8"),
+  readFile(new URL("../public-site/assets/css/ma-global-navigation-v1.css", import.meta.url), "utf8"),
 ]);
 
 assert.match(loginHtml, /اسم المستخدم أو البريد الإلكتروني/);
@@ -42,6 +43,7 @@ assert.match(courseRoomHtml, /id="logoutButton"/);
 assert.match(courseRoomHtml, /\[hidden\]\{display:none!important\}/);
 assert.match(courseRoomHtml, /id="adminDashboardLink" href="admin-dashboard\.html" hidden/);
 assert.match(businessAccessJs, /get_my_active_courses_v2/);
+assert.ok(globalNavCss.includes(".ma-global-header [hidden] { display: none !important; }"));
 assert.match(accountHtml, /id="createForm"/);
 assert.match(accountHtml, /id="courseSlugs"/);
 assert.match(accountJs, /functions\.invoke\(FUNCTION_NAME/);
