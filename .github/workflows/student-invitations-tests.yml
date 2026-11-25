@@ -8,6 +8,7 @@ on:
       - "scripts/Deploy-StudentInvitations-TEST.ps1"
       - "scripts/Deploy-StudentInvitations-LIVE.ps1"
       - "public-site/admin-students.html"
+      - "public-site/admin-dashboard.html"
       - "public-site/admin-student-accounts.html"
       - "public-site/admin-subscriptions.html"
       - "public-site/academy-access.html"
