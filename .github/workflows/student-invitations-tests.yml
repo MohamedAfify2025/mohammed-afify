@@ -150,8 +150,10 @@ jobs:
             'PSNativeCommandUseErrorActionPreference = $false',
             'BACKUP-STATUS-INCOMPLETE.txt',
             'Read-Host -AsSecureString',
-            '/storage/v1/object/authenticated/',
+            '/storage/v1/object/$accessRoute/',
             'Download-LiveStorageObjects $inventoryRows $Buckets $storageRoot',
+            'storage-download-failures.csv',
+            'Storage backup is PARTIAL',
             'ybsjnubrswqksvktgmay'
           )) {
             if (-not $backupSource.Contains($guard)) {
