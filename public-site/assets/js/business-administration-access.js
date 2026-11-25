@@ -89,10 +89,15 @@
       return;
     }
 
-    const { data: permissions, error: permissionError } = await client.rpc("get_my_course_permissions_v2");
-    if (permissionError) throw permissionError;
-    const permission = (Array.isArray(permissions) ? permissions : []).find((item) =>
-      item.course_slug === courseSlug && item.can_view_course_page === true
+    let permissionResult = await client.rpc("get_my_course_permissions_v2");
+    if (permissionResult.error &&
+        (permissionResult.error.code === "PGRST202" ||
+         /get_my_course_permissions_v2.*(not found|does not exist)|could not find the function/i.test(permissionResult.error.message || ""))) {
+      permissionResult = await client.rpc("get_my_active_courses_v2");
+    }
+    if (permissionResult.error) throw permissionResult.error;
+    const permission = (Array.isArray(permissionResult.data) ? permissionResult.data : []).find((item) =>
+      item.course_slug === courseSlug && (item.can_view_course_page === true || typeof item.can_view_course_page === "undefined")
     );
     if (!permission) {
       deny("لا توجد صلاحية مشاهدة مفعّلة لمقرر الإدارة والأعمال في اشتراكك الحالي. راجع إدارة الاشتراكات.");
