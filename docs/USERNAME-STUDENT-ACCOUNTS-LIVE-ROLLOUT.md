@@ -49,7 +49,7 @@ Important CLI limitation: Supabase CLI v3 `db dump` excludes Supabase-managed sc
 - https://supabase.com/docs/guides/local-development/cli/migrating-to-v3
 - https://supabase.com/docs/guides/platform/backups
 
-Use these logical exports after linking the local CLI checkout to the exact LIVE project:
+Run these commands with Supabase CLI v3.4.0 from the repository root. For v3, `--remote=<project-ref>` selects the exact hosted project directly; a prior `supabase link` is not required for these commands. Keep the explicit LIVE ref on every remote read:
 
 ```powershell
 supabase db dump --remote=ybsjnubrswqksvktgmay -f roles.sql --role-only
@@ -57,7 +57,7 @@ supabase db dump --remote=ybsjnubrswqksvktgmay -f schema.sql
 supabase db dump --remote=ybsjnubrswqksvktgmay -f data.sql --use-copy --data-only -x "storage.buckets_vectors" -x "storage.vector_indexes"
 ```
 
-These commands do not export Auth users/password hashes/tokens or Storage object bytes. Storage objects must be downloaded separately with the CLI `storage ls/cp --remote --experimental` commands or another verified export method. The two LIVE buckets discovered by read-only inspection are `private-course-lessons` and `public-course-assets`; preserve object paths, MIME types, bucket visibility, size limits, and allowed MIME types. Verify object counts, total bytes, and SHA-256 hashes after export.
+These commands do not export Auth users/password hashes/tokens or Storage object bytes. Storage objects must be downloaded separately with the CLI `storage ls/cp --remote=ybsjnubrswqksvktgmay --experimental` commands or another verified export method. Do not use a bare `--remote` here because that selects the linked project rather than naming the LIVE project explicitly. The two LIVE buckets discovered by read-only inspection are `private-course-lessons` and `public-course-assets`; preserve object paths, MIME types, bucket visibility, size limits, and allowed MIME types. Verify object counts, total bytes, and SHA-256 hashes after export.
 
 A sanitized Auth user/identity inventory can support manual recovery, but it is not an Auth backup: password hashes, confirmation/recovery tokens, MFA secrets, and sessions are intentionally omitted. If no platform-level full restore path is available for the Free project, document and approve a manual Auth recovery process (including password resets and MFA re-enrollment) before classifying recovery as acceptable.
 
