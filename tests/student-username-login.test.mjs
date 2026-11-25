@@ -123,7 +123,7 @@ assert.match(liveDeployScript, /BACKUP-VERIFIED/);
 assert.match(liveDeployScript, /GRANTS-VERIFIED/);
 assert.match(liveDeployScript, /DEPLOY-LIVE/);
 assert.match(liveDeployScript, /ALLOWED_ORIGINS/);
-assert.match(liveDeployScript, /verify_jwt = \\true/);
+assert.match(liveDeployScript, /verify_jwt = true/);
 assert.doesNotMatch(liveDeployScript, /SERVICE_ROLE_KEY|SUPABASE_SECRET_KEYS/);
 assert.doesNotMatch(liveDeployScript, /student_subscriptions|subscription_plan_courses|createUser/);
 
