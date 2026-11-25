@@ -30,7 +30,7 @@ assert.match(adminJs, /client\.auth\.getSession\(\)/);
 assert.match(adminJs, /Auth session missing/);
 assert.match(adminJs, /student-login\.html\?next=admin-dashboard\.html/);
 assert.match(adminJs, /admin-student-accounts\.html/);
-assert.match(studentSpaceJs, /course-room\.html/);
+assert.match(studentSpaceJs, /directCourseView =/);
 assert.match(studentSpaceJs, /direct-course-view/);
 assert.match(studentSpaceJs, /لا يملك هذا الحساب صلاحية فتح هذا المقرر/);
 assert.match(studentSpaceJs, /window\.location\.replace\("academy\/business-administration\.html"\)/);
