@@ -6,7 +6,7 @@
 <title>دورة تدريب Odoo ERP | Mohammed Afify</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/ma-global-navigation-v1.css"><link rel="stylesheet" href="../assets/css/ma-academy-breadcrumbs-v1.css?v=1">
+<link rel="stylesheet" href="../assets/css/ma-global-navigation-v1.css"><link rel="stylesheet" href="../assets/css/course-cover-manager.css?v=20261125-shared-v1"><link rel="stylesheet" href="../assets/css/ma-academy-breadcrumbs-v1.css?v=1">
 <style>
 :root{--ink:#101b35;--muted:#53647d;--line:#e3e9f1;--soft:#f3f6fb;--purple:#785080;--teal:#147a78;--navy:#101e35}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--soft);color:var(--ink);font-family:Cairo,Tahoma,Arial,sans-serif}
@@ -37,16 +37,7 @@ button{font:inherit;cursor:pointer}.odoo-main{max-width:1240px;margin:auto;paddi
 .course-hero .course-hero-visual[hidden]{display:none!important}
 .course-hero .course-hero-visual img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#14233d}
 .course-hero.has-image .hero-fallback{display:none}
-.course-hero .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
-.course-hero-admin{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:12px;padding:13px 16px;border:1px dashed #b9c6d5;background:#fff;border-radius:14px}
-.course-hero-admin[hidden]{display:none!important}
-.course-hero-admin-copy{display:grid;gap:2px}
-.course-hero-admin-copy strong{font-size:13px;color:#263650}
-.course-hero-admin-copy small{font-size:11px;color:#748198;line-height:1.7}
-#courseHeroUploadStatus{font-size:11px;color:#147a78}
-#courseHeroUploadStatus.error{color:#a33b46}
-.course-hero-upload-label{cursor:pointer;min-height:42px}
-@media(max-width:700px){.course-hero .hero-fallback{padding:27px 19px;border-radius:20px}.course-hero .hero-fallback p{font-size:14px}.course-hero .course-hero-visual{border-radius:18px}.course-hero-admin{align-items:stretch}.course-hero-upload-label{width:100%}}
+.course-hero .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:700px){.course-hero .hero-fallback{padding:27px 19px;border-radius:20px}.course-hero .hero-fallback p{font-size:14px}.course-hero .course-hero-visual{border-radius:18px}}
 
 </style>
 </head><body>
@@ -59,29 +50,30 @@ button{font:inherit;cursor:pointer}.odoo-main{max-width:1240px;margin:auto;paddi
 <main class="odoo-main">
 <div id="accessStatus" class="access-status" role="status" hidden></div>
 <nav class="ma-academy-breadcrumb" aria-label="مسار التنقل"><a href="../index.html">الرئيسية</a><span class="ma-academy-breadcrumb__separator" aria-hidden="true">/</span><a href="../academy-access.html">مكتبة الدورات</a><span class="ma-academy-breadcrumb__separator" aria-hidden="true">/</span><span aria-current="page">تدريب وتنفيذ Odoo ERP</span></nav>
-<section class="hero course-hero" id="courseHero">
-  <div class="hero-fallback" id="courseHeroFallback">
+<section class="hero course-hero" id="courseHero" data-course-cover="odoo-training">
+  <div class="hero-fallback" id="courseHeroFallback" data-course-cover-fallback>
     <div class="hero-top"><span class="hero-mark">SC</span><span>SYSTEMS CODES × ODOO 19<br><small>ERP PRACTICAL ACADEMY</small></span></div>
     <h2>دورة تدريب وتنفيذ Odoo ERP</h2>
     <p>تعلّم كيف ترتبط الإدارات التشغيلية والمستندات بالقيود والتقارير، وانتقل من فهم دورة العمل إلى التطبيق العملي على Odoo 19.</p>
     <div class="pills"><span>منهج عملي تفاعلي</span><span>Odoo 19</span><span>المحاسبة والتشغيل</span><span>المقاولات والأنشطة التجارية</span></div>
     <div class="actions"><a class="action primary" href="#curriculum">استكشف محاضرات الدورة ↓</a><a class="action secondary" href="#courseIntro">العرض الافتتاحي</a></div>
   </div>
-  <a id="courseHeroVisual" class="course-hero-visual" href="#curriculum" aria-label="استكشف محاضرات دورة Odoo ERP" hidden>
-    <img id="courseHeroImage" alt="دورة تدريب Odoo ERP من SYSTEMS CODES، تدريب عملي على تطبيقات Odoo 19" decoding="async" fetchpriority="high">
+  <a id="courseHeroVisual" class="course-hero-visual" data-course-cover-visual href="#curriculum" aria-label="استكشف محاضرات دورة Odoo ERP" hidden>
+    <img id="courseHeroImage" data-course-cover-image alt="دورة تدريب Odoo ERP من SYSTEMS CODES، تدريب عملي على تطبيقات Odoo 19" decoding="async" fetchpriority="high" hidden>
   </a>
   <h1 id="courseTitle" class="sr-only">دورة تدريب وتنفيذ Odoo ERP</h1>
   <p id="courseDescription" class="sr-only">تعلّم كيف ترتبط الإدارات التشغيلية والمستندات بالقيود والتقارير، وانتقل من فهم دورة العمل إلى التطبيق العملي على Odoo 19.</p>
-  <div id="courseHeroAdminTools" class="course-hero-admin" hidden>
-    <div class="course-hero-admin-copy"><strong>غلاف دورة Odoo</strong><small>ارفع الصورة الرئيسية لتظهر تلقائيًا لكل زوار صفحة الدورة</small><span id="courseHeroUploadStatus" role="status" aria-live="polite"></span></div>
-    <label class="action light course-hero-upload-label" for="courseHeroFile">رفع / تغيير صورة الغلاف</label>
-    <input id="courseHeroFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
-  </div>
+</section>
+<div class="course-cover-admin" data-course-cover-admin="odoo-training" hidden>
+  <div class="course-cover-admin-copy"><strong>غلاف دورة Odoo</strong><small>يمكنك رفع صورة جديدة أو تغيير الغلاف الحالي. ستظهر الصورة لجميع زوار الدورة.</small><span class="course-cover-admin-status" data-course-cover-status role="status" aria-live="polite"></span></div>
+  <label class="course-cover-upload-label" data-course-cover-upload-label="odoo-training" for="courseHeroFile">رفع / تغيير صورة الغلاف</label>
+  <input id="courseHeroFile" data-course-cover-file="odoo-training" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+</div>
 </section>
 <section class="stats"><div class="stat"><strong id="unitCount">—</strong><span>وحدات تعليمية منشورة</span></div><div class="stat"><strong id="lessonCount">—</strong><span>محاضرات ومواد متاحة</span></div><div class="stat"><strong>Odoo 19</strong><span>بيئة التطبيق المستخدمة في المنهج</span></div></section>
 <section class="section" id="courseIntro"><div class="intro-card"><div class="intro-head"><div><span class="kicker">COURSE INTRODUCTION</span><h2>العرض الافتتاحي للدورة</h2><p>تعرف على فكرة الدورة ومحاورها وخطة العمل قبل بدء المحاضرات التفصيلية.</p></div><button class="action teal" id="toggleIntro" type="button" aria-expanded="false">عرض المقدمة</button></div><div class="intro-frame" id="introFrameWrap"><iframe id="introFrame" title="العرض الافتتاحي لدورة Odoo ERP" loading="lazy" allow="fullscreen" allowfullscreen></iframe></div></div></section>
 <section class="section" id="curriculum"><div class="section-head"><div><span class="kicker">COURSE CURRICULUM</span><h2>الوحدات والمحاضرات</h2></div><div class="admin-tools"><a class="action light" id="adminCourseManagerLink" href="../admin-course-manager.html?course=odoo-training&prepare=odoo-business-flow-01" hidden>إدارة محتوى الدورة</a><a class="action light" href="../student-space.html">مساحتي التعليمية</a></div></div><div id="curriculumMessage" class="loading">جارٍ تحميل الوحدات والمحاضرات…</div><div id="unitGrid" class="unit-grid" hidden></div></section>
 <section id="lessonViewer" class="viewer" aria-live="polite"><div class="viewer-head"><strong id="lessonTitle">المحاضرة</strong><button id="closeLesson" type="button">إغلاق المحاضرة</button></div><iframe id="lessonFrame" title="محتوى المحاضرة" sandbox="allow-scripts allow-forms allow-downloads allow-presentation" allow="fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe><div class="caption">المحتوى محفوظ في المكتبة الخاصة، ويُحمّل بعد التحقق من صلاحية الحساب. تظل المحاضرة مفتوحة داخل صفحة الدورة.</div></section>
 </main><footer class="footer"><span>MOHAMMED AFIFY · LEARNING</span><span>SYSTEMS CODES × ODOO 19</span></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/js/membership-config.js"></script><script src="../assets/js/odoo-training-course.js?v=20261125-odoo-course-hero-v5" defer></script><script src="../assets/js/ma-global-navigation-v1.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../assets/js/membership-config.js"></script><script src="../assets/js/odoo-training-course.js?v=20261125-odoo-course-cover-shared-v6" defer></script><script src="../assets/js/course-cover-manager.js?v=20261125-shared-v1" defer></script><script src="../assets/js/ma-global-navigation-v1.js" defer></script>
 </body></html>
