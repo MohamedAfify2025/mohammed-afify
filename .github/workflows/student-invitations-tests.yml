@@ -145,6 +145,9 @@ jobs:
             'Get-Command "supabase" -CommandType Application',
             'Get-Command "docker" -CommandType Application',
             'Start-Process -FilePath $dockerPath',
+            'Target: project',
+            '$ErrorActionPreference = "Continue"',
+            'PSNativeCommandUseErrorActionPreference = $false',
             'BACKUP-STATUS-INCOMPLETE.txt',
             'ybsjnubrswqksvktgmay'
           )) {
