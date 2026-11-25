@@ -139,4 +139,17 @@ jobs:
               throw "PowerShell parse failed: $relativePath"
             }
           }
-          Write-Host "PowerShell syntax checks passed."
+          $backupScriptPath = Join-Path $env:GITHUB_WORKSPACE "scripts/Backup-LIVE-Supabase.ps1"
+          $backupSource = Get-Content -LiteralPath $backupScriptPath -Raw
+          foreach ($guard in @(
+            'Get-Command "supabase" -CommandType Application',
+            'Get-Command "docker" -CommandType Application',
+            'Start-Process -FilePath $dockerPath',
+            'BACKUP-STATUS-INCOMPLETE.txt',
+            'ybsjnubrswqksvktgmay'
+          )) {
+            if (-not $backupSource.Contains($guard)) {
+              throw "Backup helper is missing expected safety guard: $guard"
+            }
+          }
+          Write-Host "PowerShell syntax and LIVE backup safety-guard checks passed."
