@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { runInNewContext } from "node:vm";
 
-const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs] = await Promise.all([
+const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs, liveDeployScript, livePreflightSql, liveRunbook] = await Promise.all([
   readFile(new URL("../public-site/student-login.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/student-login.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/admin-dashboard.js", import.meta.url), "utf8"),
@@ -14,6 +14,9 @@ const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, member
   readFile(new URL("../public-site/assets/js/student-space.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/course-room.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/business-administration-access.js", import.meta.url), "utf8"),
+  readFile(new URL("../scripts/Deploy-UsernameStudentAccounts-LIVE.ps1", import.meta.url), "utf8"),
+  readFile(new URL("../sql/student-username-accounts-live-preflight.sql", import.meta.url), "utf8"),
+  readFile(new URL("../docs/USERNAME-STUDENT-ACCOUNTS-LIVE-ROLLOUT.md", import.meta.url), "utf8"),
 ]);
 
 assert.match(loginHtml, /اسم المستخدم أو البريد الإلكتروني/);
@@ -112,6 +115,27 @@ assert.match(edge, /const \{ error \} = await admin\.from\("membership_audit_log
 assert.match(edge, /if \(error\) \{\s*console\.error\("Student account audit insert failed:", error\.message\)/);
 assert.doesNotMatch(edge, /password.*(insert|update|details)/i);
 assert.match(config, /\[functions\.admin-manage-student-accounts\]\s+verify_jwt = true/);
+
+// Production release remains gated: backup, grants, exact LIVE ref, and explicit confirmation.
+assert.match(liveDeployScript, /\$ExpectedLiveProjectRef = "ybsjnubrswqksvktgmay"/);
+assert.match(liveDeployScript, /\$branchName -cne "main"/);
+assert.match(liveDeployScript, /BACKUP-VERIFIED/);
+assert.match(liveDeployScript, /GRANTS-VERIFIED/);
+assert.match(liveDeployScript, /DEPLOY-LIVE/);
+assert.match(liveDeployScript, /ALLOWED_ORIGINS/);
+assert.match(liveDeployScript, /verify_jwt = \\true/);
+assert.doesNotMatch(liveDeployScript, /SERVICE_ROLE_KEY|SUPABASE_SECRET_KEYS/);
+assert.doesNotMatch(liveDeployScript, /student_subscriptions|subscription_plan_courses|createUser/);
+
+assert.match(livePreflightSql, /GRANT SELECT, UPDATE ON TABLE public\.profiles TO service_role/);
+assert.match(livePreflightSql, /GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public\.student_subscriptions TO service_role/);
+assert.match(livePreflightSql, /has_table_privilege/);
+assert.doesNotMatch(livePreflightSql, /INSERT INTO auth\.users|INSERT INTO public\.profiles|UPDATE public\.profiles/);
+
+assert.match(liveRunbook, /Storage objects/);
+assert.match(liveRunbook, /BACKUP-VERIFIED/);
+assert.match(liveRunbook, /GRANTS-VERIFIED/);
+assert.match(liveRunbook, /No production student receives a course assignment automatically/);
 
 // Cloudflare preview deployments must use TEST; the root Pages domain and
 // custom production domains must keep using LIVE.
