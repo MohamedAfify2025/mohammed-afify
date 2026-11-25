@@ -34,7 +34,8 @@ function Stop-Backup([string]$Message) {
 }
 
 function Initialize-SupabaseCli {
-    $globalCli = Get-Command "supabase" -ErrorAction SilentlyContinue
+    # Ignore PowerShell aliases/functions from profiles; accept only a real executable.
+    $globalCli = Get-Command "supabase" -CommandType Application -ErrorAction SilentlyContinue
     if ($globalCli) {
         $script:SupabaseExe = $globalCli.Path
         if (-not $script:SupabaseExe) { $script:SupabaseExe = $globalCli.Definition }
@@ -43,7 +44,7 @@ function Initialize-SupabaseCli {
         return
     }
 
-    $npxCommand = Get-Command "npx.cmd" -ErrorAction SilentlyContinue
+    $npxCommand = Get-Command "npx.cmd" -CommandType Application -ErrorAction SilentlyContinue
     $npxPath = $null
     if ($npxCommand) {
         $npxPath = $npxCommand.Path
@@ -146,14 +147,27 @@ try {
         Stop-Backup "This backup script is pinned to Supabase CLI $CliVersion. Detected: $versionText"
     }
 
-    $docker = Get-Command "docker" -ErrorAction SilentlyContinue
+    # Probe Docker without allowing native stderr to become a terminating PowerShell
+    # error under $ErrorActionPreference = Stop. Docker is optional for Storage export.
+    $docker = Get-Command "docker" -CommandType Application -ErrorAction SilentlyContinue
     $dockerAvailable = $false
     if ($docker) {
         $dockerPath = $docker.Path
         if (-not $dockerPath) { $dockerPath = $docker.Definition }
         if ($dockerPath) {
-            & $dockerPath info --format "{{.ServerVersion}}" *> $null
-            $dockerAvailable = ($LASTEXITCODE -eq 0)
+            $probeId = [guid]::NewGuid().ToString("N")
+            $dockerStdout = Join-Path $env:TEMP ("supabase-docker-probe-" + $probeId + ".out")
+            $dockerStderr = Join-Path $env:TEMP ("supabase-docker-probe-" + $probeId + ".err")
+            try {
+                $probe = Start-Process -FilePath $dockerPath -ArgumentList @("info", "--format", "{{.ServerVersion}}") -RedirectStandardOutput $dockerStdout -RedirectStandardError $dockerStderr -NoNewWindow -Wait -PassThru
+                $dockerAvailable = ($probe.ExitCode -eq 0)
+            }
+            catch {
+                $dockerAvailable = $false
+            }
+            finally {
+                Remove-Item -LiteralPath $dockerStdout, $dockerStderr -Force -ErrorAction SilentlyContinue
+            }
         }
     }
 
