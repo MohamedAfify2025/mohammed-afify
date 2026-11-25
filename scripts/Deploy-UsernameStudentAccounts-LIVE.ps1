@@ -28,11 +28,24 @@ function Stop-With([string]$Message) {
 
 function Invoke-SupabaseCli([string[]]$Arguments) {
     $cli = Get-Command "supabase" -ErrorAction SilentlyContinue
-    if (-not $cli) {
-        Stop-With "Supabase CLI is not installed or not on PATH. Install it from https://supabase.com/docs/guides/local-development/cli/getting-started, then retry."
+    if ($cli) {
+        & $cli.Source @Arguments
+    }
+    else {
+        # Match the tested Windows environment: invoke a pinned CLI through npx.cmd.
+        $npx = Get-Command "npx.cmd" -ErrorAction SilentlyContinue
+        if (-not $npx) {
+            $npxPath = Join-Path $env:ProgramFiles "nodejs/npx.cmd"
+            if (Test-Path -LiteralPath $npxPath) {
+                $npx = Get-Item -LiteralPath $npxPath
+            }
+        }
+        if (-not $npx) {
+            Stop-With "Neither a global Supabase CLI nor npx.cmd was found. Install Node.js or Supabase CLI, then retry."
+        }
+        & $npx.Source --yes supabase@3.4.0 @Arguments
     }
 
-    & $cli.Source @Arguments
     if ($LASTEXITCODE -ne 0) {
         Stop-With "Supabase CLI failed (exit code $LASTEXITCODE). No further deployment steps were run."
     }
@@ -108,8 +121,8 @@ try {
         Stop-With "Final LIVE confirmation was not received. Deployment cancelled."
     }
 
-    $version = (& supabase --version 2>$null)
-    if ($LASTEXITCODE -ne 0 -or -not $version) {
+    $version = (Invoke-SupabaseCli @("--version") | Out-String).Trim()
+    if (-not $version) {
         Stop-With "Could not read Supabase CLI version."
     }
     Write-Host "Using Supabase CLI: $version"
@@ -124,7 +137,7 @@ try {
     try {
         # Current Supabase CLI requires explicit confirmation in non-interactive secret updates.
         $env:SUPABASE_YES = "1"
-        Invoke-SupabaseCli @("secrets", "set", "--env-file", $tempEnvFile, "--remote=$projectRef")
+        Invoke-SupabaseCli @("secrets", "set", "--env-file", $tempEnvFile, "--project-ref", $projectRef)
     }
     finally {
         if ($null -eq $oldSupabaseYes) {
