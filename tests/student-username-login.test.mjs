@@ -51,6 +51,8 @@ assert.match(courseTransferJs, /private-course-lessons/);
 assert.match(courseTransferJs, /guest_preview_enabled: false/);
 assert.doesNotMatch(courseTransferJs, /localStorage|sessionStorage|console\.log/);
 assert.match(courseTransferJs, /course_lessons/);
+assert.match(courseTransferJs, /new Blob\(\[blob\], \{ type: "text\/html" \}\)/);
+assert.match(courseTransferJs, /files\.push\(\{ lesson, blob: htmlBlob, size: htmlBlob\.size \}\)/);
 assert.match(courseTransferJs, /course_units/);
 assert.match(accountHtml, /id="createForm"/);
 assert.match(accountHtml, /id="courseSlugs"/);
