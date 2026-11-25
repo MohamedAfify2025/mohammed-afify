@@ -68,13 +68,16 @@ async function logAction(
   details: Record<string, unknown>,
 ): Promise<void> {
   try {
-    await admin.from("membership_audit_log").insert({
+    const { error } = await admin.from("membership_audit_log").insert({
       actor_user_id: actorId,
       action_key: action,
       target_user_id: targetId,
       entity_type: "student_account",
       details,
     });
+    if (error) {
+      console.error("Student account audit insert failed:", error.message);
+    }
   } catch (error) {
     console.warn("Student account audit insert failed:", error instanceof Error ? error.message : "unknown");
   }
