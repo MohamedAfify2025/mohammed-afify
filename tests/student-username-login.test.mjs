@@ -30,7 +30,7 @@ assert.match(adminJs, /client\.auth\.getSession\(\)/);
 assert.match(adminJs, /Auth session missing/);
 assert.match(adminJs, /student-login\.html\?next=admin-dashboard\.html/);
 assert.match(adminJs, /admin-student-accounts\.html/);
-assert.match(studentSpaceJs, /course-room\\.html/);
+assert.match(studentSpaceJs, /course-room\.html/);
 assert.match(studentSpaceJs, /direct-course-view/);
 assert.match(studentSpaceJs, /لا يملك هذا الحساب صلاحية فتح هذا المقرر/);
 assert.match(studentSpaceJs, /window\.location\.replace\("academy\/business-administration\.html"\)/);
@@ -49,11 +49,11 @@ assert.match(accountJs, /action: "suspend"/);
 assert.match(accountJs, /action: "reactivate"/);
 assert.match(accountJs, /"مرحبًا " \+ \(account\.full_name \|\| "بك"\) \+ ","/);
 assert.doesNotMatch(accountJs, /🌷/);
-assert.match(accountJs, /"odoo-training": "academy\\/odoo-training\\.html"/);
-assert.match(accountJs, /"business-administration": "academy\\/business-administration\\.html"/);
+assert.match(accountJs, /"odoo-training": "academy\/odoo-training\.html"/);
+assert.match(accountJs, /"business-administration": "academy\/business-administration\.html"/);
 assert.match(accountJs, /const destinationPath = routes\[courseSlug\] \|\| "course-room\.html"/);
 
-const directCourseFunction = accountJs.match(/  function directCourseUrl\(courseSlug\) \{[\\s\\S]*?\\n  \}/);
+const directCourseFunction = accountJs.match(/  function directCourseUrl\(courseSlug\) \{[\s\S]*?\n  \}/);
 assert.ok(directCourseFunction, "direct course login URL helper exists");
 const buildDirectCourseUrl = runInNewContext("(" + directCourseFunction[0].trim() + ")", {
   URL,
