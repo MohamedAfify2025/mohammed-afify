@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { runInNewContext } from "node:vm";
 
-const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs] = await Promise.all([
+const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, membershipConfigJs, studentSpaceJs, courseRoomHtml, businessAccessJs, courseTransferHtml, courseTransferJs] = await Promise.all([
   readFile(new URL("../public-site/student-login.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/student-login.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/admin-dashboard.js", import.meta.url), "utf8"),
@@ -14,6 +14,8 @@ const [loginHtml, loginJs, adminJs, accountHtml, accountJs, edge, config, member
   readFile(new URL("../public-site/assets/js/student-space.js", import.meta.url), "utf8"),
   readFile(new URL("../public-site/course-room.html", import.meta.url), "utf8"),
   readFile(new URL("../public-site/assets/js/business-administration-access.js", import.meta.url), "utf8"),
+  readFile(new URL("../public-site/admin-course-transfer.html", import.meta.url), "utf8"),
+  readFile(new URL("../public-site/assets/js/admin-course-transfer.js", import.meta.url), "utf8"),
 ]);
 
 assert.match(loginHtml, /اسم المستخدم أو البريد الإلكتروني/);
@@ -39,6 +41,17 @@ assert.match(courseRoomHtml, /id="logoutButton"/);
 assert.match(courseRoomHtml, /\[hidden\]\{display:none!important\}/);
 assert.match(courseRoomHtml, /id="adminDashboardLink" href="admin-dashboard\.html" hidden/);
 assert.match(businessAccessJs, /get_my_active_courses_v2/);
+assert.match(loginJs, /admin-course-transfer/);
+assert.match(courseTransferHtml, /LIVE/);
+assert.match(courseTransferHtml, /type="password"/);
+assert.match(courseTransferHtml, /لا ترسل كلمة المرور في المحادثة/);
+assert.match(courseTransferJs, /persistSession: false/);
+assert.match(courseTransferJs, /is_platform_admin/);
+assert.match(courseTransferJs, /private-course-lessons/);
+assert.match(courseTransferJs, /guest_preview_enabled: false/);
+assert.doesNotMatch(courseTransferJs, /localStorage|sessionStorage|console\.log/);
+assert.match(courseTransferJs, /course_lessons/);
+assert.match(courseTransferJs, /course_units/);
 assert.match(accountHtml, /id="createForm"/);
 assert.match(accountHtml, /id="courseSlugs"/);
 assert.match(accountJs, /functions\.invoke\(FUNCTION_NAME/);
