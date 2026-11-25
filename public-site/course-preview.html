@@ -20,6 +20,17 @@
     .description{font-size:16px;line-height:2.1;color:#5c6d84;white-space:pre-wrap}
     .notice{padding:13px 15px;border-radius:12px;background:#e8f7f1;color:#126447;font-size:13px;line-height:1.9;margin:18px 0}
     .notice.error{background:#fff0f0;color:#9b2632}
+    .preview-outline{margin:28px 0 8px;padding:22px;border:1px solid #e3eaf2;border-radius:18px;background:#f9fbfd}
+    .preview-outline-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    .preview-outline-head h2{margin:0;color:#17243b;font-size:clamp(18px,3vw,23px)}
+    .preview-outline-count{padding:5px 10px;border-radius:999px;background:#e8f7f1;color:#126447;font-size:11px;font-weight:900;white-space:nowrap}
+    .preview-outline-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+    .preview-outline-item{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:start;padding:13px;border:1px solid #e6ebf2;border-radius:12px;background:#fff}
+    .preview-outline-number{display:grid;width:34px;height:34px;place-items:center;border-radius:10px;background:#eaf4f3;color:#147f75;font:800 11px Inter,sans-serif}
+    .preview-outline-item strong{display:block;color:#223451;font-size:13px;line-height:1.8}
+    .preview-outline-item p{margin:3px 0 0;color:#65748a;font-size:12px;line-height:1.9}
+    .preview-outline-note{margin:14px 0 0;color:#6c7a8e;font-size:11px;line-height:1.9}
+    @media(max-width:560px){.preview-outline{padding:15px}.preview-outline-item{padding:11px;gap:9px}}
     .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
     a{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:800}
     .primary{background:#0b8379;color:#fff}.secondary{background:#edf2f8;color:#243650}
@@ -60,6 +71,14 @@
       </section>
       <h1 id="courseTitle"></h1>
       <p id="courseDescription" class="description"></p>
+      <section id="courseOutline" class="preview-outline" hidden aria-labelledby="courseOutlineTitle">
+        <div class="preview-outline-head">
+          <h2 id="courseOutlineTitle">محاور الدورة والوحدات التعليمية</h2>
+          <span id="courseOutlineCount" class="preview-outline-count"></span>
+        </div>
+        <ol id="courseOutlineList" class="preview-outline-list"></ol>
+        <p class="preview-outline-note">هذه معاينة تعريفية للمحاور. تفاصيل المحاضرات والملفات والاختبارات تظهر داخل مساحة المتدرب وفق صلاحيات الاشتراك.</p>
+      </section>
       <div class="preview-highlights" aria-label="طريقة الوصول إلى محتوى الدورة">
         <article><span class="preview-highlight-icon">01</span><strong>محتوى منظم</strong><small>تُعرض الدروس والمواد داخل مساحتك التعليمية.</small></article>
         <article><span class="preview-highlight-icon">02</span><strong>صلاحيات واضحة</strong><small>تختلف إتاحة الملفات والاختبارات حسب اشتراكك.</small></article>
