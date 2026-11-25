@@ -159,7 +159,10 @@
 
   async function init(root, requestedSlug, options = {}) {
     if (!root) return;
-    const slug = safeSlug(requestedSlug || root.dataset.courseCover);
+    const storedSlug = root.dataset.courseCover === "dynamic"
+      ? new URLSearchParams(window.location.search).get("course")
+      : root.dataset.courseCover;
+    const slug = safeSlug(requestedSlug || storedSlug);
     if (!slug) return;
     root.dataset.courseCover = slug;
     if (root.dataset.coverManagerReady === "1") return;
