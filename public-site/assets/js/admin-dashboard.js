@@ -53,6 +53,16 @@
   }
 
   async function verifyAdmin() {
+    // Check the local session first. Calling getUser() without any stored
+    // session returns "Auth session missing!" and leaves users on this page.
+    const {data:sessionData,error:sessionError}=await client.auth.getSession();
+    if(sessionError) throw sessionError;
+    if(!sessionData?.session?.user) {
+      window.location.replace("student-login.html?next=admin-dashboard.html");
+      return null;
+    }
+
+    // Confirm the saved access token with Supabase before granting dashboard access.
     const {data:userData,error:userError}=await client.auth.getUser();
     if(userError) throw userError;
     const user=userData?.user;
