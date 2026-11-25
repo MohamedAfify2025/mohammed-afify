@@ -52,8 +52,10 @@ export function validateStudentAccountInput(raw) {
     return { ok: false, error: "الاسم يجب أن يكون من حرفين إلى 120 حرفًا." };
   }
   if (!username.ok) return username;
-  if (phone.length < 7 || phone.length > 30 || !/^[+0-9().\-\s]+$/.test(phone)) {
-    return { ok: false, error: "أدخل رقم هاتف صحيحًا للتواصل عبر WhatsApp." };
+  const phoneDigits = phone.replace(/\D/g, "");
+  if (phone.length < 7 || phone.length > 30 || !/^[+0-9().\-\s]+$/.test(phone) ||
+      phoneDigits.length < 10 || phoneDigits.length > 15) {
+    return { ok: false, error: "أدخل رقم WhatsApp من 10 إلى 15 رقمًا مع مفتاح الدولة عند الحاجة." };
   }
   if (password.length < 10 || password.length > 128) {
     return { ok: false, error: "كلمة المرور يجب أن تكون من 10 إلى 128 حرفًا." };
