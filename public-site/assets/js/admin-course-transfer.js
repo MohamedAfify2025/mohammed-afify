@@ -136,11 +136,15 @@
       if (!blob || !blob.size || blob.size > MAX_HTML_BYTES) {
         throw new Error("حجم ملف المحاضرة غير صالح أو يتجاوز 10 ميجابايت.");
       }
-      const html = await blob.text();
+      // Storage may return a Blob with a generic text/plain MIME type
+      // even when the source object metadata is text/html. Normalize the
+      // verified HTML bytes before uploading to TEST's HTML-only bucket.
+      const htmlBlob = new Blob([blob], { type: "text/html" });
+      const html = await htmlBlob.text();
       if (!/<html[\s>]/i.test(html) || !/<head[\s>]/i.test(html)) {
         throw new Error("ملف المحاضرة لا يحتوي صفحة HTML صالحة: " + lesson.lesson_slug);
       }
-      files.push({ lesson, blob, size: blob.size });
+      files.push({ lesson, blob: htmlBlob, size: htmlBlob.size });
     }
 
     let cover = null;
