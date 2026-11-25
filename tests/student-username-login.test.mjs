@@ -135,7 +135,7 @@ assert.match(livePreflightSql, /GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE pu
 assert.match(livePreflightSql, /has_table_privilege/);
 assert.doesNotMatch(livePreflightSql, /INSERT INTO auth\.users|INSERT INTO public\.profiles|UPDATE public\.profiles/);
 
-assert.match(liveRunbook, /Back up Storage separately/);
+assert.match(liveRunbook, /Storage objects must be downloaded separately/);
 assert.match(liveRunbook, /BACKUP-VERIFIED/);
 assert.match(liveRunbook, /GRANTS-VERIFIED/);
 assert.match(liveRunbook, /No production student receives a course assignment automatically/);
