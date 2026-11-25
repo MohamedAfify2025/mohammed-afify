@@ -108,6 +108,8 @@ assert.match(edge, /x-retry-count/);
 assert.match(edge, /payment_state: "waived"/);
 assert.match(edge, /is_public: false/);
 assert.match(edge, /admin_direct_student_created/);
+assert.match(edge, /const \{ error \} = await admin\.from\("membership_audit_log"\)\.insert/);
+assert.match(edge, /if \(error\) \{\s*console\.error\("Student account audit insert failed:", error\.message\)/);
 assert.doesNotMatch(edge, /password.*(insert|update|details)/i);
 assert.match(config, /\[functions\.admin-manage-student-accounts\]\s+verify_jwt = true/);
 
