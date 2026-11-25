@@ -1,0 +1,21 @@
+/* Shared course-cover presentation and administrator upload control */
+.course-cover-admin{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:12px 0 0;padding:13px 16px;border:1px dashed #b9c6d5;background:#fff;border-radius:14px;color:#263650}
+.course-cover-admin[hidden],[data-course-cover-visual][hidden],[data-course-cover-image][hidden]{display:none!important}
+.course-cover-admin-copy{display:grid;gap:2px}
+.course-cover-admin-copy strong{font-size:13px;color:#263650}
+.course-cover-admin-copy small{font-size:11px;color:#748198;line-height:1.7}
+.course-cover-admin-status{display:block;min-height:1.4em;font-size:11px;color:#147a78;line-height:1.6}
+.course-cover-admin-status.error{color:#a33b46}
+.course-cover-upload-label{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border:0;border-radius:11px;background:#14233d;color:#fff;font:inherit;font-size:12px;font-weight:900;cursor:pointer}
+.course-cover-upload-label:hover{filter:brightness(1.08)}
+.course-cover-upload-label.is-busy{opacity:.6;pointer-events:none}
+[data-course-cover-slot]{position:relative;overflow:hidden}
+[data-course-cover-slot] [data-course-cover-image]{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:100%;object-fit:cover;border-radius:inherit}
+[data-course-cover-slot].has-course-cover{padding:0!important}
+[data-course-cover-slot] [data-course-cover-fallback][hidden]{display:none!important}
+.course-preview-cover{display:none;width:100%;margin:12px 0 22px;overflow:hidden;border-radius:18px;background:#14233d;line-height:0;box-shadow:0 12px 32px #172b471c}
+.course-preview-cover.has-course-cover{display:block}
+.course-preview-cover img{display:block;width:100%;height:auto;max-height:430px;aspect-ratio:16/7;object-fit:cover}
+.course-preview-cover [data-course-cover-image][hidden]{display:none!important}
+.course-preview-cover .course-cover-admin{margin:10px 0 0;line-height:1.5}
+@media(max-width:700px){.course-cover-admin{align-items:stretch}.course-cover-upload-label{width:100%}.course-preview-cover{border-radius:13px}.course-preview-cover img{aspect-ratio:16/9;max-height:300px}}
