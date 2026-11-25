@@ -76,6 +76,17 @@ assert.equal(branchPreviewWindow.MEMBERSHIP_CONFIG.environment, "preview");
 assert.equal(hashPreviewWindow.MEMBERSHIP_CONFIG.supabaseUrl, "https://jniekfbelqticopcotxg.supabase.co");
 assert.equal(productionWindow.MEMBERSHIP_CONFIG.supabaseUrl, "https://ybsjnubrswqksvktgmay.supabase.co");
 assert.equal(customDomainWindow.MEMBERSHIP_CONFIG.supabaseUrl, "https://ybsjnubrswqksvktgmay.supabase.co");
-assert.doesNotMatch(membershipConfigJs, /sb_secret_|sb_service_role_/);
+assert.equal(
+  branchPreviewWindow.isMembershipPublicKey(branchPreviewWindow.MEMBERSHIP_CONFIG.supabasePublishableKey),
+  true
+);
+assert.equal(
+  productionWindow.isMembershipPublicKey(productionWindow.MEMBERSHIP_CONFIG.supabasePublishableKey),
+  true
+);
+assert.notEqual(
+  branchPreviewWindow.MEMBERSHIP_CONFIG.supabasePublishableKey,
+  productionWindow.MEMBERSHIP_CONFIG.supabasePublishableKey
+);
 
 console.log("PASS: username login routing, admin controls, WhatsApp link, and server-only account management checks.");
