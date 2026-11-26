@@ -37,9 +37,14 @@ function openLesson(lesson,button){
   if(button)button.disabled=true;
   note("جارٍ تحميل المحاضرة والفيديو...");
   (async()=>{
-    const{data,error}=await db.storage.from(lesson.storage_bucket).download(lesson.storage_path);
-    if(error||!data)throw error||new Error("تعذر تحميل المحاضرة التفاعلية.");
-    const source=await data.text();
+    const{data:contentRow,error:contentError}=await db.from("course_lessons").select("content_html,storage_bucket,storage_path").eq("id",lesson.id).maybeSingle();
+    if(contentError)throw contentError;
+    let source=typeof contentRow?.content_html==="string"?contentRow.content_html:"";
+    if(!source.trim()){
+      const{data,error}=await db.storage.from(contentRow?.storage_bucket||lesson.storage_bucket).download(contentRow?.storage_path||lesson.storage_path);
+      if(error||!data)throw error||new Error("لم يتم العثور على محتوى هذه المحاضرة في قاعدة البيانات أو التخزين الخاص.");
+      source=await data.text();
+    }
     if(!/<html[\s>]/i.test(source)||!/<head[\s>]/i.test(source))throw new Error("ملف المحاضرة ليس صفحة HTML صالحة.");
     const bridge='<script>(function(){var k="sc_reader_size_v2",v="medium";try{var x=parent.localStorage.getItem(k);if(["small","medium","large","xlarge"].indexOf(x)>=0)v=x;}catch(e){}var d={};d[k]=v;var s={getItem:function(n){return Object.prototype.hasOwnProperty.call(d,n)?d[n]:null;},setItem:function(n,x){d[n]=String(x);if(n===k){try{parent.localStorage.setItem(n,String(x));}catch(e){}}},removeItem:function(n){delete d[n];try{parent.localStorage.removeItem(n);}catch(e){}}};try{Object.defineProperty(window,"localStorage",{configurable:true,value:s});}catch(e){window.localStorage=s;}})();</'+'script>';
     const injected=source.replace(/<head\b[^>]*>/i,h=>h+bridge);
