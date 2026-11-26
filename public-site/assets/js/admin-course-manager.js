@@ -185,7 +185,7 @@
       const importItems = SOURCE_IMPORTS[selectedSlug] || [];
       importButton.hidden = importItems.length === 0;
       importButton.textContent = importItems.length
-        ? "استيراد " + importItems.length + " صفحة من الأكاديمية إلى التخزين الخاص"
+        ? "استيراد " + importItems.length + " صفحة من الأكاديمية إلى قاعدة البيانات الخاصة"
         : "لا يوجد مصدر أكاديمية مهيأ لهذا المقرر";
       importButton.disabled = importItems.length === 0;
     }
@@ -441,7 +441,7 @@
     if (!items.length) return message("لا يوجد مصدر أكاديمية محدد لهذا المقرر.", true);
     const button = $("importAcademyButton");
     const progress = $("importProgress");
-    if (!window.confirm("سيتم نسخ " + items.length + " صفحة أصلية من الأكاديمية إلى التخزين الخاص لهذا المقرر. ستُضاف كمسودات ولن تظهر للطلاب قبل نشرها. هل تريد المتابعة؟")) return;
+    if (!window.confirm("سيتم نسخ " + items.length + " صفحة أصلية من الأكاديمية داخل قاعدة بيانات المنصة الخاصة لهذا المقرر. ستُضاف كمسودات ولن تظهر للطلاب قبل نشرها. هل تريد المتابعة؟")) return;
 
     setBusy(button, true, "جارٍ استيراد صفحات الأكاديمية...");
     progress.hidden = false;
@@ -478,15 +478,8 @@
             throw new Error("ملف المصدر ليس صفحة HTML صالحة.");
           }
           const blob = new Blob([source], { type: "text/html;charset=UTF-8" });
-          if (!blob.size || blob.size > 10 * 1024 * 1024) throw new Error("حجم الملف يتجاوز حد التخزين البالغ 10 ميجابايت.");
+          if (!blob.size || blob.size > 10 * 1024 * 1024) throw new Error("حجم الملف يتجاوز الحد المسموح به وهو 10 ميجابايت.");
           const storagePath = selectedSlug + "/" + item.slug + ".html";
-          const { error: uploadError } = await client.storage.from(BUCKET).upload(storagePath, blob, {
-            upsert: true,
-            contentType: "text/html",
-            cacheControl: "no-store"
-          });
-          if (uploadError) throw uploadError;
-
           const previous = existing.get(item.slug);
           const values = {
             course_slug: selectedSlug,
@@ -496,6 +489,7 @@
             storage_bucket: BUCKET,
             storage_path: storagePath,
             content_type: "text/html",
+            content_html: source,
             file_size_bytes: blob.size,
             is_published: previous?.is_published === true,
             sort_order: item.order,
@@ -530,7 +524,7 @@
         console.warn("Academy import failures:", failures);
         message("اكتمل الاستيراد جزئيًا. راجع تفاصيل الأخطاء في سجل المتصفح.", true);
       } else {
-        message("تم نسخ صفحات الأكاديمية إلى التخزين الخاص كمسودات. لم يتم نشر أي صفحة تلقائيًا.");
+        message("تم حفظ صفحات الأكاديمية داخل قاعدة بيانات المنصة كمسودات. لم يتم نشر أي صفحة تلقائيًا.");
       }
     } catch (error) {
       progress.hidden = false;
@@ -538,7 +532,7 @@
       message(error.message || "تعذر استيراد محتوى الأكاديمية.", true);
     } finally {
       setBusy(button, false);
-      button.textContent = "استيراد " + items.length + " صفحة من الأكاديمية إلى التخزين الخاص";
+      button.textContent = "استيراد " + items.length + " صفحة من الأكاديمية إلى قاعدة البيانات الخاصة";
     }
   }
 
@@ -609,17 +603,17 @@
     }
     if (!editId && !file) return message("اختر ملف HTML للمحاضرة الجديدة.", true);
 
-    setBusy(button, true, "جارٍ حفظ المحاضرة...");
+    setBusy(button, true, "جارٍ حفظ المحاضرة في قاعدة البيانات...");
     try {
       const existingLesson = editId ? lessons.find((item) => item.id === editId) : null;
       const storageBucket = existingLesson?.storage_bucket || BUCKET;
       const storagePath = existingLesson?.storage_path || (courseSlug + "/" + lessonSlug + ".html");
+      let contentHtml = null;
       if (file) {
-        const { error: uploadError } = await client.storage.from(storageBucket).upload(storagePath, file, {
-          upsert: true,
-          contentType: "text/html"
-        });
-        if (uploadError) throw uploadError;
+        contentHtml = await file.text();
+        if (!/<html[\s>]/i.test(contentHtml) || !/<head[\s>]/i.test(contentHtml)) {
+          throw new Error("ملف المحاضرة ليس صفحة HTML صالحة.");
+        }
       }
 
       const values = {
@@ -639,6 +633,7 @@
         source_base_url: sourceBaseUrl || null,
         updated_at: new Date().toISOString()
       };
+      if (file) values.content_html = contentHtml;
 
       let result;
       if (editId) {
