@@ -693,8 +693,33 @@
 
   function prepareRequestedLesson() {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("prepare") !== "odoo-business-flow-01" || selectedSlug !== "odoo-training") return;
+    const prepare = params.get("prepare");
+    if (selectedSlug !== "odoo-training") return;
 
+    if (prepare === "odoo-accounting-foundations-02") {
+      const existingSecond = lessons.find((item) => item.lesson_slug === "lesson-02-accounting-foundations");
+      if (existingSecond) {
+        fillLessonForm(existingSecond);
+        message("تم تجهيز المحاضرة الثانية. اختر ملف HTML المحاضرة الثانية من جهازك ثم اضغط «حفظ تعديل المحاضرة». سيُحفظ المحتوى في قاعدة البيانات كمسودة، ولن يُنشر للطلاب تلقائيًا.");
+        return;
+      }
+      $("lessonCourse").value = "odoo-training";
+      $("lessonSlug").value = "lesson-02-accounting-foundations";
+      $("lessonTitle").value = "المحاضرة الثانية: التأسيس المحاسبي وإعداد المنتجات داخل Odoo";
+      $("lessonDescription").value = "محاضرة تفاعلية عن شجرة الحسابات واليوميات وفئات المنتجات وإعداد المنتجات، مع تطبيق متكامل على شركة مقاولات واختبار وتكليف عملي.";
+      $("lessonSort").value = "2";
+      const secondUnit = units.find((unit) => unit.unit_slug === "unit-02-accounting-foundations");
+      $("lessonUnit").value = secondUnit?.id || "";
+      $("lessonType").value = "lesson";
+      $("lessonSourcePath").value = "";
+      $("lessonBaseUrl").value = "";
+      $("lessonPublish").checked = false;
+      $("lessonForm").scrollIntoView({ behavior: "smooth", block: "center" });
+      message("تم تجهيز بيانات المحاضرة الثانية. اختر ملف HTML من جهازك ثم احفظه؛ سيبقى المحتوى مسودة خاصة حتى تراجعه وتنشره بنفسك.");
+      return;
+    }
+
+    if (prepare !== "odoo-business-flow-01") return;
     const existing = lessons.find((item) => item.lesson_slug === "lesson-01-business-flow");
     if (existing) {
       fillLessonForm(existing);
@@ -714,7 +739,7 @@
     $("lessonBaseUrl").value = "";
     $("lessonPublish").checked = true;
     $("lessonForm").scrollIntoView({ behavior: "smooth", block: "center" });
-    message("تم تجهيز بيانات المحاضرة الأولى. اختر ملف HTML المحسّن من جهازك، ثم اضغط «حفظ المحاضرة» لرفعه إلى التخزين الخاص وإتاحته للمتدربين المصرح لهم.");
+    message("تم تجهيز بيانات المحاضرة الأولى. اختر ملف HTML المحسّن من جهازك ثم اضغط «حفظ المحاضرة» ليُحفظ المحتوى داخل قاعدة البيانات الخاصة.");
   }
 
   async function boot() {
@@ -737,7 +762,7 @@
     $("managerContent").hidden = false;
     if (!courses.length) {
       message("تم التحقق من المدير. ابدأ بإضافة أول مقرر ثم أضف المحاضرات.");
-    } else if (new URLSearchParams(window.location.search).get("prepare") === "odoo-business-flow-01" && selectedSlug === "odoo-training") {
+    } else if (new URLSearchParams(window.location.search).get("prepare") && selectedSlug === "odoo-training") {
       prepareRequestedLesson();
     } else {
       message("تم التحقق من صلاحية المدير. لديك تحكم كامل في جميع المقررات والمحاضرات والملفات المنشورة والمسودات.");
